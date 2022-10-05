@@ -1,7 +1,7 @@
 name: CI for restaurant
 
 on:
-  push:
+  pull_request:
     branches: [development, main]
 
 jobs:
@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v2
         with:
           node-version: "16"
@@ -25,3 +27,8 @@ jobs:
           npm i
           npm run build
           npm run test-ci
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
