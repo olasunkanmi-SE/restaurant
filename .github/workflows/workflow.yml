@@ -15,13 +15,13 @@ jobs:
       - name: ci for backend
         working-directory: ./backend
         run: |
-          npm ci
+          npm i
           npm run build
           npm test
           npm test:cov
       - name: ci for frontend
         working-directory: ./frontend
         run: |
-          npm ci
+          npm i
           npm run build
           npm run test-ci
