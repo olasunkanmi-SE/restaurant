@@ -18,7 +18,7 @@ jobs:
           npm i
           npm run build
           npm test
-          npm test:cov
+          npm run test:cov
       - name: ci for frontend
         working-directory: ./frontend
         run: |
