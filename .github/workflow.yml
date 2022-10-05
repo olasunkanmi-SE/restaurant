@@ -18,12 +18,10 @@ jobs:
           npm ci
           npm run build
           npm test
+          npm test:cov
       - name: ci for frontend
         working-directory: ./frontend
         run: |
           npm ci
           npm run build
           npm run test-ci
-      - name: SonarCloud
-        working-directory: ./backend
-        run: npm test:cov
