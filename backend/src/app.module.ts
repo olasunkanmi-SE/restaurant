@@ -7,9 +7,10 @@ import {
   ApplicationExceptionsFilter,
   ApplicationLogger,
 } from './infrastructure';
+import { LoggerModule } from './modules';
 
 @Module({
-  imports: [],
+  imports: [LoggerModule],
   controllers: [AppController],
   providers: [
     AppService,
