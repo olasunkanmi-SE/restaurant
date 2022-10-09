@@ -9,22 +9,23 @@ export class ApplicationLogger extends Logger implements IContextAwareLogger {
 
   debug(context: string, message: string): void {
     if (process.env['NODE_ENV'] !== 'production')
-      this.debug(`[DEBUG] ${message}`, context);
+      super.debug(`[DEBUG] ${message}`, context);
   }
 
   log(context: string, message: string): void {
-    this.log(`[INFO] ${message}`, context);
+    super.log(`[INFO] ${message}`, context);
   }
 
   error(context: string, message: string, trace?: string): void {
-    this.error(`[ERROR] ${message}`, trace, context);
+    super.error(`[ERROR] ${message}`, trace, context);
   }
 
   warn(context: string, message: string): void {
-    this.warn(`[WARN] ${message}`, context);
+    super.warn(`[WARN] ${message}`, context);
   }
+
   verbose(context: string, message: string): void {
     if (process.env['NODE_ENV'] !== 'production')
-      this.verbose(`[VERBOSE] ${message}`, context);
+      super.verbose(`[VERBOSE] ${message}`, context);
   }
 }

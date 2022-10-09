@@ -51,9 +51,10 @@ export class ApplicationExceptionsFilter implements ExceptionFilter {
       statusCode = exception.getStatus();
       const errorResponse: string | object = exception.getResponse();
       message = (errorResponse as string) || exception.message;
+    } else {
+      statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+      message = APIResponseMessage.serverError;
     }
-    statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-    message = APIResponseMessage.serverError;
     return { statusCode, message };
   }
 
