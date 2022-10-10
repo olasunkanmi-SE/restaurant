@@ -1,4 +1,3 @@
-import { TYPES } from './../../application/constants/types';
 import {
   ArgumentsHost,
   Catch,
@@ -8,13 +7,13 @@ import {
   Inject,
 } from '@nestjs/common';
 import { IContextAwareLogger } from '../logger';
-import { APIResponseMessage } from 'src/application/constants';
 import { Request } from 'express';
 import * as fs from 'fs';
 import {
   IExceptionResponse,
   IRequestException,
 } from './exception-response.interface';
+import { APIResponseMessage, TYPES } from '../../application/constants';
 
 @Catch()
 export class ApplicationExceptionsFilter implements ExceptionFilter {

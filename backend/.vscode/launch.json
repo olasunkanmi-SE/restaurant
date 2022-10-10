@@ -1,20 +1,38 @@
 {
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "ng serve",
-      "type": "pwa-chrome",
+      "type": "node",
       "request": "launch",
-      "preLaunchTask": "npm: start",
-      "url": "http://localhost:4200/"
+      "name": "Nest Debug",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:debug", "--", "--inspect-brk"],
+      "console": "integratedTerminal",
+      "restart": true,
+      "protocol": "auto",
+      "port": 9229,
+      "autoAttachChildProcesses": true
     },
     {
-      "name": "ng test",
-      "type": "chrome",
+      "type": "node",
       "request": "launch",
-      "preLaunchTask": "npm: test",
-      "url": "http://localhost:9876/debug.html"
+      "name": "Test",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "test",
+        "src/infrastructure/filters/exception.filter.spec.ts",
+        "--inspect-brk"
+      ],
+      // "src/infrastructure/data_access/db_repositories/worker_sql_repository.spec.ts",
+      "console": "integratedTerminal",
+      "restart": true,
+      "protocol": "auto",
+      "port": 9229,
+      "autoAttachChildProcesses": true
     }
   ]
 }
