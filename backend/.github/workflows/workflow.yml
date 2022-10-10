@@ -1,8 +1,8 @@
 name: CI for restaurant
 
 on:
-  pull_request:
-    branches: [development, main, release]
+  push:
+    branches: [development, master, release]
 jobs:
   build:
     runs-on: ubuntu-latest
