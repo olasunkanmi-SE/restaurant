@@ -26,7 +26,10 @@
     "@nestjs/platform-express": "^8.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "ts-sinon": "^2.0.2",
+    "@types/chai-as-promised": "^7.1.2",
+    "chai-as-promised": "^7.1.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
@@ -49,7 +52,11 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "^3.10.1",
-    "typescript": "^4.3.5"
+    "typescript": "^4.3.5",
+    "@types/chai": "^4.2.4",
+    "@types/chai-spies": "^1.0.1",
+    "chai": "^4.2.0",
+    "chai-spies": "^1.0.0"
   },
   "jest": {
     "moduleFileExtensions": [
