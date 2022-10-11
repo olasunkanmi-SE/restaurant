@@ -11,7 +11,7 @@ import {
 } from 'mongoose';
 import { IGenericDocument } from './generic-document.interface';
 
-export abstract class DocumentRepository<T extends Document>
+export abstract class GenericDocumentRepository<T extends Document>
   implements IGenericDocument<T>
 {
   constructor(
@@ -63,7 +63,7 @@ export abstract class DocumentRepository<T extends Document>
   }
 
   async deleteMany(filterQuery: FilterQuery<T>): Promise<boolean> {
-    const result = await this.DocumentModel.deleteMany(filterQuery);
+    const result = this.DocumentModel.deleteMany(filterQuery);
     return (await result).deletedCount >= 1;
   }
 
