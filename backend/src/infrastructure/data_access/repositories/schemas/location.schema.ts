@@ -11,7 +11,7 @@ export class Location extends BaseDocument implements ILocation {
   address: string;
 
   @Prop({ type: String })
-  address_2: string;
+  address2: string;
 
   @Prop({ type: String, required: true })
   city: string;
@@ -20,7 +20,7 @@ export class Location extends BaseDocument implements ILocation {
   country: string;
 
   @Prop({ type: String, required: true })
-  postal_code: string;
+  postalCode: string;
 
   @Prop({ type: String, required: true })
   state: string;
