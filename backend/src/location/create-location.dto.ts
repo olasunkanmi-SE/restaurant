@@ -16,7 +16,7 @@ export class CreateLocationDto {
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(30)
+  @MaxLength(256)
   readonly country: string;
 
   @IsString()
@@ -26,7 +26,7 @@ export class CreateLocationDto {
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(30)
+  @MaxLength(256)
   readonly state: string;
 
   @IsNumber()
@@ -36,4 +36,14 @@ export class CreateLocationDto {
   @IsNumber()
   @MaxLength(10)
   readonly longitude: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(256)
+  auditCreatedDateTime;
+
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(256)
+  auditCreatedBy: string;
 }

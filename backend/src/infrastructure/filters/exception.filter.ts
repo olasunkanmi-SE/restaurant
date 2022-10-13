@@ -32,6 +32,7 @@ export class ApplicationExceptionsFilter implements ExceptionFilter {
       path: request.url,
       timeStamp: new Date().toISOString(),
       method: request.method,
+      body: request.body,
     };
     this.logErrorMessage(request, message, statusCode, exception);
     const errorLog: string = this.constructErrorMessage(
