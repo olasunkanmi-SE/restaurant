@@ -1,11 +1,11 @@
+import { DocumentDatabaseModule } from './../infrastructure/database/document-database.module';
 import { TYPES } from './../application/constants/types';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
-import { DocumentDatabaseModule } from 'src/infrastructure';
 import {
-  Location,
+  LocationDataModel,
   LocationSchema,
 } from '../infrastructure/data_access/repositories/schemas/location.schema';
 import { LocationService } from './location.service';
@@ -22,7 +22,7 @@ import { LocationsController } from './location.controller';
     }),
     DocumentDatabaseModule,
     MongooseModule.forFeature([
-      { name: Location.name, schema: LocationSchema },
+      { name: LocationDataModel.name, schema: LocationSchema },
     ]),
   ],
   controllers: [LocationsController],

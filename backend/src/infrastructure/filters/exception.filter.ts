@@ -27,6 +27,7 @@ export class ApplicationExceptionsFilter implements ExceptionFilter {
     const request = context.getRequest();
     const { statusCode, message } = this.getException(exception);
     const responseBody: IExceptionResponse = {
+      isSuccess: false,
       statusCode,
       message,
       path: request.url,

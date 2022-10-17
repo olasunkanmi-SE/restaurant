@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsNumber, IsString, MaxLength } from 'class-validator';
+import {
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  MaxLength,
+} from 'class-validator';
 export class CreateLocationDto {
   @IsString()
   @IsNotEmpty()
@@ -37,7 +43,7 @@ export class CreateLocationDto {
   @MaxLength(10)
   readonly longitude: string;
 
-  @IsString()
+  @IsDate()
   @IsNotEmpty()
   @MaxLength(256)
   auditCreatedDateTime;

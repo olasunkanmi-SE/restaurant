@@ -1,4 +1,5 @@
 export interface IExceptionResponse {
+  isSuccess: boolean;
   statusCode: number;
   timeStamp: string;
   path: string;
