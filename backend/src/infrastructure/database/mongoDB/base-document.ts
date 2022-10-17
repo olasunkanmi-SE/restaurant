@@ -4,9 +4,9 @@ import { IBaseDocument } from './base-document.interface';
 
 export abstract class BaseDocument implements IBaseDocument {
   @Prop({ type: SchemaTypes.ObjectId })
-  _id: Types.ObjectId;
+  _id?: Types.ObjectId;
 
-  @Prop({ type: Date, required: true })
+  @Prop({ type: String, required: true })
   auditCreatedDateTime: Date;
 
   @Prop({ type: String, required: true })
@@ -15,12 +15,12 @@ export abstract class BaseDocument implements IBaseDocument {
   @Prop({ type: String })
   auditModifiedBy: string;
 
-  @Prop({ type: Date })
+  @Prop({ type: String })
   auditModifiedDateTime?: Date;
 
   @Prop({ type: Date })
   auditDeletedBy?: string;
 
-  @Prop({ type: Date })
+  @Prop({ type: String })
   auditDeletedDateTime?: Date;
 }
