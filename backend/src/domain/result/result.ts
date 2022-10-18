@@ -8,7 +8,7 @@ export class Result<T> {
     this.message = message;
   }
 
-  getvalue(): T {
+  getValue(): T {
     return this.data;
   }
 

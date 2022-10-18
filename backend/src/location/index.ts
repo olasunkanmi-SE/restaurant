@@ -5,3 +5,6 @@ export * from './location';
 export * from './location.controller';
 export * from './location-service.interface';
 export * from './create-location.dto';
+export * from './location-response.dto';
+export * from './location.mapper';
+export * from './location.parser';

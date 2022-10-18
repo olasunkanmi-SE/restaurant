@@ -14,15 +14,15 @@ export class AuditMapper implements IMapper<Audit, BaseDocument> {
     return model;
   }
 
-  toDomain(model: BaseDocument): Audit {
+  toDomain(doc: BaseDocument): Audit {
     const entity: Audit = Audit.create({
-      auditCreatedBy: model.auditCreatedBy,
-      auditCreatedDateTime: model.auditCreatedDateTime,
-      auditModifiedBy: model.auditModifiedBy,
-      auditModifiedDateTime: model.auditModifiedDateTime,
-      auditDeletedDateTime: model.auditDeletedDateTime,
-      auditDeletedBy: model.auditDeletedBy,
-    }).getvalue();
+      auditCreatedBy: doc.auditCreatedBy,
+      auditCreatedDateTime: doc.auditCreatedDateTime,
+      auditModifiedBy: doc.auditModifiedBy,
+      auditModifiedDateTime: doc.auditModifiedDateTime,
+      auditDeletedDateTime: doc.auditDeletedDateTime,
+      auditDeletedBy: doc.auditDeletedBy,
+    }).getValue();
     return entity;
   }
 }
