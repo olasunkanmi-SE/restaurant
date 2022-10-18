@@ -26,9 +26,6 @@ describe('application exception filter', () => {
     const exception = new Error();
     // @ts-ignore
     const result = exceptionFilter.getException(exception);
-    chai
-      .expect(result.message)
-      .to.deep.equal('Critical server error occured, please try again later');
     chai.expect(result.statusCode).to.eq(500);
   });
 

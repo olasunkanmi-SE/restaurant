@@ -21,6 +21,6 @@ export class LocationsController {
 
   @Get()
   async getRestaurantLocations(): Promise<Result<ILocationResponseDTO[]>> {
-    return await this.locationService.getAllRestaurantLocations();
+    return this.locationService.getAllRestaurantLocations();
   }
 }
