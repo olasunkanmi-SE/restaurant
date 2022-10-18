@@ -13,7 +13,7 @@ import {
   IExceptionResponse,
   IRequestException,
 } from './exception-response.interface';
-import { APIResponseMessage, TYPES } from '../../application/constants';
+import { TYPES } from '../../application/constants';
 
 @Catch()
 export class ApplicationExceptionsFilter implements ExceptionFilter {
@@ -21,7 +21,7 @@ export class ApplicationExceptionsFilter implements ExceptionFilter {
     @Inject(TYPES.IApplicationLogger)
     private readonly logger: IContextAwareLogger,
   ) {}
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: any, host: ArgumentsHost) {
     const context = host.switchToHttp();
     const response = context.getResponse();
     const request = context.getRequest();
@@ -45,16 +45,16 @@ export class ApplicationExceptionsFilter implements ExceptionFilter {
     response.status(statusCode).json(responseBody);
   }
 
-  private getException(exception: unknown): IRequestException {
+  private getException(exception: any): IRequestException {
     let statusCode: number;
-    let message: string;
+    let message: any;
     if (exception instanceof HttpException) {
       statusCode = exception.getStatus();
       const errorResponse: string | object = exception.getResponse();
       message = (errorResponse as string) || exception.message;
     } else {
       statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-      message = APIResponseMessage.serverError;
+      message = exception.errors;
     }
     return { statusCode, message };
   }

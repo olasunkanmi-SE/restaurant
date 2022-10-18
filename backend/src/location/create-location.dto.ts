@@ -1,7 +1,7 @@
 import {
-  IsDate,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   MaxLength,
 } from 'class-validator';
@@ -13,6 +13,7 @@ export class CreateLocationDto {
 
   @IsString()
   @MaxLength(256)
+  @IsOptional()
   readonly address2: string;
 
   @IsString()
@@ -28,7 +29,7 @@ export class CreateLocationDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(10)
-  readonly postalCode: string;
+  readonly postCode: string;
 
   @IsString()
   @IsNotEmpty()
@@ -37,19 +38,11 @@ export class CreateLocationDto {
 
   @IsNumber()
   @MaxLength(10)
+  @IsOptional()
   readonly latitude: string;
 
   @IsNumber()
   @MaxLength(10)
+  @IsOptional()
   readonly longitude: string;
-
-  @IsDate()
-  @IsNotEmpty()
-  @MaxLength(256)
-  auditCreatedDateTime;
-
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(256)
-  auditCreatedBy: string;
 }

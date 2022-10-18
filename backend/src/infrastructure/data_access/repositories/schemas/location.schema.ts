@@ -3,10 +3,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { BaseDocument } from './../../../database/mongoDB/base-document';
 import { Document } from 'mongoose';
 
-export type LocationDocument = LocationDataModel & Document;
+export type LocationDocument = LocationDataDocument & Document;
 
 @Schema({ versionKey: false })
-export class LocationDataModel extends BaseDocument implements ILocation {
+export class LocationDataDocument extends BaseDocument implements ILocation {
   @Prop({ type: String, required: true })
   address: string;
 
@@ -20,16 +20,17 @@ export class LocationDataModel extends BaseDocument implements ILocation {
   country: string;
 
   @Prop({ type: String, required: true })
-  postalCode: string;
+  postCode: string;
 
   @Prop({ type: String, required: true })
   state: string;
 
-  @Prop({ type: Number })
-  latitude?: number;
+  @Prop({ type: String })
+  latitude?: string;
 
-  @Prop({ type: Number })
-  longitude?: number;
+  @Prop({ type: String })
+  longitude?: string;
 }
 
-export const LocationSchema = SchemaFactory.createForClass(LocationDataModel);
+export const LocationSchema =
+  SchemaFactory.createForClass(LocationDataDocument);

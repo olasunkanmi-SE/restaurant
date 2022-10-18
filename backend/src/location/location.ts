@@ -4,15 +4,15 @@ import { Audit } from './../domain/audit/audit';
 import { Entity } from './../domain/entity/entity';
 import { Result } from './../domain/result/result';
 
-export class Location extends Entity {
+export class Location extends Entity<ILocation> {
   private _address: string;
   private _address2: string;
   private _city: string;
   private _country: string;
-  private _postalCode: string;
+  private _postCode: string;
   private _state: string;
-  private _latitude?: number;
-  private _longitude?: number;
+  private _latitude?: string;
+  private _longitude?: string;
   private _audit: Audit;
   constructor(id: Types.ObjectId, props: ILocation) {
     super(id);
@@ -24,6 +24,7 @@ export class Location extends Entity {
     this._latitude = props.latitude;
     this._longitude = props.longitude;
     this._audit = props.audit;
+    this._postCode = props.postCode;
   }
 
   get address() {
@@ -58,12 +59,12 @@ export class Location extends Entity {
     this._country = country;
   }
 
-  get postalCode() {
-    return this._postalCode;
+  get postCode() {
+    return this._postCode;
   }
 
-  set postalCode(postalCode: string) {
-    this._postalCode = postalCode;
+  set postCode(postCode: string) {
+    this._postCode = postCode;
   }
 
   get state() {
@@ -74,19 +75,19 @@ export class Location extends Entity {
     this._state = state;
   }
 
-  get longitude() {
+  get longitude(): string {
     return this._longitude;
   }
 
-  set longitude(longitude: number) {
+  set longitude(longitude: string) {
     this._longitude = longitude;
   }
 
-  get latitude(): number {
+  get latitude(): string {
     return this._latitude;
   }
 
-  set latitude(latitude: number) {
+  set latitude(latitude: string) {
     this._latitude = latitude;
   }
 
@@ -94,7 +95,11 @@ export class Location extends Entity {
     return this._audit;
   }
 
-  static create(props: ILocation, id?: Types.ObjectId) {
+  set audit(audit) {
+    this._audit = audit;
+  }
+
+  static create(props: ILocation, id?: Types.ObjectId): Result<Location> {
     return Result.ok(new Location(id, props));
   }
 }

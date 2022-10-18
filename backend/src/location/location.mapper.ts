@@ -1,20 +1,20 @@
-import { LocationDataModel } from './../infrastructure/data_access/repositories/schemas/location.schema';
-import { Audit } from './../domain/audit/audit';
-import { AuditParser } from './../audit/audit.parser';
+import { LocationDataDocument } from './../infrastructure/data_access/repositories/schemas/location.schema';
 import { Injectable } from '@nestjs/common';
 import { IMapper } from './../domain/mapper/mapper';
 import { Location } from './location';
+import { AuditMapper } from 'src/audit/audit.mapper';
 
 @Injectable()
-export class LocationMapper implements IMapper<Location, LocationDataModel> {
-  toPersistence(entity: Location): LocationDataModel {
-    const model: LocationDataModel = {
+export class LocationMapper implements IMapper<Location, LocationDataDocument> {
+  constructor(private readonly auditMapper: AuditMapper) {}
+  toPersistence(entity: Location): LocationDataDocument {
+    const model: LocationDataDocument = {
       _id: entity.id,
       address: entity.address,
       address2: entity.address2,
       city: entity.city,
       country: entity.country,
-      postalCode: entity.postalCode,
+      postCode: entity.postCode,
       state: entity.state,
       latitude: entity.latitude,
       longitude: entity.longitude,
@@ -28,28 +28,28 @@ export class LocationMapper implements IMapper<Location, LocationDataModel> {
     return model;
   }
 
-  toDomain(model: LocationDataModel): Location {
+  toDomain(doc: LocationDataDocument): Location {
     const {
       address,
       address2,
       city,
       country,
-      postalCode,
+      postCode,
       state,
       latitude,
       longitude,
-    } = model;
-    const domain: Location = new Location(model._id, {
+    } = doc;
+    const domain: Location = Location.create({
       address,
       address2,
       city,
       country,
-      postalCode,
+      postCode,
       state,
       latitude,
       longitude,
-      audit: Audit.create(AuditParser.createAuditResponse(model)).getvalue(),
-    });
+      audit: this.auditMapper.toDomain(doc),
+    }).getValue();
     return domain;
   }
 }
