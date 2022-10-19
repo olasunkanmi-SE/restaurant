@@ -6,7 +6,7 @@ import { Result } from './../domain/result/result';
 
 export class Location extends Entity<ILocation> {
   private _address: string;
-  private _address2: string;
+  private _address2?: string;
   private _city: string;
   private _country: string;
   private _postCode: string;

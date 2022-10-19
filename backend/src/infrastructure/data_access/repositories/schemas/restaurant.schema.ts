@@ -11,10 +11,10 @@ export class RestaurantDataDocument extends BaseDocument {
   @Prop({ type: String, required: true })
   name: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, unique: true })
   email: string;
 
-  @Prop({ type: Boolean, required: true })
+  @Prop({ type: Boolean, required: true, default: false })
   isActive: boolean;
 
   @Prop({ type: String })
@@ -22,6 +22,9 @@ export class RestaurantDataDocument extends BaseDocument {
 
   @Prop({ type: String })
   logoUrl: string;
+
+  @Prop({ type: String })
+  timeZone: string;
 
   @Prop({ type: LocationSchema })
   @Type(() => LocationDataDocument)
