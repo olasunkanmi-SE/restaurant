@@ -6,10 +6,10 @@ export abstract class BaseDocument implements IBaseDocument {
   @Prop({ type: SchemaTypes.ObjectId })
   _id?: Types.ObjectId;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, immutable: true })
   auditCreatedDateTime: Date;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, immutable: true })
   auditCreatedBy: string;
 
   @Prop({ type: String })
