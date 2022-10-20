@@ -3,6 +3,9 @@ import { RestaurantDataDocument } from './../infrastructure/data_access/reposito
 import { AuditMapper } from './../audit/audit.mapper';
 import { Restaurant } from './restaurant';
 import { IMapper } from './../domain/mapper/mapper';
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
 export class RestaurantMapper
   implements IMapper<Restaurant, RestaurantDataDocument>
 {

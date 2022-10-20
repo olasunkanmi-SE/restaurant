@@ -19,4 +19,14 @@ export class RestaurantParser {
     };
     return restaurantResponse;
   }
+
+  static createRestaurantsParser(
+    restaurants: Restaurant[],
+  ): IRestaurantResponseDTO[] {
+    const restaurantsResponse: IRestaurantResponseDTO[] = [];
+    for (const restaurant of restaurants) {
+      restaurantsResponse.push(this.createRestaurantResponse(restaurant));
+    }
+    return restaurantsResponse;
+  }
 }

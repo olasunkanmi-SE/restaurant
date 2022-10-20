@@ -14,9 +14,9 @@ export class LocationsController {
 
   @Post()
   async createLocation(
-    @Body() createLocationDto: CreateLocationDTO,
+    @Body() request: CreateLocationDTO,
   ): Promise<Result<ILocationResponseDTO>> {
-    return this.locationService.createLocation(createLocationDto);
+    return this.locationService.createLocation(request);
   }
 
   @Get()

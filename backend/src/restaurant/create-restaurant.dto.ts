@@ -4,6 +4,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsObject,
+  IsOptional,
   IsString,
   MaxLength,
 } from 'class-validator';
@@ -25,14 +26,17 @@ export class CreateRestaurantDTO {
 
   @IsString()
   @MaxLength(256)
+  @IsOptional()
   readonly webUrl: string;
 
   @IsString()
   @MaxLength(256)
+  @IsOptional()
   readonly logoUrl: string;
 
   @IsString()
   @MaxLength(256)
+  @IsOptional()
   readonly timeZone: string;
 
   @IsObject()

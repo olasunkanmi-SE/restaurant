@@ -26,23 +26,27 @@ export class LocationService implements ILocationService {
       ...createLocationDTO,
       audit,
     }).getValue();
-    await this.locationRepository.create(
+    const locationDocument = await this.locationRepository.create(
       this.locationMapper.toPersistence(location),
     );
-    return Result.ok(LocationParser.createLocationResponse(location));
+    return Result.ok(
+      LocationParser.createLocationResponse(
+        this.locationMapper.toDomain(locationDocument),
+      ),
+    );
   }
 
   async getAllRestaurantLocations(): Promise<Result<ILocationResponseDTO[]>> {
     const locations: Location[] = [];
-    const models = await this.locationRepository.find({});
-    if (models.length) {
-      for (const model of models) {
+    const documents = await this.locationRepository.find({});
+    if (documents.length) {
+      for (const model of documents) {
         locations.push(this.locationMapper.toDomain(model));
       }
     }
     return Result.ok(
       LocationParser.createLocationsResponse(locations),
-      'Restaurants retrieved successfully',
+      'Restaurant locations retrieved successfully',
     );
   }
 }
