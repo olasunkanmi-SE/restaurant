@@ -89,7 +89,7 @@ export class Restaurant extends Entity<IRestaurant> {
   set audit(audit) {
     this._audit = audit;
   }
-  
+
   static create(props: IRestaurant, id?: Types.ObjectId): Result<Restaurant> {
     return Result.ok(new Restaurant(id, props));
   }

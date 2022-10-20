@@ -8,6 +8,7 @@ export class RestaurantParser {
   ): IRestaurantResponseDTO {
     const { audit, location } = restaurant;
     const restaurantResponse: IRestaurantResponseDTO = {
+      id: restaurant.id,
       name: restaurant.name,
       email: restaurant.email,
       isActive: restaurant.isActive,

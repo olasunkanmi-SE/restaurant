@@ -4,7 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
 
 import {
-  LocationDataDocument,
+  LocationData,
   LocationSchema,
 } from '../infrastructure/data_access/repositories/schemas/location.schema';
 import { LocationService } from './location.service';
@@ -15,7 +15,7 @@ import { LocationMapper } from './location.mapper';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: LocationDataDocument.name, schema: LocationSchema },
+      { name: LocationData.name, schema: LocationSchema },
     ]),
   ],
   controllers: [LocationsController],

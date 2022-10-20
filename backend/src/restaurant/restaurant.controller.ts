@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import { Types } from 'mongoose';
 import { TYPES } from './../application/constants/types';
 import { CreateRestaurantDTO } from './create-restaurant.dto';
 import { IRestaurantService } from './restaurant-service.interface';
@@ -22,5 +23,12 @@ export class RestaurantsController {
   @Get()
   async getRestaurants(): Promise<Result<IRestaurantResponseDTO[]>> {
     return this.restaurantService.getRestaurants();
+  }
+
+  @Get('/:id')
+  async getRestaurantById(
+    @Param('id') restaurantId: Types.ObjectId,
+  ): Promise<Result<IRestaurantResponseDTO>> {
+    return this.restaurantService.getRestaurantById(restaurantId);
   }
 }

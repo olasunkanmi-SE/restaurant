@@ -1,7 +1,8 @@
-import { RestaurantDocument } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Types } from 'mongoose';
 import { RestaurantRepository } from './../infrastructure/data_access/repositories/restaurant.repository';
 import { LocationRepository } from './../infrastructure/data_access/repositories/location.repository';
+import { RestaurantDocument } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
 import { Location } from './../location/location';
 import { RestaurantParser } from './restaurant.parser';
 import { Audit } from './../domain/audit/audit';
@@ -12,7 +13,6 @@ import { IRestaurantResponseDTO } from './restaurant-response.dto';
 import { Restaurant } from './restaurant';
 import { IRestaurantService } from './restaurant-service.interface';
 import { LocationMapper } from './../location/location.mapper';
-
 @Injectable()
 export class RestaurantService implements IRestaurantService {
   constructor(
@@ -52,10 +52,14 @@ export class RestaurantService implements IRestaurantService {
       location: this.locationMapper.toDomain(locationDocument),
       audit,
     }).getValue();
-    await this.restaurantRepository.create(
+    const newRestaurant = await this.restaurantRepository.create(
       this.restaurantMapper.toPersistence(restaurant),
     );
-    return Result.ok(RestaurantParser.createRestaurantResponse(restaurant));
+    return Result.ok(
+      RestaurantParser.createRestaurantResponse(
+        this.restaurantMapper.toDomain(newRestaurant),
+      ),
+    );
   }
 
   async getRestaurants(): Promise<Result<IRestaurantResponseDTO[]>> {
@@ -70,5 +74,14 @@ export class RestaurantService implements IRestaurantService {
       RestaurantParser.createRestaurantsParser(restaurants),
       'Restaurants retrieved successfully',
     );
+  }
+
+  async getRestaurantById(
+    id: Types.ObjectId,
+  ): Promise<Result<IRestaurantResponseDTO>> {
+    const document: RestaurantDocument =
+      await this.restaurantRepository.findById(id);
+    const restaurant = this.restaurantMapper.toDomain(document);
+    return Result.ok(RestaurantParser.createRestaurantResponse(restaurant));
   }
 }
