@@ -1,4 +1,4 @@
-import { CreateLocationDto } from './../location/create-location.dto';
+import { CreateLocationDTO } from './../location/create-location.dto';
 import {
   IsBoolean,
   IsEmail,
@@ -7,7 +7,7 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
-export class CreateRestaurantDto {
+export class CreateRestaurantDTO {
   @IsString()
   @IsNotEmpty()
   @MaxLength(256)
@@ -37,5 +37,5 @@ export class CreateRestaurantDto {
 
   @IsObject()
   @IsNotEmpty()
-  readonly location: CreateLocationDto;
+  readonly location: CreateLocationDTO;
 }

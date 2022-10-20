@@ -3,7 +3,7 @@ import { Audit } from './../domain/audit/audit';
 import { ILocationService } from './location-service.interface';
 import { Injectable } from '@nestjs/common';
 import { LocationRepository } from './../infrastructure/data_access/repositories/location.repository';
-import { CreateLocationDto } from './create-location.dto';
+import { CreateLocationDTO } from './create-location.dto';
 import { Location } from './location';
 import { LocationMapper } from './location.mapper';
 import { LocationParser } from './location.parser';
@@ -17,16 +17,15 @@ export class LocationService implements ILocationService {
   ) {}
 
   async createLocation(
-    createLocationDto: CreateLocationDto,
+    createLocationDTO: CreateLocationDTO,
   ): Promise<Result<ILocationResponseDTO>> {
     //create a context function that takes an argument and does this
     //retrieve user information from jwt.
-    const audit: Audit = Audit.create({
-      auditCreatedDateTime: new Date(),
-      auditCreatedBy: 'Ola',
+    const audit: Audit = Audit.createInsertContext().getValue();
+    const location: Location = Location.create({
+      ...createLocationDTO,
+      audit,
     }).getValue();
-    const location: Location = Location.create(createLocationDto).getValue();
-    location.audit = audit;
     await this.locationRepository.create(
       this.locationMapper.toPersistence(location),
     );

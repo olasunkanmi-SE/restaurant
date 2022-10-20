@@ -1,3 +1,4 @@
+import { Audit } from './../domain/audit/audit';
 import { Location } from './../location/location';
 export interface IRestaurant {
   name: string;
@@ -7,4 +8,5 @@ export interface IRestaurant {
   logoUrl?: string;
   timeZone?: string;
   location: Location;
+  audit: Audit;
 }

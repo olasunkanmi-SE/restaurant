@@ -4,7 +4,7 @@ import { ILocationResponseDTO } from './location-response.dto';
 
 export class LocationParser {
   static createLocationResponse(location: Location): ILocationResponseDTO {
-    const locationResponseDTO: ILocationResponseDTO = {
+    const locationResponse: ILocationResponseDTO = {
       address: location.address,
       address2: location.address2,
       city: location.city,
@@ -15,7 +15,7 @@ export class LocationParser {
       longitude: location.longitude,
       ...AuditParser.createAuditResponse(location.audit),
     };
-    return locationResponseDTO;
+    return locationResponse;
   }
 
   static createLocationsResponse(
