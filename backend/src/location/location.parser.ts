@@ -5,6 +5,7 @@ import { ILocationResponseDTO } from './location-response.dto';
 export class LocationParser {
   static createLocationResponse(location: Location): ILocationResponseDTO {
     const locationResponse: ILocationResponseDTO = {
+      id: location.id,
       address: location.address,
       address2: location.address2,
       city: location.city,

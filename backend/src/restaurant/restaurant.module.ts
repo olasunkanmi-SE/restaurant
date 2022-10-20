@@ -3,11 +3,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { RestaurantRepository } from './../infrastructure/data_access/repositories/restaurant.repository';
 import { LocationRepository } from './../infrastructure/data_access/repositories/location.repository';
 import {
-  RestaurantDataDocument,
+  RestaurantData,
   RestaurantSchema,
 } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
 import {
-  LocationDataDocument,
+  LocationData,
   LocationSchema,
 } from './../infrastructure/data_access/repositories/schemas/location.schema';
 import { RestaurantsController } from './restaurant.controller';
@@ -20,8 +20,8 @@ import { LocationMapper } from './../location/location.mapper';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: LocationDataDocument.name, schema: LocationSchema },
-      { name: RestaurantDataDocument.name, schema: RestaurantSchema },
+      { name: LocationData.name, schema: LocationSchema },
+      { name: RestaurantData.name, schema: RestaurantSchema },
     ]),
   ],
   controllers: [RestaurantsController],
