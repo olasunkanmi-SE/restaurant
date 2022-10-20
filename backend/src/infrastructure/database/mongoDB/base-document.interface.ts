@@ -1,5 +1,5 @@
 export interface IBaseDocument extends IAudit {
-  readonly _id: any;
+  readonly _id?: any;
 }
 
 export interface IAudit {

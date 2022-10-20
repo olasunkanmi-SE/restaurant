@@ -4,6 +4,7 @@ import * as chai from 'chai';
 import { Request } from 'express';
 import * as sinon from 'ts-sinon';
 import { IContextAwareLogger } from '../logger';
+import { IExceptionResponse } from './exception-response.interface';
 import { ApplicationExceptionsFilter } from './exception.filter';
 
 describe('application exception filter', () => {
@@ -25,9 +26,6 @@ describe('application exception filter', () => {
     const exception = new Error();
     // @ts-ignore
     const result = exceptionFilter.getException(exception);
-    chai
-      .expect(result.message)
-      .to.deep.equal('Critical server error occured, please try again later');
     chai.expect(result.statusCode).to.eq(500);
   });
 
@@ -37,7 +35,8 @@ describe('application exception filter', () => {
   });
 
   it('should return error log', () => {
-    const exceptionResponse = {
+    const exceptionResponse: IExceptionResponse = {
+      isSuccess: true,
       statusCode: 400,
       timeStamp: new Date().toISOString(),
       path: '',
@@ -55,6 +54,7 @@ describe('application exception filter', () => {
 
   it('should write error log to file', () => {
     const exceptionResponse = {
+      isSuccess: true,
       statusCode: 400,
       timeStamp: new Date().toISOString(),
       path: '',
