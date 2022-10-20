@@ -1,5 +1,6 @@
-import { Location } from './../location/location';
 import { Types } from 'mongoose';
+import { Audit } from './../domain/audit/audit';
+import { Location } from './../location/location';
 import { Entity } from '../domain/entity/';
 import { IRestaurant } from './restaurant.interface';
 import { Result } from './../domain/result';
@@ -12,6 +13,7 @@ export class Restaurant extends Entity<IRestaurant> {
   private _logoUrl?: string;
   private _timeZone?: string;
   private _location: Location;
+  private _audit: Audit;
   constructor(id: Types.ObjectId, props: IRestaurant) {
     super(id);
     this._name = props.name;
@@ -21,6 +23,7 @@ export class Restaurant extends Entity<IRestaurant> {
     this._logoUrl = props.logoUrl;
     this._timeZone = props.timeZone;
     this._location = props.location;
+    this._audit = props.audit;
   }
 
   get name(): string {
@@ -79,6 +82,14 @@ export class Restaurant extends Entity<IRestaurant> {
     this._location = location;
   }
 
+  get audit(): Audit {
+    return this._audit;
+  }
+
+  set audit(audit) {
+    this._audit = audit;
+  }
+  
   static create(props: IRestaurant, id?: Types.ObjectId): Result<Restaurant> {
     return Result.ok(new Restaurant(id, props));
   }

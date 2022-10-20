@@ -30,4 +30,12 @@ export class Audit extends ValueObjects<IAudit> {
   static create(props: IAudit): Result<Audit> {
     return Result.ok(new Audit(props));
   }
+
+  static createInsertContext(): Result<Audit> {
+    const audit: IAudit = {
+      auditCreatedDateTime: new Date(),
+      auditCreatedBy: 'Ola',
+    };
+    return Audit.create(audit);
+  }
 }

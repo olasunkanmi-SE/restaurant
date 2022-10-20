@@ -5,7 +5,7 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
-export class CreateLocationDto {
+export class CreateLocationDTO {
   @IsString()
   @IsNotEmpty()
   @MaxLength(256)

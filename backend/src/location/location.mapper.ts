@@ -8,7 +8,7 @@ import { AuditMapper } from 'src/audit/audit.mapper';
 export class LocationMapper implements IMapper<Location, LocationDataDocument> {
   constructor(private readonly auditMapper: AuditMapper) {}
   toPersistence(entity: Location): LocationDataDocument {
-    const model: LocationDataDocument = {
+    const document: LocationDataDocument = {
       _id: entity.id,
       address: entity.address,
       address2: entity.address2,
@@ -25,7 +25,7 @@ export class LocationMapper implements IMapper<Location, LocationDataDocument> {
       auditDeletedDateTime: entity.audit.auditDeletedDateTime,
       auditDeletedBy: entity.audit.auditDeletedBy,
     };
-    return model;
+    return document;
   }
 
   toDomain(doc: LocationDataDocument): Location {
@@ -39,7 +39,7 @@ export class LocationMapper implements IMapper<Location, LocationDataDocument> {
       latitude,
       longitude,
     } = doc;
-    const domain: Location = Location.create({
+    const entity: Location = Location.create({
       address,
       address2,
       city,
@@ -50,6 +50,6 @@ export class LocationMapper implements IMapper<Location, LocationDataDocument> {
       longitude,
       audit: this.auditMapper.toDomain(doc),
     }).getValue();
-    return domain;
+    return entity;
   }
 }
