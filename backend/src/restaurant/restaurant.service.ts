@@ -27,9 +27,11 @@ export class RestaurantService implements IRestaurantService {
   ): Promise<Result<IRestaurantResponseDTO>> {
     const restaurantDocuments: RestaurantDocument[] =
       await this.restaurantRepository.find({});
+
     const existingEmail = restaurantDocuments.find(
       (doc) => doc.email === createRestaurantDTO.email,
     );
+
     if (existingEmail) {
       throw new HttpException(
         {
@@ -39,22 +41,27 @@ export class RestaurantService implements IRestaurantService {
         HttpStatus.BAD_REQUEST,
       );
     }
+
     const audit: Audit = Audit.createInsertContext().getValue();
     const location: Location = Location.create({
       ...createRestaurantDTO.location,
       audit,
     }).getValue();
+
     const locationDocument = await this.locationRepository.create(
       this.locationMapper.toPersistence(location),
     );
+
     const restaurant: Restaurant = Restaurant.create({
       ...createRestaurantDTO,
       location: this.locationMapper.toDomain(locationDocument),
       audit,
     }).getValue();
+
     const newRestaurant = await this.restaurantRepository.create(
       this.restaurantMapper.toPersistence(restaurant),
     );
+
     return Result.ok(
       RestaurantParser.createRestaurantResponse(
         this.restaurantMapper.toDomain(newRestaurant),

@@ -22,7 +22,7 @@ export class RestaurantData extends BaseDocument {
 
   @Prop({ type: String })
   logoUrl: string;
-  
+
   @Prop({ type: String })
   timeZone: string;
 
