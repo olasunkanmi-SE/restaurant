@@ -24,7 +24,7 @@ export class LocationData extends BaseDocument implements ILocation {
 
   @Prop({ type: String, required: true })
   state: string;
-  
+
   @Prop({ type: String })
   latitude?: string;
 
