@@ -1,20 +1,19 @@
 import { LocationMapper } from './../location/location.mapper';
-import { RestaurantDataDocument } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
+import { RestaurantData } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
 import { AuditMapper } from './../audit/audit.mapper';
 import { Restaurant } from './restaurant';
 import { IMapper } from './../domain/mapper/mapper';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class RestaurantMapper
-  implements IMapper<Restaurant, RestaurantDataDocument>
-{
+export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
   constructor(
     private readonly auditMapper: AuditMapper,
     private readonly locationMapper: LocationMapper,
   ) {}
-  toPersistence(entity: Restaurant): RestaurantDataDocument {
-    const document: RestaurantDataDocument = {
+  toPersistence(entity: Restaurant): RestaurantData {
+    const document: RestaurantData = {
+      _id: entity.id,
       name: entity.name,
       email: entity.email,
       isActive: entity.isActive,
@@ -32,18 +31,21 @@ export class RestaurantMapper
     return document;
   }
 
-  toDomain(document: RestaurantDataDocument): Restaurant {
-    const { name, email, isActive, webUrl, logoUrl, timeZone } = document;
-    const entity: Restaurant = Restaurant.create({
-      name,
-      email,
-      isActive,
-      webUrl,
-      logoUrl,
-      timeZone,
-      location: this.locationMapper.toDomain(document.location),
-      audit: this.auditMapper.toDomain(document),
-    }).getValue();
+  toDomain(document: RestaurantData): Restaurant {
+    const { name, email, isActive, webUrl, logoUrl, timeZone, _id } = document;
+    const entity: Restaurant = Restaurant.create(
+      {
+        name,
+        email,
+        isActive,
+        webUrl,
+        logoUrl,
+        timeZone,
+        location: this.locationMapper.toDomain(document.location),
+        audit: this.auditMapper.toDomain(document),
+      },
+      _id,
+    ).getValue();
     return entity;
   }
 }

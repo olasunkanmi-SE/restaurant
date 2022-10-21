@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { BaseDocument } from '../../../database/mongoDB/base-document';
 import { Document } from 'mongoose';
-import { LocationDataDocument, LocationSchema } from './location.schema';
+import { LocationData, LocationSchema } from './location.schema';
 import { Type } from 'class-transformer';
 
-export type RestaurantDocument = RestaurantDataDocument & Document;
+export type RestaurantDocument = RestaurantData & Document;
 
 @Schema({ versionKey: false })
-export class RestaurantDataDocument extends BaseDocument {
+export class RestaurantData extends BaseDocument {
   @Prop({ type: String, required: true })
   name: string;
 
@@ -27,10 +27,8 @@ export class RestaurantDataDocument extends BaseDocument {
   timeZone: string;
 
   @Prop({ type: LocationSchema })
-  @Type(() => LocationDataDocument)
-  location: LocationDataDocument;
+  @Type(() => LocationData)
+  location: LocationData;
 }
 
-export const RestaurantSchema = SchemaFactory.createForClass(
-  RestaurantDataDocument,
-);
+export const RestaurantSchema = SchemaFactory.createForClass(RestaurantData);

@@ -1,14 +1,14 @@
-import { LocationDataDocument } from './../infrastructure/data_access/repositories/schemas/location.schema';
+import { LocationData } from './../infrastructure/data_access/repositories/schemas/location.schema';
 import { Injectable } from '@nestjs/common';
 import { IMapper } from './../domain/mapper/mapper';
 import { Location } from './location';
 import { AuditMapper } from 'src/audit/audit.mapper';
 
 @Injectable()
-export class LocationMapper implements IMapper<Location, LocationDataDocument> {
+export class LocationMapper implements IMapper<Location, LocationData> {
   constructor(private readonly auditMapper: AuditMapper) {}
-  toPersistence(entity: Location): LocationDataDocument {
-    const document: LocationDataDocument = {
+  toPersistence(entity: Location): LocationData {
+    const document: LocationData = {
       _id: entity.id,
       address: entity.address,
       address2: entity.address2,
@@ -28,8 +28,9 @@ export class LocationMapper implements IMapper<Location, LocationDataDocument> {
     return document;
   }
 
-  toDomain(doc: LocationDataDocument): Location {
+  toDomain(doc: LocationData): Location {
     const {
+      _id,
       address,
       address2,
       city,
@@ -39,17 +40,20 @@ export class LocationMapper implements IMapper<Location, LocationDataDocument> {
       latitude,
       longitude,
     } = doc;
-    const entity: Location = Location.create({
-      address,
-      address2,
-      city,
-      country,
-      postCode,
-      state,
-      latitude,
-      longitude,
-      audit: this.auditMapper.toDomain(doc),
-    }).getValue();
+    const entity: Location = Location.create(
+      {
+        address,
+        address2,
+        city,
+        country,
+        postCode,
+        state,
+        latitude,
+        longitude,
+        audit: this.auditMapper.toDomain(doc),
+      },
+      _id,
+    ).getValue();
     return entity;
   }
 }
