@@ -1,8 +1,8 @@
 import { Types } from 'mongoose';
-import { ILocation } from './location.interface';
 import { Audit } from './../domain/audit/audit';
 import { Entity } from './../domain/entity/entity';
 import { Result } from './../domain/result/result';
+import { ILocation } from './location.interface';
 
 export class Location extends Entity<ILocation> {
   private _address: string;

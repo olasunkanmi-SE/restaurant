@@ -1,7 +1,7 @@
-import { IRestaurantResponseDTO } from './restaurant-response.dto';
-import { LocationParser } from './../location/location.parser';
 import { AuditParser } from './../audit/audit.parser';
+import { LocationParser } from './../location/location.parser';
 import { Restaurant } from './restaurant';
+import { IRestaurantResponseDTO } from './restaurant-response.dto';
 export class RestaurantParser {
   static createRestaurantResponse(
     restaurant: Restaurant,

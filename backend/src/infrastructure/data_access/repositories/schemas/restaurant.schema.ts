@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { BaseDocument } from '../../../database/mongoDB/base-document';
-import { Document } from 'mongoose';
-import { LocationData, LocationSchema } from './location.schema';
 import { Type } from 'class-transformer';
+import { Document } from 'mongoose';
+import { BaseDocument } from '../../../database/mongoDB/base-document';
+import { LocationData, LocationSchema } from './location.schema';
 
 export type RestaurantDocument = RestaurantData & Document;
 
