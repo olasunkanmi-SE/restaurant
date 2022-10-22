@@ -24,7 +24,7 @@
       "runtimeArgs": [
         "run",
         "test",
-        "src/infrastructure/filters/exception.filter.spec.ts",
+        "src/infrastructure/data_access/repositories/restaurant-repository.spec.ts",
         "--inspect-brk"
       ],
       // "src/infrastructure/data_access/db_repositories/worker_sql_repository.spec.ts",
