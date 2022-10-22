@@ -1,9 +1,9 @@
-import { Result } from './../domain/result/result';
 import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
-import { ILocationService } from './location-service.interface';
 import { TYPES } from './../application/constants/types';
+import { Result } from './../domain/result/result';
 import { CreateLocationDTO } from './create-location.dto';
 import { ILocationResponseDTO } from './location-response.dto';
+import { ILocationService } from './location-service.interface';
 
 @Controller('locations')
 export class LocationsController {

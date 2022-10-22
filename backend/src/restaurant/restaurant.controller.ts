@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { TYPES } from './../application/constants/types';
-import { CreateRestaurantDTO } from './create-restaurant.dto';
-import { IRestaurantService } from './restaurant-service.interface';
-import { IRestaurantResponseDTO } from './restaurant-response.dto';
 import { Result } from './../domain/result/result';
+import { CreateRestaurantDTO } from './create-restaurant.dto';
+import { IRestaurantResponseDTO } from './restaurant-response.dto';
+import { IRestaurantService } from './restaurant-service.interface';
 
 @Controller('restaurants')
 export class RestaurantsController {

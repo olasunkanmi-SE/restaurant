@@ -1,9 +1,9 @@
-import { LocationMapper } from './../location/location.mapper';
-import { RestaurantData } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
-import { AuditMapper } from './../audit/audit.mapper';
-import { Restaurant } from './restaurant';
-import { IMapper } from './../domain/mapper/mapper';
 import { Injectable } from '@nestjs/common';
+import { AuditMapper } from './../audit/audit.mapper';
+import { IMapper } from './../domain/mapper/mapper';
+import { RestaurantData } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
+import { LocationMapper } from './../location/location.mapper';
+import { Restaurant } from './restaurant';
 
 @Injectable()
 export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
