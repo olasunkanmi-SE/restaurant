@@ -1,7 +1,7 @@
-import { ILocation } from './../location.interface';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { BaseDocument } from './../../../database/mongoDB/base-document';
 import { Document } from 'mongoose';
+import { BaseDocument } from './../../../database/mongoDB/base-document';
+import { ILocation } from './../location.interface';
 
 export type LocationDocument = LocationData & Document;
 

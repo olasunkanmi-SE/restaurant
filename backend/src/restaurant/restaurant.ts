@@ -1,9 +1,9 @@
 import { Types } from 'mongoose';
-import { Audit } from './../domain/audit/audit';
-import { Location } from './../location/location';
 import { Entity } from '../domain/entity/';
-import { IRestaurant } from './restaurant.interface';
+import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result';
+import { Location } from './../location/location';
+import { IRestaurant } from './restaurant.interface';
 
 export class Restaurant extends Entity<IRestaurant> {
   private _name: string;
@@ -89,7 +89,7 @@ export class Restaurant extends Entity<IRestaurant> {
   set audit(audit) {
     this._audit = audit;
   }
-  
+
   static create(props: IRestaurant, id?: Types.ObjectId): Result<Restaurant> {
     return Result.ok(new Restaurant(id, props));
   }

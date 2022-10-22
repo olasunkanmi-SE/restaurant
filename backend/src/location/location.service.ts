@@ -1,13 +1,13 @@
-import { Result } from './../domain/result/result';
-import { Audit } from './../domain/audit/audit';
-import { ILocationService } from './location-service.interface';
 import { Injectable } from '@nestjs/common';
+import { Audit } from './../domain/audit/audit';
+import { Result } from './../domain/result/result';
 import { LocationRepository } from './../infrastructure/data_access/repositories/location.repository';
 import { CreateLocationDTO } from './create-location.dto';
 import { Location } from './location';
+import { ILocationResponseDTO } from './location-response.dto';
+import { ILocationService } from './location-service.interface';
 import { LocationMapper } from './location.mapper';
 import { LocationParser } from './location.parser';
-import { ILocationResponseDTO } from './location-response.dto';
 
 @Injectable()
 export class LocationService implements ILocationService {

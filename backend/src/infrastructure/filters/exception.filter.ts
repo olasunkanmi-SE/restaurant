@@ -6,14 +6,14 @@ import {
   HttpStatus,
   Inject,
 } from '@nestjs/common';
-import { IContextAwareLogger } from '../logger';
 import { Request } from 'express';
 import * as fs from 'fs';
+import { TYPES } from '../../application/constants';
+import { IContextAwareLogger } from '../logger';
 import {
   IExceptionResponse,
   IRequestException,
 } from './exception-response.interface';
-import { TYPES } from '../../application/constants';
 
 @Catch()
 export class ApplicationExceptionsFilter implements ExceptionFilter {
