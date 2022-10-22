@@ -18,13 +18,13 @@ export class RestaurantData extends BaseDocument {
   isActive: boolean;
 
   @Prop({ type: String })
-  webUrl: string;
+  webUrl?: string;
 
   @Prop({ type: String })
-  logoUrl: string;
+  logoUrl?: string;
 
   @Prop({ type: String })
-  timeZone: string;
+  timeZone?: string;
 
   @Prop({ type: LocationSchema })
   @Type(() => LocationData)
