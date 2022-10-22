@@ -24,7 +24,7 @@ export abstract class GenericDocumentRepository<T extends Document>
     filterQuery: FilterQuery<T>,
     projection?: ProjectionType<T | null>,
   ): Promise<T | null> {
-    const document = this.DocumentModel.findOne(filterQuery, projection).exec();
+    const document = this.DocumentModel.findOne(filterQuery, projection);
     if (!document) {
       throw new HttpException(
         {
@@ -56,11 +56,7 @@ export abstract class GenericDocumentRepository<T extends Document>
     projection?: ProjectionType<T | null>,
     options?: QueryOptions<T>,
   ): Promise<T[] | null> {
-    const documents = this.DocumentModel.find(
-      filterQuery,
-      projection,
-      options,
-    ).exec();
+    const documents = this.DocumentModel.find(filterQuery, projection, options);
     if (!documents) {
       throw new HttpException(
         {
