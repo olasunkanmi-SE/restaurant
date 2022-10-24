@@ -1,4 +1,5 @@
-import { AuditParser } from 'src/audit/audit.parser';
+import { AuditParser } from './../audit/audit.parser';
+
 import { Location } from './location';
 import { ILocationResponseDTO } from './location-response.dto';
 

@@ -21,7 +21,7 @@ export class LocationService implements ILocationService {
   ): Promise<Result<ILocationResponseDTO>> {
     //create a context function that takes an argument and does this
     //retrieve user information from jwt.
-    const audit: Audit = Audit.createInsertContext().getValue();
+    const audit: Audit = Audit.createInsertContext();
     const location: Location = Location.create({
       ...createLocationDTO,
       audit,

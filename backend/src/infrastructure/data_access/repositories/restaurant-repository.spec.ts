@@ -1,12 +1,16 @@
 import { expect } from 'chai';
 import mongoose, { Connection, Types } from 'mongoose';
 import { GenericDocumentRepository } from 'src/infrastructure';
-import { Mock } from 'typemoq';
-import { restaurantMockDocument } from '../../../restaurant/restaurant-mock-data';
+import { It, Mock } from 'typemoq';
+import {
+  restaurantMockData,
+  restaurantMockDocument,
+} from '../../../restaurant/restaurant-mock-data';
+import { Restaurant } from './../../../restaurant/restaurant';
 import { RestaurantRepository } from './restaurant.repository';
 import {
-  RestaurantDocument,
   RestaurantData,
+  RestaurantDocument,
 } from './schemas/restaurant.schema';
 
 describe('test the restaurant service', () => {
@@ -64,20 +68,19 @@ describe('test the restaurant service', () => {
     expect(result.isActive).to.be.true;
   });
 
-  // it('Should create a restaurant', async () => {
-  //   restaurantsRepositoryMock.setup((restaurantDocument) =>
-  //     restaurantDocument.create(),
-  //   );
-  //   restaurantsRepositoryMock
-  //     .setup((restaurantDocument) =>
-  //       restaurantDocument.DocumentModel.save(It.isAny()),
-  //     )
-  //     .returns(() => restaurantMockData);
-  //   const result: RestaurantData = await restaurantRepository.create(
-  //     await Restaurant.create(restaurantMockData).getValue(),
-  //   );
-  //   expect(result.email).to.eq('support@Sheraton.com');
-  // });
+  it('Should create a restaurant', async () => {
+    restaurantsRepositoryMock
+      .setup((restaurantDocument) => restaurantDocument.create())
+      .returns(() => restaurantDocumentPromise);
+    restaurantsRepositoryMock
+      .setup((restaurantDocument) => restaurantDocument.save(It.isAny()))
+      .returns(() => restaurantMockData);
+    const result: RestaurantData =
+      await restaurantRepository.DocumentModel.create(
+        await Restaurant.create(restaurantMockData).getValue(),
+      );
+    expect(result.email).to.eq('support@Sheraton.com');
+  });
 
   it('Should find a restaurant and update a property', async () => {
     const query = { name: 'Sharaton' };
