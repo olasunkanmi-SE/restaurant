@@ -2,11 +2,9 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
-import { LocationRepository } from './../infrastructure/data_access/repositories/location.repository';
 import { RestaurantRepository } from './../infrastructure/data_access/repositories/restaurant.repository';
 import { RestaurantDocument } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
 import { Location } from './../location/location';
-import { LocationMapper } from './../location/location.mapper';
 import { CreateRestaurantDTO } from './create-restaurant.dto';
 import { Restaurant } from './restaurant';
 import { IRestaurantResponseDTO } from './restaurant-response.dto';
@@ -18,8 +16,6 @@ export class RestaurantService implements IRestaurantService {
   constructor(
     private readonly restaurantRepository: RestaurantRepository,
     private readonly restaurantMapper: RestaurantMapper,
-    private readonly locationRepository: LocationRepository,
-    private readonly locationMapper: LocationMapper,
   ) {}
 
   async createRestaurant(
@@ -42,19 +38,15 @@ export class RestaurantService implements IRestaurantService {
       );
     }
 
-    const audit: Audit = Audit.createInsertContext().getValue();
+    const audit: Audit = Audit.createInsertContext();
     const location: Location = Location.create({
       ...createRestaurantDTO.location,
       audit,
     }).getValue();
 
-    const locationDocument = await this.locationRepository.create(
-      this.locationMapper.toPersistence(location),
-    );
-
     const restaurant: Restaurant = Restaurant.create({
       ...createRestaurantDTO,
-      location: this.locationMapper.toDomain(locationDocument),
+      location,
       audit,
     }).getValue();
 
