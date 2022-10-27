@@ -1,4 +1,3 @@
-import { Types } from 'mongoose';
 import { Audit } from '.././domain/audit';
 import { auditMockData } from './../audit/audit-mock-data';
 import { Location } from './../location/location';
@@ -32,20 +31,7 @@ export const restaurantMockDocument: any = {
     auditCreatedBy: 'Ola',
     auditCreatedDateTime: new Date(),
   },
-  merchant: {
-    _id: new Types.ObjectId(),
-    firstName: 'Ola',
-    lastName: 'Ola',
-    email: 'ola@tesla.com',
-    organisationName: 'Tesla',
-    phoneNumber: '123456',
-    passwordHash: '23rt565regf3454t',
-    role: 'admin',
-    isActive: true,
-    status: 'onboard',
-    organisationAddress: 'Malaysia',
-    audit: Audit.create(auditMockData).getValue(),
-  },
+  merchant: merchantMockData,
   auditModifiedBy: '',
   auditCreatedBy: 'Ola',
   auditCreatedDateTime: new Date(),
