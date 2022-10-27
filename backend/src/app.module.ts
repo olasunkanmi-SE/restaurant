@@ -13,6 +13,7 @@ import { RestaurantModule } from './restaurant/restaurant.module';
 
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
+import { MerchantModule } from './merchant/merchant.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import * as Joi from 'joi';
     ConfigModule.forRoot(),
     LocationModule,
     RestaurantModule,
+    MerchantModule,
   ],
   controllers: [AppController],
   providers: [

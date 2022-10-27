@@ -5,9 +5,13 @@ import { auditMockData } from './../audit/audit-mock-data';
 import { AuditMapper } from './../audit/audit.mapper';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
+import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { RestaurantRepository } from './../infrastructure/data_access/repositories/restaurant.repository';
+import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { RestaurantDocument } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
 import { LocationMapper } from './../location/location.mapper';
+import { merchantMockData } from './../merchant/merchant-mock-data';
+import { MerchantMapper } from './../merchant/merchant.mapper';
 import { Restaurant } from './restaurant';
 import {
   restaurantMockData,
@@ -20,14 +24,20 @@ import { RestaurantService } from './restaurant.service';
 describe('Test restaurant service', () => {
   const restaurantRepositoryStub: RestaurantRepository =
     sinon.stubInterface<RestaurantRepository>();
+  const merchantRepositoryStub: MerchantRepository =
+    sinon.stubInterface<MerchantRepository>();
   const locationMapperStub = new LocationMapper(new AuditMapper());
+  const merchantMapperStub = new MerchantMapper(new AuditMapper());
   const restaurantMapperStub: RestaurantMapper = new RestaurantMapper(
     new AuditMapper(),
     locationMapperStub,
+    merchantMapperStub,
   );
   const restaurantService = new RestaurantService(
     restaurantRepositoryStub,
+    merchantRepositoryStub,
     restaurantMapperStub,
+    merchantMapperStub,
   );
   let createRestaurantDTO: any = {
     name: 'Komune living',
@@ -40,6 +50,11 @@ describe('Test restaurant service', () => {
       country: 'Nigeria',
       state: 'FCT',
     },
+    merchantId: new Types.ObjectId(),
+    audit: {
+      auditCreatedBy: '',
+      auditCreatedDateTime: new Date(),
+    },
   };
   it('Create a restaurant', async () => {
     restaurantRepositoryStub.find = async (): Promise<RestaurantDocument[]> => {
@@ -48,11 +63,18 @@ describe('Test restaurant service', () => {
     Audit.createInsertContext = (): Audit => {
       return Audit.create(auditMockData).getValue();
     };
+    merchantRepositoryStub.findById = async (): Promise<MerchantDocument> => {
+      return merchantMockData;
+    };
     const restaurant = Restaurant.create(restaurantMockData).getValue();
     restaurantMapperStub.toPersistence(restaurant);
     restaurantRepositoryStub.create = async (): Promise<RestaurantDocument> => {
       return restaurantMockDocument;
     };
+    restaurantRepositoryStub.getRestaurantWithMerchantDetails =
+      async (): Promise<Restaurant> => {
+        return restaurant;
+      };
     const result: Result<IRestaurantResponseDTO> =
       await restaurantService.createRestaurant(createRestaurantDTO);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

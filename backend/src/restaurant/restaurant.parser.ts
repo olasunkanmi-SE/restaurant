@@ -1,3 +1,4 @@
+import { MerchantParser } from './../merchant/merchant-parser';
 import { AuditParser } from './../audit/audit.parser';
 import { LocationParser } from './../location/location.parser';
 import { Restaurant } from './restaurant';
@@ -6,7 +7,7 @@ export class RestaurantParser {
   static createRestaurantResponse(
     restaurant: Restaurant,
   ): IRestaurantResponseDTO {
-    const { audit, location } = restaurant;
+    const { audit, location, merchant } = restaurant;
     const restaurantResponse: IRestaurantResponseDTO = {
       id: restaurant.id,
       name: restaurant.name,
@@ -17,6 +18,7 @@ export class RestaurantParser {
       timeZone: restaurant.timeZone,
       location: LocationParser.createLocationResponse(location),
       ...AuditParser.createAuditResponse(audit),
+      merchant: MerchantParser.createMerchantResponse(merchant),
     };
     return restaurantResponse;
   }
