@@ -3,6 +3,7 @@ import { Entity } from '../domain/entity/';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result';
 import { Location } from './../location/location';
+import { Merchant } from './../merchant/merchant';
 import { IRestaurant } from './restaurant.interface';
 
 export class Restaurant extends Entity<IRestaurant> {
@@ -14,6 +15,8 @@ export class Restaurant extends Entity<IRestaurant> {
   private _timeZone?: string;
   private _location: Location;
   private _audit: Audit;
+  private _phoneNumber: string;
+  private _merchant: Merchant;
   constructor(id: Types.ObjectId, props: IRestaurant) {
     super(id);
     this._name = props.name;
@@ -24,6 +27,8 @@ export class Restaurant extends Entity<IRestaurant> {
     this._timeZone = props.timeZone;
     this._location = props.location;
     this._audit = props.audit;
+    this._phoneNumber = props.phoneNumber;
+    this._merchant = props.merchant;
   }
 
   get name(): string {
@@ -74,12 +79,28 @@ export class Restaurant extends Entity<IRestaurant> {
     this._timeZone = timeZone;
   }
 
+  get phoneNumber(): string {
+    return this._phoneNumber;
+  }
+
+  set phoneNumber(phoneNumber: string) {
+    this._phoneNumber = phoneNumber;
+  }
+
   get location(): Location {
     return this._location;
   }
 
   set location(location: Location) {
     this._location = location;
+  }
+
+  get merchant(): Merchant {
+    return this._merchant;
+  }
+
+  set merchant(merchant: Merchant) {
+    this._merchant = merchant;
   }
 
   get audit(): Audit {

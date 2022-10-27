@@ -1,3 +1,6 @@
+import { MerchantMapper } from './../merchant/merchant.mapper';
+import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
+import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { Audit } from './../domain/audit/audit';
@@ -11,11 +14,14 @@ import { IRestaurantResponseDTO } from './restaurant-response.dto';
 import { IRestaurantService } from './restaurant-service.interface';
 import { RestaurantMapper } from './restaurant.mapper';
 import { RestaurantParser } from './restaurant.parser';
+import { Merchant } from './../merchant/merchant';
 @Injectable()
 export class RestaurantService implements IRestaurantService {
   constructor(
     private readonly restaurantRepository: RestaurantRepository,
+    private readonly merchantRepository: MerchantRepository,
     private readonly restaurantMapper: RestaurantMapper,
+    private readonly merchantMapper: MerchantMapper,
   ) {}
 
   async createRestaurant(
@@ -39,25 +45,44 @@ export class RestaurantService implements IRestaurantService {
     }
 
     const audit: Audit = Audit.createInsertContext();
-    const location: Location = Location.create({
-      ...createRestaurantDTO.location,
-      audit,
-    }).getValue();
+    const location: Location = Location.create(
+      {
+        ...createRestaurantDTO.location,
+        audit,
+      },
+      new Types.ObjectId(),
+    ).getValue();
 
-    const restaurant: Restaurant = Restaurant.create({
-      ...createRestaurantDTO,
-      location,
-      audit,
-    }).getValue();
+    const merchantDoc: MerchantDocument =
+      await this.merchantRepository.findById(createRestaurantDTO.merchantId);
+
+    const merchant: Merchant = Merchant.create(
+      this.merchantMapper.toDomain(merchantDoc),
+      new Types.ObjectId(),
+    ).getValue();
+
+    const restaurant: Restaurant = Restaurant.create(
+      {
+        ...createRestaurantDTO,
+        location,
+        merchant,
+        audit,
+      },
+      new Types.ObjectId(),
+    ).getValue();
 
     const newRestaurant = await this.restaurantRepository.create(
       this.restaurantMapper.toPersistence(restaurant),
     );
+    const rest = this.restaurantMapper.toDomain(newRestaurant);
+    const restaurantWithMerchantDetails =
+      await this.restaurantRepository.getRestaurantWithMerchantDetails(
+        rest,
+        createRestaurantDTO.merchantId,
+      );
 
     return Result.ok(
-      RestaurantParser.createRestaurantResponse(
-        this.restaurantMapper.toDomain(newRestaurant),
-      ),
+      RestaurantParser.createRestaurantResponse(restaurantWithMerchantDetails),
     );
   }
 

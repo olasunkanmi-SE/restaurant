@@ -1,4 +1,4 @@
 export * from './schemas';
-export * from './location.interface';
+export * from './interfaces';
 export * from './location.repository';
 export * from './restaurant.repository';

@@ -1,12 +1,16 @@
+import { AuditMapper } from './../../../audit/audit.mapper';
+import { MerchantMapper } from './../../../merchant/merchant.mapper';
 import { expect } from 'chai';
 import mongoose, { Connection, Types } from 'mongoose';
-import { GenericDocumentRepository } from 'src/infrastructure';
+import * as sinon from 'ts-sinon';
 import { It, Mock } from 'typemoq';
+import { GenericDocumentRepository } from '../../../infrastructure';
 import {
   restaurantMockData,
   restaurantMockDocument,
 } from '../../../restaurant/restaurant-mock-data';
 import { Restaurant } from './../../../restaurant/restaurant';
+import { MerchantRepository } from './merchant-repository';
 import { RestaurantRepository } from './restaurant.repository';
 import {
   RestaurantData,
@@ -21,11 +25,16 @@ describe('test the restaurant service', () => {
   beforeEach(async () => {
     connection = new Connection();
     modelId = new Types.ObjectId();
+    const merchantRepositoryStub: MerchantRepository =
+      sinon.stubInterface<MerchantRepository>();
+    const merchantMapperStub = new MerchantMapper(new AuditMapper());
     restaurantsRepositoryMock =
       Mock.ofType<GenericDocumentRepository<RestaurantDocument>>();
     restaurantRepository = await new RestaurantRepository(
       restaurantsRepositoryMock.target,
       connection,
+      merchantRepositoryStub,
+      merchantMapperStub,
     );
   });
   afterEach(() => {
