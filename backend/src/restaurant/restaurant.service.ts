@@ -1,24 +1,26 @@
-import { MerchantMapper } from './../merchant/merchant.mapper';
-import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
-import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
-import { RestaurantRepository } from './../infrastructure/data_access/repositories/restaurant.repository';
+import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
+import { IRestaurantRepository } from './../infrastructure/data_access/repositories/restaurant-repository.interface';
+import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { RestaurantDocument } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
 import { Location } from './../location/location';
+import { Merchant } from './../merchant/merchant';
+import { MerchantMapper } from './../merchant/merchant.mapper';
 import { CreateRestaurantDTO } from './create-restaurant.dto';
 import { Restaurant } from './restaurant';
 import { IRestaurantResponseDTO } from './restaurant-response.dto';
 import { IRestaurantService } from './restaurant-service.interface';
 import { RestaurantMapper } from './restaurant.mapper';
 import { RestaurantParser } from './restaurant.parser';
-import { Merchant } from './../merchant/merchant';
 @Injectable()
 export class RestaurantService implements IRestaurantService {
   constructor(
-    private readonly restaurantRepository: RestaurantRepository,
+    @Inject(TYPES.IRestaurantRepository)
+    private readonly restaurantRepository: IRestaurantRepository,
     private readonly merchantRepository: MerchantRepository,
     private readonly restaurantMapper: RestaurantMapper,
     private readonly merchantMapper: MerchantMapper,

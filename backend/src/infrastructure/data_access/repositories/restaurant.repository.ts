@@ -1,3 +1,4 @@
+import { IRestaurantRepository } from './restaurant-repository.interface';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model, Types } from 'mongoose';
 import { GenericDocumentRepository } from '../../database/mongoDB/generic-document.repository';
@@ -11,7 +12,10 @@ import {
   RestaurantDocument,
 } from './schemas';
 
-export class RestaurantRepository extends GenericDocumentRepository<RestaurantDocument> {
+export class RestaurantRepository
+  extends GenericDocumentRepository<RestaurantDocument>
+  implements IRestaurantRepository
+{
   constructor(
     @InjectModel(RestaurantData.name)
     restaurantModel: Model<RestaurantDocument>,

@@ -34,7 +34,7 @@ import { RestaurantService } from './restaurant.service';
   controllers: [RestaurantsController],
   providers: [
     { provide: TYPES.IRestaurantService, useClass: RestaurantService },
-    RestaurantRepository,
+    { provide: TYPES.IRestaurantRepository, useClass: RestaurantRepository },
     RestaurantMapper,
     AuditMapper,
     LocationMapper,

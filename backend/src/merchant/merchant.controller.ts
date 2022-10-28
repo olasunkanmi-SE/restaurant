@@ -1,6 +1,6 @@
 import { Result } from './../domain/result/result';
 import { IMerchantResponseDTO } from './merchant-response.dto';
-import { createMerchantDTO } from './create-merchant.dto';
+import { CreateMerchantDTO } from './create-merchant.dto';
 import { TYPES } from './../application/constants/types';
 import { IMerchantService } from './merchant-service.interface';
 import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
@@ -15,13 +15,13 @@ export class MerchantController {
 
   @Post()
   async createMerchant(
-    @Body() request: createMerchantDTO,
+    @Body() request: CreateMerchantDTO,
   ): Promise<Result<IMerchantResponseDTO>> {
     return this.merchantService.createMerchant(request);
   }
 
   @Get('/:id')
-  async getRestaurantById(
+  async getMerchantById(
     @Param('id') merchantId: Types.ObjectId,
   ): Promise<Result<IMerchantResponseDTO>> {
     return this.merchantService.getMerchantById(merchantId);

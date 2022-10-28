@@ -7,7 +7,7 @@ import {
   MaxLength,
 } from 'class-validator';
 
-export class createMerchantDTO {
+export class CreateMerchantDTO {
   @IsString()
   @IsNotEmpty()
   @MaxLength(256)
