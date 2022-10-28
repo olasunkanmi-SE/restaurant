@@ -1,12 +1,15 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
-import { LocationRepository } from './../infrastructure/data_access/repositories/location.repository';
-import { RestaurantRepository } from './../infrastructure/data_access/repositories/restaurant.repository';
+import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
+import { IRestaurantRepository } from './../infrastructure/data_access/repositories/restaurant-repository.interface';
+import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { RestaurantDocument } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
 import { Location } from './../location/location';
-import { LocationMapper } from './../location/location.mapper';
+import { Merchant } from './../merchant/merchant';
+import { MerchantMapper } from './../merchant/merchant.mapper';
 import { CreateRestaurantDTO } from './create-restaurant.dto';
 import { Restaurant } from './restaurant';
 import { IRestaurantResponseDTO } from './restaurant-response.dto';
@@ -16,10 +19,11 @@ import { RestaurantParser } from './restaurant.parser';
 @Injectable()
 export class RestaurantService implements IRestaurantService {
   constructor(
-    private readonly restaurantRepository: RestaurantRepository,
+    @Inject(TYPES.IRestaurantRepository)
+    private readonly restaurantRepository: IRestaurantRepository,
+    private readonly merchantRepository: MerchantRepository,
     private readonly restaurantMapper: RestaurantMapper,
-    private readonly locationRepository: LocationRepository,
-    private readonly locationMapper: LocationMapper,
+    private readonly merchantMapper: MerchantMapper,
   ) {}
 
   async createRestaurant(
@@ -42,30 +46,45 @@ export class RestaurantService implements IRestaurantService {
       );
     }
 
-    const audit: Audit = Audit.createInsertContext().getValue();
-    const location: Location = Location.create({
-      ...createRestaurantDTO.location,
-      audit,
-    }).getValue();
+    const audit: Audit = Audit.createInsertContext();
+    const location: Location = Location.create(
+      {
+        ...createRestaurantDTO.location,
+        audit,
+      },
+      new Types.ObjectId(),
+    ).getValue();
 
-    const locationDocument = await this.locationRepository.create(
-      this.locationMapper.toPersistence(location),
-    );
+    const merchantDoc: MerchantDocument =
+      await this.merchantRepository.findById(createRestaurantDTO.merchantId);
 
-    const restaurant: Restaurant = Restaurant.create({
-      ...createRestaurantDTO,
-      location: this.locationMapper.toDomain(locationDocument),
-      audit,
-    }).getValue();
+    const merchant: Merchant = Merchant.create(
+      this.merchantMapper.toDomain(merchantDoc),
+      new Types.ObjectId(),
+    ).getValue();
+
+    const restaurant: Restaurant = Restaurant.create(
+      {
+        ...createRestaurantDTO,
+        location,
+        merchant,
+        audit,
+      },
+      new Types.ObjectId(),
+    ).getValue();
 
     const newRestaurant = await this.restaurantRepository.create(
       this.restaurantMapper.toPersistence(restaurant),
     );
+    const rest = this.restaurantMapper.toDomain(newRestaurant);
+    const restaurantWithMerchantDetails =
+      await this.restaurantRepository.getRestaurantWithMerchantDetails(
+        rest,
+        createRestaurantDTO.merchantId,
+      );
 
     return Result.ok(
-      RestaurantParser.createRestaurantResponse(
-        this.restaurantMapper.toDomain(newRestaurant),
-      ),
+      RestaurantParser.createRestaurantResponse(restaurantWithMerchantDetails),
     );
   }
 

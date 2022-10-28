@@ -8,5 +8,5 @@ export interface ILocation {
   state: string;
   latitude?: string;
   longitude?: string;
-  audit?: Audit;
+  audit: Audit;
 }

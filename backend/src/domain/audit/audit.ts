@@ -31,11 +31,11 @@ export class Audit extends ValueObjects<IAudit> {
     return Result.ok(new Audit(props));
   }
 
-  static createInsertContext(): Result<Audit> {
+  static createInsertContext(): Audit {
     const audit: IAudit = {
       auditCreatedDateTime: new Date(),
       auditCreatedBy: 'Ola',
     };
-    return Audit.create(audit);
+    return Audit.create(audit).getValue();
   }
 }

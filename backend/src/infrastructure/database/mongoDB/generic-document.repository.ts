@@ -37,8 +37,11 @@ export abstract class GenericDocumentRepository<T extends Document>
     return document;
   }
 
-  findById(id: any, projection?: ProjectionType<T> | null): Promise<T | null> {
-    const document = this.DocumentModel.findById(id, projection).exec();
+  async findById(
+    id: any,
+    projection?: ProjectionType<T> | null,
+  ): Promise<T | null> {
+    const document = await this.DocumentModel.findById(id, projection);
     if (!document) {
       throw new HttpException(
         {

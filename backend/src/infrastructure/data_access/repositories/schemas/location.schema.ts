@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { BaseDocument } from './../../../database/mongoDB/base-document';
-import { ILocation } from './../location.interface';
+import { ILocationData } from '../interfaces/location-model.interface';
 
 export type LocationDocument = LocationData & Document;
 
 @Schema({ versionKey: false })
-export class LocationData extends BaseDocument implements ILocation {
+export class LocationData extends BaseDocument implements ILocationData {
   @Prop({ type: String, required: true })
   address: string;
 

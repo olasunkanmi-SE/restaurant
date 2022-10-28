@@ -1,4 +1,3 @@
-import { CreateLocationDTO } from './../location/create-location.dto';
 import {
   IsBoolean,
   IsEmail,
@@ -8,6 +7,8 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
+import { Types } from 'mongoose';
+import { CreateLocationDTO } from './../location/create-location.dto';
 export class CreateRestaurantDTO {
   @IsString()
   @IsNotEmpty()
@@ -39,7 +40,15 @@ export class CreateRestaurantDTO {
   @IsOptional()
   readonly timeZone: string;
 
+  @IsString()
+  @MaxLength(256)
+  @IsOptional()
+  readonly phoneNumber: string;
+
   @IsObject()
   @IsNotEmpty()
   readonly location: CreateLocationDTO;
+
+  @IsNotEmpty()
+  readonly merchantId: Types.ObjectId;
 }

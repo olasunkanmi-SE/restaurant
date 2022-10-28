@@ -1,8 +1,8 @@
-import { LocationData } from './../infrastructure/data_access/repositories/schemas/location.schema';
 import { Injectable } from '@nestjs/common';
+import { AuditMapper } from './../audit/audit.mapper';
 import { IMapper } from './../domain/mapper/mapper';
+import { LocationData } from './../infrastructure/data_access/repositories/schemas/location.schema';
 import { Location } from './location';
-import { AuditMapper } from 'src/audit/audit.mapper';
 
 @Injectable()
 export class LocationMapper implements IMapper<Location, LocationData> {

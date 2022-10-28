@@ -1,4 +1,4 @@
-import { Audit } from 'src/domain';
+import { Audit } from './../domain/audit/audit';
 import { IAudit } from './../infrastructure/database/mongoDB/base-document.interface';
 
 export class AuditParser {
