@@ -7,7 +7,6 @@ export interface IMerchantResponseDTO extends IAudit {
   email: string;
   organisationName: string;
   phoneNumber: string;
-  passwordHash: string;
   role: string;
   isActive: boolean;
   status?: string;

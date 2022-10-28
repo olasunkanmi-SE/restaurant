@@ -1,10 +1,11 @@
-import { Merchant } from './../merchant/merchant';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
+import { Merchant } from './../merchant/merchant';
 import { CreateMerchantDTO } from './create-merchant.dto';
 import { MerchantParser } from './merchant-parser';
 import { IMerchantResponseDTO } from './merchant-response.dto';
@@ -35,7 +36,12 @@ export class MerchantService implements IMerchantService {
       );
     }
     const audit: Audit = Audit.createInsertContext();
-    const merchant: Merchant = Merchant.create({ ...props, audit }).getValue();
+    const hashedPassword = await this.hashPassword(props.passwordHash);
+    const merchant: Merchant = Merchant.create({
+      ...props,
+      passwordHash: hashedPassword,
+      audit,
+    }).getValue();
     const newMerchant = await this.merchantRepository.create(
       this.merchantMapper.toPersistence(merchant),
     );
@@ -50,6 +56,14 @@ export class MerchantService implements IMerchantService {
     id: Types.ObjectId,
   ): Promise<Result<IMerchantResponseDTO>> {
     const merchantDoc = await this.merchantRepository.findById(id);
-    return Result.ok(merchantDoc).getValue();
+    return Result.ok(
+      MerchantParser.createMerchantResponse(
+        this.merchantMapper.toDomain(merchantDoc),
+      ),
+    );
+  }
+
+  private async hashPassword(password: string): Promise<string> {
+    return await bcrypt.hash(password, 10);
   }
 }

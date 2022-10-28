@@ -10,7 +10,6 @@ export class MerchantParser {
       email: merchant.email,
       organisationName: merchant.organisationName,
       phoneNumber: merchant.phoneNumber,
-      passwordHash: merchant.organisationAddress,
       role: merchant.role,
       isActive: merchant.isActive,
       status: merchant.status,
