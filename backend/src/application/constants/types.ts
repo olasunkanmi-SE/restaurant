@@ -3,4 +3,5 @@ export const TYPES = {
   ILocationService: Symbol('ILocationService'),
   IRestaurantService: Symbol('IRestaurantService'),
   IMerchantService: Symbol('IMerchantService'),
+  IRestaurantRepository: Symbol('IRestaurantRepository'),
 };

@@ -6,7 +6,7 @@ import { AuditMapper } from './../audit/audit.mapper';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
-import { RestaurantRepository } from './../infrastructure/data_access/repositories/restaurant.repository';
+import { IRestaurantRepository } from './../infrastructure/data_access/repositories/restaurant-repository.interface';
 import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { RestaurantDocument } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
 import { LocationMapper } from './../location/location.mapper';
@@ -22,8 +22,8 @@ import { RestaurantMapper } from './restaurant.mapper';
 import { RestaurantService } from './restaurant.service';
 
 describe('Test restaurant service', () => {
-  const restaurantRepositoryStub: RestaurantRepository =
-    sinon.stubInterface<RestaurantRepository>();
+  const restaurantRepositoryStub: IRestaurantRepository =
+    sinon.stubInterface<IRestaurantRepository>();
   const merchantRepositoryStub: MerchantRepository =
     sinon.stubInterface<MerchantRepository>();
   const locationMapperStub = new LocationMapper(new AuditMapper());

@@ -5,7 +5,7 @@ import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
-import { createMerchantDTO } from './create-merchant.dto';
+import { CreateMerchantDTO } from './create-merchant.dto';
 import { MerchantParser } from './merchant-parser';
 import { IMerchantResponseDTO } from './merchant-response.dto';
 import { IMerchantService } from './merchant-service.interface';
@@ -18,7 +18,7 @@ export class MerchantService implements IMerchantService {
     private readonly merchantMapper: MerchantMapper,
   ) {}
   async createMerchant(
-    props: createMerchantDTO,
+    props: CreateMerchantDTO,
   ): Promise<Result<IMerchantResponseDTO>> {
     const merchantDocuments: MerchantDocument[] =
       await this.merchantRepository.find({});

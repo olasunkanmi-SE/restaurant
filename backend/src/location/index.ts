@@ -8,3 +8,4 @@ export * from './create-location.dto';
 export * from './location-response.dto';
 export * from './location.mapper';
 export * from './location.parser';
+export * from './location-mock-data';

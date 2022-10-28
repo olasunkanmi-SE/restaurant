@@ -12,6 +12,13 @@ export interface IGenericDocument<T> {
     projection?: ProjectionType<T | null>,
   ): Promise<T | null>;
 
+  findOne(
+    filterQuery: FilterQuery<T>,
+    projection?: ProjectionType<T | null>,
+  ): Promise<T | null>;
+
+  findById(id: any, projection?: ProjectionType<T> | null): Promise<T | null>;
+
   find(
     filterQuery: FilterQuery<T>,
     projection?: ProjectionType<T | null>,
