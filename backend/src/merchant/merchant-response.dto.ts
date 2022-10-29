@@ -1,3 +1,4 @@
+import { ISignUpTokens } from './../infrastructure/auth/interfaces/auth.interface';
 import { Types } from 'mongoose';
 import { IAudit } from './../infrastructure/database/mongoDB/base-document.interface';
 export interface IMerchantResponseDTO extends IAudit {
@@ -11,4 +12,5 @@ export interface IMerchantResponseDTO extends IAudit {
   isActive: boolean;
   status?: string;
   organisationAddress: string;
+  tokens?: ISignUpTokens;
 }

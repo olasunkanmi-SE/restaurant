@@ -1,8 +1,14 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
+import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
+import { IAuthService } from './../infrastructure/auth/interfaces/auth-service.interface';
+import {
+  ISignUpTokens,
+  IUserPayload,
+} from './../infrastructure/auth/interfaces/auth.interface';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { Merchant } from './../merchant/merchant';
@@ -11,13 +17,13 @@ import { MerchantParser } from './merchant-parser';
 import { IMerchantResponseDTO } from './merchant-response.dto';
 import { IMerchantService } from './merchant-service.interface';
 import { MerchantMapper } from './merchant.mapper';
-import { ISignUpTokens } from './tokens.interface';
 
 @Injectable()
 export class MerchantService implements IMerchantService {
   constructor(
     private readonly merchantRepository: MerchantRepository,
     private readonly merchantMapper: MerchantMapper,
+    @Inject(TYPES.IAuthService) private readonly authService: IAuthService,
   ) {}
 
   // async signUp(props: CreateMerchantDTO): Promise<ISignUpTokens> {}
@@ -49,11 +55,19 @@ export class MerchantService implements IMerchantService {
     const newMerchant = await this.merchantRepository.create(
       this.merchantMapper.toPersistence(merchant),
     );
-    return Result.ok(
-      MerchantParser.createMerchantResponse(
-        this.merchantMapper.toDomain(newMerchant),
-      ),
+
+    let tokens: ISignUpTokens;
+    if (newMerchant) {
+      const { id, email, role } = newMerchant;
+      const props: IUserPayload = { userId: id, email, role };
+      tokens = await this.authService.generateAuthTokens(props);
+    }
+
+    const parsedResponse = MerchantParser.createMerchantResponse(
+      this.merchantMapper.toDomain(newMerchant),
     );
+    parsedResponse.tokens = tokens;
+    return Result.ok(parsedResponse);
   }
 
   async getMerchantById(

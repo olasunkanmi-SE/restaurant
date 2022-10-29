@@ -131,4 +131,6 @@ export class Merchant extends Entity<IMerchant> {
   static create(props: IMerchant, id?: Types.ObjectId): Result<Merchant> {
     return Result.ok(new Merchant(id, props));
   }
+
+  // static update(props: Partial<IMerchant>);
 }
