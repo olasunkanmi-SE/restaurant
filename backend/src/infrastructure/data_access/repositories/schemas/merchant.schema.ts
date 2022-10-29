@@ -7,28 +7,28 @@ export type MerchantDocument = MerchantData & Document;
 
 @Schema({ versionKey: false })
 export class MerchantData extends BaseDocument implements IMerchantData {
-  @Prop({ type: String, required: true })
+  @Prop({ type: String })
   firstName: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String })
   lastName: string;
 
   @Prop({ type: String, required: true, unique: true })
   email: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String })
   organisationName: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String })
   organisationAddress: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String })
   phoneNumber: string;
 
   @Prop({ type: String, required: true })
   passwordHash: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String })
   role: string;
 
   @Prop({ type: Boolean, required: true, default: false })
@@ -36,6 +36,9 @@ export class MerchantData extends BaseDocument implements IMerchantData {
 
   @Prop({ type: String })
   status: string;
+
+  @Prop({ type: String })
+  refreshTokenHash: string;
 }
 
 export const MerchantSchema = SchemaFactory.createForClass(MerchantData);

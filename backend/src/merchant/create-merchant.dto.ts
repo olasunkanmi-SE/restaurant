@@ -9,7 +9,7 @@ import {
 
 export class CreateMerchantDTO {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @MaxLength(256)
   readonly firstName: string;
 
@@ -20,17 +20,17 @@ export class CreateMerchantDTO {
   readonly email: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @MaxLength(256)
   readonly lastName: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @MaxLength(256)
   readonly organisationName: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @MaxLength(40)
   readonly phoneNumber: string;
 
@@ -38,13 +38,12 @@ export class CreateMerchantDTO {
   @MaxLength(256)
   readonly passwordHash: string;
 
-  @IsString()
+  @IsOptional()
   @IsNotEmpty()
   @MaxLength(30)
   readonly role: string;
 
   @IsBoolean()
-  @IsNotEmpty()
   readonly isActive: boolean;
 
   @IsBoolean()
