@@ -31,7 +31,7 @@ export class MerchantData extends BaseDocument implements IMerchantData {
   @Prop({ type: String })
   role: string;
 
-  @Prop({ type: Boolean, required: true, default: false })
+  @Prop({ type: Boolean, default: false })
   isActive: boolean;
 
   @Prop({ type: String })
