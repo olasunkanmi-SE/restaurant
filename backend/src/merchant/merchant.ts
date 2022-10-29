@@ -119,6 +119,13 @@ export class Merchant extends Entity<IMerchant> {
   set audit(audit) {
     this._audit = audit;
   }
+  get refreshTokenHash(): string {
+    return this._refreshTokenHash;
+  }
+
+  set refreshTokenHash(token: string) {
+    this._refreshTokenHash = token;
+  }
 
   get refreshTokenHash(): string {
     return this._refreshTokenHash;
