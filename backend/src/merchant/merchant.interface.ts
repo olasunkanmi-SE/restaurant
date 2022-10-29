@@ -10,5 +10,6 @@ export interface IMerchant {
   isActive: boolean;
   status?: string;
   organisationAddress: string;
+  refreshTokenHash?: string;
   audit: Audit;
 }

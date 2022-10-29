@@ -13,6 +13,7 @@ export class Merchant extends Entity<IMerchant> {
   private _isActive: boolean;
   private _status: string;
   private _organisationAddress: string;
+  private _refreshTokenHash: string;
   private _audit: Audit;
 
   constructor(id: Types.ObjectId, props: IMerchant) {
@@ -27,6 +28,7 @@ export class Merchant extends Entity<IMerchant> {
     this._isActive = props.isActive;
     this._status = props.status;
     this._organisationAddress = props.organisationAddress;
+    this._refreshTokenHash = props.refreshTokenHash;
     this._audit = props.audit;
   }
 
@@ -117,8 +119,17 @@ export class Merchant extends Entity<IMerchant> {
   set audit(audit) {
     this._audit = audit;
   }
+  get refreshTokenHash(): string {
+    return this._refreshTokenHash;
+  }
+
+  set refreshTokenHash(token: string) {
+    this._refreshTokenHash = token;
+  }
 
   static create(props: IMerchant, id?: Types.ObjectId): Result<Merchant> {
     return Result.ok(new Merchant(id, props));
   }
+
+  // static update(props: Partial<IMerchant>);
 }
