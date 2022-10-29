@@ -1,6 +1,5 @@
-import { IUserPayload, ISignUpTokens, IJwtPayload } from './auth.interface';
+import { IUserPayload, ISignUpTokens } from './auth.interface';
 export interface IAuthService {
   generateAuthTokens(payload: IUserPayload): Promise<ISignUpTokens>;
-  signAccessToken(jwtPayload: IJwtPayload): Promise<string>;
-  signRefreshToken(jwtPayload: IJwtPayload): Promise<string>;
+  hashData(prop: string, saltRound: number): Promise<string>;
 }

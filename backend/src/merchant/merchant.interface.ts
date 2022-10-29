@@ -1,15 +1,15 @@
 import { Audit } from './../domain/audit/audit';
 export interface IMerchant {
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
-  organisationName: string;
-  phoneNumber: string;
+  organisationName?: string;
+  phoneNumber?: string;
   passwordHash: string;
-  role: string;
-  isActive: boolean;
+  role?: string;
+  isActive?: boolean;
   status?: string;
-  organisationAddress: string;
+  organisationAddress?: string;
   refreshTokenHash?: string;
   audit: Audit;
 }

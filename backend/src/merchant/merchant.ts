@@ -3,17 +3,17 @@ import { Audit, Entity, Result } from './../domain';
 import { IMerchant } from './merchant.interface';
 
 export class Merchant extends Entity<IMerchant> {
-  private _firstName: string;
-  private _lastName: string;
+  private _firstName?: string;
+  private _lastName?: string;
   private _email: string;
-  private _organisationName: string;
-  private _phoneNumber: string;
+  private _organisationName?: string;
+  private _phoneNumber?: string;
   private _passwordHash: string;
-  private _role: string;
-  private _isActive: boolean;
-  private _status: string;
-  private _organisationAddress: string;
-  private _refreshTokenHash: string;
+  private _role?: string;
+  private _isActive?: boolean;
+  private _status?: string;
+  private _organisationAddress?: string;
+  private _refreshTokenHash?: string;
   private _audit: Audit;
 
   constructor(id: Types.ObjectId, props: IMerchant) {
@@ -132,5 +132,9 @@ export class Merchant extends Entity<IMerchant> {
     return Result.ok(new Merchant(id, props));
   }
 
-  // static update(props: Partial<IMerchant>);
+  update(props: Partial<IMerchant>) {
+    if (Object.hasOwnProperty.call(props, 'refreshTokenHash')) {
+      this._refreshTokenHash = props.refreshTokenHash;
+    }
+  }
 }

@@ -43,6 +43,7 @@ export class CreateMerchantDTO {
   @MaxLength(30)
   readonly role: string;
 
+  @IsOptional()
   @IsBoolean()
   readonly isActive: boolean;
 

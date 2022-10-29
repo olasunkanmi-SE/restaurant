@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
+import { saltRounds } from './../application/constants/constants';
 import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
@@ -26,8 +26,6 @@ export class MerchantService implements IMerchantService {
     @Inject(TYPES.IAuthService) private readonly authService: IAuthService,
   ) {}
 
-  // async signUp(props: CreateMerchantDTO): Promise<ISignUpTokens> {}
-
   async createMerchant(
     props: CreateMerchantDTO,
   ): Promise<Result<IMerchantResponseDTO>> {
@@ -52,20 +50,19 @@ export class MerchantService implements IMerchantService {
       passwordHash: hashedPassword,
       audit,
     }).getValue();
-    const newMerchant = await this.merchantRepository.create(
+    const newMerchantDoc = await this.merchantRepository.create(
       this.merchantMapper.toPersistence(merchant),
     );
 
     let tokens: ISignUpTokens;
-    if (newMerchant) {
-      const { id, email, role } = newMerchant;
+    if (newMerchantDoc) {
+      const { id, email, role } = newMerchantDoc;
       const props: IUserPayload = { userId: id, email, role };
       tokens = await this.authService.generateAuthTokens(props);
     }
-
-    const parsedResponse = MerchantParser.createMerchantResponse(
-      this.merchantMapper.toDomain(newMerchant),
-    );
+    const newMerchant: Merchant = this.merchantMapper.toDomain(newMerchantDoc);
+    this.updateUserRefreshToken(newMerchant, tokens);
+    const parsedResponse = MerchantParser.createMerchantResponse(newMerchant);
     parsedResponse.tokens = tokens;
     return Result.ok(parsedResponse);
   }
@@ -82,6 +79,22 @@ export class MerchantService implements IMerchantService {
   }
 
   private async hashPassword(password: string): Promise<string> {
-    return bcrypt.hash(password, 10);
+    return this.authService.hashData(password, saltRounds);
+  }
+
+  private async updateUserRefreshToken(
+    merchant: Merchant,
+    token: ISignUpTokens,
+  ): Promise<Merchant> {
+    const hash = await this.authService.hashData(
+      token.refreshToken,
+      saltRounds,
+    );
+    const merchantDoc: MerchantDocument =
+      await this.merchantRepository.findOneAndUpdate(
+        { _id: merchant.id },
+        { refreshTokenHash: hash },
+      );
+    return this.merchantMapper.toDomain(merchantDoc);
   }
 }

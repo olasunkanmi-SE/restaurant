@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 import { TYPES } from './../../application/constants/types';
 import { IAuthService } from './interfaces/auth-service.interface';
 import {
@@ -34,17 +35,21 @@ export class AuthService implements IAuthService {
     };
   }
 
-  async signAccessToken(jwtPayload: IJwtPayload): Promise<string> {
+  private async signAccessToken(jwtPayload: IJwtPayload): Promise<string> {
     return this.jwtService.signAsync(jwtPayload, {
       secret: this.configService.get<string>(TYPES.jwtAccessTokenSecret),
       expiresIn: this.configService.get<string>(TYPES.AccessTokenExpiresIn),
     });
   }
 
-  async signRefreshToken(jwtPayload: IJwtPayload): Promise<string> {
+  private async signRefreshToken(jwtPayload: IJwtPayload): Promise<string> {
     return this.jwtService.signAsync(jwtPayload, {
       secret: this.configService.get<string>(TYPES.jwtRefreshTokenSecret),
       expiresIn: this.configService.get<string>(TYPES.refreshTokenExpiresIn),
     });
+  }
+
+  async hashData(prop: string, saltRound: number): Promise<string> {
+    return bcrypt.hash(prop, saltRound);
   }
 }
