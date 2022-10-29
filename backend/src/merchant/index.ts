@@ -9,3 +9,4 @@ export * from './merchant.interface';
 export * from './merchant.mapper';
 export * from './merchant.module';
 export * from './merchant.service';
+export * from './tokens.interface';

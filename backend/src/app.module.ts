@@ -13,6 +13,7 @@ import { RestaurantModule } from './restaurant/restaurant.module';
 
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
+import { AuthModule } from './infrastructure/auth';
 import { MerchantModule } from './merchant/merchant.module';
 
 @Module({
@@ -21,6 +22,7 @@ import { MerchantModule } from './merchant/merchant.module';
       isGlobal: true,
       validationSchema: Joi.object({
         DATABASE_URL: Joi.string().required(),
+        JWT_TOKEN_SECRET: Joi.string().required(),
       }),
     }),
     MongooseModule.forRootAsync({
@@ -34,6 +36,7 @@ import { MerchantModule } from './merchant/merchant.module';
     LocationModule,
     RestaurantModule,
     MerchantModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [

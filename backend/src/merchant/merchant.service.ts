@@ -11,6 +11,7 @@ import { MerchantParser } from './merchant-parser';
 import { IMerchantResponseDTO } from './merchant-response.dto';
 import { IMerchantService } from './merchant-service.interface';
 import { MerchantMapper } from './merchant.mapper';
+import { ISignUpTokens } from './tokens.interface';
 
 @Injectable()
 export class MerchantService implements IMerchantService {
@@ -18,6 +19,9 @@ export class MerchantService implements IMerchantService {
     private readonly merchantRepository: MerchantRepository,
     private readonly merchantMapper: MerchantMapper,
   ) {}
+
+  // async signUp(props: CreateMerchantDTO): Promise<ISignUpTokens> {}
+
   async createMerchant(
     props: CreateMerchantDTO,
   ): Promise<Result<IMerchantResponseDTO>> {
@@ -64,6 +68,6 @@ export class MerchantService implements IMerchantService {
   }
 
   private async hashPassword(password: string): Promise<string> {
-    return await bcrypt.hash(password, 10);
+    return bcrypt.hash(password, 10);
   }
 }

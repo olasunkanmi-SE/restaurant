@@ -9,4 +9,5 @@ export interface IMerchantData {
   readonly isActive: boolean;
   readonly status: string;
   readonly organisationAddress: string;
+  readonly refreshTokenHash: string;
 }
