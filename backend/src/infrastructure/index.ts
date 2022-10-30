@@ -3,3 +3,4 @@ export * from './logger';
 export * from './data_access';
 export * from './database';
 export * from './utilities';
+export * from './auth';
