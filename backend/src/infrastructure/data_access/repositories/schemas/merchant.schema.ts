@@ -28,13 +28,13 @@ export class MerchantData extends BaseDocument implements IMerchantData {
   @Prop({ type: String, required: true })
   passwordHash: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String, default: 'admin' })
   role: string;
 
   @Prop({ type: Boolean, default: false })
   isActive: boolean;
 
-  @Prop({ type: String })
+  @Prop({ type: String, default: 'onBoarding' })
   status: string;
 
   @Prop({ type: String })
