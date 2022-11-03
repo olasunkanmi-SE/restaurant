@@ -16,6 +16,7 @@ import { throwApplicationError } from './../infrastructure/utilities/exception-i
 import { Merchant } from './../merchant/merchant';
 import { LoginMerchantDTO } from './dtos';
 import { CreateMerchantDTO } from './dtos/create-merchant.dto';
+import { OnBoardMerchantDTO } from './dtos/on-board-merchant.dto';
 import { MerchantParser } from './merchant-parser';
 import { IMerchantResponseDTO } from './merchant-response.dto';
 import { IMerchantService } from './merchant-service.interface';
@@ -115,6 +116,55 @@ export class MerchantService implements IMerchantService {
     this.updateUserRefreshToken(merchant, tokens);
     const parsedResponse = MerchantParser.createMerchantResponse(merchant);
     parsedResponse.tokens = tokens;
+    return Result.ok(parsedResponse);
+  }
+
+  async onBoardMerchant(
+    props: OnBoardMerchantDTO,
+    id: Types.ObjectId,
+  ): Promise<Result<IMerchantResponseDTO>> {
+    const merchantDoc: MerchantDocument =
+      await this.merchantRepository.findById(id);
+    const merchant: Merchant = this.merchantMapper.toDomain(merchantDoc);
+    const {
+      firstName,
+      lastName,
+      organisationAddress,
+      organisationName,
+      phoneNumber,
+    } = props;
+
+    for (const [key] of Object.entries(props)) {
+      switch (key) {
+        case firstName:
+          merchant.firstName = firstName;
+          break;
+        case lastName:
+          merchant.lastName = lastName;
+          break;
+        case organisationAddress:
+          merchant.organisationAddress = organisationAddress;
+          break;
+        case organisationName:
+          merchant.organisationName = organisationName;
+          break;
+        case phoneNumber:
+          merchant.phoneNumber = phoneNumber;
+          break;
+        default:
+          break;
+      }
+    }
+
+    const updatedMerchantDoc: MerchantDocument =
+      await this.merchantRepository.findOneAndUpdate(
+        { _id: merchant.id },
+        props,
+      );
+    const updateMerchant: Merchant =
+      this.merchantMapper.toDomain(updatedMerchantDoc);
+    const parsedResponse =
+      MerchantParser.createMerchantResponse(updateMerchant);
     return Result.ok(parsedResponse);
   }
 }
