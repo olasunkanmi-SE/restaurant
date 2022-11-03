@@ -125,6 +125,12 @@ export class MerchantService implements IMerchantService {
   ): Promise<Result<IMerchantResponseDTO>> {
     const merchantDoc: MerchantDocument =
       await this.merchantRepository.findById(id);
+    if (merchantDoc.organisationName) {
+      throwApplicationError(
+        HttpStatus.BAD_REQUEST,
+        'Merchant has been boarded',
+      );
+    }
     const merchant: Merchant = this.merchantMapper.toDomain(merchantDoc);
     const {
       firstName,
