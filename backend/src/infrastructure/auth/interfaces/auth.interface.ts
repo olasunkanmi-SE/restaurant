@@ -20,3 +20,8 @@ export interface ISignUpTokens {
   refreshToken: string;
   accessToken: string;
 }
+
+export interface ILogin {
+  email: string;
+  password: string;
+}

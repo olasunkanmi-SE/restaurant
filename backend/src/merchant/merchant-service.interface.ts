@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 import { Result } from './../domain/result/result';
-import { CreateMerchantDTO } from './create-merchant.dto';
+import { LoginMerchantDTO } from './dtos';
+import { CreateMerchantDTO } from './dtos/create-merchant.dto';
 import { IMerchantResponseDTO } from './merchant-response.dto';
 
 export interface IMerchantService {
@@ -9,4 +10,5 @@ export interface IMerchantService {
   ): Promise<Result<IMerchantResponseDTO>>;
 
   getMerchantById(id: Types.ObjectId): Promise<Result<IMerchantResponseDTO>>;
+  signIn(props: LoginMerchantDTO): Promise<Result<IMerchantResponseDTO>>;
 }
