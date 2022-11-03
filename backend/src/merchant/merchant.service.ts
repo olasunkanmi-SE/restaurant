@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
 import { saltRounds } from './../application/constants/constants';
 import { TYPES } from './../application/constants/types';
@@ -11,8 +12,10 @@ import {
 } from './../infrastructure/auth/interfaces/auth.interface';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
+import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
 import { Merchant } from './../merchant/merchant';
-import { CreateMerchantDTO } from './create-merchant.dto';
+import { LoginMerchantDTO } from './dtos';
+import { CreateMerchantDTO } from './dtos/create-merchant.dto';
 import { MerchantParser } from './merchant-parser';
 import { IMerchantResponseDTO } from './merchant-response.dto';
 import { IMerchantService } from './merchant-service.interface';
@@ -50,20 +53,14 @@ export class MerchantService implements IMerchantService {
       passwordHash: hashedPassword,
       audit,
     }).getValue();
+
     const newMerchantDoc = await this.merchantRepository.create(
       this.merchantMapper.toPersistence(merchant),
     );
 
-    let tokens: ISignUpTokens;
-    if (newMerchantDoc) {
-      const { id, email, role } = newMerchantDoc;
-      const props: IUserPayload = { userId: id, email, role };
-      tokens = await this.authService.generateAuthTokens(props);
-    }
-    const newMerchant: Merchant = this.merchantMapper.toDomain(newMerchantDoc);
-    this.updateUserRefreshToken(newMerchant, tokens);
-    const parsedResponse = MerchantParser.createMerchantResponse(newMerchant);
-    parsedResponse.tokens = tokens;
+    const parsedResponse = MerchantParser.createMerchantResponse(
+      this.merchantMapper.toDomain(newMerchantDoc),
+    );
     return Result.ok(parsedResponse);
   }
 
@@ -96,5 +93,28 @@ export class MerchantService implements IMerchantService {
         { refreshTokenHash: hash },
       );
     return this.merchantMapper.toDomain(merchantDoc);
+  }
+
+  async signIn(props: LoginMerchantDTO): Promise<Result<IMerchantResponseDTO>> {
+    const merchantDoc: MerchantDocument = await this.merchantRepository.findOne(
+      {
+        email: props.email,
+      },
+    );
+    const comparePassWord: boolean = await bcrypt.compare(
+      props.password,
+      merchantDoc.passwordHash,
+    );
+    if (!comparePassWord) {
+      throwApplicationError(400, 'InCorrect Username or Password');
+    }
+    const { id, email, role } = merchantDoc;
+    const userProps: IUserPayload = { userId: id, email, role };
+    const tokens = await this.authService.generateAuthTokens(userProps);
+    const merchant: Merchant = this.merchantMapper.toDomain(merchantDoc);
+    this.updateUserRefreshToken(merchant, tokens);
+    const parsedResponse = MerchantParser.createMerchantResponse(merchant);
+    parsedResponse.tokens = tokens;
+    return Result.ok(parsedResponse);
   }
 }

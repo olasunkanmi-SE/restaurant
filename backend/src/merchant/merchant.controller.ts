@@ -1,10 +1,11 @@
 import { Result } from './../domain/result/result';
 import { IMerchantResponseDTO } from './merchant-response.dto';
-import { CreateMerchantDTO } from './create-merchant.dto';
+import { CreateMerchantDTO } from './dtos/create-merchant.dto';
 import { TYPES } from './../application/constants/types';
 import { IMerchantService } from './merchant-service.interface';
 import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { LoginMerchantDTO } from './dtos';
 
 @Controller('merchants')
 export class MerchantController {
@@ -25,5 +26,12 @@ export class MerchantController {
     @Param('id') merchantId: Types.ObjectId,
   ): Promise<Result<IMerchantResponseDTO>> {
     return this.merchantService.getMerchantById(merchantId);
+  }
+
+  @Post('/signin')
+  async LoginMerchant(
+    @Body() request: LoginMerchantDTO,
+  ): Promise<Result<IMerchantResponseDTO>> {
+    return this.merchantService.signIn(request);
   }
 }

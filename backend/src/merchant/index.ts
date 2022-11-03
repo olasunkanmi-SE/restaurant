@@ -1,4 +1,4 @@
-export * from './create-merchant.dto';
+export * from './dtos';
 export * from './merchant';
 export * from './merchant-mock-data';
 export * from './merchant-parser';

@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { AppController } from './app.controller';
@@ -56,6 +61,12 @@ import { ContextMiddleWare } from './infrastructure/middlewares/context.middlewa
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(ContextMiddleWare).forRoutes('*');
+    consumer
+      .apply(ContextMiddleWare)
+      .exclude(
+        { path: 'api/merchants', method: RequestMethod.POST },
+        { path: 'api/merchants/signin', method: RequestMethod.POST },
+      )
+      .forRoutes('*');
   }
 }
