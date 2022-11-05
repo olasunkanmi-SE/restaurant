@@ -7,7 +7,7 @@ export const merchantMockData: any = {
   email: 'ola@tesla.com',
   organisationName: 'Tesla',
   phoneNumber: '123456',
-  passwordHash: '2345678uhbnewnjdk',
+  passwordHash: '',
   role: 'admin',
   isActive: true,
   status: 'onboard',

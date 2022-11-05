@@ -35,7 +35,7 @@ describe('Test merchant service', () => {
   const merchant: Merchant = Merchant.create(merchantMockData).getValue();
 
   const merchantId = new Types.ObjectId();
-  const mockPassword = 'kjwer849504jdf';
+  const mockPassword = '';
 
   it('Should not create a Merchant, should throw an exception instead', async () => {
     try {
@@ -133,7 +133,7 @@ describe('Test merchant service', () => {
   it('Should sign a merchant in', async () => {
     const loginProps = {
       email: 'ola@ola.com',
-      password: '2345678uhbnewnjdk',
+      password: '',
     };
     const hashPassword = await bcrypt.hash(loginProps.password, 10);
     merchantRepositoryStub.findOne = async (): Promise<MerchantDocument> => {
@@ -174,7 +174,7 @@ describe('Test merchant service', () => {
     }
   });
 
-  it('Should not OnBoard a Merchant', async () => {
+  it('Should OnBoard a Merchant', async () => {
     const props = {
       firstName: 'ola',
       lastName: 'Ola',
