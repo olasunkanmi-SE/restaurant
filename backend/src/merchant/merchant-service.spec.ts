@@ -35,13 +35,12 @@ describe('Test merchant service', () => {
   const merchant: Merchant = Merchant.create(merchantMockData).getValue();
 
   const merchantId = new Types.ObjectId();
-  const mockPassword = '';
 
   it('Should not create a Merchant, should throw an exception instead', async () => {
     try {
       const createMerchantProps = {
         email: 'ola@tesla.com',
-        passwordHash: mockPassword,
+        passwordHash: '',
       };
       merchantRepositoryStub.find = async (): Promise<MerchantDocument[]> => {
         return [merchantMockData];
@@ -58,7 +57,7 @@ describe('Test merchant service', () => {
   it('Should create a Merchant', async () => {
     const createMerchantProps = {
       email: 'ola@ola.com',
-      passwordHash: 'mockPassword',
+      passwordHash: '',
     };
     Audit.createInsertContext = (): Audit => {
       return Audit.create(auditMockData).getValue();
@@ -94,7 +93,7 @@ describe('Test merchant service', () => {
     };
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const result = await merchantService.hashPassword(mockPassword, 10);
+    const result = await merchantService.hashPassword('', 10);
     expect(result).to.not.be.undefined;
   });
 
