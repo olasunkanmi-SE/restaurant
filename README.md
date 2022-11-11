@@ -7,3 +7,8 @@ Clone this repository
 npm run start:dev to start the backend application
 
 ng serve to run the frontend application
+
+## Contributing
+Contributions are welcome. Fork this repo and raise a PR to the Sprint branch, Github actions will run the pipeline to check for build errors and run test.
+
+Please ensure you write unit tests if you are contributing.
