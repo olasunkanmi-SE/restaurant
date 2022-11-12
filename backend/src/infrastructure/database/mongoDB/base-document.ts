@@ -7,7 +7,7 @@ export abstract class BaseDocument implements IBaseDocument {
   _id?: Types.ObjectId;
 
   @Prop({ type: String, required: true, immutable: true })
-  auditCreatedDateTime: Date;
+  auditCreatedDateTime: string;
 
   @Prop({ type: String, required: true, immutable: true })
   auditCreatedBy: string;
@@ -16,11 +16,11 @@ export abstract class BaseDocument implements IBaseDocument {
   auditModifiedBy?: string;
 
   @Prop({ type: String })
-  auditModifiedDateTime?: Date;
+  auditModifiedDateTime?: string;
 
   @Prop({ type: Date })
   auditDeletedBy?: string;
 
   @Prop({ type: String })
-  auditDeletedDateTime?: Date;
+  auditDeletedDateTime?: string;
 }

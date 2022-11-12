@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import { Audit, Entity, Result } from './../domain';
-import { IMerchant } from './merchant.interface';
+import { IMerchant } from './interface/merchant.interface';
 
 export class Merchant extends Entity<IMerchant> {
   private _firstName?: string;

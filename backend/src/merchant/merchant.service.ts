@@ -10,6 +10,7 @@ import {
   ISignUpTokens,
   IUserPayload,
 } from './../infrastructure/auth/interfaces/auth.interface';
+import { Context, IContextService } from './../infrastructure/context';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
@@ -22,14 +23,17 @@ import {
 
 import { MerchantParser } from './merchant-parser';
 import { IMerchantResponseDTO } from './merchant-response.dto';
-import { IMerchantService } from './merchant-service.interface';
+import { IMerchantService } from './interface/merchant-service.interface';
 import { MerchantMapper } from './merchant.mapper';
+import { IUpdateMerchant } from './interface/update-merchant.interface';
 
 @Injectable()
 export class MerchantService implements IMerchantService {
   constructor(
     private readonly merchantRepository: MerchantRepository,
     private readonly merchantMapper: MerchantMapper,
+    @Inject(TYPES.IContextService)
+    private readonly contextService: IContextService,
     @Inject(TYPES.IAuthService) private readonly authService: IAuthService,
   ) {}
 
@@ -50,7 +54,8 @@ export class MerchantService implements IMerchantService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const audit: Audit = Audit.createInsertContext();
+    const context: Context = this.contextService.getContext();
+    const audit: Audit = Audit.createInsertContext(context);
     const hashedPassword = await this.hashPassword(props.passwordHash);
     const merchant: Merchant = Merchant.create({
       ...props,
@@ -83,7 +88,7 @@ export class MerchantService implements IMerchantService {
     return this.authService.hashData(password, saltRounds);
   }
 
-  private async updateUserRefreshToken(
+  private async updateMerchantRefreshToken(
     merchant: Merchant,
     token: ISignUpTokens,
   ): Promise<Merchant> {
@@ -116,7 +121,7 @@ export class MerchantService implements IMerchantService {
     const userProps: IUserPayload = { userId: id, email, role };
     const tokens = await this.authService.generateAuthTokens(userProps);
     const merchant: Merchant = this.merchantMapper.toDomain(merchantDoc);
-    this.updateUserRefreshToken(merchant, tokens);
+    this.updateMerchantRefreshToken(merchant, tokens);
     const parsedResponse = MerchantParser.createMerchantResponse(merchant);
     parsedResponse.tokens = tokens;
     return Result.ok(parsedResponse);
@@ -128,22 +133,44 @@ export class MerchantService implements IMerchantService {
   ): Promise<Result<IMerchantResponseDTO>> {
     const merchantDoc: MerchantDocument =
       await this.merchantRepository.findById(id);
-    if (merchantDoc.organisationName) {
-      throwApplicationError(
-        HttpStatus.BAD_REQUEST,
-        'Merchant has been boarded',
-      );
-    }
     const merchant: Merchant = this.merchantMapper.toDomain(merchantDoc);
+    const context: Context = this.contextService.getContext();
+
+    const data = {
+      auditModifiedBy: context.email,
+      auditModifiedDateTime: new Date().toISOString(),
+      ...props,
+    };
+
+    this.updateMerchantData(data, merchant, context);
+
+    const updatedMerchantDoc: MerchantDocument =
+      await this.merchantRepository.findOneAndUpdate(
+        { _id: merchant.id },
+        data,
+      );
+    const updateMerchant: Merchant =
+      this.merchantMapper.toDomain(updatedMerchantDoc);
+    const parsedResponse =
+      MerchantParser.createMerchantResponse(updateMerchant);
+    return Result.ok(parsedResponse);
+  }
+
+  updateMerchantData(
+    data: IUpdateMerchant,
+    merchant: Merchant,
+    context: Context,
+  ) {
     const {
       firstName,
       lastName,
       organisationAddress,
       organisationName,
       phoneNumber,
-    } = props;
-
-    for (const [key] of Object.entries(props)) {
+      auditModifiedBy,
+      auditModifiedDateTime,
+    } = data;
+    for (const [key] of Object.entries(data)) {
       switch (key) {
         case firstName:
           merchant.firstName = firstName;
@@ -160,20 +187,15 @@ export class MerchantService implements IMerchantService {
         case phoneNumber:
           merchant.phoneNumber = phoneNumber;
           break;
+        case auditModifiedBy:
+          merchant.audit.auditModifiedBy = context.email;
+          break;
+        case auditModifiedDateTime:
+          merchant.audit.auditModifiedDateTime = new Date().toISOString();
+          break;
         default:
           break;
       }
     }
-
-    const updatedMerchantDoc: MerchantDocument =
-      await this.merchantRepository.findOneAndUpdate(
-        { _id: merchant.id },
-        props,
-      );
-    const updateMerchant: Merchant =
-      this.merchantMapper.toDomain(updatedMerchantDoc);
-    const parsedResponse =
-      MerchantParser.createMerchantResponse(updateMerchant);
-    return Result.ok(parsedResponse);
   }
 }

@@ -3,8 +3,17 @@ import { Result } from './../domain/result/result';
 import { IMerchantResponseDTO } from './merchant-response.dto';
 import { CreateMerchantDTO } from './dtos/create-merchant.dto';
 import { TYPES } from './../application/constants/types';
-import { IMerchantService } from './merchant-service.interface';
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import { IMerchantService } from './interface/merchant-service.interface';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Inject,
+  Param,
+  Post,
+  HttpStatus,
+} from '@nestjs/common';
 import { Types } from 'mongoose';
 import { LoginMerchantDTO } from './dtos';
 import { OnBoardMerchantDTO } from './dtos/on-board-merchant.dto';
@@ -17,13 +26,15 @@ export class MerchantController {
   ) {}
 
   @Post()
-  async create(
+  @HttpCode(HttpStatus.CREATED)
+  async signUp(
     @Body() request: CreateMerchantDTO,
   ): Promise<Result<IMerchantResponseDTO>> {
     return this.merchantService.createMerchant(request);
   }
 
   @Get('/:id')
+  @HttpCode(HttpStatus.OK)
   async getById(
     @Param('id') merchantId: Types.ObjectId,
   ): Promise<Result<IMerchantResponseDTO>> {
@@ -31,6 +42,7 @@ export class MerchantController {
   }
 
   @Post('/signin')
+  @HttpCode(HttpStatus.OK)
   async login(
     @Body() request: LoginMerchantDTO,
   ): Promise<Result<IMerchantResponseDTO>> {
@@ -38,6 +50,7 @@ export class MerchantController {
   }
 
   @Post('/onboarding')
+  @HttpCode(HttpStatus.CREATED)
   async onBoard(
     @Body() request: OnBoardMerchantDTO,
   ): Promise<Result<IMerchantResponseDTO>> {

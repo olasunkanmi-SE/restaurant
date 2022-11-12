@@ -1,3 +1,4 @@
+import { IContextService } from './../infrastructure/context/context-service.interface';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { TYPES } from './../application/constants/types';
@@ -16,6 +17,7 @@ import { IRestaurantResponseDTO } from './restaurant-response.dto';
 import { IRestaurantService } from './restaurant-service.interface';
 import { RestaurantMapper } from './restaurant.mapper';
 import { RestaurantParser } from './restaurant.parser';
+import { Context } from 'src/infrastructure/context';
 @Injectable()
 export class RestaurantService implements IRestaurantService {
   constructor(
@@ -24,6 +26,8 @@ export class RestaurantService implements IRestaurantService {
     private readonly merchantRepository: MerchantRepository,
     private readonly restaurantMapper: RestaurantMapper,
     private readonly merchantMapper: MerchantMapper,
+    @Inject(TYPES.IContextService)
+    private readonly contextService: IContextService,
   ) {}
 
   async createRestaurant(
@@ -45,8 +49,8 @@ export class RestaurantService implements IRestaurantService {
         HttpStatus.BAD_REQUEST,
       );
     }
-
-    const audit: Audit = Audit.createInsertContext();
+    const context: Context = this.contextService.getContext();
+    const audit: Audit = Audit.createInsertContext(context);
     const location: Location = Location.create(
       {
         ...createRestaurantDTO.location,

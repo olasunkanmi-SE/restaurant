@@ -1,14 +1,18 @@
+import { IContextService } from './../context/context-service.interface';
+import { TYPES } from './../../application/constants/types';
 import { APIResponseMessage } from './../../application/constants/constants';
 import { Regex } from './../utilities/regex';
-import { HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { Context } from '../context/context';
 import { throwApplicationError } from '../utilities/exception-instance';
-import { ContextService } from './context.service';
 
 @Injectable()
 export class ContextMiddleWare implements NestMiddleware {
-  constructor(private readonly contextService: ContextService) {}
+  constructor(
+    @Inject(TYPES.IContextService)
+    private readonly contextService: IContextService,
+  ) {}
   use(req: Request, res: Response, next: NextFunction) {
     const headers = req.headers;
     const errors = new Object() as any;
