@@ -14,9 +14,12 @@ import { MerchantRepository } from './../infrastructure/data_access/repositories
 import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
 import { Merchant } from './../merchant/merchant';
-import { LoginMerchantDTO } from './dtos';
-import { CreateMerchantDTO } from './dtos/create-merchant.dto';
-import { OnBoardMerchantDTO } from './dtos/on-board-merchant.dto';
+import {
+  CreateMerchantDTO,
+  LoginMerchantDTO,
+  OnBoardMerchantDTO,
+} from './dtos';
+
 import { MerchantParser } from './merchant-parser';
 import { IMerchantResponseDTO } from './merchant-response.dto';
 import { IMerchantService } from './merchant-service.interface';
