@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TYPES } from './../application/constants/types';
 import { AuditMapper } from './../audit/audit.mapper';
+import { ContextService } from './../infrastructure/context/context.service';
 import { LocationRepository } from './../infrastructure/data_access/repositories/location.repository';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { RestaurantRepository } from './../infrastructure/data_access/repositories/restaurant.repository';
@@ -35,6 +36,7 @@ import { RestaurantService } from './restaurant.service';
   providers: [
     { provide: TYPES.IRestaurantService, useClass: RestaurantService },
     { provide: TYPES.IRestaurantRepository, useClass: RestaurantRepository },
+    { provide: TYPES.IContextService, useClass: ContextService },
     RestaurantMapper,
     AuditMapper,
     LocationMapper,

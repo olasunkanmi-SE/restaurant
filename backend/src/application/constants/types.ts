@@ -9,4 +9,5 @@ export const TYPES = {
   jwtRefreshTokenSecret: 'JWT_REFRESH_TOKEN_SECRET',
   refreshTokenExpiresIn: 'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
   IAuthService: Symbol('AuthService'),
+  IContextService: Symbol('IContextService'),
 };

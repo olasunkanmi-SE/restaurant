@@ -1,6 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
+import { Context } from './../infrastructure/context';
+import { ContextService } from './../infrastructure/context/context.service';
 import { LocationRepository } from './../infrastructure/data_access/repositories/location.repository';
 import { CreateLocationDTO } from './create-location.dto';
 import { Location } from './location';
@@ -14,14 +17,15 @@ export class LocationService implements ILocationService {
   constructor(
     private readonly locationRepository: LocationRepository,
     private readonly locationMapper: LocationMapper,
+    @Inject(TYPES.IContextService)
+    private readonly contextService: ContextService,
   ) {}
 
   async createLocation(
     createLocationDTO: CreateLocationDTO,
   ): Promise<Result<ILocationResponseDTO>> {
-    //create a context function that takes an argument and does this
-    //retrieve user information from jwt.
-    const audit: Audit = Audit.createInsertContext();
+    const context: Context = this.contextService.getContext();
+    const audit: Audit = Audit.createInsertContext(context);
     const location: Location = Location.create({
       ...createLocationDTO,
       audit,
