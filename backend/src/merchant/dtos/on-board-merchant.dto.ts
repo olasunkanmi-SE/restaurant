@@ -8,21 +8,25 @@ export class OnBoardMerchantDTO {
 
   @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   @MaxLength(256)
   readonly lastName: string;
 
   @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   @MaxLength(256)
   readonly organisationName: string;
 
   @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   @MaxLength(40)
   readonly phoneNumber: string;
 
   @IsString()
   @MaxLength(256)
+  @IsNotEmpty()
   @IsOptional()
   readonly organisationAddress: string;
 }

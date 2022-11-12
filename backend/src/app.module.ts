@@ -1,9 +1,4 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { AppController } from './app.controller';
@@ -19,9 +14,8 @@ import { RestaurantModule } from './restaurant/restaurant.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
 import { AuthModule } from './infrastructure/auth';
+import { ContextService } from './infrastructure/context';
 import { MerchantModule } from './merchant/merchant.module';
-import { ContextService } from './infrastructure/middlewares/context.service';
-import { ContextMiddleWare } from './infrastructure/middlewares/context.middleware';
 
 @Module({
   imports: [
@@ -59,14 +53,4 @@ import { ContextMiddleWare } from './infrastructure/middlewares/context.middlewa
     ContextService,
   ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(ContextMiddleWare)
-      .exclude(
-        { path: 'api/merchants', method: RequestMethod.POST },
-        { path: 'api/merchants/signin', method: RequestMethod.POST },
-      )
-      .forRoutes('*');
-  }
-}
+export class AppModule {}

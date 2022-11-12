@@ -1,4 +1,4 @@
-import { Audit } from './../domain/audit/audit';
+import { Audit } from '../../domain/audit/audit';
 export interface IMerchant {
   firstName?: string;
   lastName?: string;

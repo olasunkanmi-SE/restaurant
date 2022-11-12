@@ -5,7 +5,7 @@ export const APIResponseMessage = {
   invalidEmailHeaderError: 'Invalid user email address',
   emailHeader: 'x-user-email',
   correlationIdHeader: 'x-correlation-id',
-  authorizationHeader: 'Authorization',
+  authorizationHeader: 'authorization',
   roleHeader: 'x-user-role',
 };
 

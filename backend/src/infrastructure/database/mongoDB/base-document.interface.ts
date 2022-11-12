@@ -3,10 +3,10 @@ export interface IBaseDocument extends IAudit {
 }
 
 export interface IAudit {
-  readonly auditCreatedDateTime: Date;
+  readonly auditCreatedDateTime: string;
   readonly auditCreatedBy: string;
-  readonly auditModifiedBy?: string;
-  readonly auditModifiedDateTime?: Date;
-  readonly auditDeletedBy?: string;
-  readonly auditDeletedDateTime?: Date;
+  auditModifiedBy?: string;
+  auditModifiedDateTime?: string;
+  auditDeletedBy?: string;
+  auditDeletedDateTime?: string;
 }

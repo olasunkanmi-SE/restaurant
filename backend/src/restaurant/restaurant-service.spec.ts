@@ -5,6 +5,7 @@ import { auditMockData } from './../audit/audit-mock-data';
 import { AuditMapper } from './../audit/audit.mapper';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
+import { IContextService } from './../infrastructure/context/context-service.interface';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { IRestaurantRepository } from './../infrastructure/data_access/repositories/restaurant-repository.interface';
 import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
@@ -33,11 +34,14 @@ describe('Test restaurant service', () => {
     locationMapperStub,
     merchantMapperStub,
   );
+  const contextServiceStub: IContextService =
+    sinon.stubInterface<IContextService>();
   const restaurantService = new RestaurantService(
     restaurantRepositoryStub,
     merchantRepositoryStub,
     restaurantMapperStub,
     merchantMapperStub,
+    contextServiceStub,
   );
   let createRestaurantDTO: any = {
     name: 'Komune living',
