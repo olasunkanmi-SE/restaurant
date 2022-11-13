@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { TYPES } from './../../application/constants/types';
 import { IAuthService } from './interfaces/auth-service.interface';
 import {
   IJwtPayload,
@@ -37,15 +36,19 @@ export class AuthService implements IAuthService {
 
   private async signAccessToken(jwtPayload: IJwtPayload): Promise<string> {
     return this.jwtService.signAsync(jwtPayload, {
-      secret: this.configService.get<string>(TYPES.jwtAccessTokenSecret),
-      expiresIn: this.configService.get<string>(TYPES.AccessTokenExpiresIn),
+      secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
+      expiresIn: this.configService.get<string>(
+        'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+      ),
     });
   }
 
   private async signRefreshToken(jwtPayload: IJwtPayload): Promise<string> {
     return this.jwtService.signAsync(jwtPayload, {
-      secret: this.configService.get<string>(TYPES.jwtRefreshTokenSecret),
-      expiresIn: this.configService.get<string>(TYPES.refreshTokenExpiresIn),
+      secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
+      expiresIn: this.configService.get<string>(
+        'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+      ),
     });
   }
 

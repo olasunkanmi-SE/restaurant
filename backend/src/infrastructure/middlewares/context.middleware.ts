@@ -36,14 +36,14 @@ export class ContextMiddleWare implements NestMiddleware {
       }
     }
     if (Object.getOwnPropertyNames(errors).length) {
-      throwApplicationError(HttpStatus.BAD_REQUEST, JSON.stringify(errors));
+      throwApplicationError(HttpStatus.BAD_REQUEST, errors);
     }
     const email = req.headers[APIResponseMessage.emailHeader] as string;
     const correlationId = req.headers[
       APIResponseMessage.correlationIdHeader
     ] as string;
     const token =
-      (req.header[APIResponseMessage.authorizationHeader] as string) ?? '';
+      (req.headers[APIResponseMessage.authorizationHeader] as string) ?? '';
     const role = (req.headers[APIResponseMessage.roleHeader] as string) ?? '';
     const context: Context = new Context(email, correlationId, token, role);
     this.contextService.setContext(context);
