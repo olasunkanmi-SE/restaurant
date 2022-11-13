@@ -1,22 +1,24 @@
-import { ConvertId } from './../utils/mongoose-id-conversion';
-import { Result } from './../domain/result/result';
-import { IMerchantResponseDTO } from './merchant-response.dto';
-import { CreateMerchantDTO } from './dtos/create-merchant.dto';
-import { TYPES } from './../application/constants/types';
-import { IMerchantService } from './interface/merchant-service.interface';
 import {
   Body,
   Controller,
   Get,
   HttpCode,
+  HttpStatus,
   Inject,
   Param,
   Post,
-  HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { TYPES } from './../application/constants/types';
+import { Result } from './../domain/result/result';
+import { AccessAuthGuard } from './../infrastructure/guards/access-auth.guard';
+import { ConvertId } from './../utils/mongoose-id-conversion';
 import { LoginMerchantDTO } from './dtos';
+import { CreateMerchantDTO } from './dtos/create-merchant.dto';
 import { OnBoardMerchantDTO } from './dtos/on-board-merchant.dto';
+import { IMerchantService } from './interface/merchant-service.interface';
+import { IMerchantResponseDTO } from './merchant-response.dto';
 
 @Controller('merchants')
 export class MerchantController {
@@ -49,6 +51,7 @@ export class MerchantController {
     return this.merchantService.signIn(request);
   }
 
+  @UseGuards(AccessAuthGuard)
   @Post('/onboarding')
   @HttpCode(HttpStatus.CREATED)
   async onBoard(
