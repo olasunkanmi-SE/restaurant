@@ -1,3 +1,4 @@
+import { Result } from './../../../domain/result/result';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import {
   Connection,
@@ -23,90 +24,83 @@ export abstract class GenericDocumentRepository<T extends Document>
   async findOne(
     filterQuery: FilterQuery<T>,
     projection?: ProjectionType<T | null>,
-  ): Promise<T | null> {
-    const document = this.DocumentModel.findOne(filterQuery, projection);
+  ): Promise<Result<T | null>> {
+    const document = await this.DocumentModel.findOne(filterQuery, projection);
     if (!document) {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: 'Error getting document from database',
-        },
+      return Result.fail(
+        'Error getting documents from database',
         HttpStatus.NOT_FOUND,
       );
     }
-    return document;
+    return Result.ok(document);
   }
 
   async findById(
     id: any,
     projection?: ProjectionType<T> | null,
-  ): Promise<T | null> {
+  ): Promise<Result<T | null>> {
     const document = await this.DocumentModel.findById(id, projection);
     if (!document) {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: 'Error getting document from database',
-        },
+      return Result.fail(
+        'Error getting documents from database',
         HttpStatus.NOT_FOUND,
       );
     }
-    return document;
+    return Result.ok(document);
   }
 
   async find(
     filterQuery: FilterQuery<T>,
     projection?: ProjectionType<T | null>,
     options?: QueryOptions<T>,
-  ): Promise<T[] | null> {
-    const documents = this.DocumentModel.find(filterQuery, projection, options);
+  ): Promise<Result<T[] | null>> {
+    const documents = await this.DocumentModel.find(
+      filterQuery,
+      projection,
+      options,
+    );
     if (!documents) {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: 'Error getting documents from database',
-        },
+      return Result.fail(
+        'Error getting documents from database',
         HttpStatus.NOT_FOUND,
       );
     }
-    return documents;
+    return Result.ok(documents);
   }
 
-  async create(document: any, options?: SaveOptions): Promise<T> {
+  async create(document: any, options?: SaveOptions): Promise<Result<T>> {
     const doc = new this.DocumentModel({
       ...document,
       _id: new Types.ObjectId(),
     });
     const result = (await (await doc.save(options)).toJSON()) as T;
     if (!result) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: 'Unable to save document in the db',
-        },
+      return Result.fail(
+        'An Error occured, unable to save document in the db',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-    return result;
+    return Result.ok(result);
   }
 
   async findOneAndUpdate(
     filterQuery: FilterQuery<T>,
     update: UpdateQuery<T>,
-  ): Promise<T | null> {
-    const result = this.DocumentModel.findByIdAndUpdate(filterQuery, update, {
-      new: true,
-    });
+  ): Promise<Result<T | null>> {
+    const result = await this.DocumentModel.findByIdAndUpdate(
+      filterQuery,
+      update,
+      {
+        new: true,
+      },
+    );
     if (!result) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: 'Unable to update the database',
-        },
+      return Result.fail(
+        'An Error occured, unable to update the database',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-    return result;
+    return Result.ok(result);
   }
 
   async upsert(

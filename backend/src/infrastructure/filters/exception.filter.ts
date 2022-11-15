@@ -10,6 +10,7 @@ import { Request } from 'express';
 import * as fs from 'fs';
 import { TYPES } from '../../application/constants';
 import { IContextAwareLogger } from '../logger';
+import { APIResponseMessage } from './../../application/constants/constants';
 import {
   IExceptionResponse,
   IRequestException,
@@ -54,7 +55,7 @@ export class ApplicationExceptionsFilter implements ExceptionFilter {
       message = (errorResponse as string) || exception.message;
     } else {
       statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-      message = exception.errors;
+      message = APIResponseMessage.serverError;
     }
     return { statusCode, message };
   }
@@ -86,11 +87,11 @@ export class ApplicationExceptionsFilter implements ExceptionFilter {
     request: Request,
     exception: unknown,
   ): string {
-    const { statusCode, message } = errorResponse;
+    const { statusCode } = errorResponse;
     const { url, method } = request;
     const errorLog = `Response Code: ${statusCode} - Method: ${method} - URL: ${url}\n\n
     ${JSON.stringify(errorResponse)}
-    ${exception instanceof HttpException ? exception.stack : message}`;
+    ${exception instanceof HttpException ? exception.stack : exception}`;
     return errorLog;
   }
 

@@ -1,3 +1,4 @@
+import { Result } from './../../../domain/result/result';
 import {
   FilterQuery,
   ProjectionType,
@@ -10,27 +11,25 @@ export interface IGenericDocument<T> {
   findOne(
     filterQuery: FilterQuery<T>,
     projection?: ProjectionType<T | null>,
-  ): Promise<T | null>;
+  ): Promise<Result<T | null>>;
 
-  findOne(
-    filterQuery: FilterQuery<T>,
-    projection?: ProjectionType<T | null>,
-  ): Promise<T | null>;
-
-  findById(id: any, projection?: ProjectionType<T> | null): Promise<T | null>;
+  findById(
+    id: any,
+    projection?: ProjectionType<T> | null,
+  ): Promise<Result<T | null>>;
 
   find(
     filterQuery: FilterQuery<T>,
     projection?: ProjectionType<T | null>,
     options?: QueryOptions<T>,
-  ): Promise<T[] | null>;
+  ): Promise<Result<T[] | null>>;
 
-  create(document: any, options?: SaveOptions): Promise<T>;
+  create(document: any, options?: SaveOptions): Promise<Result<T>>;
 
   findOneAndUpdate(
     filterQuery: FilterQuery<T>,
     update: UpdateQuery<T>,
-  ): Promise<T | null>;
+  ): Promise<Result<T | null>>;
 
   upsert(filterQuery: FilterQuery<T>, document: Partial<T>): Promise<T | null>;
 
