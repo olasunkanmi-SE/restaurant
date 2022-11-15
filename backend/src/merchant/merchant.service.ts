@@ -34,14 +34,16 @@ export class MerchantService implements IMerchantService {
     private readonly merchantMapper: MerchantMapper,
     @Inject(TYPES.IContextService)
     private readonly contextService: IContextService,
-    @Inject(TYPES.IAuthService) private readonly authService: IAuthService,
+    @Inject(TYPES.IAuthService)
+    private readonly authService: IAuthService<MerchantDocument>,
   ) {}
 
   async createMerchant(
     props: CreateMerchantDTO,
   ): Promise<Result<IMerchantResponseDTO>> {
-    const merchantDocuments: MerchantDocument[] =
+    const result: Result<MerchantDocument[]> =
       await this.merchantRepository.find({});
+    const merchantDocuments: MerchantDocument[] = result.getValue();
     const existingMerchant = merchantDocuments.find(
       (merchant) => merchant.email === props.email,
     );
@@ -63,9 +65,10 @@ export class MerchantService implements IMerchantService {
       audit,
     }).getValue();
 
-    const newMerchantDoc = await this.merchantRepository.create(
+    const docResult = await this.merchantRepository.create(
       this.merchantMapper.toPersistence(merchant),
     );
+    const newMerchantDoc = docResult.getValue();
 
     const parsedResponse = MerchantParser.createMerchantResponse(
       this.merchantMapper.toDomain(newMerchantDoc),
@@ -76,7 +79,8 @@ export class MerchantService implements IMerchantService {
   async getMerchantById(
     id: Types.ObjectId,
   ): Promise<Result<IMerchantResponseDTO>> {
-    const merchantDoc = await this.merchantRepository.findById(id);
+    const result = await this.merchantRepository.findById(id);
+    const merchantDoc: MerchantDocument = result.getValue();
     return Result.ok(
       MerchantParser.createMerchantResponse(
         this.merchantMapper.toDomain(merchantDoc),
@@ -96,20 +100,21 @@ export class MerchantService implements IMerchantService {
       token.refreshToken,
       saltRounds,
     );
-    const merchantDoc: MerchantDocument =
+    const docResult: Result<MerchantDocument> =
       await this.merchantRepository.findOneAndUpdate(
         { _id: merchant.id },
         { refreshTokenHash: hash },
       );
+    const merchantDoc = docResult.getValue();
     return this.merchantMapper.toDomain(merchantDoc);
   }
 
   async signIn(props: LoginMerchantDTO): Promise<Result<IMerchantResponseDTO>> {
-    const merchantDoc: MerchantDocument = await this.merchantRepository.findOne(
-      {
+    const result: Result<MerchantDocument> =
+      await this.merchantRepository.findOne({
         email: props.email,
-      },
-    );
+      });
+    const merchantDoc: MerchantDocument = result.getValue();
     const comparePassWord: boolean = await bcrypt.compare(
       props.password,
       merchantDoc.passwordHash,
@@ -131,8 +136,8 @@ export class MerchantService implements IMerchantService {
     props: OnBoardMerchantDTO,
     id: Types.ObjectId,
   ): Promise<Result<IMerchantResponseDTO>> {
-    const merchantDoc: MerchantDocument =
-      await this.merchantRepository.findById(id);
+    const result = await this.merchantRepository.findById(id);
+    const merchantDoc: MerchantDocument = result.getValue();
     const merchant: Merchant = this.merchantMapper.toDomain(merchantDoc);
     const context: Context = this.contextService.getContext();
 
@@ -144,11 +149,12 @@ export class MerchantService implements IMerchantService {
 
     this.updateMerchantData(data, merchant, context);
 
-    const updatedMerchantDoc: MerchantDocument =
+    const docResult: Result<MerchantDocument> =
       await this.merchantRepository.findOneAndUpdate(
         { _id: merchant.id },
         data,
       );
+    const updatedMerchantDoc: MerchantDocument = docResult.getValue();
     const updateMerchant: Merchant =
       this.merchantMapper.toDomain(updatedMerchantDoc);
     const parsedResponse =

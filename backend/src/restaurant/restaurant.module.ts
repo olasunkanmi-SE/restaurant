@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TYPES } from './../application/constants/types';
 import { AuditMapper } from './../audit/audit.mapper';
@@ -18,6 +18,7 @@ import {
   RestaurantData,
   RestaurantSchema,
 } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
+import { ContextMiddleWare } from './../infrastructure/middlewares/context.middleware';
 import { LocationMapper } from './../location/location.mapper';
 import { MerchantMapper } from './../merchant/merchant.mapper';
 import { RestaurantsController } from './restaurant.controller';
@@ -45,4 +46,8 @@ import { RestaurantService } from './restaurant.service';
     MerchantMapper,
   ],
 })
-export class RestaurantModule {}
+export class RestaurantModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ContextMiddleWare).forRoutes('*');
+  }
+}

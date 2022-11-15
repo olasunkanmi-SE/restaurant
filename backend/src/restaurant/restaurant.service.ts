@@ -33,8 +33,9 @@ export class RestaurantService implements IRestaurantService {
   async createRestaurant(
     createRestaurantDTO: CreateRestaurantDTO,
   ): Promise<Result<IRestaurantResponseDTO>> {
-    const restaurantDocuments: RestaurantDocument[] =
-      await this.restaurantRepository.find({});
+    const restaurantDocuments: RestaurantDocument[] = await (
+      await this.restaurantRepository.find({})
+    ).getValue();
 
     const existingEmail = restaurantDocuments.find(
       (doc) => doc.email === createRestaurantDTO.email,
@@ -59,13 +60,13 @@ export class RestaurantService implements IRestaurantService {
       new Types.ObjectId(),
     ).getValue();
 
-    const merchantDoc: MerchantDocument =
-      await this.merchantRepository.findById(createRestaurantDTO.merchantId);
+    const result = await this.merchantRepository.findById(
+      createRestaurantDTO.merchantId,
+    );
 
-    const merchant: Merchant = Merchant.create(
-      this.merchantMapper.toDomain(merchantDoc),
-      new Types.ObjectId(),
-    ).getValue();
+    const merchantDoc: MerchantDocument = result.getValue();
+
+    const merchant: Merchant = this.merchantMapper.toDomain(merchantDoc);
 
     const restaurant: Restaurant = Restaurant.create(
       {
@@ -77,10 +78,11 @@ export class RestaurantService implements IRestaurantService {
       new Types.ObjectId(),
     ).getValue();
 
-    const newRestaurant = await this.restaurantRepository.create(
+    const docResult = await this.restaurantRepository.create(
       this.restaurantMapper.toPersistence(restaurant),
     );
-    const rest = this.restaurantMapper.toDomain(newRestaurant);
+    const newRestaurantDoc = docResult.getValue();
+    const rest = this.restaurantMapper.toDomain(newRestaurantDoc);
     const restaurantWithMerchantDetails =
       await this.restaurantRepository.getRestaurantWithMerchantDetails(
         rest,
@@ -94,7 +96,9 @@ export class RestaurantService implements IRestaurantService {
 
   async getRestaurants(): Promise<Result<IRestaurantResponseDTO[]>> {
     const restaurants: Restaurant[] = [];
-    const documents = await this.restaurantRepository.find({});
+    const documents: RestaurantDocument[] = await (
+      await this.restaurantRepository.find({})
+    ).getValue();
     if (documents.length) {
       for (const document of documents) {
         restaurants.push(this.restaurantMapper.toDomain(document));
@@ -109,8 +113,8 @@ export class RestaurantService implements IRestaurantService {
   async getRestaurantById(
     id: Types.ObjectId,
   ): Promise<Result<IRestaurantResponseDTO>> {
-    const document: RestaurantDocument =
-      await this.restaurantRepository.findById(id);
+    const result = await this.restaurantRepository.findById(id);
+    const document: RestaurantDocument = await result.getValue();
     const restaurant = this.restaurantMapper.toDomain(document);
     return Result.ok(RestaurantParser.createRestaurantResponse(restaurant));
   }

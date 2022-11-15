@@ -1,16 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { IMapper } from './../../domain/mapper/mapper';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { Model, Types } from 'mongoose';
 import { IAuthService } from './interfaces/auth-service.interface';
 import {
   IJwtPayload,
   ISignUpTokens,
   IUserPayload,
 } from './interfaces/auth.interface';
+import { throwApplicationError } from '../utilities/exception-instance';
 
 @Injectable()
-export class AuthService implements IAuthService {
+export class AuthService<T> implements IAuthService<T> {
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
@@ -54,5 +57,33 @@ export class AuthService implements IAuthService {
 
   async hashData(prop: string, saltRound: number): Promise<string> {
     return bcrypt.hash(prop, saltRound);
+  }
+
+  async updateRefreshToken(
+    model: Model<T>,
+    userId: Types.ObjectId,
+    refreshToken: string,
+  ) {
+    const userDoc: any = await model.findById(userId);
+    if (userDoc.isSuccess === false || !userDoc._refreshTokenHash) {
+      throwApplicationError(HttpStatus.FORBIDDEN, 'Access denied');
+    }
+
+    let mapper: IMapper<any, T>;
+    const userEntity = mapper.toDomain(userDoc);
+
+    const verifyToken = bcrypt.compare(
+      refreshToken,
+      userEntity.refreshTokenHash,
+    );
+    if (!verifyToken) {
+      throwApplicationError(HttpStatus.FORBIDDEN, 'Access denied');
+    }
+    const payload = { userId, email: userEntity.email, role: userEntity.role };
+    const newTokens = await this.generateAuthTokens(payload);
+    await model.findOneAndUpdate(
+      { _id: userEntity.id },
+      { refreshTokenHash: newTokens.refreshToken },
+    );
   }
 }
