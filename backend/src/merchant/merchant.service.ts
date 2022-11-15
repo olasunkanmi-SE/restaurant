@@ -35,7 +35,7 @@ export class MerchantService implements IMerchantService {
     @Inject(TYPES.IContextService)
     private readonly contextService: IContextService,
     @Inject(TYPES.IAuthService)
-    private readonly authService: IAuthService<MerchantDocument>,
+    private readonly authService: IAuthService,
   ) {}
 
   async createMerchant(
