@@ -1,9 +1,9 @@
-import { IMapper } from './../../domain/mapper/mapper';
+import { Result } from './../../domain/result/result';
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { Model, Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { IAuthService } from './interfaces/auth-service.interface';
 import {
   IJwtPayload,
@@ -11,9 +11,10 @@ import {
   IUserPayload,
 } from './interfaces/auth.interface';
 import { throwApplicationError } from '../utilities/exception-instance';
+import { GenericDocumentRepository } from '../database';
 
 @Injectable()
-export class AuthService<T> implements IAuthService<T> {
+export class AuthService implements IAuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
@@ -60,30 +61,40 @@ export class AuthService<T> implements IAuthService<T> {
   }
 
   async updateRefreshToken(
-    model: Model<T>,
+    model: GenericDocumentRepository<any>,
     userId: Types.ObjectId,
     refreshToken: string,
   ) {
-    const userDoc: any = await model.findById(userId);
-    if (userDoc.isSuccess === false || !userDoc._refreshTokenHash) {
+    const result: Result<any | null> = await model.findById(userId);
+    if (result.isSuccess === false) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Access denied');
     }
-
-    let mapper: IMapper<any, T>;
-    const userEntity = mapper.toDomain(userDoc);
-
-    const verifyToken = bcrypt.compare(
-      refreshToken,
-      userEntity.refreshTokenHash,
-    );
+    const userDoc = await result.getValue();
+    const { refreshTokenHash, role, email } = userDoc._doc;
+    const verifyToken = await bcrypt.compare(refreshToken, refreshTokenHash);
     if (!verifyToken) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Access denied');
     }
-    const payload = { userId, email: userEntity.email, role: userEntity.role };
+    const payload = { userId, email, role };
     const newTokens = await this.generateAuthTokens(payload);
     await model.findOneAndUpdate(
-      { _id: userEntity.id },
+      { _id: userDoc._id },
       { refreshTokenHash: newTokens.refreshToken },
     );
+  }
+
+  async logOut(model: GenericDocumentRepository<any>, userId: Types.ObjectId) {
+    const result: Result<any | null> = await model.findOneAndUpdate(
+      {
+        _id: userId,
+      },
+      { refreshTokenHash: null },
+    );
+    if (result.isSuccess === false) {
+      throwApplicationError(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        'Unable to update data',
+      );
+    }
   }
 }

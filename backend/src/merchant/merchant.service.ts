@@ -35,7 +35,7 @@ export class MerchantService implements IMerchantService {
     @Inject(TYPES.IContextService)
     private readonly contextService: IContextService,
     @Inject(TYPES.IAuthService)
-    private readonly authService: IAuthService<MerchantDocument>,
+    private readonly authService: IAuthService,
   ) {}
 
   async createMerchant(
@@ -43,6 +43,9 @@ export class MerchantService implements IMerchantService {
   ): Promise<Result<IMerchantResponseDTO>> {
     const result: Result<MerchantDocument[]> =
       await this.merchantRepository.find({});
+    if (!result.isSuccess) {
+      throwApplicationError(HttpStatus.NOT_FOUND, 'Merchant does not exist');
+    }
     const merchantDocuments: MerchantDocument[] = result.getValue();
     const existingMerchant = merchantDocuments.find(
       (merchant) => merchant.email === props.email,
@@ -68,6 +71,12 @@ export class MerchantService implements IMerchantService {
     const docResult = await this.merchantRepository.create(
       this.merchantMapper.toPersistence(merchant),
     );
+    if (!docResult.isSuccess) {
+      throwApplicationError(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        'Error while creating merchant',
+      );
+    }
     const newMerchantDoc = docResult.getValue();
 
     const parsedResponse = MerchantParser.createMerchantResponse(
@@ -80,6 +89,9 @@ export class MerchantService implements IMerchantService {
     id: Types.ObjectId,
   ): Promise<Result<IMerchantResponseDTO>> {
     const result = await this.merchantRepository.findById(id);
+    if (!result.isSuccess) {
+      throwApplicationError(HttpStatus.NOT_FOUND, 'Merchant does not exist');
+    }
     const merchantDoc: MerchantDocument = result.getValue();
     return Result.ok(
       MerchantParser.createMerchantResponse(
@@ -105,6 +117,12 @@ export class MerchantService implements IMerchantService {
         { _id: merchant.id },
         { refreshTokenHash: hash },
       );
+    if (!docResult.isSuccess) {
+      throwApplicationError(
+        HttpStatus.NOT_MODIFIED,
+        'Merchant could not be updated',
+      );
+    }
     const merchantDoc = docResult.getValue();
     return this.merchantMapper.toDomain(merchantDoc);
   }
@@ -114,6 +132,9 @@ export class MerchantService implements IMerchantService {
       await this.merchantRepository.findOne({
         email: props.email,
       });
+    if (!result.isSuccess) {
+      throwApplicationError(HttpStatus.NOT_FOUND, 'Merchant does not exist');
+    }
     const merchantDoc: MerchantDocument = result.getValue();
     const comparePassWord: boolean = await bcrypt.compare(
       props.password,
@@ -137,6 +158,9 @@ export class MerchantService implements IMerchantService {
     id: Types.ObjectId,
   ): Promise<Result<IMerchantResponseDTO>> {
     const result = await this.merchantRepository.findById(id);
+    if (!result.isSuccess) {
+      throwApplicationError(HttpStatus.NOT_FOUND, 'Merchant does not exist');
+    }
     const merchantDoc: MerchantDocument = result.getValue();
     const merchant: Merchant = this.merchantMapper.toDomain(merchantDoc);
     const context: Context = this.contextService.getContext();
@@ -154,6 +178,12 @@ export class MerchantService implements IMerchantService {
         { _id: merchant.id },
         data,
       );
+    if (!docResult.isSuccess) {
+      throwApplicationError(
+        HttpStatus.NOT_MODIFIED,
+        'Merchant could not be updated',
+      );
+    }
     const updatedMerchantDoc: MerchantDocument = docResult.getValue();
     const updateMerchant: Merchant =
       this.merchantMapper.toDomain(updatedMerchantDoc);
