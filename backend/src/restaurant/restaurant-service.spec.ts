@@ -61,19 +61,25 @@ describe('Test restaurant service', () => {
     },
   };
   it('Create a restaurant', async () => {
-    restaurantRepositoryStub.find = async (): Promise<RestaurantDocument[]> => {
-      return [restaurantMockDocument];
+    restaurantRepositoryStub.find = async (): Promise<
+      Result<RestaurantDocument[]>
+    > => {
+      return Result.ok([restaurantMockDocument]);
     };
     Audit.createInsertContext = (): Audit => {
       return Audit.create(auditMockData).getValue();
     };
-    merchantRepositoryStub.findById = async (): Promise<MerchantDocument> => {
-      return merchantMockData;
+    merchantRepositoryStub.findById = async (): Promise<
+      Result<MerchantDocument>
+    > => {
+      return Result.ok(merchantMockData);
     };
     const restaurant = Restaurant.create(restaurantMockData).getValue();
     restaurantMapperStub.toPersistence(restaurant);
-    restaurantRepositoryStub.create = async (): Promise<RestaurantDocument> => {
-      return restaurantMockDocument;
+    restaurantRepositoryStub.create = async (): Promise<
+      Result<RestaurantDocument>
+    > => {
+      return Result.ok(restaurantMockDocument);
     };
     restaurantRepositoryStub.getRestaurantWithMerchantDetails =
       async (): Promise<Restaurant> => {
@@ -90,9 +96,9 @@ describe('Test restaurant service', () => {
   it('Should throw an exception if restaurant email exists', async () => {
     try {
       restaurantRepositoryStub.find = async (): Promise<
-        RestaurantDocument[]
+        Result<RestaurantDocument[]>
       > => {
-        return [restaurantMockDocument];
+        return Result.ok([restaurantMockDocument]);
       };
       createRestaurantDTO = {
         ...createRestaurantDTO,
@@ -108,8 +114,10 @@ describe('Test restaurant service', () => {
   });
 
   it('Should get Restaurants', async () => {
-    restaurantRepositoryStub.find = async (): Promise<RestaurantDocument[]> => {
-      return [restaurantMockDocument];
+    restaurantRepositoryStub.find = async (): Promise<
+      Result<RestaurantDocument[]>
+    > => {
+      return Result.ok([restaurantMockDocument]);
     };
     restaurantMapperStub.toDomain(restaurantMockDocument);
     const result: Result<IRestaurantResponseDTO[]> =
@@ -119,10 +127,11 @@ describe('Test restaurant service', () => {
   });
 
   it('Should get a restaurant by Id', async () => {
-    restaurantRepositoryStub.findById =
-      async (): Promise<RestaurantDocument> => {
-        return restaurantMockDocument;
-      };
+    restaurantRepositoryStub.findById = async (): Promise<
+      Result<RestaurantDocument>
+    > => {
+      return Result.ok(restaurantMockDocument);
+    };
     restaurantMapperStub.toDomain(restaurantMockDocument);
     const result: Result<IRestaurantResponseDTO> =
       await restaurantService.getRestaurantById(new Types.ObjectId());

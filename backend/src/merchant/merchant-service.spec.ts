@@ -24,7 +24,8 @@ describe('Test merchant service', () => {
   const merchantMapperStub: MerchantMapper = new MerchantMapper(
     new AuditMapper(),
   );
-  const authServiceStub: IAuthService = sinon.stubInterface<IAuthService>();
+  const authServiceStub: IAuthService<MerchantDocument> =
+    sinon.stubInterface<IAuthService<MerchantDocument>>();
 
   const contextServiceStub: IContextService =
     sinon.stubInterface<IContextService>();
@@ -44,8 +45,10 @@ describe('Test merchant service', () => {
         email: 'ola@tesla.com',
         passwordHash: '',
       };
-      merchantRepositoryStub.find = async (): Promise<MerchantDocument[]> => {
-        return [merchantMockData];
+      merchantRepositoryStub.find = async (): Promise<
+        Result<MerchantDocument[]>
+      > => {
+        return Result.ok([merchantMockData]);
       };
       await merchantService.createMerchant(createMerchantProps);
     } catch (error) {
@@ -64,8 +67,10 @@ describe('Test merchant service', () => {
     Audit.createInsertContext = (): Audit => {
       return Audit.create(auditMockData).getValue();
     };
-    merchantRepositoryStub.create = async (): Promise<MerchantDocument> => {
-      return merchantMockData;
+    merchantRepositoryStub.create = async (): Promise<
+      Result<MerchantDocument>
+    > => {
+      return Result.ok(merchantMockData);
     };
     const response = {
       id: merchantId,
@@ -81,8 +86,10 @@ describe('Test merchant service', () => {
   });
 
   it('Should get a merchant by Id', async () => {
-    merchantRepositoryStub.findById = async (): Promise<MerchantDocument> => {
-      return merchantMockData;
+    merchantRepositoryStub.findById = async (): Promise<
+      Result<MerchantDocument>
+    > => {
+      return Result.ok(merchantMockData);
     };
     const result = await merchantService.getMerchantById(merchantId);
     expect(result).to.not.be.undefined;
@@ -102,8 +109,10 @@ describe('Test merchant service', () => {
   it('Should not sign a merchant in and should throw an exception', async () => {
     try {
       const loginProps = { email: 'ola@ola.com', password: '' };
-      merchantRepositoryStub.findOne = async (): Promise<MerchantDocument> => {
-        return merchantMockData;
+      merchantRepositoryStub.findOne = async (): Promise<
+        Result<MerchantDocument>
+      > => {
+        return Result.ok(merchantMockData);
       };
 
       await merchantService.signIn(loginProps);
@@ -123,16 +132,19 @@ describe('Test merchant service', () => {
       auditModifiedBy: 'Ola@gmail.com',
       auditModifiedDateTime: new Date().toString(),
     };
-    merchantRepositoryStub.findById = async (): Promise<MerchantDocument> => {
-      return { ...merchantMockData, organisationName: '' };
+    merchantRepositoryStub.findById = async (): Promise<
+      Result<MerchantDocument>
+    > => {
+      return Result.ok({ ...merchantMockData, organisationName: '' });
     };
     contextServiceStub.getContext = (): Context => {
       return new Context('Ola@gmail.com', '1234567890');
     };
-    merchantRepositoryStub.findOneAndUpdate =
-      async (): Promise<MerchantDocument> => {
-        return { ...merchantMockData, ...props };
-      };
+    merchantRepositoryStub.findOneAndUpdate = async (): Promise<
+      Result<MerchantDocument>
+    > => {
+      return Result.ok({ ...merchantMockData, ...props });
+    };
     const result: Result<IMerchantResponseDTO> =
       await merchantService.onBoardMerchant(props, merchantId);
     expect(result.isSuccess).to.be.true;

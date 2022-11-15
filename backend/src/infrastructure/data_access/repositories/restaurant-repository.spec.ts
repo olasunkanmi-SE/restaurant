@@ -1,27 +1,22 @@
-import { AuditMapper } from './../../../audit/audit.mapper';
-import { MerchantMapper } from './../../../merchant/merchant.mapper';
 import { expect } from 'chai';
 import mongoose, { Connection, Types } from 'mongoose';
 import * as sinon from 'ts-sinon';
-import { It, Mock } from 'typemoq';
+import { Mock } from 'typemoq';
 import { GenericDocumentRepository } from '../../../infrastructure';
-import {
-  restaurantMockData,
-  restaurantMockDocument,
-} from '../../../restaurant/restaurant-mock-data';
+import { restaurantMockDocument } from '../../../restaurant/restaurant-mock-data';
+import { AuditMapper } from './../../../audit/audit.mapper';
+import { Result } from './../../../domain/result/result';
+import { MerchantMapper } from './../../../merchant/merchant.mapper';
 import { Restaurant } from './../../../restaurant/restaurant';
 import { MerchantRepository } from './merchant-repository';
 import { RestaurantRepository } from './restaurant.repository';
-import {
-  RestaurantData,
-  RestaurantDocument,
-} from './schemas/restaurant.schema';
+import { RestaurantDocument } from './schemas/restaurant.schema';
 
 describe('test the restaurant service', () => {
   let connection: Connection;
   let modelId: Types.ObjectId;
   let restaurantsRepositoryMock: any;
-  let restaurantRepository;
+  let restaurantRepository: RestaurantRepository;
   beforeEach(async () => {
     connection = new Connection();
     modelId = new Types.ObjectId();
@@ -51,7 +46,8 @@ describe('test the restaurant service', () => {
     restaurantsRepositoryMock
       .setup((restaurantDocument) => restaurantDocument.find())
       .returns(() => [restaurantDocumentPromise]);
-    const result: RestaurantData = await restaurantRepository.find({});
+    const result: Result<RestaurantDocument[]> =
+      await restaurantRepository.find({});
     expect(result).to.have.length;
   });
 
@@ -59,35 +55,31 @@ describe('test the restaurant service', () => {
     restaurantsRepositoryMock
       .setup((restaurantDocument) => restaurantDocument.findOne())
       .returns(() => restaurantDocumentPromise);
-    const result: RestaurantData = await restaurantRepository.findOne({
-      name: 'Sheraton',
-    });
+    const result: Result<RestaurantDocument> =
+      await restaurantRepository.findOne({
+        name: 'Sheraton',
+      });
     expect(result).to.have.length;
-    expect(result.name).to.eq('Sheraton');
+    expect(result.getValue().name).to.eq('Sheraton');
   });
 
   it('Should find a restaurant by id', async () => {
     restaurantsRepositoryMock
       .setup((restaurantDocument) => restaurantDocument.findOne())
       .returns(() => restaurantDocumentPromise);
-    const result: RestaurantData = await restaurantRepository.findOne({
-      _id: modelId,
-    });
+    const result: Result<RestaurantDocument> =
+      await restaurantRepository.findOne({
+        _id: modelId,
+      });
     expect(result).to.have.length;
-    expect(result.isActive).to.be.true;
+    expect(result.getValue().isActive).to.be.true;
   });
 
   it('Should create a restaurant', async () => {
-    restaurantsRepositoryMock
-      .setup((restaurantDocument) => restaurantDocument.create())
-      .returns(() => restaurantDocumentPromise);
-    restaurantsRepositoryMock
-      .setup((restaurantDocument) => restaurantDocument.save(It.isAny()))
-      .returns(() => restaurantMockData);
-    const result: RestaurantData =
-      await restaurantRepository.DocumentModel.create(
-        await Restaurant.create(restaurantMockData).getValue(),
-      );
+    const result = Restaurant.create(
+      restaurantMockDocument,
+      new Types.ObjectId(),
+    ).getValue();
     expect(result.email).to.eq('support@Sheraton.com');
   });
 
@@ -99,14 +91,12 @@ describe('test the restaurant service', () => {
     restaurantsRepositoryMock
       .setup((restaurantDocument) => restaurantDocument.findByIdAndUpdate())
       .returns(() => restaurantDocumentPromise);
-    const result: RestaurantData = await restaurantRepository.findOneAndUpdate(
-      query,
-      {
+    const result: Result<RestaurantDocument> =
+      await restaurantRepository.findOneAndUpdate(query, {
         $set: {
           name: 'Transcorp Hilton',
         },
-      },
-    );
+      });
     expect(result);
   });
 });

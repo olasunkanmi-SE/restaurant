@@ -30,8 +30,9 @@ export class RestaurantRepository
     restaurant: Restaurant,
     merchantId: Types.ObjectId,
   ): Promise<Restaurant> {
-    const merchantDoc: MerchantDocument =
-      await this.merchantRepository.findById(merchantId);
+    const merchantDoc: MerchantDocument = await (
+      await this.merchantRepository.findById(merchantId)
+    ).getValue();
     const merchant: Merchant = this.merchantMapper.toDomain(merchantDoc);
     restaurant.merchant = merchant;
     return restaurant;
