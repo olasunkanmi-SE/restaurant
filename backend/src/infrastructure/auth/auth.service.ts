@@ -14,7 +14,7 @@ import { throwApplicationError } from '../utilities/exception-instance';
 import { GenericDocumentRepository } from '../database';
 
 @Injectable()
-export class AuthService<T> implements IAuthService<T> {
+export class AuthService implements IAuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,

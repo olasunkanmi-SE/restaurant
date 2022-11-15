@@ -24,8 +24,7 @@ describe('Test merchant service', () => {
   const merchantMapperStub: MerchantMapper = new MerchantMapper(
     new AuditMapper(),
   );
-  const authServiceStub: IAuthService<MerchantDocument> =
-    sinon.stubInterface<IAuthService<MerchantDocument>>();
+  const authServiceStub: IAuthService = sinon.stubInterface<IAuthService>();
 
   const contextServiceStub: IContextService =
     sinon.stubInterface<IContextService>();
