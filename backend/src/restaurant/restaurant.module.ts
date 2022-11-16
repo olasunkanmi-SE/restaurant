@@ -48,6 +48,9 @@ import { RestaurantService } from './restaurant.service';
 })
 export class RestaurantModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(ContextMiddleWare).forRoutes('*');
+    consumer
+      .apply(ContextMiddleWare)
+      .exclude()
+      .forRoutes(RestaurantsController);
   }
 }

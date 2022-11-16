@@ -10,10 +10,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { GetCurrentUserId } from 'src/infrastructure/decorators/get-user-id.decorator';
+import { GetCurrentUser } from 'src/infrastructure/decorators/get-user.decorator';
 import { TYPES } from './../application/constants/types';
 import { Result } from './../domain/result/result';
 import { AccessAuthGuard } from './../infrastructure/guards/access-auth.guard';
-import { ConvertId } from './../utils/mongoose-id-conversion';
+import { RefreshAuthGuard } from './../infrastructure/guards/refresh-auth.guard';
 import { LoginMerchantDTO } from './dtos';
 import { CreateMerchantDTO } from './dtos/create-merchant.dto';
 import { OnBoardMerchantDTO } from './dtos/on-board-merchant.dto';
@@ -56,10 +58,19 @@ export class MerchantController {
   @HttpCode(HttpStatus.CREATED)
   async onBoard(
     @Body() request: OnBoardMerchantDTO,
+    @GetCurrentUserId() userId: Types.ObjectId,
   ): Promise<Result<IMerchantResponseDTO>> {
-    return this.merchantService.onBoardMerchant(
-      request,
-      ConvertId.convertStringToObjectId('63636353885a6f18f06f78c1'),
+    return this.merchantService.onBoardMerchant(request, userId);
+  }
+
+  @UseGuards(RefreshAuthGuard)
+  @Post('/refresh')
+  async refresh(
+    @GetCurrentUser() merchant: any,
+  ): Promise<Result<{ accessToken: string }>> {
+    return this.merchantService.getAccessTokenAndUpdateRefreshToken(
+      merchant.sub,
+      merchant.token,
     );
   }
 }

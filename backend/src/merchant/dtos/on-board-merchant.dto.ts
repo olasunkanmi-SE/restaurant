@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class OnBoardMerchantDTO {
   @IsNotEmpty()
@@ -27,6 +27,5 @@ export class OnBoardMerchantDTO {
   @IsString()
   @MaxLength(256)
   @IsNotEmpty()
-  @IsOptional()
   readonly organisationAddress: string;
 }
