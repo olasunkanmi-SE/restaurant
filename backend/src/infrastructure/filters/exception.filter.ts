@@ -26,15 +26,22 @@ export class ApplicationExceptionsFilter implements ExceptionFilter {
     const context = host.switchToHttp();
     const response = context.getResponse();
     const request = context.getRequest();
+    const { body } = request;
+    let props: any;
+    if (Object.hasOwnProperty.call(body, 'password')) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...prop } = body;
+      props = prop;
+    }
     const { statusCode, message } = this.getException(exception);
     const responseBody: IExceptionResponse = {
       isSuccess: false,
       statusCode,
       message,
-      path: request.url,
+      path: request.originalUrl,
       timeStamp: new Date().toISOString(),
       method: request.method,
-      body: request.body,
+      body: Object.hasOwnProperty.call(body, 'password') ? props : body,
     };
     this.logErrorMessage(request, message, statusCode, exception);
     const errorLog: string = this.constructErrorMessage(

@@ -18,7 +18,7 @@ export class AccessTokenStrategy extends PassportStrategy(
 
   validate(payload: any): unknown {
     return {
-      payload,
+      ...payload,
     };
   }
 }

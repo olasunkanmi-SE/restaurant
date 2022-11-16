@@ -8,5 +8,5 @@ export interface IAuthService {
     model: GenericDocumentRepository<any>,
     userId: Types.ObjectId,
     refreshToken: string,
-  );
+  ): Promise<{ accessToken: string }>;
 }

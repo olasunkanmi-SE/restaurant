@@ -56,4 +56,9 @@ export class LocationService implements ILocationService {
       'Restaurant locations retrieved successfully',
     );
   }
+
+  async someFunctions(id: string) {
+    if (Object.hasOwnProperty.call({}, '')) {
+    }
+  }
 }

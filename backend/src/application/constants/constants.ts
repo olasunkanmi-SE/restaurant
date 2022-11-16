@@ -10,3 +10,9 @@ export const APIResponseMessage = {
 };
 
 export const saltRounds = 10;
+
+export enum MerchantStatus {
+  onBoarding = 'onBoarding',
+  boarded = 'borded',
+  banned = 'banned',
+}

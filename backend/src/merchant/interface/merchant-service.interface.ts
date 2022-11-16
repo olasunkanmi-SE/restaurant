@@ -11,9 +11,16 @@ export interface IMerchantService {
   ): Promise<Result<IMerchantResponseDTO>>;
 
   getMerchantById(id: Types.ObjectId): Promise<Result<IMerchantResponseDTO>>;
+
   signIn(props: LoginMerchantDTO): Promise<Result<IMerchantResponseDTO>>;
+
   onBoardMerchant(
     props: OnBoardMerchantDTO,
     id: Types.ObjectId,
   ): Promise<Result<IMerchantResponseDTO>>;
+
+  getAccessTokenAndUpdateRefreshToken(
+    userId: Types.ObjectId,
+    refreshToken: string,
+  ): Promise<Result<{ accessToken: string }>>;
 }
