@@ -1,7 +1,8 @@
-import { BaseDocument } from '../../../../infrastructure/database';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { BaseDocument } from '../../../../infrastructure/database';
 import { IMerchantData } from '../interfaces/merchant-model.interface';
+import { MerchantStatus } from './../../../../application/constants/constants';
 
 export type MerchantDocument = MerchantData & Document;
 
@@ -34,7 +35,7 @@ export class MerchantData extends BaseDocument implements IMerchantData {
   @Prop({ type: Boolean, default: false })
   isActive: boolean;
 
-  @Prop({ type: String, default: 'onBoarding' })
+  @Prop({ type: String, default: MerchantStatus.onBoarding })
   status: string;
 
   @Prop({ type: String })

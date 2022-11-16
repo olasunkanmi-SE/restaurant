@@ -1,7 +1,11 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { GenericDocumentRepository } from 'src/infrastructure/database';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
-import { saltRounds } from './../application/constants/constants';
+import {
+  MerchantStatus,
+  saltRounds,
+} from './../application/constants/constants';
 import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
@@ -51,12 +55,9 @@ export class MerchantService implements IMerchantService {
       (merchant) => merchant.email === props.email,
     );
     if (existingMerchant) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          error: `Restaurant with email ${props.email} already exists`,
-        },
+      throwApplicationError(
         HttpStatus.BAD_REQUEST,
+        `Restaurant with email ${props.email} already exists`,
       );
     }
     const context: Context = this.contextService.getContext();
@@ -73,7 +74,7 @@ export class MerchantService implements IMerchantService {
     );
     if (!docResult.isSuccess) {
       throwApplicationError(
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.NOT_IMPLEMENTED,
         'Error while creating merchant',
       );
     }
@@ -168,6 +169,7 @@ export class MerchantService implements IMerchantService {
     const data = {
       auditModifiedBy: context.email,
       auditModifiedDateTime: new Date().toISOString(),
+      status: MerchantStatus.boarded,
       ...props,
     };
 
@@ -233,5 +235,30 @@ export class MerchantService implements IMerchantService {
           break;
       }
     }
+  }
+
+  async getAccessTokenAndUpdateRefreshToken(
+    userId: Types.ObjectId,
+    refreshToken: string,
+  ): Promise<Result<{ accessToken: string }>> {
+    const merchantRepo: MerchantRepository = this.merchantRepository;
+    const accessToken = await this.refreshMerchantToken(
+      merchantRepo,
+      userId,
+      refreshToken,
+    );
+    return Result.ok(accessToken);
+  }
+
+  private async refreshMerchantToken(
+    model: GenericDocumentRepository<any>,
+    userId: Types.ObjectId,
+    refreshToken: string,
+  ): Promise<{ accessToken: string }> {
+    return await this.authService.updateRefreshToken(
+      model,
+      userId,
+      refreshToken,
+    );
   }
 }
