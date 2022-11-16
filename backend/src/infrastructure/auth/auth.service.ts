@@ -14,6 +14,13 @@ import {
   IUserPayload,
 } from './interfaces/auth.interface';
 
+/**
+ *Authentication service class
+ *
+ * @export
+ * @class AuthService
+ * @implements {IAuthService}
+ */
 @Injectable()
 export class AuthService implements IAuthService {
   constructor(
@@ -21,6 +28,13 @@ export class AuthService implements IAuthService {
     private readonly configService: ConfigService,
   ) {}
 
+  /**
+   * method to generate access and refresh token
+   *
+   * @param {IUserPayload} payload
+   * @returns {Promise<ISignUpTokens>}
+   * @memberof AuthService
+   */
   async generateAuthTokens(payload: IUserPayload): Promise<ISignUpTokens> {
     const { userId, email, role } = payload;
     const jwtPayload: IJwtPayload = {
@@ -39,6 +53,13 @@ export class AuthService implements IAuthService {
     };
   }
 
+  /**
+   * method to sign access token
+   *
+   * @param {IJwtPayload} jwtPayload
+   * @returns {Promise<string>}
+   * @memberof AuthService
+   */
   private async signAccessToken(jwtPayload: IJwtPayload): Promise<string> {
     return this.jwtService.signAsync(jwtPayload, {
       secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
@@ -48,6 +69,13 @@ export class AuthService implements IAuthService {
     });
   }
 
+  /**
+   * method to sign refresh token
+   *
+   * @param {IJwtPayload} jwtPayload
+   * @returns {Promise<string>}
+   * @memberof AuthService
+   */
   private async signRefreshToken(jwtPayload: IJwtPayload): Promise<string> {
     return this.jwtService.signAsync(jwtPayload, {
       secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
@@ -57,10 +85,27 @@ export class AuthService implements IAuthService {
     });
   }
 
+  /**
+   * method to hash tokens
+   *
+   * @param {string} prop
+   * @param {number} saltRound
+   * @returns {Promise<string>}
+   * @memberof AuthService
+   */
   async hashData(prop: string, saltRound: number): Promise<string> {
     return bcrypt.hash(prop, saltRound);
   }
 
+  /**
+   * Generic method to update refresh token
+   *
+   * @param {GenericDocumentRepository<any>} model
+   * @param {Types.ObjectId} userId
+   * @param {string} refreshToken
+   * @returns {Promise<{ accessToken: string }>}
+   * @memberof AuthService
+   */
   async updateRefreshToken(
     model: GenericDocumentRepository<any>,
     userId: Types.ObjectId,
@@ -94,6 +139,14 @@ export class AuthService implements IAuthService {
     };
   }
 
+  /**
+   * method to log Out On Security Breach
+   *
+   * @param {GenericDocumentRepository<any>} model
+   * @param {Types.ObjectId} userId
+   * @returns {void}
+   * @memberof AuthService
+   */
   async logOutOnSecurityBreach(
     model: GenericDocumentRepository<any>,
     userId: Types.ObjectId,
@@ -110,6 +163,14 @@ export class AuthService implements IAuthService {
     }
   }
 
+  /**
+   * method to log Out On Security Breach
+   *
+   * @param {GenericDocumentRepository<any>} model
+   * @param {Types.ObjectId} userId
+   * @returns {void}
+   * @memberof AuthService
+   */
   async logOut(model: GenericDocumentRepository<any>, userId: Types.ObjectId) {
     let result: Result<any | null> = await model.findById(userId);
 
