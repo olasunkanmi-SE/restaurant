@@ -14,9 +14,7 @@ export class RestaurantsController {
   ) {}
 
   @Post()
-  async createRestaurant(
-    @Body() request: CreateRestaurantDTO,
-  ): Promise<Result<IRestaurantResponseDTO>> {
+  async createRestaurant(@Body() request: CreateRestaurantDTO): Promise<Result<IRestaurantResponseDTO>> {
     return this.restaurantService.createRestaurant(request);
   }
 
@@ -26,9 +24,7 @@ export class RestaurantsController {
   }
 
   @Get('/:id')
-  async getRestaurantById(
-    @Param('id') restaurantId: Types.ObjectId,
-  ): Promise<Result<IRestaurantResponseDTO>> {
+  async getRestaurantById(@Param('id') restaurantId: Types.ObjectId): Promise<Result<IRestaurantResponseDTO>> {
     return this.restaurantService.getRestaurantById(restaurantId);
   }
 }

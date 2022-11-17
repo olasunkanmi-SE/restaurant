@@ -8,8 +8,7 @@ export class ApplicationLogger extends Logger implements IContextAwareLogger {
   }
 
   debug(context: string, message: string): void {
-    if (process.env['NODE_ENV'] !== 'production')
-      super.debug(`[DEBUG] ${message}`, context);
+    if (process.env['NODE_ENV'] !== 'production') super.debug(`[DEBUG] ${message}`, context);
   }
 
   log(context: string, message: string): void {
@@ -25,7 +24,6 @@ export class ApplicationLogger extends Logger implements IContextAwareLogger {
   }
 
   verbose(context: string, message: string): void {
-    if (process.env['NODE_ENV'] !== 'production')
-      super.verbose(`[VERBOSE] ${message}`, context);
+    if (process.env['NODE_ENV'] !== 'production') super.verbose(`[VERBOSE] ${message}`, context);
   }
 }

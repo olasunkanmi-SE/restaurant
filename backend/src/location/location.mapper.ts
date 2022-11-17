@@ -29,17 +29,7 @@ export class LocationMapper implements IMapper<Location, LocationData> {
   }
 
   toDomain(doc: LocationData): Location {
-    const {
-      _id,
-      address,
-      address2,
-      city,
-      country,
-      postCode,
-      state,
-      latitude,
-      longitude,
-    } = doc;
+    const { _id, address, address2, city, country, postCode, state, latitude, longitude } = doc;
     const entity: Location = Location.create(
       {
         address,

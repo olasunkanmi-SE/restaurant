@@ -4,9 +4,7 @@ import { LocationParser } from './../location/location.parser';
 import { Restaurant } from './restaurant';
 import { IRestaurantResponseDTO } from './restaurant-response.dto';
 export class RestaurantParser {
-  static createRestaurantResponse(
-    restaurant: Restaurant,
-  ): IRestaurantResponseDTO {
+  static createRestaurantResponse(restaurant: Restaurant): IRestaurantResponseDTO {
     const { audit, location, merchant } = restaurant;
     const restaurantResponse: IRestaurantResponseDTO = {
       id: restaurant.id,
@@ -23,9 +21,7 @@ export class RestaurantParser {
     return restaurantResponse;
   }
 
-  static createRestaurantsParser(
-    restaurants: Restaurant[],
-  ): IRestaurantResponseDTO[] {
+  static createRestaurantsParser(restaurants: Restaurant[]): IRestaurantResponseDTO[] {
     const restaurantsResponse: IRestaurantResponseDTO[] = [];
     for (const restaurant of restaurants) {
       restaurantsResponse.push(this.createRestaurantResponse(restaurant));

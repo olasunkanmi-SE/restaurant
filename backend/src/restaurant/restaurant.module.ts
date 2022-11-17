@@ -6,14 +6,8 @@ import { ContextService } from './../infrastructure/context/context.service';
 import { LocationRepository } from './../infrastructure/data_access/repositories/location.repository';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { RestaurantRepository } from './../infrastructure/data_access/repositories/restaurant.repository';
-import {
-  LocationData,
-  LocationSchema,
-} from './../infrastructure/data_access/repositories/schemas/location.schema';
-import {
-  MerchantData,
-  MerchantSchema,
-} from './../infrastructure/data_access/repositories/schemas/merchant.schema';
+import { LocationData, LocationSchema } from './../infrastructure/data_access/repositories/schemas/location.schema';
+import { MerchantData, MerchantSchema } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import {
   RestaurantData,
   RestaurantSchema,
@@ -48,9 +42,6 @@ import { RestaurantService } from './restaurant.service';
 })
 export class RestaurantModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(ContextMiddleWare)
-      .exclude()
-      .forRoutes(RestaurantsController);
+    consumer.apply(ContextMiddleWare).exclude().forRoutes(RestaurantsController);
   }
 }

@@ -6,11 +6,7 @@ import { Merchant } from './../../../merchant/merchant';
 import { MerchantMapper } from './../../../merchant/merchant.mapper';
 import { Restaurant } from './../../../restaurant/restaurant';
 import { MerchantRepository } from './merchant-repository';
-import {
-  MerchantDocument,
-  RestaurantData,
-  RestaurantDocument,
-} from './schemas';
+import { MerchantDocument, RestaurantData, RestaurantDocument } from './schemas';
 
 export class RestaurantRepository
   extends GenericDocumentRepository<RestaurantDocument>
@@ -26,13 +22,8 @@ export class RestaurantRepository
     super(restaurantModel, connection);
   }
 
-  async getRestaurantWithMerchantDetails(
-    restaurant: Restaurant,
-    merchantId: Types.ObjectId,
-  ): Promise<Restaurant> {
-    const merchantDoc: MerchantDocument = await (
-      await this.merchantRepository.findById(merchantId)
-    ).getValue();
+  async getRestaurantWithMerchantDetails(restaurant: Restaurant, merchantId: Types.ObjectId): Promise<Restaurant> {
+    const merchantDoc: MerchantDocument = await (await this.merchantRepository.findById(merchantId)).getValue();
     const merchant: Merchant = this.merchantMapper.toDomain(merchantDoc);
     restaurant.merchant = merchant;
     return restaurant;
