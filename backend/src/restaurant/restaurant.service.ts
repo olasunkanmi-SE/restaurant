@@ -1,5 +1,6 @@
+import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
 import { IContextService } from './../infrastructure/context/context-service.interface';
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
@@ -26,24 +27,20 @@ export class RestaurantService implements IRestaurantService {
     private readonly merchantRepository: MerchantRepository,
     private readonly restaurantMapper: RestaurantMapper,
     private readonly merchantMapper: MerchantMapper,
-    @Inject(TYPES.IContextService)
-    private readonly contextService: IContextService,
+    @Inject(TYPES.IContextService) private readonly contextService: IContextService,
   ) {}
 
   async createRestaurant(createRestaurantDTO: CreateRestaurantDTO): Promise<Result<IRestaurantResponseDTO>> {
     const restaurantDocuments: RestaurantDocument[] = await (await this.restaurantRepository.find({})).getValue();
-
     const existingEmail = restaurantDocuments.find((doc) => doc.email === createRestaurantDTO.email);
 
     if (existingEmail) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          error: `Restaurant with email ${createRestaurantDTO.email} already exists`,
-        },
+      throwApplicationError(
         HttpStatus.BAD_REQUEST,
+        `Restaurant with email ${createRestaurantDTO.email} already exists`,
       );
     }
+
     const context: Context = this.contextService.getContext();
     const audit: Audit = Audit.createInsertContext(context);
     const location: Location = Location.create(
@@ -55,9 +52,7 @@ export class RestaurantService implements IRestaurantService {
     ).getValue();
 
     const result = await this.merchantRepository.findById(createRestaurantDTO.merchantId);
-
     const merchantDoc: MerchantDocument = result.getValue();
-
     const merchant: Merchant = this.merchantMapper.toDomain(merchantDoc);
 
     const restaurant: Restaurant = Restaurant.create(
@@ -89,13 +84,29 @@ export class RestaurantService implements IRestaurantService {
         restaurants.push(this.restaurantMapper.toDomain(document));
       }
     }
-    return Result.ok(RestaurantParser.createRestaurantsParser(restaurants), 'Restaurants retrieved successfully');
+    const restaurantWithMerchantData: Restaurant[] = [];
+    for (const restaurant of restaurants) {
+      restaurantWithMerchantData.push(
+        await this.restaurantRepository.getRestaurantWithMerchantDetails(restaurant, restaurant.merchant.id),
+      );
+    }
+    return Result.ok(
+      RestaurantParser.createRestaurantsParser(restaurantWithMerchantData),
+      'Restaurants retrieved successfully',
+    );
   }
 
   async getRestaurantById(id: Types.ObjectId): Promise<Result<IRestaurantResponseDTO>> {
     const result = await this.restaurantRepository.findById(id);
     const document: RestaurantDocument = await result.getValue();
     const restaurant = this.restaurantMapper.toDomain(document);
-    return Result.ok(RestaurantParser.createRestaurantResponse(restaurant));
+    const restaurantWithMerchantData: Restaurant = await this.restaurantRepository.getRestaurantWithMerchantDetails(
+      restaurant,
+      restaurant.merchant.id,
+    );
+    return Result.ok(
+      RestaurantParser.createRestaurantResponse(restaurantWithMerchantData),
+      'Restaurant retrieved successfully',
+    );
   }
 }

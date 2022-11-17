@@ -14,10 +14,7 @@ import { IMerchantResponseDTO } from './merchant-response.dto';
 
 @Controller('merchants')
 export class MerchantController {
-  constructor(
-    @Inject(TYPES.IMerchantService)
-    private readonly merchantService: IMerchantService,
-  ) {}
+  constructor(@Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -25,6 +22,7 @@ export class MerchantController {
     return this.merchantService.createMerchant(request);
   }
 
+  @UseGuards(AccessAuthGuard)
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
   async getById(@Param('id') merchantId: Types.ObjectId): Promise<Result<IMerchantResponseDTO>> {
@@ -51,5 +49,11 @@ export class MerchantController {
   @Post('/refresh')
   async refresh(@GetCurrentUser() merchant: any): Promise<Result<{ accessToken: string }>> {
     return this.merchantService.getAccessTokenAndUpdateRefreshToken(merchant.sub, merchant.token);
+  }
+
+  @UseGuards(AccessAuthGuard)
+  @Post('/logout')
+  async logOut(@GetCurrentUserId() userId: Types.ObjectId) {
+    return this.merchantService.logOut(userId);
   }
 }
