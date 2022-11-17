@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Inject,
-  Param,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Param, Post, UseGuards } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { GetCurrentUserId } from 'src/infrastructure/decorators/get-user-id.decorator';
 import { GetCurrentUser } from 'src/infrastructure/decorators/get-user.decorator';
@@ -31,25 +21,19 @@ export class MerchantController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async signUp(
-    @Body() request: CreateMerchantDTO,
-  ): Promise<Result<IMerchantResponseDTO>> {
+  async signUp(@Body() request: CreateMerchantDTO): Promise<Result<IMerchantResponseDTO>> {
     return this.merchantService.createMerchant(request);
   }
 
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
-  async getById(
-    @Param('id') merchantId: Types.ObjectId,
-  ): Promise<Result<IMerchantResponseDTO>> {
+  async getById(@Param('id') merchantId: Types.ObjectId): Promise<Result<IMerchantResponseDTO>> {
     return this.merchantService.getMerchantById(merchantId);
   }
 
   @Post('/signin')
   @HttpCode(HttpStatus.OK)
-  async login(
-    @Body() request: LoginMerchantDTO,
-  ): Promise<Result<IMerchantResponseDTO>> {
+  async login(@Body() request: LoginMerchantDTO): Promise<Result<IMerchantResponseDTO>> {
     return this.merchantService.signIn(request);
   }
 
@@ -65,12 +49,7 @@ export class MerchantController {
 
   @UseGuards(RefreshAuthGuard)
   @Post('/refresh')
-  async refresh(
-    @GetCurrentUser() merchant: any,
-  ): Promise<Result<{ accessToken: string }>> {
-    return this.merchantService.getAccessTokenAndUpdateRefreshToken(
-      merchant.sub,
-      merchant.token,
-    );
+  async refresh(@GetCurrentUser() merchant: any): Promise<Result<{ accessToken: string }>> {
+    return this.merchantService.getAccessTokenAndUpdateRefreshToken(merchant.sub, merchant.token);
   }
 }

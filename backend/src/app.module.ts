@@ -4,10 +4,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TYPES } from './application/constants/types';
-import {
-  ApplicationExceptionsFilter,
-  ApplicationLogger,
-} from './infrastructure';
+import { ApplicationExceptionsFilter, ApplicationLogger } from './infrastructure';
 import { LocationModule } from './location/location.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
 

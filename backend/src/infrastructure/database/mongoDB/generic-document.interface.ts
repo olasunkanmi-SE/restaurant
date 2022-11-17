@@ -1,22 +1,10 @@
 import { Result } from './../../../domain/result/result';
-import {
-  FilterQuery,
-  ProjectionType,
-  QueryOptions,
-  SaveOptions,
-  UpdateQuery,
-} from 'mongoose';
+import { FilterQuery, ProjectionType, QueryOptions, SaveOptions, UpdateQuery } from 'mongoose';
 
 export interface IGenericDocument<T> {
-  findOne(
-    filterQuery: FilterQuery<T>,
-    projection?: ProjectionType<T | null>,
-  ): Promise<Result<T | null>>;
+  findOne(filterQuery: FilterQuery<T>, projection?: ProjectionType<T | null>): Promise<Result<T | null>>;
 
-  findById(
-    id: any,
-    projection?: ProjectionType<T> | null,
-  ): Promise<Result<T | null>>;
+  findById(id: any, projection?: ProjectionType<T> | null): Promise<Result<T | null>>;
 
   find(
     filterQuery: FilterQuery<T>,
@@ -26,10 +14,7 @@ export interface IGenericDocument<T> {
 
   create(document: any, options?: SaveOptions): Promise<Result<T>>;
 
-  findOneAndUpdate(
-    filterQuery: FilterQuery<T>,
-    update: UpdateQuery<T>,
-  ): Promise<Result<T | null>>;
+  findOneAndUpdate(filterQuery: FilterQuery<T>, update: UpdateQuery<T>): Promise<Result<T | null>>;
 
   upsert(filterQuery: FilterQuery<T>, document: Partial<T>): Promise<T | null>;
 

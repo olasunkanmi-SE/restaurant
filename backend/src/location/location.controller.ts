@@ -13,9 +13,7 @@ export class LocationsController {
   ) {}
 
   @Post()
-  async createLocation(
-    @Body() request: CreateLocationDTO,
-  ): Promise<Result<ILocationResponseDTO>> {
+  async createLocation(@Body() request: CreateLocationDTO): Promise<Result<ILocationResponseDTO>> {
     return this.locationService.createLocation(request);
   }
 

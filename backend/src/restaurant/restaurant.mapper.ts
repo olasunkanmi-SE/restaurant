@@ -39,16 +39,7 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
   }
 
   toDomain(document: RestaurantData): Restaurant {
-    const {
-      name,
-      email,
-      isActive,
-      webUrl,
-      logoUrl,
-      timeZone,
-      _id,
-      phoneNumber,
-    } = document;
+    const { name, email, isActive, webUrl, logoUrl, timeZone, _id, phoneNumber } = document;
     const entity: Restaurant = Restaurant.create(
       {
         name,

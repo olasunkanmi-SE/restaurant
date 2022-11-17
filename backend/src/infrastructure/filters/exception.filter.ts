@@ -1,20 +1,10 @@
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-  Inject,
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Inject } from '@nestjs/common';
 import { Request } from 'express';
 import * as fs from 'fs';
 import { TYPES } from '../../application/constants';
 import { IContextAwareLogger } from '../logger';
 import { APIResponseMessage } from './../../application/constants/constants';
-import {
-  IExceptionResponse,
-  IRequestException,
-} from './exception-response.interface';
+import { IExceptionResponse, IRequestException } from './exception-response.interface';
 
 @Catch()
 export class ApplicationExceptionsFilter implements ExceptionFilter {
@@ -44,11 +34,7 @@ export class ApplicationExceptionsFilter implements ExceptionFilter {
       body: Object.hasOwnProperty.call(body, 'password') ? props : body,
     };
     this.logErrorMessage(request, message, statusCode, exception);
-    const errorLog: string = this.constructErrorMessage(
-      responseBody,
-      request,
-      exception,
-    );
+    const errorLog: string = this.constructErrorMessage(responseBody, request, exception);
     this.writeErrorLogToFile(errorLog);
     response.status(statusCode).json(responseBody);
   }
@@ -67,16 +53,8 @@ export class ApplicationExceptionsFilter implements ExceptionFilter {
     return { statusCode, message };
   }
 
-  private logErrorMessage(
-    request: any,
-    message: string,
-    statusCode: number,
-    exception: any,
-  ) {
-    if (
-      statusCode === HttpStatus.INTERNAL_SERVER_ERROR ||
-      HttpStatus.NOT_FOUND
-    ) {
+  private logErrorMessage(request: any, message: string, statusCode: number, exception: any) {
+    if (statusCode === HttpStatus.INTERNAL_SERVER_ERROR || HttpStatus.NOT_FOUND) {
       this.logger.error(
         `End Request for ${request.path}`,
         `method=${request.method} statusCode=${statusCode} message=${message}`,
@@ -89,11 +67,7 @@ export class ApplicationExceptionsFilter implements ExceptionFilter {
     );
   }
 
-  private constructErrorMessage(
-    errorResponse: IExceptionResponse,
-    request: Request,
-    exception: unknown,
-  ): string {
+  private constructErrorMessage(errorResponse: IExceptionResponse, request: Request, exception: unknown): string {
     const { statusCode } = errorResponse;
     const { url, method } = request;
     const errorLog = `Response Code: ${statusCode} - Method: ${method} - URL: ${url}\n\n

@@ -8,11 +8,7 @@ import { throwApplicationError } from '../utilities/exception-instance';
 import { saltRounds } from './../../application/constants/constants';
 import { Result } from './../../domain/result/result';
 import { IAuthService } from './interfaces/auth-service.interface';
-import {
-  IJwtPayload,
-  ISignUpTokens,
-  IUserPayload,
-} from './interfaces/auth.interface';
+import { IJwtPayload, ISignUpTokens, IUserPayload } from './interfaces/auth.interface';
 
 /**
  *Authentication service class
@@ -23,10 +19,7 @@ import {
  */
 @Injectable()
 export class AuthService implements IAuthService {
-  constructor(
-    private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly jwtService: JwtService, private readonly configService: ConfigService) {}
 
   /**
    * method to generate access and refresh token
@@ -63,9 +56,7 @@ export class AuthService implements IAuthService {
   private async signAccessToken(jwtPayload: IJwtPayload): Promise<string> {
     return this.jwtService.signAsync(jwtPayload, {
       secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
-      expiresIn: this.configService.get<string>(
-        'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
-      ),
+      expiresIn: this.configService.get<string>('JWT_ACCESS_TOKEN_EXPIRATION_TIME'),
     });
   }
 
@@ -79,9 +70,7 @@ export class AuthService implements IAuthService {
   private async signRefreshToken(jwtPayload: IJwtPayload): Promise<string> {
     return this.jwtService.signAsync(jwtPayload, {
       secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
-      expiresIn: this.configService.get<string>(
-        'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
-      ),
+      expiresIn: this.configService.get<string>('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
     });
   }
 
@@ -129,10 +118,7 @@ export class AuthService implements IAuthService {
     const newTokens = await this.generateAuthTokens(payload);
     const tokenHash = await this.hashData(newTokens.refreshToken, saltRounds);
 
-    await model.findOneAndUpdate(
-      { _id: userDoc._id },
-      { refreshTokenHash: tokenHash },
-    );
+    await model.findOneAndUpdate({ _id: userDoc._id }, { refreshTokenHash: tokenHash });
 
     return {
       accessToken: newTokens.accessToken,
@@ -147,10 +133,7 @@ export class AuthService implements IAuthService {
    * @returns {void}
    * @memberof AuthService
    */
-  async logOutOnSecurityBreach(
-    model: GenericDocumentRepository<any>,
-    userId: Types.ObjectId,
-  ) {
+  async logOutOnSecurityBreach(model: GenericDocumentRepository<any>, userId: Types.ObjectId) {
     const docResult: Result<any | null> = await model.findById(userId);
 
     if (docResult) {
@@ -179,11 +162,7 @@ export class AuthService implements IAuthService {
     }
     const userDoc = await result.getValue();
 
-    if (
-      result &&
-      userDoc._doc.refreshTokenHash !== undefined &&
-      userDoc._doc.refreshTokenHash !== null
-    ) {
+    if (result && userDoc._doc.refreshTokenHash !== undefined && userDoc._doc.refreshTokenHash !== null) {
       result = await model.findOneAndUpdate(
         {
           _id: userId,
@@ -191,10 +170,7 @@ export class AuthService implements IAuthService {
         { refreshTokenHash: null },
       );
       if (result.isSuccess === false) {
-        throwApplicationError(
-          HttpStatus.INTERNAL_SERVER_ERROR,
-          'Unable to update data',
-        );
+        throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Unable to update data');
       }
     }
   }

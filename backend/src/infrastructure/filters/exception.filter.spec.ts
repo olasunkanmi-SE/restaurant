@@ -8,11 +8,9 @@ import { IExceptionResponse } from './exception-response.interface';
 import { ApplicationExceptionsFilter } from './exception.filter';
 
 describe('application exception filter', () => {
-  const loggerStub: IContextAwareLogger =
-    sinon.stubInterface<IContextAwareLogger>();
+  const loggerStub: IContextAwareLogger = sinon.stubInterface<IContextAwareLogger>();
   const mockRequest = { body: {}, url: '' } as Request;
-  const exceptionFilter: ApplicationExceptionsFilter =
-    new ApplicationExceptionsFilter(loggerStub);
+  const exceptionFilter: ApplicationExceptionsFilter = new ApplicationExceptionsFilter(loggerStub);
   const exception: HttpException = new HttpException('there was an error', 400);
 
   it('should get application request exception', () => {
@@ -44,11 +42,7 @@ describe('application exception filter', () => {
       method: 'GET',
     };
     // @ts-ignore
-    const errorLog = exceptionFilter.constructErrorMessage(
-      exceptionResponse,
-      mockRequest,
-      exception,
-    );
+    const errorLog = exceptionFilter.constructErrorMessage(exceptionResponse, mockRequest, exception);
     chai.expect(errorLog).to.not.be.undefined;
   });
 
@@ -62,11 +56,7 @@ describe('application exception filter', () => {
       method: 'GET',
     };
     // @ts-ignore
-    const errorLog = exceptionFilter.constructErrorMessage(
-      exceptionResponse,
-      mockRequest,
-      exception,
-    );
+    const errorLog = exceptionFilter.constructErrorMessage(exceptionResponse, mockRequest, exception);
     // @ts-ignore
     exceptionFilter.writeErrorLogToFile(errorLog);
   });

@@ -3,10 +3,7 @@ import { AuditParser } from './../audit/audit.parser';
 import { Merchant } from './merchant';
 import { IMerchantResponseDTO } from './merchant-response.dto';
 export class MerchantParser {
-  static createMerchantResponse(
-    merchant: Merchant,
-    tokens?: ISignUpTokens,
-  ): IMerchantResponseDTO {
+  static createMerchantResponse(merchant: Merchant, tokens?: ISignUpTokens): IMerchantResponseDTO {
     const merchantResponse: IMerchantResponseDTO = {
       id: merchant.id,
       firstName: merchant.firstName,
