@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post, UseGuards } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { GetCurrentUserId, AccessAuthGuard } from './../infrastructure';
 import { TYPES } from './../application/constants/types';
 import { Result } from './../domain/result/result';
 import { CreateRestaurantDTO } from './create-restaurant.dto';
@@ -14,16 +15,24 @@ export class RestaurantsController {
   ) {}
 
   @Post()
-  async createRestaurant(@Body() request: CreateRestaurantDTO): Promise<Result<IRestaurantResponseDTO>> {
-    return this.restaurantService.createRestaurant(request);
+  @UseGuards(AccessAuthGuard)
+  async createRestaurant(
+    @Body() request: CreateRestaurantDTO,
+    @GetCurrentUserId() userId: Types.ObjectId,
+  ): Promise<Result<IRestaurantResponseDTO>> {
+    let { merchantId } = request;
+    merchantId = userId;
+    return this.restaurantService.createRestaurant({ ...request, merchantId });
   }
 
   @Get()
+  @UseGuards(AccessAuthGuard)
   async getRestaurants(): Promise<Result<IRestaurantResponseDTO[]>> {
     return this.restaurantService.getRestaurants();
   }
 
   @Get('/:id')
+  @UseGuards(AccessAuthGuard)
   async getRestaurantById(@Param('id') restaurantId: Types.ObjectId): Promise<Result<IRestaurantResponseDTO>> {
     return this.restaurantService.getRestaurantById(restaurantId);
   }

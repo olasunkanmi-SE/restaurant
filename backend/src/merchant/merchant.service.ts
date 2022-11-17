@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { GenericDocumentRepository } from 'src/infrastructure/database';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
@@ -56,8 +55,8 @@ export class MerchantService implements IMerchantService {
     if (!docResult.isSuccess) {
       throwApplicationError(HttpStatus.NOT_IMPLEMENTED, 'Error while creating merchant');
     }
-    const newMerchantDoc = docResult.getValue();
 
+    const newMerchantDoc = docResult.getValue();
     const parsedResponse = MerchantParser.createMerchantResponse(this.merchantMapper.toDomain(newMerchantDoc));
     return Result.ok(parsedResponse);
   }
@@ -135,6 +134,7 @@ export class MerchantService implements IMerchantService {
     if (!docResult.isSuccess) {
       throwApplicationError(HttpStatus.NOT_MODIFIED, 'Merchant could not be updated');
     }
+
     const updatedMerchantDoc: MerchantDocument = docResult.getValue();
     const updateMerchant: Merchant = this.merchantMapper.toDomain(updatedMerchantDoc);
     const parsedResponse = MerchantParser.createMerchantResponse(updateMerchant);
@@ -195,5 +195,13 @@ export class MerchantService implements IMerchantService {
     refreshToken: string,
   ): Promise<{ accessToken: string }> {
     return await this.authService.updateRefreshToken(model, userId, refreshToken);
+  }
+
+  private async logOutMerchant(model: GenericDocumentRepository<any>, userId: Types.ObjectId): Promise<void> {
+    return this.authService.logOut(model, userId);
+  }
+
+  async logOut(userId: Types.ObjectId): Promise<void> {
+    return this.logOutMerchant(this.merchantRepository, userId);
   }
 }

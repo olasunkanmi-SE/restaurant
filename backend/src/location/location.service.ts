@@ -18,8 +18,7 @@ export class LocationService implements ILocationService {
   constructor(
     private readonly locationRepository: LocationRepository,
     private readonly locationMapper: LocationMapper,
-    @Inject(TYPES.IContextService)
-    private readonly contextService: ContextService,
+    @Inject(TYPES.IContextService) private readonly contextService: ContextService,
   ) {}
 
   async createLocation(createLocationDTO: CreateLocationDTO): Promise<Result<ILocationResponseDTO>> {
