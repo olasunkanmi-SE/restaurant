@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { GenericDocumentRepository } from 'src/infrastructure/database';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
