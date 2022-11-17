@@ -4,12 +4,7 @@ export class Result<T> {
   private data?: any;
   message: string;
   errorCode: HttpStatus;
-  constructor(
-    isSuccess: boolean,
-    data?: any,
-    message?: string,
-    errorCode?: HttpStatus,
-  ) {
+  constructor(isSuccess: boolean, data?: any, message?: string, errorCode?: HttpStatus) {
     this.data = data;
     this.isSuccess = isSuccess;
     this.message = message;

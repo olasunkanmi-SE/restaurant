@@ -20,9 +20,7 @@ export class LocationParser {
     return locationResponse;
   }
 
-  static createLocationsResponse(
-    locations: Location[],
-  ): ILocationResponseDTO[] {
+  static createLocationsResponse(locations: Location[]): ILocationResponseDTO[] {
     const locationsResponse: ILocationResponseDTO[] = [];
     for (const location of locations) {
       locationsResponse.push(this.createLocationResponse(location));

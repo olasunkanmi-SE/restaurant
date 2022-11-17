@@ -30,16 +30,10 @@ export class RestaurantService implements IRestaurantService {
     private readonly contextService: IContextService,
   ) {}
 
-  async createRestaurant(
-    createRestaurantDTO: CreateRestaurantDTO,
-  ): Promise<Result<IRestaurantResponseDTO>> {
-    const restaurantDocuments: RestaurantDocument[] = await (
-      await this.restaurantRepository.find({})
-    ).getValue();
+  async createRestaurant(createRestaurantDTO: CreateRestaurantDTO): Promise<Result<IRestaurantResponseDTO>> {
+    const restaurantDocuments: RestaurantDocument[] = await (await this.restaurantRepository.find({})).getValue();
 
-    const existingEmail = restaurantDocuments.find(
-      (doc) => doc.email === createRestaurantDTO.email,
-    );
+    const existingEmail = restaurantDocuments.find((doc) => doc.email === createRestaurantDTO.email);
 
     if (existingEmail) {
       throw new HttpException(
@@ -60,9 +54,7 @@ export class RestaurantService implements IRestaurantService {
       new Types.ObjectId(),
     ).getValue();
 
-    const result = await this.merchantRepository.findById(
-      createRestaurantDTO.merchantId,
-    );
+    const result = await this.merchantRepository.findById(createRestaurantDTO.merchantId);
 
     const merchantDoc: MerchantDocument = result.getValue();
 
@@ -78,41 +70,29 @@ export class RestaurantService implements IRestaurantService {
       new Types.ObjectId(),
     ).getValue();
 
-    const docResult = await this.restaurantRepository.create(
-      this.restaurantMapper.toPersistence(restaurant),
-    );
+    const docResult = await this.restaurantRepository.create(this.restaurantMapper.toPersistence(restaurant));
     const newRestaurantDoc = docResult.getValue();
     const rest = this.restaurantMapper.toDomain(newRestaurantDoc);
-    const restaurantWithMerchantDetails =
-      await this.restaurantRepository.getRestaurantWithMerchantDetails(
-        rest,
-        createRestaurantDTO.merchantId,
-      );
-
-    return Result.ok(
-      RestaurantParser.createRestaurantResponse(restaurantWithMerchantDetails),
+    const restaurantWithMerchantDetails = await this.restaurantRepository.getRestaurantWithMerchantDetails(
+      rest,
+      createRestaurantDTO.merchantId,
     );
+
+    return Result.ok(RestaurantParser.createRestaurantResponse(restaurantWithMerchantDetails));
   }
 
   async getRestaurants(): Promise<Result<IRestaurantResponseDTO[]>> {
     const restaurants: Restaurant[] = [];
-    const documents: RestaurantDocument[] = await (
-      await this.restaurantRepository.find({})
-    ).getValue();
+    const documents: RestaurantDocument[] = await (await this.restaurantRepository.find({})).getValue();
     if (documents.length) {
       for (const document of documents) {
         restaurants.push(this.restaurantMapper.toDomain(document));
       }
     }
-    return Result.ok(
-      RestaurantParser.createRestaurantsParser(restaurants),
-      'Restaurants retrieved successfully',
-    );
+    return Result.ok(RestaurantParser.createRestaurantsParser(restaurants), 'Restaurants retrieved successfully');
   }
 
-  async getRestaurantById(
-    id: Types.ObjectId,
-  ): Promise<Result<IRestaurantResponseDTO>> {
+  async getRestaurantById(id: Types.ObjectId): Promise<Result<IRestaurantResponseDTO>> {
     const result = await this.restaurantRepository.findById(id);
     const document: RestaurantDocument = await result.getValue();
     const restaurant = this.restaurantMapper.toDomain(document);

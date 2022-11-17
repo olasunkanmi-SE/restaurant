@@ -22,43 +22,26 @@ export class LocationService implements ILocationService {
     private readonly contextService: ContextService,
   ) {}
 
-  async createLocation(
-    createLocationDTO: CreateLocationDTO,
-  ): Promise<Result<ILocationResponseDTO>> {
+  async createLocation(createLocationDTO: CreateLocationDTO): Promise<Result<ILocationResponseDTO>> {
     const context: Context = this.contextService.getContext();
     const audit: Audit = Audit.createInsertContext(context);
     const location: Location = Location.create({
       ...createLocationDTO,
       audit,
     }).getValue();
-    const locationDocument = await this.locationRepository.create(
-      this.locationMapper.toPersistence(location),
-    );
-    return Result.ok(
-      LocationParser.createLocationResponse(
-        this.locationMapper.toDomain(locationDocument.getValue()),
-      ),
-    );
+    const locationDocument = await this.locationRepository.create(this.locationMapper.toPersistence(location));
+    return Result.ok(LocationParser.createLocationResponse(this.locationMapper.toDomain(locationDocument.getValue())));
   }
 
   async getAllRestaurantLocations(): Promise<Result<ILocationResponseDTO[]>> {
     const locations: Location[] = [];
-    const result: Result<LocationDocument[]> =
-      await this.locationRepository.find({});
+    const result: Result<LocationDocument[]> = await this.locationRepository.find({});
     const locationDocuments = result.getValue();
     if (locationDocuments.length) {
       for (const model of locationDocuments) {
         locations.push(this.locationMapper.toDomain(model));
       }
     }
-    return Result.ok(
-      LocationParser.createLocationsResponse(locations),
-      'Restaurant locations retrieved successfully',
-    );
-  }
-
-  async someFunctions(id: string) {
-    if (Object.hasOwnProperty.call({}, '')) {
-    }
+    return Result.ok(LocationParser.createLocationsResponse(locations), 'Restaurant locations retrieved successfully');
   }
 }
