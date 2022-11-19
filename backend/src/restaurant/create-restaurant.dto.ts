@@ -41,6 +41,5 @@ export class CreateRestaurantDTO {
   @IsNotEmpty()
   readonly location: CreateLocationDTO;
 
-  @IsNotEmpty()
   readonly merchantId: Types.ObjectId;
 }

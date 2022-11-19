@@ -13,7 +13,7 @@ import { IJwtPayload, ISignUpTokens, IUserPayload } from './interfaces/auth.inte
 /**
  *Authentication service class
  *
- * @export
+ * @exports
  * @class AuthService
  * @implements {IAuthService}
  */

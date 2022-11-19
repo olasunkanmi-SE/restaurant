@@ -1,4 +1,3 @@
-import { Result } from './../../../domain/result/result';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import {
   Connection,
@@ -11,6 +10,7 @@ import {
   Types,
   UpdateQuery,
 } from 'mongoose';
+import { Result } from './../../../domain/result/result';
 import { IGenericDocument } from './generic-document.interface';
 
 export abstract class GenericDocumentRepository<T extends Document> implements IGenericDocument<T> {

@@ -5,14 +5,17 @@ import { auditMockData } from './../audit/audit-mock-data';
 import { AuditMapper } from './../audit/audit.mapper';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
+import { Context } from './../infrastructure';
 import { IContextService } from './../infrastructure/context/context-service.interface';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { IRestaurantRepository } from './../infrastructure/data_access/repositories/restaurant-repository.interface';
 import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { RestaurantDocument } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
 import { LocationMapper } from './../location/location.mapper';
+import { IMerchantService } from './../merchant/interface/merchant-service.interface';
 import { merchantMockData } from './../merchant/merchant-mock-data';
 import { MerchantMapper } from './../merchant/merchant.mapper';
+import { IValidateUser } from './../utils/context-validation.interface';
 import { Restaurant } from './restaurant';
 import { restaurantMockData, restaurantMockDocument } from './restaurant-mock-data';
 import { IRestaurantResponseDTO } from './restaurant-response.dto';
@@ -30,13 +33,18 @@ describe('Test restaurant service', () => {
     merchantMapperStub,
   );
   const contextServiceStub: IContextService = sinon.stubInterface<IContextService>();
+  const validateUserStub: IValidateUser = sinon.stubInterface<IValidateUser>();
+  const merchantServiceStub: IMerchantService = sinon.stubInterface<IMerchantService>();
   const restaurantService = new RestaurantService(
     restaurantRepositoryStub,
     merchantRepositoryStub,
     restaurantMapperStub,
     merchantMapperStub,
     contextServiceStub,
+    validateUserStub,
+    merchantServiceStub,
   );
+  const contextPromise = Promise.resolve(new Context('Komune@Komune.com', ''));
   let createRestaurantDTO: any = {
     name: 'Komune living',
     email: 'Komune@Komune.com',
@@ -55,6 +63,13 @@ describe('Test restaurant service', () => {
     },
   };
   it('Create a restaurant', async () => {
+    contextServiceStub.getContext = (): Promise<Context> => {
+      return contextPromise;
+    };
+
+    merchantServiceStub.validateContext = async (): Promise<any | undefined> => {
+      return merchantMockData;
+    };
     restaurantRepositoryStub.find = async (): Promise<Result<RestaurantDocument[]>> => {
       return Result.ok([restaurantMockDocument]);
     };
@@ -81,6 +96,12 @@ describe('Test restaurant service', () => {
 
   it('Should throw an exception if restaurant email exists', async () => {
     try {
+      contextServiceStub.getContext = (): Promise<Context> => {
+        return contextPromise;
+      };
+      validateUserStub.getUser = async (): Promise<any | undefined> => {
+        return restaurantMockDocument;
+      };
       restaurantRepositoryStub.find = async (): Promise<Result<RestaurantDocument[]>> => {
         return Result.ok([restaurantMockDocument]);
       };
@@ -96,21 +117,18 @@ describe('Test restaurant service', () => {
   });
 
   it('Should get Restaurants', async () => {
+    contextServiceStub.getContext = (): Promise<Context> => {
+      return contextPromise;
+    };
+    validateUserStub.getUser = async (): Promise<any | undefined> => {
+      return restaurantMockDocument;
+    };
     restaurantRepositoryStub.find = async (): Promise<Result<RestaurantDocument[]>> => {
       return Result.ok([restaurantMockDocument]);
     };
     restaurantMapperStub.toDomain(restaurantMockDocument);
     const result: Result<IRestaurantResponseDTO[]> = await restaurantService.getRestaurants();
     expect(result.message).to.eq('Restaurants retrieved successfully');
-    expect(result.isSuccess).to.be.true;
-  });
-
-  it('Should get a restaurant by Id', async () => {
-    restaurantRepositoryStub.findById = async (): Promise<Result<RestaurantDocument>> => {
-      return Result.ok(restaurantMockDocument);
-    };
-    restaurantMapperStub.toDomain(restaurantMockDocument);
-    const result: Result<IRestaurantResponseDTO> = await restaurantService.getRestaurantById(new Types.ObjectId());
     expect(result.isSuccess).to.be.true;
   });
 });

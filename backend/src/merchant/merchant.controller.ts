@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { GetCurrentUserId } from 'src/infrastructure/decorators/get-user-id.decorator';
 import { GetCurrentUser } from 'src/infrastructure/decorators/get-user.decorator';
@@ -14,17 +14,15 @@ import { IMerchantResponseDTO } from './merchant-response.dto';
 
 @Controller('merchants')
 export class MerchantController {
-  constructor(
-    @Inject(TYPES.IMerchantService)
-    private readonly merchantService: IMerchantService,
-  ) {}
+  constructor(@Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService) {}
 
-  @Post()
+  @Post('/signup')
   @HttpCode(HttpStatus.CREATED)
   async signUp(@Body() request: CreateMerchantDTO): Promise<Result<IMerchantResponseDTO>> {
     return this.merchantService.createMerchant(request);
   }
 
+  @UseGuards(AccessAuthGuard)
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
   async getById(@Param('id') merchantId: Types.ObjectId): Promise<Result<IMerchantResponseDTO>> {
@@ -38,7 +36,7 @@ export class MerchantController {
   }
 
   @UseGuards(AccessAuthGuard)
-  @Post('/onboarding')
+  @Patch('/onboarding')
   @HttpCode(HttpStatus.CREATED)
   async onBoard(
     @Body() request: OnBoardMerchantDTO,
@@ -51,5 +49,11 @@ export class MerchantController {
   @Post('/refresh')
   async refresh(@GetCurrentUser() merchant: any): Promise<Result<{ accessToken: string }>> {
     return this.merchantService.getAccessTokenAndUpdateRefreshToken(merchant.sub, merchant.token);
+  }
+
+  @UseGuards(AccessAuthGuard)
+  @Post('/logout')
+  async logOut(@GetCurrentUserId() userId: Types.ObjectId) {
+    return this.merchantService.logOut(userId);
   }
 }

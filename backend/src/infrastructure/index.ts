@@ -6,3 +6,4 @@ export * from './utilities';
 export * from './auth';
 export * from './context';
 export * from './guards';
+export * from './decorators';
