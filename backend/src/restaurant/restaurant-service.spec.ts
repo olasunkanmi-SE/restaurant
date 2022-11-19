@@ -59,8 +59,10 @@ describe('Test restaurant service', () => {
     },
   };
   it('Create a restaurant', async () => {
-    contextServiceStub.getContext = (): Context => {
-      return new Context('Komune@Komune.com', '');
+    contextServiceStub.getContext = (): Promise<Context> => {
+      return new Promise((resolve) => {
+        resolve(new Context('Komune@Komune.com', ''));
+      });
     };
 
     validateUserStub.getUser = async (): Promise<any | undefined> => {
@@ -92,8 +94,10 @@ describe('Test restaurant service', () => {
 
   it('Should throw an exception if restaurant email exists', async () => {
     try {
-      contextServiceStub.getContext = (): Context => {
-        return new Context('Komune@Komune.com', '');
+      contextServiceStub.getContext = (): Promise<Context> => {
+        return new Promise((resolve) => {
+          resolve(new Context('Komune@Komune.com', ''));
+        });
       };
       validateUserStub.getUser = async (): Promise<any | undefined> => {
         return restaurantMockDocument;
@@ -113,8 +117,10 @@ describe('Test restaurant service', () => {
   });
 
   it('Should get Restaurants', async () => {
-    contextServiceStub.getContext = (): Context => {
-      return new Context('Komune@Komune.com', '');
+    contextServiceStub.getContext = (): Promise<Context> => {
+      return new Promise((resolve) => {
+        resolve(new Context('Komune@Komune.com', ''));
+      });
     };
     validateUserStub.getUser = async (): Promise<any | undefined> => {
       return restaurantMockDocument;
@@ -129,14 +135,19 @@ describe('Test restaurant service', () => {
   });
 
   it('Should get a restaurant by Id', async () => {
-    contextServiceStub.getContext = (): Context => {
-      return new Context('Komune@Komune.com', '');
+    contextServiceStub.getContext = (): Promise<Context> => {
+      return new Promise((resolve) => {
+        resolve(new Context('Komune@Komune.com', ''));
+      });
     };
     validateUserStub.getUser = async (): Promise<any | undefined> => {
       return restaurantMockDocument;
     };
     restaurantRepositoryStub.findById = async (): Promise<Result<RestaurantDocument>> => {
       return Result.ok(restaurantMockDocument);
+    };
+    merchantRepositoryStub.findOne = async (): Promise<Result<MerchantDocument>> => {
+      return Result.ok(merchantMockData);
     };
     restaurantMapperStub.toDomain(restaurantMockDocument);
     const result: Result<IRestaurantResponseDTO> = await restaurantService.getRestaurantById(new Types.ObjectId());

@@ -22,7 +22,7 @@ export class LocationService implements ILocationService {
   ) {}
 
   async createLocation(createLocationDTO: CreateLocationDTO): Promise<Result<ILocationResponseDTO>> {
-    const context: Context = this.contextService.getContext();
+    const context: Context = await this.contextService.getContext();
     const audit: Audit = Audit.createInsertContext(context);
     const location: Location = Location.create({
       ...createLocationDTO,

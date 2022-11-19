@@ -15,6 +15,6 @@ export class ValidateUser implements IValidateUser {
     if (Object.hasOwnProperty.call(props, 'role')) {
       user = await model.findOne({ role });
     }
-    return !user.isSuccess ? undefined : await user.getValue();
+    return Boolean(user.isSuccess);
   }
 }

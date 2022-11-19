@@ -42,8 +42,13 @@ describe('Test merchant service', () => {
         email: 'ola@tesla.com',
         passwordHash: '',
       };
-      contextServiceStub.getContext = (): Context => {
-        return new Context(createMerchantProps.email, '');
+      validateUserStub.getUser = async (): Promise<any | undefined> => {
+        return merchantMockData;
+      };
+      contextServiceStub.getContext = (): Promise<Context> => {
+        return new Promise((resolve) => {
+          resolve(new Context(createMerchantProps.email, ''));
+        });
       };
       merchantRepositoryStub.findOne = async (): Promise<Result<MerchantDocument>> => {
         return Result.ok(merchantMockData);
@@ -63,8 +68,10 @@ describe('Test merchant service', () => {
       email: 'ola@ola.com',
       passwordHash: '',
     };
-    contextServiceStub.getContext = (): Context => {
-      return new Context(createMerchantProps.email, '');
+    contextServiceStub.getContext = (): Promise<Context> => {
+      return new Promise((resolve) => {
+        resolve(new Context(createMerchantProps.email, ''));
+      });
     };
     Audit.createInsertContext = (): Audit => {
       return Audit.create(auditMockData).getValue();
@@ -86,8 +93,10 @@ describe('Test merchant service', () => {
   });
 
   it('Should get a merchant by Id', async () => {
-    contextServiceStub.getContext = (): Context => {
-      return new Context('ola@tesla.com', '');
+    contextServiceStub.getContext = (): Promise<Context> => {
+      return new Promise((resolve) => {
+        resolve(new Context('ola@tesla.com', ''));
+      });
     };
     validateUserStub.getUser = async (): Promise<any | undefined> => {
       return merchantMockData;
@@ -140,8 +149,10 @@ describe('Test merchant service', () => {
     merchantRepositoryStub.findById = async (): Promise<Result<MerchantDocument>> => {
       return Result.ok({ ...merchantMockData, organisationName: '' });
     };
-    contextServiceStub.getContext = (): Context => {
-      return new Context(merchantMockData.email, '1234567890');
+    contextServiceStub.getContext = (): Promise<Context> => {
+      return new Promise((resolve) => {
+        resolve(new Context(merchantMockData.email, '1234567890'));
+      });
     };
     merchantRepositoryStub.findOneAndUpdate = async (): Promise<Result<MerchantDocument>> => {
       return Result.ok({ ...merchantMockData, ...props });

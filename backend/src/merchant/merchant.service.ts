@@ -36,12 +36,11 @@ export class MerchantService implements IMerchantService {
   ) {}
 
   async createMerchant(props: CreateMerchantDTO): Promise<Result<IMerchantResponseDTO>> {
-    const context: Context = this.contextService.getContext();
-    const user = await this.merchantRepository.findOne({ email: context.email });
-    if (!user.isSuccess) {
+    const context: Context = await this.contextService.getContext();
+    const isValidUser = await this.validateUser.getUser(this.merchantRepository, { email: context.email });
+    if (!isValidUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
-
     const result: Result<MerchantDocument[]> = await this.merchantRepository.find({});
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.NOT_FOUND, 'Merchant does not exist');
@@ -71,7 +70,7 @@ export class MerchantService implements IMerchantService {
   }
 
   async getMerchantById(id: Types.ObjectId): Promise<Result<IMerchantResponseDTO>> {
-    const context: Context = this.contextService.getContext();
+    const context: Context = await this.contextService.getContext();
     const isValidUser = await this.validateUser.getUser(this.merchantRepository, { email: context.email });
     if (!isValidUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
@@ -80,7 +79,7 @@ export class MerchantService implements IMerchantService {
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.NOT_FOUND, 'Merchant does not exist');
     }
-    const merchantDoc: MerchantDocument = await result.getValue();
+    const merchantDoc: MerchantDocument = result.getValue();
     if (context.email !== merchantDoc.email) {
       throwApplicationError(HttpStatus.UNAUTHORIZED, 'You dont have sufficient priviledge');
     }
@@ -127,7 +126,7 @@ export class MerchantService implements IMerchantService {
   }
 
   async onBoardMerchant(props: OnBoardMerchantDTO, id: Types.ObjectId): Promise<Result<IMerchantResponseDTO>> {
-    const context: Context = this.contextService.getContext();
+    const context: Context = await this.contextService.getContext();
     const isValidUser = await this.validateUser.getUser(this.merchantRepository, { email: context.email });
     if (!isValidUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
@@ -136,7 +135,7 @@ export class MerchantService implements IMerchantService {
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.NOT_FOUND, 'Merchant does not exist');
     }
-    const merchantDoc: MerchantDocument = await result.getValue();
+    const merchantDoc: MerchantDocument = result.getValue();
 
     if (context.email !== merchantDoc.email) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid email');
@@ -168,15 +167,7 @@ export class MerchantService implements IMerchantService {
   }
 
   updateMerchantData(data: IUpdateMerchant, merchant: Merchant, context: Context) {
-    const {
-      firstName,
-      lastName,
-      organisationAddress,
-      organisationName,
-      phoneNumber,
-      auditModifiedBy,
-      auditModifiedDateTime,
-    } = data;
+    const { firstName, lastName, organisationAddress, organisationName, phoneNumber } = data;
     for (const [key] of Object.entries(data)) {
       switch (key) {
         case firstName:
@@ -194,15 +185,10 @@ export class MerchantService implements IMerchantService {
         case phoneNumber:
           merchant.phoneNumber = phoneNumber;
           break;
-        case auditModifiedBy:
-          merchant.audit.auditModifiedBy = context.email;
-          break;
-        case auditModifiedDateTime:
-          merchant.audit.auditModifiedDateTime = new Date().toISOString();
-          break;
         default:
           break;
       }
+      Audit.updateContext(context.email, merchant);
     }
   }
 

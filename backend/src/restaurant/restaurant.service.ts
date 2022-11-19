@@ -22,6 +22,7 @@ import { RestaurantMapper } from './restaurant.mapper';
 import { RestaurantParser } from './restaurant.parser';
 @Injectable()
 export class RestaurantService implements IRestaurantService {
+  private context: Promise<Context>;
   constructor(
     @Inject(TYPES.IRestaurantRepository)
     private readonly restaurantRepository: IRestaurantRepository,
@@ -30,12 +31,13 @@ export class RestaurantService implements IRestaurantService {
     private readonly merchantMapper: MerchantMapper,
     @Inject(TYPES.IContextService) private readonly contextService: IContextService,
     @Inject(TYPES.IValidateUser) private readonly validateUser: IValidateUser,
-  ) {}
+  ) {
+    this.context = this.contextService.getContext();
+  }
 
   async createRestaurant(createRestaurantDTO: CreateRestaurantDTO): Promise<Result<IRestaurantResponseDTO>> {
-    const context: Context = this.contextService.getContext();
-    const isValidUser = await this.validateUser.getUser(this.merchantRepository, { email: context.email });
-    if (!isValidUser) {
+    const validateUser = await this.validateContext();
+    if (!validateUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
     const restaurantDocuments: RestaurantDocument[] = await (await this.restaurantRepository.find({})).getValue();
@@ -48,7 +50,7 @@ export class RestaurantService implements IRestaurantService {
       );
     }
 
-    const audit: Audit = Audit.createInsertContext(context);
+    const audit: Audit = Audit.createInsertContext(await this.context);
     const location: Location = Location.create(
       {
         ...createRestaurantDTO.location,
@@ -83,9 +85,8 @@ export class RestaurantService implements IRestaurantService {
   }
 
   async getRestaurants(): Promise<Result<IRestaurantResponseDTO[]>> {
-    const context: Context = this.contextService.getContext();
-    const isValidUser = await this.validateUser.getUser(this.merchantRepository, { email: context.email });
-    if (!isValidUser) {
+    const validateUser = await this.validateContext();
+    if (!validateUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
     const restaurants: Restaurant[] = [];
@@ -108,9 +109,8 @@ export class RestaurantService implements IRestaurantService {
   }
 
   async getRestaurantById(id: Types.ObjectId): Promise<Result<IRestaurantResponseDTO>> {
-    const context: Context = this.contextService.getContext();
-    const user = await this.validateUser.getUser(this.merchantRepository, { email: context.email });
-    if (!user) {
+    const validateUser = await this.validateContext();
+    if (!validateUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
     const result = await this.restaurantRepository.findById(id);
@@ -120,13 +120,26 @@ export class RestaurantService implements IRestaurantService {
       restaurant,
       restaurant.merchant.id,
     );
-
-    if (user.id !== restaurantWithMerchantData.merchant.id) {
+    const email = (await this.context).email;
+    const user = await (await this.merchantRepository.findOne({ email })).getValue();
+    if (user.id.toString() !== restaurantWithMerchantData.merchant.id.toString()) {
       throwApplicationError(HttpStatus.UNAUTHORIZED, 'You dont have sufficient priviledge');
     }
     return Result.ok(
       RestaurantParser.createRestaurantResponse(restaurantWithMerchantData),
       'Restaurant retrieved successfully',
     );
+  }
+
+  /**
+   * private method to validate user context
+   *
+   * @param {GenericDocumentRepository<any>} model
+   * @returns {void}
+   * @memberof AuthService
+   */
+  async validateContext() {
+    const context: Context = await this.contextService.getContext();
+    return await this.validateUser.getUser(this.merchantRepository, { email: context.email });
   }
 }
