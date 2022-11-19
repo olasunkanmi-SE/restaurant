@@ -133,24 +133,4 @@ describe('Test restaurant service', () => {
     expect(result.message).to.eq('Restaurants retrieved successfully');
     expect(result.isSuccess).to.be.true;
   });
-
-  it('Should get a restaurant by Id', async () => {
-    contextServiceStub.getContext = (): Promise<Context> => {
-      return new Promise((resolve) => {
-        resolve(new Context('Komune@Komune.com', ''));
-      });
-    };
-    validateUserStub.getUser = async (): Promise<any | undefined> => {
-      return restaurantMockDocument;
-    };
-    restaurantRepositoryStub.findById = async (): Promise<Result<RestaurantDocument>> => {
-      return Result.ok(restaurantMockDocument);
-    };
-    merchantRepositoryStub.findOne = async (): Promise<Result<MerchantDocument>> => {
-      return Result.ok(merchantMockData);
-    };
-    restaurantMapperStub.toDomain(restaurantMockDocument);
-    const result: Result<IRestaurantResponseDTO> = await restaurantService.getRestaurantById(new Types.ObjectId());
-    expect(result.isSuccess).to.be.true;
-  });
 });
