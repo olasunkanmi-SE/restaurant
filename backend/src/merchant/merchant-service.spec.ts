@@ -46,9 +46,7 @@ describe('Test merchant service', () => {
         return merchantMockData;
       };
       contextServiceStub.getContext = (): Promise<Context> => {
-        return new Promise((resolve) => {
-          resolve(new Context(createMerchantProps.email, ''));
-        });
+        return Promise.resolve(new Context(createMerchantProps.email, ''));
       };
       merchantRepositoryStub.findOne = async (): Promise<Result<MerchantDocument>> => {
         return Result.ok(merchantMockData);
@@ -69,9 +67,7 @@ describe('Test merchant service', () => {
       passwordHash: '',
     };
     contextServiceStub.getContext = (): Promise<Context> => {
-      return new Promise((resolve) => {
-        resolve(new Context(createMerchantProps.email, ''));
-      });
+      return Promise.resolve(new Context(createMerchantProps.email, ''));
     };
     Audit.createInsertContext = (): Audit => {
       return Audit.create(auditMockData).getValue();
@@ -94,9 +90,7 @@ describe('Test merchant service', () => {
 
   it('Should get a merchant by Id', async () => {
     contextServiceStub.getContext = (): Promise<Context> => {
-      return new Promise((resolve) => {
-        resolve(new Context('ola@tesla.com', ''));
-      });
+      return Promise.resolve(new Context('ola@tesla.com', ''));
     };
     validateUserStub.getUser = async (): Promise<any | undefined> => {
       return merchantMockData;
@@ -150,9 +144,7 @@ describe('Test merchant service', () => {
       return Result.ok({ ...merchantMockData, organisationName: '' });
     };
     contextServiceStub.getContext = (): Promise<Context> => {
-      return new Promise((resolve) => {
-        resolve(new Context(merchantMockData.email, '1234567890'));
-      });
+      return Promise.resolve(new Context(merchantMockData.email, '1234567890'));
     };
     merchantRepositoryStub.findOneAndUpdate = async (): Promise<Result<MerchantDocument>> => {
       return Result.ok({ ...merchantMockData, ...props });

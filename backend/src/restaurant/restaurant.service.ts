@@ -120,8 +120,10 @@ export class RestaurantService implements IRestaurantService {
       restaurant,
       restaurant.merchant.id,
     );
-    const email = await (await this.contextService.getContext()).email;
-    const user = await (await this.merchantRepository.findOne({ email })).getValue();
+    const context = await this.contextService.getContext();
+    const email = context.email;
+    const userDoc = await this.merchantRepository.findOne({ email });
+    const user: MerchantDocument = userDoc.getValue();
     if (user.id.toString() !== restaurantWithMerchantData.merchant.id.toString()) {
       throwApplicationError(HttpStatus.UNAUTHORIZED, 'You dont have sufficient priviledge');
     }
