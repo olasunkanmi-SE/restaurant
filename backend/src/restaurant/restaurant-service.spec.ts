@@ -41,6 +41,7 @@ describe('Test restaurant service', () => {
     contextServiceStub,
     validateUserStub,
   );
+  const contextPromise = Promise.resolve(new Context('Komune@Komune.com', ''));
   let createRestaurantDTO: any = {
     name: 'Komune living',
     email: 'Komune@Komune.com',
@@ -60,9 +61,7 @@ describe('Test restaurant service', () => {
   };
   it('Create a restaurant', async () => {
     contextServiceStub.getContext = (): Promise<Context> => {
-      return new Promise((resolve) => {
-        resolve(new Context('Komune@Komune.com', ''));
-      });
+      return contextPromise;
     };
 
     validateUserStub.getUser = async (): Promise<any | undefined> => {
@@ -95,9 +94,7 @@ describe('Test restaurant service', () => {
   it('Should throw an exception if restaurant email exists', async () => {
     try {
       contextServiceStub.getContext = (): Promise<Context> => {
-        return new Promise((resolve) => {
-          resolve(new Context('Komune@Komune.com', ''));
-        });
+        return contextPromise;
       };
       validateUserStub.getUser = async (): Promise<any | undefined> => {
         return restaurantMockDocument;
@@ -118,9 +115,7 @@ describe('Test restaurant service', () => {
 
   it('Should get Restaurants', async () => {
     contextServiceStub.getContext = (): Promise<Context> => {
-      return new Promise((resolve) => {
-        resolve(new Context('Komune@Komune.com', ''));
-      });
+      return contextPromise;
     };
     validateUserStub.getUser = async (): Promise<any | undefined> => {
       return restaurantMockDocument;
