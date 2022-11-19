@@ -21,7 +21,7 @@ jobs:
         run: |
           npm i
           npm run build
-          npm test
+          npm test:unit
           npm run test:cov
       - name: ci for frontend
         working-directory: ./frontend
