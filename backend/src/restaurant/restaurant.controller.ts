@@ -20,9 +20,10 @@ export class RestaurantsController {
     @Body() request: CreateRestaurantDTO,
     @GetCurrentUserId() userId: Types.ObjectId,
   ): Promise<Result<IRestaurantResponseDTO>> {
-    let { merchantId } = request;
+    // eslint-disable-next-line prefer-const
+    let { merchantId, ...rest } = request;
     merchantId = userId;
-    return this.restaurantService.createRestaurant({ ...request, merchantId });
+    return this.restaurantService.createRestaurant({ ...rest, merchantId });
   }
 
   @Get()
