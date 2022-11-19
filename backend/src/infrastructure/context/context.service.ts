@@ -9,7 +9,7 @@ export class ContextService implements IContextService {
     this._context = context;
   }
 
-  getContext(): Context {
+  async getContext(): Promise<Context> {
     return this._context;
   }
 }

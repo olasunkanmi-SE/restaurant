@@ -20,4 +20,5 @@ export interface IMerchantService {
   ): Promise<Result<{ accessToken: string }>>;
 
   logOut(userId: Types.ObjectId): Promise<void>;
+  validateContext(): Promise<boolean>;
 }

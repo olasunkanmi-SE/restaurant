@@ -9,6 +9,7 @@ import { ContextService } from './../infrastructure/context/context.service';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { MerchantData, MerchantSchema } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { ContextMiddleWare } from './../infrastructure/middlewares/context.middleware';
+import { ValidateUser } from './../utils/context-validation';
 import { MerchantController } from './merchant.controller';
 import { MerchantMapper } from './merchant.mapper';
 import { MerchantService } from './merchant.service';
@@ -24,6 +25,7 @@ import { MerchantService } from './merchant.service';
     { provide: TYPES.IMerchantService, useClass: MerchantService },
     { provide: TYPES.IAuthService, useClass: AuthService },
     { provide: TYPES.IContextService, useClass: ContextService },
+    { provide: TYPES.IValidateUser, useClass: ValidateUser },
   ],
   controllers: [MerchantController],
 })

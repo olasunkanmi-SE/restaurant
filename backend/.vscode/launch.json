@@ -23,8 +23,8 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": [
         "run",
-        "test",
-        "src/infrastructure/data_access/repositories/restaurant-repository.spec.ts",
+        "test:unit",
+        "src/restaurant/restaurant-service.spec.ts",
         "--inspect-brk"
       ],
       // "src/infrastructure/data_access/db_repositories/worker_sql_repository.spec.ts",

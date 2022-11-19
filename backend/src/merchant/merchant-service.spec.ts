@@ -1,5 +1,3 @@
-import { Context } from './../infrastructure/context';
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { expect } from 'chai';
 import { Types } from 'mongoose';
 import * as sinon from 'ts-sinon';
@@ -8,9 +6,11 @@ import { AuditMapper } from './../audit/audit.mapper';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
 import { IAuthService } from './../infrastructure/auth/interfaces/auth-service.interface';
+import { Context } from './../infrastructure/context';
 import { IContextService } from './../infrastructure/context/context-service.interface';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
+import { IValidateUser } from './../utils/context-validation.interface';
 import { merchantMockData } from './merchant-mock-data';
 import { MerchantParser } from './merchant-parser';
 import { IMerchantResponseDTO } from './merchant-response.dto';
@@ -24,12 +24,14 @@ describe('Test merchant service', () => {
   const authServiceStub: IAuthService = sinon.stubInterface<IAuthService>();
 
   const contextServiceStub: IContextService = sinon.stubInterface<IContextService>();
+  const validateUserStub: IValidateUser = sinon.stubInterface<IValidateUser>();
 
   const merchantService = new MerchantService(
     merchantRepositoryStub,
     merchantMapperStub,
     contextServiceStub,
     authServiceStub,
+    validateUserStub,
   );
 
   const merchantId = new Types.ObjectId();
@@ -39,6 +41,15 @@ describe('Test merchant service', () => {
       const createMerchantProps = {
         email: 'ola@tesla.com',
         passwordHash: '',
+      };
+      validateUserStub.getUser = async (): Promise<any | undefined> => {
+        return merchantMockData;
+      };
+      contextServiceStub.getContext = (): Promise<Context> => {
+        return Promise.resolve(new Context(createMerchantProps.email, ''));
+      };
+      merchantRepositoryStub.findOne = async (): Promise<Result<MerchantDocument>> => {
+        return Result.ok(merchantMockData);
       };
       merchantRepositoryStub.find = async (): Promise<Result<MerchantDocument[]>> => {
         return Result.ok([merchantMockData]);
@@ -54,6 +65,9 @@ describe('Test merchant service', () => {
     const createMerchantProps = {
       email: 'ola@ola.com',
       passwordHash: '',
+    };
+    contextServiceStub.getContext = (): Promise<Context> => {
+      return Promise.resolve(new Context(createMerchantProps.email, ''));
     };
     Audit.createInsertContext = (): Audit => {
       return Audit.create(auditMockData).getValue();
@@ -75,6 +89,12 @@ describe('Test merchant service', () => {
   });
 
   it('Should get a merchant by Id', async () => {
+    contextServiceStub.getContext = (): Promise<Context> => {
+      return Promise.resolve(new Context('ola@tesla.com', ''));
+    };
+    validateUserStub.getUser = async (): Promise<any | undefined> => {
+      return merchantMockData;
+    };
     merchantRepositoryStub.findById = async (): Promise<Result<MerchantDocument>> => {
       return Result.ok(merchantMockData);
     };
@@ -117,11 +137,14 @@ describe('Test merchant service', () => {
       auditModifiedBy: 'Ola@gmail.com',
       auditModifiedDateTime: new Date().toString(),
     };
+    validateUserStub.getUser = async (): Promise<any | undefined> => {
+      return merchantMockData;
+    };
     merchantRepositoryStub.findById = async (): Promise<Result<MerchantDocument>> => {
       return Result.ok({ ...merchantMockData, organisationName: '' });
     };
-    contextServiceStub.getContext = (): Context => {
-      return new Context('Ola@gmail.com', '1234567890');
+    contextServiceStub.getContext = (): Promise<Context> => {
+      return Promise.resolve(new Context(merchantMockData.email, '1234567890'));
     };
     merchantRepositoryStub.findOneAndUpdate = async (): Promise<Result<MerchantDocument>> => {
       return Result.ok({ ...merchantMockData, ...props });
