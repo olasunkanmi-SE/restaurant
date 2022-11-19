@@ -12,6 +12,7 @@ import { IRestaurantRepository } from './../infrastructure/data_access/repositor
 import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { RestaurantDocument } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
 import { LocationMapper } from './../location/location.mapper';
+import { IMerchantService } from './../merchant/interface/merchant-service.interface';
 import { merchantMockData } from './../merchant/merchant-mock-data';
 import { MerchantMapper } from './../merchant/merchant.mapper';
 import { IValidateUser } from './../utils/context-validation.interface';
@@ -33,6 +34,7 @@ describe('Test restaurant service', () => {
   );
   const contextServiceStub: IContextService = sinon.stubInterface<IContextService>();
   const validateUserStub: IValidateUser = sinon.stubInterface<IValidateUser>();
+  const merchantServiceStub: IMerchantService = sinon.stubInterface<IMerchantService>();
   const restaurantService = new RestaurantService(
     restaurantRepositoryStub,
     merchantRepositoryStub,
@@ -40,6 +42,7 @@ describe('Test restaurant service', () => {
     merchantMapperStub,
     contextServiceStub,
     validateUserStub,
+    merchantServiceStub,
   );
   const contextPromise = Promise.resolve(new Context('Komune@Komune.com', ''));
   let createRestaurantDTO: any = {
@@ -64,7 +67,7 @@ describe('Test restaurant service', () => {
       return contextPromise;
     };
 
-    validateUserStub.getUser = async (): Promise<any | undefined> => {
+    merchantServiceStub.validateContext = async (): Promise<any | undefined> => {
       return merchantMockData;
     };
     restaurantRepositoryStub.find = async (): Promise<Result<RestaurantDocument[]>> => {

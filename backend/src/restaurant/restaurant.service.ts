@@ -11,6 +11,7 @@ import { MerchantDocument } from './../infrastructure/data_access/repositories/s
 import { RestaurantDocument } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
 import { Location } from './../location/location';
+import { IMerchantService } from './../merchant/interface/merchant-service.interface';
 import { Merchant } from './../merchant/merchant';
 import { MerchantMapper } from './../merchant/merchant.mapper';
 import { IValidateUser } from './../utils/context-validation.interface';
@@ -31,12 +32,13 @@ export class RestaurantService implements IRestaurantService {
     private readonly merchantMapper: MerchantMapper,
     @Inject(TYPES.IContextService) private readonly contextService: IContextService,
     @Inject(TYPES.IValidateUser) private readonly validateUser: IValidateUser,
+    @Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService,
   ) {
     this.context = this.contextService.getContext();
   }
 
   async createRestaurant(createRestaurantDTO: CreateRestaurantDTO): Promise<Result<IRestaurantResponseDTO>> {
-    const validateUser = await this.validateContext();
+    const validateUser = await this.merchantService.validateContext();
     if (!validateUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
@@ -85,7 +87,7 @@ export class RestaurantService implements IRestaurantService {
   }
 
   async getRestaurants(): Promise<Result<IRestaurantResponseDTO[]>> {
-    const validateUser = await this.validateContext();
+    const validateUser = await this.merchantService.validateContext();
     if (!validateUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
@@ -109,7 +111,7 @@ export class RestaurantService implements IRestaurantService {
   }
 
   async getRestaurantById(id: Types.ObjectId): Promise<Result<IRestaurantResponseDTO>> {
-    const validateUser = await this.validateContext();
+    const validateUser = await this.merchantService.validateContext();
     if (!validateUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
@@ -131,17 +133,5 @@ export class RestaurantService implements IRestaurantService {
       RestaurantParser.createRestaurantResponse(restaurantWithMerchantData),
       'Restaurant retrieved successfully',
     );
-  }
-
-  /**
-   * private method to validate user context
-   *
-   * @param {GenericDocumentRepository<any>} model
-   * @returns {void}
-   * @memberof AuthService
-   */
-  async validateContext() {
-    const context: Context = await this.contextService.getContext();
-    return await this.validateUser.getUser(this.merchantRepository, { email: context.email });
   }
 }

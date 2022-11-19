@@ -37,7 +37,7 @@ export class MerchantService implements IMerchantService {
 
   async createMerchant(props: CreateMerchantDTO): Promise<Result<IMerchantResponseDTO>> {
     const context: Context = await this.contextService.getContext();
-    const isValidUser = await this.validateUser.getUser(this.merchantRepository, { email: context.email });
+    const isValidUser = await this.validateContext();
     if (!isValidUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
@@ -71,7 +71,7 @@ export class MerchantService implements IMerchantService {
 
   async getMerchantById(id: Types.ObjectId): Promise<Result<IMerchantResponseDTO>> {
     const context: Context = await this.contextService.getContext();
-    const isValidUser = await this.validateUser.getUser(this.merchantRepository, { email: context.email });
+    const isValidUser = await this.validateContext();
     if (!isValidUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
@@ -127,7 +127,7 @@ export class MerchantService implements IMerchantService {
 
   async onBoardMerchant(props: OnBoardMerchantDTO, id: Types.ObjectId): Promise<Result<IMerchantResponseDTO>> {
     const context: Context = await this.contextService.getContext();
-    const isValidUser = await this.validateUser.getUser(this.merchantRepository, { email: context.email });
+    const isValidUser = this.validateContext();
     if (!isValidUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
@@ -215,5 +215,17 @@ export class MerchantService implements IMerchantService {
 
   async logOut(userId: Types.ObjectId): Promise<void> {
     return this.logOutMerchant(this.merchantRepository, userId);
+  }
+
+  /**
+   * private method to validate user context
+   *
+   * @param {GenericDocumentRepository<any>} model
+   * @returns {void}
+   * @memberof AuthService
+   */
+  async validateContext(): Promise<boolean> {
+    const context: Context = await this.contextService.getContext();
+    return await this.validateUser.getUser(this.merchantRepository, { email: context.email });
   }
 }
