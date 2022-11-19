@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { GetCurrentUserId } from 'src/infrastructure/decorators/get-user-id.decorator';
 import { GetCurrentUser } from 'src/infrastructure/decorators/get-user.decorator';
@@ -16,7 +16,7 @@ import { IMerchantResponseDTO } from './merchant-response.dto';
 export class MerchantController {
   constructor(@Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService) {}
 
-  @Post()
+  @Post('/signup')
   @HttpCode(HttpStatus.CREATED)
   async signUp(@Body() request: CreateMerchantDTO): Promise<Result<IMerchantResponseDTO>> {
     return this.merchantService.createMerchant(request);
@@ -36,7 +36,7 @@ export class MerchantController {
   }
 
   @UseGuards(AccessAuthGuard)
-  @Post('/onboarding')
+  @Patch('/onboarding')
   @HttpCode(HttpStatus.CREATED)
   async onBoard(
     @Body() request: OnBoardMerchantDTO,

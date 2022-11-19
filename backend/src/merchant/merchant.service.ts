@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { GenericDocumentRepository } from 'src/infrastructure/database';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
+import { GenericDocumentRepository } from './../infrastructure/database';
 import { MerchantStatus, saltRounds } from './../application/constants/constants';
 import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
@@ -14,13 +14,14 @@ import { MerchantRepository } from './../infrastructure/data_access/repositories
 import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
 import { Merchant } from './../merchant/merchant';
+import { IValidateUser } from './../utils/context-validation.interface';
 import { CreateMerchantDTO, LoginMerchantDTO, OnBoardMerchantDTO } from './dtos';
 
+import { IMerchantService } from './interface/merchant-service.interface';
+import { IUpdateMerchant } from './interface/update-merchant.interface';
 import { MerchantParser } from './merchant-parser';
 import { IMerchantResponseDTO } from './merchant-response.dto';
-import { IMerchantService } from './interface/merchant-service.interface';
 import { MerchantMapper } from './merchant.mapper';
-import { IUpdateMerchant } from './interface/update-merchant.interface';
 
 @Injectable()
 export class MerchantService implements IMerchantService {
@@ -31,9 +32,16 @@ export class MerchantService implements IMerchantService {
     private readonly contextService: IContextService,
     @Inject(TYPES.IAuthService)
     private readonly authService: IAuthService,
+    @Inject(TYPES.IValidateUser) private readonly validateUser: IValidateUser,
   ) {}
 
   async createMerchant(props: CreateMerchantDTO): Promise<Result<IMerchantResponseDTO>> {
+    const context: Context = this.contextService.getContext();
+    const user = await this.merchantRepository.findOne({ email: context.email });
+    if (!user.isSuccess) {
+      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
+    }
+
     const result: Result<MerchantDocument[]> = await this.merchantRepository.find({});
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.NOT_FOUND, 'Merchant does not exist');
@@ -43,7 +51,7 @@ export class MerchantService implements IMerchantService {
     if (existingMerchant) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `Restaurant with email ${props.email} already exists`);
     }
-    const context: Context = this.contextService.getContext();
+
     const audit: Audit = Audit.createInsertContext(context);
     const hashedPassword = await this.hashPassword(props.passwordHash);
     const merchant: Merchant = Merchant.create({
@@ -63,11 +71,19 @@ export class MerchantService implements IMerchantService {
   }
 
   async getMerchantById(id: Types.ObjectId): Promise<Result<IMerchantResponseDTO>> {
+    const context: Context = this.contextService.getContext();
+    const isValidUser = await this.validateUser.getUser(this.merchantRepository, { email: context.email });
+    if (!isValidUser) {
+      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
+    }
     const result = await this.merchantRepository.findById(id);
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.NOT_FOUND, 'Merchant does not exist');
     }
-    const merchantDoc: MerchantDocument = result.getValue();
+    const merchantDoc: MerchantDocument = await result.getValue();
+    if (context.email !== merchantDoc.email) {
+      throwApplicationError(HttpStatus.UNAUTHORIZED, 'You dont have sufficient priviledge');
+    }
     return Result.ok(MerchantParser.createMerchantResponse(this.merchantMapper.toDomain(merchantDoc)));
   }
 
@@ -111,13 +127,22 @@ export class MerchantService implements IMerchantService {
   }
 
   async onBoardMerchant(props: OnBoardMerchantDTO, id: Types.ObjectId): Promise<Result<IMerchantResponseDTO>> {
+    const context: Context = this.contextService.getContext();
+    const isValidUser = await this.validateUser.getUser(this.merchantRepository, { email: context.email });
+    if (!isValidUser) {
+      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
+    }
     const result = await this.merchantRepository.findById(id);
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.NOT_FOUND, 'Merchant does not exist');
     }
-    const merchantDoc: MerchantDocument = result.getValue();
+    const merchantDoc: MerchantDocument = await result.getValue();
+
+    if (context.email !== merchantDoc.email) {
+      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid email');
+    }
+
     const merchant: Merchant = this.merchantMapper.toDomain(merchantDoc);
-    const context: Context = this.contextService.getContext();
 
     const data = {
       auditModifiedBy: context.email,

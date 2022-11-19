@@ -10,4 +10,5 @@ export const TYPES = {
   refreshTokenExpiresIn: 'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
   IAuthService: Symbol('AuthService'),
   IContextService: Symbol('IContextService'),
+  IValidateUser: Symbol('IValidateUser'),
 };

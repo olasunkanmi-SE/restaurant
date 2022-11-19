@@ -5,6 +5,7 @@ import { auditMockData } from './../audit/audit-mock-data';
 import { AuditMapper } from './../audit/audit.mapper';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
+import { Context } from './../infrastructure';
 import { IContextService } from './../infrastructure/context/context-service.interface';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { IRestaurantRepository } from './../infrastructure/data_access/repositories/restaurant-repository.interface';
@@ -13,6 +14,7 @@ import { RestaurantDocument } from './../infrastructure/data_access/repositories
 import { LocationMapper } from './../location/location.mapper';
 import { merchantMockData } from './../merchant/merchant-mock-data';
 import { MerchantMapper } from './../merchant/merchant.mapper';
+import { IValidateUser } from './../utils/context-validation.interface';
 import { Restaurant } from './restaurant';
 import { restaurantMockData, restaurantMockDocument } from './restaurant-mock-data';
 import { IRestaurantResponseDTO } from './restaurant-response.dto';
@@ -30,12 +32,14 @@ describe('Test restaurant service', () => {
     merchantMapperStub,
   );
   const contextServiceStub: IContextService = sinon.stubInterface<IContextService>();
+  const validateUserStub: IValidateUser = sinon.stubInterface<IValidateUser>();
   const restaurantService = new RestaurantService(
     restaurantRepositoryStub,
     merchantRepositoryStub,
     restaurantMapperStub,
     merchantMapperStub,
     contextServiceStub,
+    validateUserStub,
   );
   let createRestaurantDTO: any = {
     name: 'Komune living',
@@ -55,6 +59,13 @@ describe('Test restaurant service', () => {
     },
   };
   it('Create a restaurant', async () => {
+    contextServiceStub.getContext = (): Context => {
+      return new Context('Komune@Komune.com', '');
+    };
+
+    validateUserStub.getUser = async (): Promise<any | undefined> => {
+      return merchantMockData;
+    };
     restaurantRepositoryStub.find = async (): Promise<Result<RestaurantDocument[]>> => {
       return Result.ok([restaurantMockDocument]);
     };
@@ -81,6 +92,12 @@ describe('Test restaurant service', () => {
 
   it('Should throw an exception if restaurant email exists', async () => {
     try {
+      contextServiceStub.getContext = (): Context => {
+        return new Context('Komune@Komune.com', '');
+      };
+      validateUserStub.getUser = async (): Promise<any | undefined> => {
+        return restaurantMockDocument;
+      };
       restaurantRepositoryStub.find = async (): Promise<Result<RestaurantDocument[]>> => {
         return Result.ok([restaurantMockDocument]);
       };
@@ -96,6 +113,12 @@ describe('Test restaurant service', () => {
   });
 
   it('Should get Restaurants', async () => {
+    contextServiceStub.getContext = (): Context => {
+      return new Context('Komune@Komune.com', '');
+    };
+    validateUserStub.getUser = async (): Promise<any | undefined> => {
+      return restaurantMockDocument;
+    };
     restaurantRepositoryStub.find = async (): Promise<Result<RestaurantDocument[]>> => {
       return Result.ok([restaurantMockDocument]);
     };
@@ -106,6 +129,12 @@ describe('Test restaurant service', () => {
   });
 
   it('Should get a restaurant by Id', async () => {
+    contextServiceStub.getContext = (): Context => {
+      return new Context('Komune@Komune.com', '');
+    };
+    validateUserStub.getUser = async (): Promise<any | undefined> => {
+      return restaurantMockDocument;
+    };
     restaurantRepositoryStub.findById = async (): Promise<Result<RestaurantDocument>> => {
       return Result.ok(restaurantMockDocument);
     };

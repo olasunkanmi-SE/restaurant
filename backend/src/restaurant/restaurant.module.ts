@@ -1,3 +1,4 @@
+import { ValidateUser } from './../utils/context-validation';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TYPES } from './../application/constants/types';
@@ -32,6 +33,7 @@ import { RestaurantService } from './restaurant.service';
     { provide: TYPES.IRestaurantService, useClass: RestaurantService },
     { provide: TYPES.IRestaurantRepository, useClass: RestaurantRepository },
     { provide: TYPES.IContextService, useClass: ContextService },
+    { provide: TYPES.IValidateUser, useClass: ValidateUser },
     RestaurantMapper,
     AuditMapper,
     LocationMapper,

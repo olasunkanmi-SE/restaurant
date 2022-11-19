@@ -1,24 +1,25 @@
-import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
-import { IContextService } from './../infrastructure/context/context-service.interface';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { Context } from 'src/infrastructure/context';
 import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
+import { IContextService } from './../infrastructure/context/context-service.interface';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { IRestaurantRepository } from './../infrastructure/data_access/repositories/restaurant-repository.interface';
 import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { RestaurantDocument } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
+import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
 import { Location } from './../location/location';
 import { Merchant } from './../merchant/merchant';
 import { MerchantMapper } from './../merchant/merchant.mapper';
+import { IValidateUser } from './../utils/context-validation.interface';
 import { CreateRestaurantDTO } from './create-restaurant.dto';
 import { Restaurant } from './restaurant';
 import { IRestaurantResponseDTO } from './restaurant-response.dto';
 import { IRestaurantService } from './restaurant-service.interface';
 import { RestaurantMapper } from './restaurant.mapper';
 import { RestaurantParser } from './restaurant.parser';
-import { Context } from 'src/infrastructure/context';
 @Injectable()
 export class RestaurantService implements IRestaurantService {
   constructor(
@@ -28,9 +29,15 @@ export class RestaurantService implements IRestaurantService {
     private readonly restaurantMapper: RestaurantMapper,
     private readonly merchantMapper: MerchantMapper,
     @Inject(TYPES.IContextService) private readonly contextService: IContextService,
+    @Inject(TYPES.IValidateUser) private readonly validateUser: IValidateUser,
   ) {}
 
   async createRestaurant(createRestaurantDTO: CreateRestaurantDTO): Promise<Result<IRestaurantResponseDTO>> {
+    const context: Context = this.contextService.getContext();
+    const isValidUser = await this.validateUser.getUser(this.merchantRepository, { email: context.email });
+    if (!isValidUser) {
+      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
+    }
     const restaurantDocuments: RestaurantDocument[] = await (await this.restaurantRepository.find({})).getValue();
     const existingEmail = restaurantDocuments.find((doc) => doc.email === createRestaurantDTO.email);
 
@@ -41,7 +48,6 @@ export class RestaurantService implements IRestaurantService {
       );
     }
 
-    const context: Context = this.contextService.getContext();
     const audit: Audit = Audit.createInsertContext(context);
     const location: Location = Location.create(
       {
@@ -77,6 +83,11 @@ export class RestaurantService implements IRestaurantService {
   }
 
   async getRestaurants(): Promise<Result<IRestaurantResponseDTO[]>> {
+    const context: Context = this.contextService.getContext();
+    const isValidUser = await this.validateUser.getUser(this.merchantRepository, { email: context.email });
+    if (!isValidUser) {
+      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
+    }
     const restaurants: Restaurant[] = [];
     const documents: RestaurantDocument[] = await (await this.restaurantRepository.find({})).getValue();
     if (documents.length) {
@@ -97,6 +108,11 @@ export class RestaurantService implements IRestaurantService {
   }
 
   async getRestaurantById(id: Types.ObjectId): Promise<Result<IRestaurantResponseDTO>> {
+    const context: Context = this.contextService.getContext();
+    const user = await this.validateUser.getUser(this.merchantRepository, { email: context.email });
+    if (!user) {
+      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
+    }
     const result = await this.restaurantRepository.findById(id);
     const document: RestaurantDocument = await result.getValue();
     const restaurant = this.restaurantMapper.toDomain(document);
@@ -104,6 +120,10 @@ export class RestaurantService implements IRestaurantService {
       restaurant,
       restaurant.merchant.id,
     );
+
+    if (user.id !== restaurantWithMerchantData.merchant.id) {
+      throwApplicationError(HttpStatus.UNAUTHORIZED, 'You dont have sufficient priviledge');
+    }
     return Result.ok(
       RestaurantParser.createRestaurantResponse(restaurantWithMerchantData),
       'Restaurant retrieved successfully',
