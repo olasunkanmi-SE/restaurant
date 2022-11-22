@@ -1,13 +1,20 @@
+import { HttpClientModule } from '@angular/common/http';
+import { MaterialComponentsModule } from './shared/module/material-components.module';
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { tap } from 'rxjs';
-
+import { BehaviorSubject, tap } from 'rxjs';
+interface User {
+  email: string;
+}
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  standalone: true,
+  imports: [HttpClientModule, MaterialComponentsModule],
 })
 export class AppComponent {
+  sub = new BehaviorSubject<User>({} as User);
   title = 'frontend';
   backendUrl = 'http://localhost:3000/api';
 
