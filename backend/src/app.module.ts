@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { AppController } from './app.controller';
@@ -13,6 +13,7 @@ import * as Joi from 'joi';
 import { AuthModule } from './infrastructure/auth';
 import { ContextService } from './infrastructure/context';
 import { MerchantModule } from './merchant/merchant.module';
+import { ContextMiddleWare } from './infrastructure/middlewares';
 
 @Module({
   imports: [
@@ -47,7 +48,11 @@ import { MerchantModule } from './merchant/merchant.module';
       useClass: ApplicationExceptionsFilter,
     },
     { provide: TYPES.IApplicationLogger, useClass: ApplicationLogger },
-    ContextService,
+    { provide: TYPES.IContextService, useClass: ContextService },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ContextMiddleWare).exclude().forRoutes(AppController);
+  }
+}
