@@ -1,13 +1,15 @@
-import { ErrorService } from './shared/services/error.service';
+import { HeaderInterceptor } from './core/interceptors/header.interceptor';
 import {
   HttpClient,
   HttpClientModule,
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { BehaviorSubject, tap, catchError } from 'rxjs';
-import { ErrorInterceptor } from './core/interceptors/error.interceptor';
+import { BehaviorSubject, catchError, tap } from 'rxjs';
+import { ErrorInterceptor, LoggingInterceptor } from './core/interceptors/';
 import { MaterialComponentsModule } from './shared/module/material-components.module';
+import { ErrorService } from './shared/services/error.service';
+
 interface User {
   email: string;
 }
@@ -16,10 +18,13 @@ interface User {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [HttpClientModule, MaterialComponentsModule],
+  imports: [MaterialComponentsModule, HttpClientModule],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptor, multi: true },
   ],
+  animations: [],
 })
 export class AppComponent {
   sub = new BehaviorSubject<User>({} as User);

@@ -1,4 +1,4 @@
 export interface IRequestException {
-  status?: number;
-  message?: string;
+  status: number;
+  message: string;
 }

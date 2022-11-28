@@ -8,7 +8,9 @@ import { Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
 import { ErrorService } from './../../shared/services/error.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ErrorInterceptor implements HttpInterceptor {
   constructor(private readonly errorService: ErrorService) {}
   intercept(
