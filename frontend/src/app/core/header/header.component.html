@@ -1,0 +1,108 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+  >
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item href="#">Notifications</a>
+      <a mat-list-item>Sign Up</a>
+      <a mat-list-item>Sign In</a>
+      <button class="btnmove" mat-raised-button color="accent">Sign Out</button>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async"
+      >
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+
+      <span>Devconnect</span>
+
+      <span class="spacer"></span>
+      <span class="main-menu">
+        <button mat-button [matMenuTriggerFor]="products">Products</button>
+        <mat-menu #products="matMenu">
+          <button mat-menu-item [matMenuTriggerFor]="electronics">
+            Electronic Devices
+          </button>
+          <button mat-menu-item [matMenuTriggerFor]="accessories">
+            Electronic Accessories
+          </button>
+        </mat-menu>
+
+        <mat-menu #electronics="matMenu">
+          <button mat-menu-item [matMenuTriggerFor]="mobile">
+            Mobile & Tablets
+          </button>
+          <button mat-menu-item [matMenuTriggerFor]="laptop">Laptops</button>
+          <button mat-menu-item [matMenuTriggerFor]="game">
+            Gaming Console
+          </button>
+          <button mat-menu-item [matMenuTriggerFor]="watch">Watches</button>
+        </mat-menu>
+
+        <mat-menu #accessories="matMenu">
+          <button mat-menu-item [matMenuTriggerFor]="mobileaccessories">
+            Mobile & Tablets
+          </button>
+          <button mat-menu-item [matMenuTriggerFor]="audio">Audio</button>
+        </mat-menu>
+
+        <mat-menu #mobile="matMenu">
+          <button *ngFor="let mobile of mobiles" mat-menu-item>
+            {{ mobile }}
+          </button>
+        </mat-menu>
+
+        <mat-menu #laptop="matMenu">
+          <button *ngFor="let laptop of laptops" mat-menu-item>
+            {{ laptop }}
+          </button>
+        </mat-menu>
+
+        <mat-menu #game="matMenu">
+          <button *ngFor="let game of games" mat-menu-item>
+            {{ game }}
+          </button>
+        </mat-menu>
+
+        <mat-menu #watch="matMenu">
+          <button *ngFor="let watch of watches" mat-menu-item>
+            {{ watch }}
+          </button>
+        </mat-menu>
+
+        <mat-menu #mobileaccessories="matMenu">
+          <button mat-menu-item>Phone Cases Cover</button>
+        </mat-menu>
+        <mat-menu #audio="matMenu">
+          <button mat-menu-item>Headphones & Headsets</button>
+          <button mat-menu-item>Portable Speakers</button>
+        </mat-menu>
+
+        <a href="#">Notifications</a>
+        <!-- 
+        <span class="badge badge-light">
+          <mat-icon class="icon" [inline]="true">shopping_cart</mat-icon>
+          cart <span class="cart"> 4</span>
+        </span> -->
+
+        <a href="#">Sign Up</a>
+        <a href="#">Sign In</a>
+        <a href="#">Sign Out</a>
+      </span>
+    </mat-toolbar>
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>
