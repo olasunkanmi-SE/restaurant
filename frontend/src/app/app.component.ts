@@ -9,9 +9,9 @@ import { tap } from 'rxjs';
 })
 export class AppComponent {
   title = 'frontend';
-  backendUrl = 'http://localhost:3000/api';
+  backendUrl = 'http://localhost:3000/api/3r';
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient) { }
 
   getTextResponse() {
     return this.http.get(this.backendUrl, { responseType: 'text' }).pipe(
