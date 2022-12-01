@@ -2,10 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
 import { MatcomponentModule } from '../modules/matcomponent/matcomponent.module';
+import { FooterComponent } from './footer/footer.component';
+import { MiniFooterComponent } from './mini-footer/mini-footer.component';
 
 @NgModule({
-  declarations: [HeaderComponent],
+  declarations: [HeaderComponent, FooterComponent, MiniFooterComponent],
   imports: [CommonModule, MatcomponentModule],
-  exports: [HeaderComponent],
+  exports: [HeaderComponent, FooterComponent, MiniFooterComponent],
 })
 export class CoreModule {}

@@ -1,12 +1,34 @@
+/* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.css";
+@import "~bootstrap/scss/bootstrap";
+
 html,
 body {
   height: 100%;
+}
+
+body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.blue-snackbar {
-  background: #000000;
-  color: #fff;
+$mainColor: black;
+
+.mat-list-base .mat-list-item {
+  color: rgb(255 255 255 / 87%) !important;
+}
+
+.mat-drawer {
+  background-color: $mainColor !important;
+}
+
+.mat-flat-button.mat-primary,
+.mat-raised-button.mat-primary,
+.mat-fab.mat-primary,
+.mat-mini-fab.mat-primary {
+  background-color: $mainColor !important;
+}
+
+.mat-card:not([class*="mat-elevation-z"]) {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.05) !important;
 }
