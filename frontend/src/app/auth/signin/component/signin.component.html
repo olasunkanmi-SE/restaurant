@@ -1,1 +1,57 @@
-<p>signin works!</p>
+<div class="container signup-spacing">
+  <div class="row justify-content-md-center signup-form-spacing">
+    <div class="col-md-4 mb-3">
+      <mat-card class="example-card">
+        <mat-card-content><h1>Sign-In</h1> </mat-card-content>
+        <mat-card-content>
+          <p>
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput />
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>password</mat-label>
+              <input matInput [type]="hide ? 'password' : 'text'" />
+              <button
+                mat-icon-button
+                matSuffix
+                (click)="hide = !hide"
+                [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hide"
+              >
+                <mat-icon>{{
+                  hide ? "visibility_off" : "visibility"
+                }}</mat-icon>
+              </button>
+            </mat-form-field>
+          </p>
+
+          <p>
+            <button
+              class="full-width"
+              mat-raised-button
+              color="primary"
+              type="button"
+            >
+              Sign-in
+            </button>
+          </p>
+          <p class="signup-small">
+            By creating an account, you agree to Ecommerce's <br />
+            <a href="#">Conditions of Use</a> and
+            <a href="#">Privacy Notice</a> .
+          </p>
+        </mat-card-content>
+        <div class="login">
+          <p class="signup-medium">
+            <a href="#">Forgot your password?</a>
+          </p>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <app-mini-footer></app-mini-footer>
+</div>

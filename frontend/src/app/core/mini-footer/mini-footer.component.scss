@@ -1,0 +1,21 @@
+.e-divider-inner {
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.1),
+            rgba(0, 0, 0, 0.01) 1px,
+            transparent);
+    height: 44px;
+    margin-bottom: -18px;
+    z-index: 0;
+    zoom: 1;
+}
+
+.e-normal-link {
+    font-size: 11px !important;
+    line-height: 1.456 !important;
+}
+
+.e-year {
+    font-size: 10px;
+    font-weight: 300;
+    margin-top: 10px;
+}
