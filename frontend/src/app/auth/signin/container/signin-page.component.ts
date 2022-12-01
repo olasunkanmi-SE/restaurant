@@ -1,15 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-signin-page',
   templateUrl: './signin-page.component.html',
-  styleUrls: ['./signin-page.component.scss']
+  styleUrls: ['./signin-page.component.scss'],
 })
-export class SigninPageComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-}
+export class SigninPageComponent {}
