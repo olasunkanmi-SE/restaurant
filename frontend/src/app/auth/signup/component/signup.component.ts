@@ -7,6 +7,7 @@ import { FormCustomValidation } from './../../../shared/utility/form-custom.vali
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
+  animations: [],
 })
 export class SignupComponent implements OnInit {
   signUpForm: any;
