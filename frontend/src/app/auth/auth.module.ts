@@ -11,6 +11,8 @@ import { SigninComponent } from './signin/component/signin.component';
 import { SigninPageComponent } from './signin/container/signin-page.component';
 import { SignupComponent } from './signup/component/signup.component';
 import { SignupPageComponent } from './signup/container/signup-page.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,13 @@ import { SignupPageComponent } from './signup/container/signup-page.component';
     ForgotPasswordPageComponent,
     ForgotPasswordComponent,
   ],
-  imports: [CommonModule, AuthRoutingModule, MatcomponentModule, CoreModule],
+  imports: [
+    CommonModule,
+    AuthRoutingModule,
+    MatcomponentModule,
+    CoreModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
 })
 export class AuthModule {}
