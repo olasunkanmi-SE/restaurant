@@ -3,17 +3,27 @@
     <div class="col-md-4 mb-3">
       <mat-card class="example-card">
         <mat-card-content><h1>Sign-In</h1> </mat-card-content>
-        <mat-card-content>
+        <mat-card-content [formGroup]="signInForm">
           <p>
             <mat-form-field class="full-width" appearance="outline">
               <mat-label>Email</mat-label>
-              <input matInput />
+              <input formControlName="email" matInput type="email" />
+              <mat-error *ngIf="email.touched && email.invalid">
+                <mat-error
+                  *ngIf="signInForm.controls['email'].hasError('hasEmail')"
+                >
+                  Please enter a valid email address
+                </mat-error>
+                <mat-error *ngIf="email.errors.required">
+                  Email is required
+                </mat-error>
+              </mat-error>
             </mat-form-field>
           </p>
           <p>
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>password</mat-label>
-              <input matInput [type]="hide ? 'password' : 'text'" />
+              <input matInput [type]="hide ? 'password' : 'text'" formControlName="password"/>
               <button
                 mat-icon-button
                 matSuffix
@@ -25,6 +35,11 @@
                   hide ? "visibility_off" : "visibility"
                 }}</mat-icon>
               </button>
+              <mat-error *ngIf="password.invalid && password.touched">
+                <mat-error *ngIf="password.errors.required">
+                  Password is required
+                </mat-error>
+              </mat-error>
             </mat-form-field>
           </p>
 
