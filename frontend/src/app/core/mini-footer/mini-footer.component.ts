@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+mport { Component } from '@angular/core';
 
 @Component({
   selector: 'app-mini-footer',
