@@ -3,23 +3,26 @@
     <div class="col-md-4 mb-3">
       <mat-card class="example-card">
         <mat-card-content><h1>Create account</h1> </mat-card-content>
+         <form class="example-form" [formGroup]="signUpForm">
         <mat-card-content>
           <p>
             <mat-form-field class="full-width" appearance="outline">
-              <mat-label>Name</mat-label>
-              <input matInput />
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field class="full-width" appearance="outline">
               <mat-label>Email</mat-label>
-              <input matInput />
+                 <input matInput type="email" formControlName = "email" />
+                  <mat-error *ngIf="email.touched && email.invalid">
+                    <mat-error *ngIf="email.errors?.required"
+                      >Email is required
+                    </mat-error>
+                    <mat-error *ngIf="email.errors?.['hasEmail']"
+                      >Enter a valid email address.</mat-error
+                    >
+                  </mat-error>
             </mat-form-field>
           </p>
           <p>
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>password</mat-label>
-              <input matInput [type]="hide ? 'password' : 'text'" />
+              <input matInput [type]="hide ? 'password' : 'text'" formControlName = "password" />
               <button
                 mat-icon-button
                 matSuffix
@@ -31,23 +34,40 @@
                   hide ? "visibility_off" : "visibility"
                 }}</mat-icon>
               </button>
+               <mat-error *ngIf="password.touched && password.invalid">
+                    <mat-error *ngIf="password.errors?.required"
+                      >password is required</mat-error
+                    >
+                    <mat-error
+                      *ngIf="
+                        password.errors?.['hasCapitalCase']
+                          
+                      "
+                    >
+                      at least 8 characters, a lower case, capital case
+                      and a number
+                    </mat-error>
+                  </mat-error>
             </mat-form-field>
           </p>
           <p>
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Confrim password</mat-label>
-              <input matInput [type]="hide ? 'password' : 'text'" />
-              <button
-                mat-icon-button
-                matSuffix
-                (click)="hide = !hide"
-                [attr.aria-label]="'Hide password'"
-                [attr.aria-pressed]="hide"
-              >
-                <mat-icon>{{
-                  hide ? "visibility_off" : "visibility"
-                }}</mat-icon>
-              </button>
+              <input matInput [type]="hide ? 'password' : 'text'" formControlName="confirmPassword" />
+               <mat-error
+                    *ngIf="confirmPassword.touched && confirmPassword.invalid"
+                  >
+                  <mat-error *ngIf="confirmPassword.errors?.required"
+                      >Confirm Password</mat-error
+                    >
+                    <mat-error
+                      *ngIf="
+                      confirmPassword.errors?.['misMatch']
+                      "
+                    >
+                      Password does not match
+                    </mat-error>
+                  </mat-error>
             </mat-form-field>
           </p>
           <p>
@@ -57,7 +77,7 @@
               color="primary"
               type="button"
             >
-              Create your Ecommerce Account
+              Sign Up
             </button>
           </p>
           <p class="signup-small">
@@ -66,6 +86,7 @@
             <a href="#">Privacy Notice</a> .
           </p>
         </mat-card-content>
+        </form>
         <div class="login">
           <p class="signup-medium">
             Already have an account? <a href="#">Sign-In</a>
