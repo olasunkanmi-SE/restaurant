@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { CoreModule } from './core/core.module';
 import { ErrorInterceptor, HeaderInterceptor } from './core/interceptors';
 import { MatcomponentModule } from './modules/matcomponent/matcomponent.module';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +24,7 @@ import { MatcomponentModule } from './modules/matcomponent/matcomponent.module';
     HttpClientModule,
     CoreModule,
     AuthModule,
+    StoreModule.forRoot({}),
   ],
   providers: [
     ErrorService,
