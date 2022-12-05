@@ -33,7 +33,7 @@ export class ApplicationExceptionsFilter implements ExceptionFilter {
       method: request.method,
       body: Object.hasOwnProperty.call(body, 'password') ? props : body,
     };
-    this.logErrorMessage(request, message, statusCode, exception);
+    this.logErrorMessage(request, JSON.stringify(responseBody), statusCode, exception);
     const errorLog: string = this.constructErrorMessage(responseBody, request, exception);
     this.writeErrorLogToFile(errorLog);
     response.status(statusCode).json(responseBody);
