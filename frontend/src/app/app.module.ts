@@ -13,6 +13,8 @@ import { CoreModule } from './core/core.module';
 import { ErrorInterceptor, HeaderInterceptor } from './core/interceptors';
 import { MatcomponentModule } from './modules/matcomponent/matcomponent.module';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,6 +27,8 @@ import { StoreModule } from '@ngrx/store';
     CoreModule,
     AuthModule,
     StoreModule.forRoot({}),
+    StoreDevtoolsModule.instrument(),
+    EffectsModule.forRoot([]),
   ],
   providers: [
     ErrorService,
