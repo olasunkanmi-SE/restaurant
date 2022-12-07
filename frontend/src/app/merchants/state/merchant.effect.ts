@@ -22,7 +22,7 @@ export class MerchantEffect {
         this.merchantService.getMerchants().pipe(
           map(
             (merchants: IMerchant[]) =>
-              new merchantActions.GerMerchantsSuccess(merchants)
+              new merchantActions.GetMerchantsSuccess(merchants)
           ),
           catchError((err: IResult) =>
             of(new merchantActions.GerMerchantsFailure(err.message.message))

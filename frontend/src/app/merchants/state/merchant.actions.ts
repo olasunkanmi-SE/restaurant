@@ -11,7 +11,7 @@ export class GetMerchants implements Action {
   readonly type = merchantActionTypes.GET_MERCHANTS;
 }
 
-export class GerMerchantsSuccess implements Action {
+export class GetMerchantsSuccess implements Action {
   readonly type = merchantActionTypes.GET_MERCHANTS_SUCCESS;
   constructor(public payload: IMerchant[]) {}
 }
@@ -23,5 +23,5 @@ export class GerMerchantsFailure implements Action {
 
 export type MerchantsActions =
   | GetMerchants
-  | GerMerchantsSuccess
+  | GetMerchantsSuccess
   | GerMerchantsFailure;
