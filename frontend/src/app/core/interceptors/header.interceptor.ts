@@ -13,7 +13,12 @@ export class HeaderInterceptor implements HttpInterceptor {
     httpRequest: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const API_KEY = '123456';
-    return next.handle(httpRequest.clone({ setHeaders: { API_KEY } }));
+    return next.handle(
+      httpRequest.clone({
+        headers: httpRequest.headers
+          .set('x-user-email', 'ola@ola.com')
+          .set('x-correlation-id', '876538909837'),
+      })
+    );
   }
 }
