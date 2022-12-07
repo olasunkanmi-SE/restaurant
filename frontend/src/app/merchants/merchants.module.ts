@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { StoreModule } from '@ngrx/store';
 
 import { EffectsModule } from '@ngrx/effects';
 import { MerchantDetailsComponent } from './merchant-details/component/merchant-details/merchant-details.component';
@@ -11,6 +12,7 @@ import { MerchantListPageComponent } from './merchant-list/container/merchant-li
 import { MerchantsRoutingModule } from './merchants-routing.module';
 import { MerchantsComponent } from './merchants.component';
 import { MerchantEffect } from './state/merchant.effect';
+import { merchantReducer } from './state/merchant.reducer';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,7 @@ import { MerchantEffect } from './state/merchant.effect';
     CommonModule,
     MerchantsRoutingModule,
     EffectsModule.forFeature([MerchantEffect]),
+    StoreModule.forFeature('merchants', merchantReducer),
   ],
 })
 export class MerchantsModule {}

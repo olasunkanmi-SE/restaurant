@@ -21,7 +21,7 @@ export class ErrorService {
       this.log.error('An error occurred', message);
     }
     if (status === 401) {
-      //refresh token
+      //if unauthorized and token expired, refresh else logout
     } else {
       this.log.error('An error occurred', message);
     }

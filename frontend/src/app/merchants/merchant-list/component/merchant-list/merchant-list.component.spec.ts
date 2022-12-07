@@ -1,3 +1,4 @@
+import { StoreModule } from '@ngrx/store';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MerchantListComponent } from './merchant-list.component';
@@ -8,9 +9,9 @@ describe('MerchantListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MerchantListComponent ]
-    })
-    .compileComponents();
+      imports: [StoreModule.forRoot({})],
+      declarations: [MerchantListComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
