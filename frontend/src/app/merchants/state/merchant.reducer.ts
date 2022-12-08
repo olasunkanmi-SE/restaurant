@@ -9,7 +9,6 @@ interface IMerchantsState {
   loaded: boolean;
   error: string;
 }
-
 export interface IAppState extends rootState.AppState {
   merchants: IMerchantsState;
 }
