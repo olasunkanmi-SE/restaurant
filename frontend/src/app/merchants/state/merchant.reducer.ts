@@ -1,7 +1,7 @@
 import { IMerchant } from './../../shared/models/merchant.model';
 import * as rootState from '../../state/app.reducer';
 import { merchantActionTypes, MerchantsActions } from './merchant.actions';
-import { createFeatureSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 
 interface IMerchantsState {
   merchants: IMerchant[];
@@ -9,8 +9,7 @@ interface IMerchantsState {
   loaded: boolean;
   error: string;
 }
-
-export interface MerchantState extends rootState.AppState {
+export interface IAppState extends rootState.AppState {
   merchants: IMerchantsState;
 }
 
@@ -45,3 +44,26 @@ export function merchantReducer(
       return { ...state };
   }
 }
+
+const getMerchantsFeatureState =
+  createFeatureSelector<IMerchantsState>('merchants');
+
+export const getCustomers = createSelector(
+  getMerchantsFeatureState,
+  (state: IMerchantsState) => state.merchants
+);
+
+export const getCustomersLoading = createSelector(
+  getMerchantsFeatureState,
+  (state: IMerchantsState) => state.loading
+);
+
+export const getCustomersLoaded = createSelector(
+  getMerchantsFeatureState,
+  (state: IMerchantsState) => state.loaded
+);
+
+export const getCustomersError = createSelector(
+  getMerchantsFeatureState,
+  (state: IMerchantsState) => state.error
+);
