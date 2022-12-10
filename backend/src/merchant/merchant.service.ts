@@ -36,21 +36,13 @@ export class MerchantService implements IMerchantService {
   ) {}
 
   async createMerchant(props: CreateMerchantDTO): Promise<Result<IMerchantResponseDTO>> {
-    const context: Context = await this.contextService.getContext();
-    const isValidUser = await this.validateContext();
-    if (!isValidUser) {
-      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
+    const context: Context = new Context(props.email);
+    const { email } = props;
+    const existingMerchant: Result<MerchantDocument> = await this.merchantRepository.findOne({ email });
+    const existingEmail = existingMerchant.getValue().email;
+    if (existingEmail === email) {
+      throwApplicationError(HttpStatus.BAD_REQUEST, `Merchant with email ${props.email} already exists`);
     }
-    const result: Result<MerchantDocument[]> = await this.merchantRepository.find({});
-    if (!result.isSuccess) {
-      throwApplicationError(HttpStatus.NOT_FOUND, 'Merchant does not exist');
-    }
-    const merchantDocuments: MerchantDocument[] = result.getValue();
-    const existingMerchant = merchantDocuments.find((merchant) => merchant.email === props.email);
-    if (existingMerchant) {
-      throwApplicationError(HttpStatus.BAD_REQUEST, `Restaurant with email ${props.email} already exists`);
-    }
-
     const audit: Audit = Audit.createInsertContext(context);
     const hashedPassword = await this.hashPassword(props.passwordHash);
     const merchant: Merchant = Merchant.create({

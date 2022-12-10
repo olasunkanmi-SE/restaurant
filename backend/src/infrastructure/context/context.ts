@@ -6,7 +6,7 @@ export class Context {
   private readonly _correlationId: string;
   private readonly _authToken: string;
   private readonly _role: string;
-  constructor(email: string, correlationId: string, authToken?: string, role?: string) {
+  constructor(email: string, correlationId?: string, authToken?: string, role?: string) {
     this._email = email;
     this._correlationId = correlationId;
     this._authToken = authToken;

@@ -57,7 +57,7 @@ describe('Test merchant service', () => {
       await merchantService.createMerchant(createMerchantProps);
     } catch (error) {
       expect(error.status).to.eq(400);
-      expect(error.response.error).to.eq('Restaurant with email ola@tesla.com already exists');
+      expect(error.response.error).to.eq('Merchant with email ola@tesla.com already exists');
     }
   });
 
@@ -71,6 +71,9 @@ describe('Test merchant service', () => {
     };
     Audit.createInsertContext = (): Audit => {
       return Audit.create(auditMockData).getValue();
+    };
+    merchantRepositoryStub.findOne = async (): Promise<Result<MerchantDocument>> => {
+      return Result.ok(merchantMockData);
     };
     merchantRepositoryStub.create = async (): Promise<Result<MerchantDocument>> => {
       return Result.ok(merchantMockData);

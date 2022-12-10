@@ -35,7 +35,7 @@ export class MerchantModule implements NestModule {
       .apply(ContextMiddleWare)
       .exclude(
         { path: 'api/merchants/signin', method: RequestMethod.POST },
-        { path: 'api/merchants/signin', method: RequestMethod.POST },
+        { path: 'api/merchants/signup', method: RequestMethod.POST },
       )
       .forRoutes(MerchantController);
   }

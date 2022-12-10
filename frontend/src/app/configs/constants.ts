@@ -20,4 +20,5 @@ export const form = {
 
 export const urls = {
   signup: '/merchants/signup',
+  login: '/merchants/signin',
 };
