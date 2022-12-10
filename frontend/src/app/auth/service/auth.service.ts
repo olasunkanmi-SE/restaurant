@@ -11,10 +11,17 @@ export class AuthService implements IAuthService {
   private baseUrl: string = environment.backendUrl;
   constructor(private readonly http: HttpClient) {}
 
-  createUser(payload: IUser): Observable<IUserResponse> {
-    return this.http.post<IUserResponse>(
-      `${this.baseUrl}/${urls.signup}`,
-      payload
-    );
+  protected createUser(payload: IUser): Observable<IUserResponse> {
+    const signUpUrl = urls.signup;
+    return this.auth(payload, signUpUrl);
+  }
+
+  protected login(payload: IUser): Observable<IUserResponse> {
+    const loginUrl = urls.login;
+    return this.auth(payload, loginUrl);
+  }
+
+  private auth(payload: IUser, url: string): Observable<IUserResponse> {
+    return this.http.post<IUserResponse>(`${this.baseUrl}/${url}`, payload);
   }
 }

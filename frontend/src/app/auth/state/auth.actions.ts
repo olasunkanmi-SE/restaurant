@@ -5,6 +5,9 @@ export enum AuthActionTypes {
   CREATE_USER = '[User] Create User',
   CREATE_USER_SUCCESS = '[User] Create User Success',
   CREATE_USER_FAIL = '[User] Create Customer Fail',
+  LOGIN_USER = '[Login] Login User',
+  LOGIN_USER_SUCCESS = '[Login] Login User Success',
+  LOGIN_USER_FAIL = '[Login] Login Customer Fail',
 }
 
 export class CreateUser implements Action {
@@ -22,4 +25,25 @@ export class CreateUserFailure implements Action {
   constructor(public payload: string) {}
 }
 
-export type AuthActions = CreateUser | CreateUserSuccess | CreateUserFailure;
+export class LoginUser implements Action {
+  readonly type = AuthActionTypes.LOGIN_USER;
+  constructor(public payload: IUser) {}
+}
+
+export class LoginUserSuccess implements Action {
+  readonly type = AuthActionTypes.LOGIN_USER_SUCCESS;
+  constructor(public payload: IUserResponse) {}
+}
+
+export class LoginUserFailure implements Action {
+  readonly type = AuthActionTypes.LOGIN_USER_FAIL;
+  constructor(public payload: string) {}
+}
+
+export type AuthActions =
+  | CreateUser
+  | CreateUserSuccess
+  | CreateUserFailure
+  | LoginUser
+  | LoginUserSuccess
+  | LoginUserFailure;
