@@ -1,5 +1,5 @@
-import { IMerchant } from './../../shared/models/merchant.model';
 import { Action } from '@ngrx/store';
+import { IMerchant } from './../../shared/models/merchant.model';
 
 export enum merchantActionTypes {
   GET_MERCHANTS = '[Merchant] Load Merchants',

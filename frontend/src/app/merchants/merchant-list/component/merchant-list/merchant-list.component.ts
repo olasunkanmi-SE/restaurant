@@ -12,8 +12,10 @@ import * as fromMerchantReducer from '../../../state/merchant.reducer';
 })
 export class MerchantListComponent implements OnInit {
   private merchants$: Observable<IMerchant[]> | undefined;
-  constructor(private store: Store<fromMerchantReducer.IAppState>) {}
-  ngOnInit(): void {
+  constructor(private store: Store<fromMerchantReducer.IState>) {}
+  ngOnInit(): void {}
+
+  getMerchants() {
     this.store.dispatch(new merchantActions.GetMerchants());
     this.merchants$ = this.store.pipe(select(fromMerchantReducer.getCustomers));
   }

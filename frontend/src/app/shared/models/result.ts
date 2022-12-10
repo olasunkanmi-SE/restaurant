@@ -8,5 +8,5 @@ export interface IResult {
   path: string;
   timeStamp: string;
   method: string;
-  body: { [key: string]: any };
+  data: { [key: string]: any };
 }

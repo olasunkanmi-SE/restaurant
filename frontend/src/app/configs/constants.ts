@@ -17,3 +17,7 @@ export const form = {
   specialCharacterPattern:
     /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
 };
+
+export const urls = {
+  signup: '/merchants/signup',
+};
