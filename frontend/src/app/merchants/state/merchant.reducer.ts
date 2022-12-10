@@ -5,18 +5,15 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 
 interface IMerchantsState {
   merchants: IMerchant[];
-  loading: boolean;
-  loaded: boolean;
   error: string;
 }
-export interface IAppState extends rootState.AppState {
+
+export interface IState extends rootState.IState {
   merchants: IMerchantsState;
 }
 
-export const initialState: IMerchantsState = {
+const initialState: IMerchantsState = {
   merchants: [],
-  loading: false,
-  loaded: false,
   error: '',
 };
 export function merchantReducer(
@@ -25,15 +22,11 @@ export function merchantReducer(
 ): IMerchantsState {
   switch (action.type) {
     case merchantActionTypes.GET_MERCHANTS:
-      return {
-        ...state,
-        loading: true,
-      };
+      return state;
     case merchantActionTypes.GET_MERCHANTS_SUCCESS:
       return {
         ...state,
         merchants: action.payload,
-        loaded: true,
       };
     case merchantActionTypes.GET_MERCHANTS_FAILURE:
       return {
@@ -41,7 +34,7 @@ export function merchantReducer(
         error: action.payload,
       };
     default:
-      return { ...state };
+      return state;
   }
 }
 
@@ -52,17 +45,6 @@ export const getCustomers = createSelector(
   getMerchantsFeatureState,
   (state: IMerchantsState) => state.merchants
 );
-
-export const getCustomersLoading = createSelector(
-  getMerchantsFeatureState,
-  (state: IMerchantsState) => state.loading
-);
-
-export const getCustomersLoaded = createSelector(
-  getMerchantsFeatureState,
-  (state: IMerchantsState) => state.loaded
-);
-
 export const getCustomersError = createSelector(
   getMerchantsFeatureState,
   (state: IMerchantsState) => state.error

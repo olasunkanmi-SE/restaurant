@@ -15,6 +15,7 @@ import { MatcomponentModule } from './modules/matcomponent/matcomponent.module';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
+import { reducers } from './state/app.reducer';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,7 +27,7 @@ import { EffectsModule } from '@ngrx/effects';
     HttpClientModule,
     CoreModule,
     AuthModule,
-    StoreModule.forRoot({}),
+    StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument(),
     EffectsModule.forRoot([]),
   ],
