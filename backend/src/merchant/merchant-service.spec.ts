@@ -36,30 +36,30 @@ describe('Test merchant service', () => {
 
   const merchantId = new Types.ObjectId();
 
-  // it('Should not create a Merchant, should throw an exception instead', async () => {
-  //   try {
-  //     const createMerchantProps = {
-  //       email: 'ola@tesla.com',
-  //       passwordHash: '',
-  //     };
-  //     validateUserStub.getUser = async (): Promise<any | undefined> => {
-  //       return merchantMockData;
-  //     };
-  //     contextServiceStub.getContext = (): Promise<Context> => {
-  //       return Promise.resolve(new Context(createMerchantProps.email, ''));
-  //     };
-  //     merchantRepositoryStub.findOne = async (): Promise<Result<MerchantDocument>> => {
-  //       return Result.ok(merchantMockData);
-  //     };
-  //     merchantRepositoryStub.find = async (): Promise<Result<MerchantDocument[]>> => {
-  //       return Result.ok([merchantMockData]);
-  //     };
-  //     await merchantService.createMerchant(createMerchantProps);
-  //   } catch (error) {
-  //     expect(error.status).to.eq(400);
-  //     expect(error.response.error).to.eq('Restaurant with email ola@tesla.com already exists');
-  //   }
-  // });
+  it('Should not create a Merchant, should throw an exception instead', async () => {
+    try {
+      const createMerchantProps = {
+        email: 'ola@tesla.com',
+        passwordHash: '',
+      };
+      validateUserStub.getUser = async (): Promise<any | undefined> => {
+        return merchantMockData;
+      };
+      contextServiceStub.getContext = (): Promise<Context> => {
+        return Promise.resolve(new Context(createMerchantProps.email, ''));
+      };
+      merchantRepositoryStub.findOne = async (): Promise<Result<MerchantDocument>> => {
+        return Result.ok(merchantMockData);
+      };
+      merchantRepositoryStub.find = async (): Promise<Result<MerchantDocument[]>> => {
+        return Result.ok([merchantMockData]);
+      };
+      await merchantService.createMerchant(createMerchantProps);
+    } catch (error) {
+      expect(error.status).to.eq(400);
+      expect(error.response.error).to.eq('Restaurant with email ola@tesla.com already exists');
+    }
+  });
 
   it('Should create a Merchant', async () => {
     const createMerchantProps = {

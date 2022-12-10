@@ -39,7 +39,7 @@ export class MerchantService implements IMerchantService {
     const context: Context = new Context(props.email);
     const { email } = props;
     const existingMerchant: Result<MerchantDocument> = await this.merchantRepository.findOne({ email });
-    const existingEmail = await existingMerchant.getValue().email;
+    const existingEmail = existingMerchant.getValue().email;
     if (existingEmail === email) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `Merchant with email ${props.email} already exists`);
     }
