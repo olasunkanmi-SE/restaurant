@@ -1,15 +1,9 @@
 import { IMerchant } from './../../shared/models/merchant.model';
-import * as rootState from '../../state/app.reducer';
 import { merchantActionTypes, MerchantsActions } from './merchant.actions';
-import { createFeatureSelector, createSelector } from '@ngrx/store';
 
-interface IMerchantsState {
+export interface IMerchantsState {
   merchants: IMerchant[];
   error: string;
-}
-
-export interface IState extends rootState.IState {
-  merchants: IMerchantsState;
 }
 
 const initialState: IMerchantsState = {
@@ -17,12 +11,12 @@ const initialState: IMerchantsState = {
   error: '',
 };
 export function merchantReducer(
-  state: IMerchantsState = initialState,
+  state = initialState,
   action: MerchantsActions
 ): IMerchantsState {
   switch (action.type) {
     case merchantActionTypes.GET_MERCHANTS:
-      return state;
+      return { ...state };
     case merchantActionTypes.GET_MERCHANTS_SUCCESS:
       return {
         ...state,
@@ -37,15 +31,3 @@ export function merchantReducer(
       return state;
   }
 }
-
-const getMerchantsFeatureState =
-  createFeatureSelector<IMerchantsState>('merchants');
-
-export const getCustomers = createSelector(
-  getMerchantsFeatureState,
-  (state: IMerchantsState) => state.merchants
-);
-export const getCustomersError = createSelector(
-  getMerchantsFeatureState,
-  (state: IMerchantsState) => state.error
-);
