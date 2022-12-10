@@ -72,6 +72,9 @@ describe('Test merchant service', () => {
     Audit.createInsertContext = (): Audit => {
       return Audit.create(auditMockData).getValue();
     };
+    merchantRepositoryStub.findOne = async (): Promise<Result<MerchantDocument>> => {
+      return Result.ok(merchantMockData);
+    };
     merchantRepositoryStub.create = async (): Promise<Result<MerchantDocument>> => {
       return Result.ok(merchantMockData);
     };

@@ -39,6 +39,21 @@ export function authReducer(
         ...state,
         error: action.payload,
       };
+    case AuthActionTypes.LOGIN_USER:
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case AuthActionTypes.LOGIN_USER_SUCCESS:
+      return {
+        ...state,
+        response: action.payload,
+      };
+    case AuthActionTypes.LOGIN_USER_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
     default:
       return state;
   }
@@ -46,12 +61,11 @@ export function authReducer(
 
 const getAuthFeatureState = createFeatureSelector<IAuthState>('auth');
 
-export const getAuth = createSelector(
+export const getCreatedUser = createSelector(
   getAuthFeatureState,
   (state: IAuthState) => state.response
 );
-
-export const getAuthError = createSelector(
+export const getCreatedUserError = createSelector(
   getAuthFeatureState,
   (state: IAuthState) => state.error
 );
