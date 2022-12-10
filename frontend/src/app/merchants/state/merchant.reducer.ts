@@ -45,7 +45,6 @@ export const getCustomers = createSelector(
   getMerchantsFeatureState,
   (state: IMerchantsState) => state.merchants
 );
-
 export const getCustomersError = createSelector(
   getMerchantsFeatureState,
   (state: IMerchantsState) => state.error
