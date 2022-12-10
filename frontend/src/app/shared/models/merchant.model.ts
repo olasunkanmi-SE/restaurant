@@ -2,15 +2,47 @@ import { IAudit } from './audit.model';
 import { IAuthTokens } from './token.model';
 
 export interface IMerchant extends IAudit {
-  id: string;
-  firstName: string;
-  lastName: string;
+  isSuccess: boolean;
+  data: {
+    id: any;
+    firstName: string;
+    lastName: string;
+    email: string;
+    organisationName: string;
+    phoneNumber: string;
+    role: string;
+    isActive: boolean;
+    status?: string;
+    organisationAddress: string;
+    tokens?: IAuthTokens;
+  };
+  message: string;
+}
+export interface IUser {
   email: string;
-  organisationName: string;
-  phoneNumber: string;
-  role: string;
-  isActive: boolean;
-  status?: string;
-  organisationAddress: string;
-  tokens?: IAuthTokens;
+  password: string;
+}
+
+export interface IUserResponse {
+  isSuccess: boolean;
+  data: {
+    id: any;
+    firstName: string;
+    lastName: string;
+    email: string;
+    organisationName: string;
+    phoneNumber: string;
+    role: string;
+    isActive: boolean;
+    status?: string;
+    organisationAddress: string;
+    tokens?: {
+      refreshToken: string;
+      accessToken: string;
+    };
+  };
+  message: {
+    statusCode: number;
+    message: string;
+  };
 }

@@ -9,7 +9,7 @@ import { IMerchantService } from './merchant-service.interface';
   providedIn: 'root',
 })
 export class MerchantService implements IMerchantService {
-  private readonly baseUrl = environment.backendUrl;
+  private readonly baseUrl: string = environment.backendUrl;
   constructor(private readonly http: HttpClient) {}
 
   getMerchants(): Observable<IMerchant[]> {

@@ -18,7 +18,7 @@ export class MerchantEffect {
       ofType<merchantActions.GetMerchants>(
         merchantActions.merchantActionTypes.GET_MERCHANTS
       ),
-      mergeMap((actions: merchantActions.GetMerchants) =>
+      mergeMap(() =>
         this.merchantService.getMerchants().pipe(
           map(
             (merchants: IMerchant[]) =>
