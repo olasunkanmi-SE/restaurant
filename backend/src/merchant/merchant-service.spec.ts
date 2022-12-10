@@ -57,7 +57,7 @@ describe('Test merchant service', () => {
       await merchantService.createMerchant(createMerchantProps);
     } catch (error) {
       expect(error.status).to.eq(400);
-      expect(error.response.error).to.eq('Restaurant with email ola@tesla.com already exists');
+      expect(error.response.error).to.eq('Merchant with email ola@tesla.com already exists');
     }
   });
 
