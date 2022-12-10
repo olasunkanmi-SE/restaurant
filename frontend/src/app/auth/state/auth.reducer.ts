@@ -65,7 +65,6 @@ export const getCreatedUser = createSelector(
   getAuthFeatureState,
   (state: IAuthState) => state.response
 );
-
 export const getCreatedUserError = createSelector(
   getAuthFeatureState,
   (state: IAuthState) => state.error
