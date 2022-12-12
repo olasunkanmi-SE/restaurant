@@ -8,6 +8,7 @@ export enum AuthActionTypes {
   LOGIN_USER = '[Login] Login User',
   LOGIN_USER_SUCCESS = '[Login] Login User Success',
   LOGIN_USER_FAIL = '[Login] Login Customer Fail',
+  CHECK_AUTH = '[Auth] is User Authenticated',
 }
 
 export class CreateUser implements Action {
@@ -40,10 +41,15 @@ export class LoginUserFailure implements Action {
   constructor(public payload: string) {}
 }
 
+export class IsAuthenticated implements Action {
+  readonly type = AuthActionTypes.CHECK_AUTH;
+  constructor(public payload: boolean) {}
+}
 export type AuthActions =
   | CreateUser
   | CreateUserSuccess
   | CreateUserFailure
   | LoginUser
   | LoginUserSuccess
-  | LoginUserFailure;
+  | LoginUserFailure
+  | IsAuthenticated;

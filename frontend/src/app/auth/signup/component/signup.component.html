@@ -3,7 +3,7 @@
     <div class="col-md-4 mb-3">
       <mat-card class="example-card">
         <mat-card-content><h1>Create account</h1> </mat-card-content>
-         <form class="example-form" [formGroup]="signUpForm">
+         <form class="example-form" [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
         <mat-card-content>
           <p>
             <mat-form-field class="full-width" appearance="outline">
@@ -75,7 +75,7 @@
               class="full-width"
               mat-raised-button
               color="primary"
-              type="button"
+              type="submit"
             >
               Sign Up
             </button>

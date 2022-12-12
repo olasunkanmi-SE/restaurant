@@ -4,6 +4,7 @@ import { IMerchant } from './../../../../shared/models/merchant.model';
 import { Component, OnInit } from '@angular/core';
 import * as merchantActions from '../../../state/merchant.actions';
 import * as fromMerchantReducer from '../../../state/merchant.reducer';
+import * as fromAppReducer from '../../../../state/app.reducer';
 
 @Component({
   selector: 'app-merchant-list',
@@ -12,11 +13,11 @@ import * as fromMerchantReducer from '../../../state/merchant.reducer';
 })
 export class MerchantListComponent implements OnInit {
   private merchants$: Observable<IMerchant[]> | undefined;
-  constructor(private store: Store<fromMerchantReducer.IState>) {}
+  constructor(private store: Store<fromMerchantReducer.IMerchantsState>) {}
   ngOnInit(): void {}
 
   getMerchants() {
     this.store.dispatch(new merchantActions.GetMerchants());
-    this.merchants$ = this.store.pipe(select(fromMerchantReducer.getCustomers));
+    this.merchants$ = this.store.pipe(select(fromAppReducer.getMerchants));
   }
 }

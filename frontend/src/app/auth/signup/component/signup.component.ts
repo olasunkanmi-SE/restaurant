@@ -1,3 +1,4 @@
+import { AuthService } from './../../service/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { form } from 'src/app/configs/constants';
@@ -12,7 +13,7 @@ import { FormCustomValidation } from './../../../shared/utility/form-custom.vali
 export class SignupComponent implements OnInit {
   signUpForm: any;
   hide: boolean = true;
-  constructor(private form: FormBuilder) {}
+  constructor(private form: FormBuilder, private auth: AuthService) {}
 
   ngOnInit(): void {
     this.signUpForm = this.form.group(
@@ -59,5 +60,14 @@ export class SignupComponent implements OnInit {
 
   get confirmPassword() {
     return this.signUpForm.get(form.confirmPassword);
+  }
+
+  onSubmit() {
+    const signUpProps: { email: string; passwordHash: string } = {
+      email: this.email.value,
+      passwordHash: this.password.value,
+    };
+
+    this.auth.signUpUser(signUpProps);
   }
 }
