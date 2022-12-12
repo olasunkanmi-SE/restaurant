@@ -38,10 +38,10 @@ export class ErrorService {
     let message: string;
     if (error instanceof HttpErrorResponse) {
       status = error.status;
-      message = error.message;
+      message = error.error.message.error;
     } else {
       status = HttpStatusCode.InternalServerError;
-      message = error.message;
+      message = apiResponse.genericResponse;
     }
     return { status, message };
   }

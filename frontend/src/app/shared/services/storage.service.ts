@@ -4,8 +4,10 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class StorageService {
-  saveToken(token: string): void {
-    localStorage.setItem('jwt_token', token);
+  saveToken(token: string | undefined): void {
+    token
+      ? localStorage.setItem('jwt_token', token)
+      : localStorage.setItem('jwt_token', '');
   }
 
   getToken() {
