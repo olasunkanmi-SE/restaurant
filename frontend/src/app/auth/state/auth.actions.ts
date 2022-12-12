@@ -45,7 +45,6 @@ export class IsAuthenticated implements Action {
   readonly type = AuthActionTypes.CHECK_AUTH;
   constructor(public payload: boolean) {}
 }
-
 export type AuthActions =
   | CreateUser
   | CreateUserSuccess
