@@ -1,5 +1,3 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import * as rootState from '../../state/app.reducer';
 import { IUser, IUserResponse } from './../../shared/models/merchant.model';
 import { AuthActions, AuthActionTypes } from './auth.actions';
 
@@ -7,16 +5,14 @@ export interface IAuthState {
   user: IUser;
   response: IUserResponse;
   error: string;
-}
-
-export interface IState extends rootState.IState {
-  auth: IAuthState;
+  isAuthenticated: boolean;
 }
 
 const initialSate: IAuthState = {
   user: {} as IUser,
   response: {} as IUserResponse,
   error: '',
+  isAuthenticated: false,
 };
 
 export function authReducer(
@@ -48,24 +44,19 @@ export function authReducer(
       return {
         ...state,
         response: action.payload,
+        isAuthenticated: true,
       };
     case AuthActionTypes.LOGIN_USER_FAIL:
       return {
         ...state,
         error: action.payload,
       };
+    case AuthActionTypes.CHECK_AUTH:
+      return {
+        ...state,
+        isAuthenticated: true,
+      };
     default:
       return state;
   }
 }
-
-const getAuthFeatureState = createFeatureSelector<IAuthState>('auth');
-
-export const getCreatedUser = createSelector(
-  getAuthFeatureState,
-  (state: IAuthState) => state.response
-);
-export const getCreatedUserError = createSelector(
-  getAuthFeatureState,
-  (state: IAuthState) => state.error
-);

@@ -1,6 +1,8 @@
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreModule } from '@ngrx/store';
 import { MatcomponentModule } from 'src/app/modules/matcomponent/matcomponent.module';
 
 import { SignupComponent } from './signup.component';
@@ -17,6 +19,8 @@ describe('SignupComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
+        HttpClientModule,
+        StoreModule.forRoot({}),
       ],
     }).compileComponents();
   });
