@@ -9,7 +9,7 @@ import { IResult } from './../../shared/models/result';
 import { AuthService } from './../service/auth.service';
 import * as authActions from './auth.actions';
 import * as fromAuthReducer from '../state/auth.reducer';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +20,7 @@ export class AuthEffect extends AuthService {
     store: Store<fromAuthReducer.IAuthState>,
     private readonly storage: StorageService,
     private actions$: Actions,
-    private router: Router,
-    private route: ActivatedRoute
+    private router: Router
   ) {
     super(http, store);
   }
@@ -36,10 +35,7 @@ export class AuthEffect extends AuthService {
               new authActions.CreateUserSuccess(response)
           ),
           tap(() => {
-            this.router.navigate(['login'], {
-              relativeTo: this.route,
-              skipLocationChange: true,
-            });
+            this.router.navigate(['login']);
           }),
           catchError((error: IResult) =>
             of(new authActions.CreateUserFailure(error.message.message))
