@@ -29,8 +29,12 @@ jobs:
           npm i
           npm run build
           npm run test-ci
-      - name: format application
+      - name: lint backend
         working-directory: ./backend
+        run: |
+          npm run format
+      - name: lint frontend
+        working-directory: ./frontend
         run: |
           npm run format
       - name: SonarCloud Scan

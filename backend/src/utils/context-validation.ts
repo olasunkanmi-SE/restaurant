@@ -8,8 +8,7 @@ export class ValidateUser implements IValidateUser {
     let user: Result<any>;
     if (Object.hasOwnProperty.call(props, 'email')) {
       user = await model.findOne({ email });
-    }
-    if (Object.hasOwnProperty.call(props, 'role')) {
+    } else {
       user = await model.findOne({ role });
     }
     return Boolean(user.isSuccess);
