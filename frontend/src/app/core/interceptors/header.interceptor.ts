@@ -13,11 +13,13 @@ export class HeaderInterceptor implements HttpInterceptor {
     httpRequest: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    const userEmail = localStorage.getItem('x-user-email') ?? '';
+    const correlationId = localStorage.getItem('x-correlation-id') ?? '';
     return next.handle(
       httpRequest.clone({
         headers: httpRequest.headers
-          .set('x-user-email', 'ola@ola.com')
-          .set('x-correlation-id', '876538909837'),
+          .set('x-user-email', userEmail)
+          .set('x-correlation-id', correlationId),
       })
     );
   }

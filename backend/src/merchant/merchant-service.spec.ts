@@ -125,7 +125,7 @@ describe('Test merchant service', () => {
 
       await merchantService.signIn(loginProps);
     } catch (error) {
-      expect(error.response.error).to.eq('InCorrect Username or Password');
+      expect(error.response.error).to.eq('Incorrect Username or Password');
     }
   });
 

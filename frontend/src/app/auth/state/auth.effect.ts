@@ -10,6 +10,7 @@ import { AuthService } from './../service/auth.service';
 import * as authActions from './auth.actions';
 import * as fromAuthReducer from '../state/auth.reducer';
 import { Router } from '@angular/router';
+import { generateUuid } from 'src/app/shared/utility/genrate-uuid';
 
 @Injectable({
   providedIn: 'root',
@@ -35,7 +36,7 @@ export class AuthEffect extends AuthService {
               new authActions.CreateUserSuccess(response)
           ),
           tap(() => {
-            this.router.navigate(['login']);
+            this.router.navigate(['/']);
           }),
           catchError((error: IResult) =>
             of(new authActions.CreateUserFailure(error.message.message))
@@ -56,10 +57,12 @@ export class AuthEffect extends AuthService {
           ),
           tap((response) => {
             this.storage.saveToken(response.payload.data.tokens?.accessToken);
+            this.storage.saveItem('x-correlation-id', generateUuid());
+            this.storage.saveItem('x-user-email', response.payload.data.email);
             this.router.navigate(['/']);
           }),
           catchError((error: IResult) =>
-            of(new authActions.LoginUserFailure(error.message.message))
+            of(new authActions.LoginUserFailure(error.message))
           )
         )
       )

@@ -39,10 +39,10 @@ export class MerchantService implements IMerchantService {
     const context: Context = new Context(props.email);
     const { email } = props;
     const existingMerchant: Result<MerchantDocument> = await this.merchantRepository.findOne({ email });
-    const existingEmail = existingMerchant.getValue().email;
-    if (existingEmail === email) {
+    if (existingMerchant.isSuccess && existingMerchant.getValue().email === email) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `Merchant with email ${props.email} already exists`);
     }
+
     const audit: Audit = Audit.createInsertContext(context);
     const hashedPassword = await this.hashPassword(props.passwordHash);
     const merchant: Merchant = Merchant.create({
@@ -105,7 +105,7 @@ export class MerchantService implements IMerchantService {
     const merchantDoc: MerchantDocument = result.getValue();
     const comparePassWord: boolean = await bcrypt.compare(props.password, merchantDoc.passwordHash);
     if (!comparePassWord) {
-      throwApplicationError(400, 'InCorrect Username or Password');
+      throwApplicationError(400, 'Incorrect Username or Password');
     }
     const { id, email, role } = merchantDoc;
     const userProps: IUserPayload = { userId: id, email, role };
