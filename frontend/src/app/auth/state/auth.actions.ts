@@ -4,10 +4,10 @@ import { IUser, IUserResponse } from './../../shared/models/merchant.model';
 export enum AuthActionTypes {
   CREATE_USER = '[User] Create User',
   CREATE_USER_SUCCESS = '[User] Create User Success',
-  CREATE_USER_FAIL = '[User] Create Customer Fail',
+  CREATE_USER_FAIL = '[User] Create User Fail',
   LOGIN_USER = '[Login] Login User',
   LOGIN_USER_SUCCESS = '[Login] Login User Success',
-  LOGIN_USER_FAIL = '[Login] Login Customer Fail',
+  LOGIN_USER_FAIL = '[Login] Login User Fail',
   CHECK_AUTH = '[Auth] is User Authenticated',
 }
 

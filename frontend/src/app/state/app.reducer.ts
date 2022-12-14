@@ -39,7 +39,7 @@ export const getUserResponse = createSelector(
   getAuthFeatureState,
   (state: fromAuth.IAuthState) => state.response
 );
-export const getCreatedUserError = createSelector(
+export const authError = createSelector(
   getAuthFeatureState,
   (state: fromAuth.IAuthState) => state.error
 );
