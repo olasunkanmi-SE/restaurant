@@ -5,6 +5,8 @@
         <mat-card-content><h1>Sign-In</h1> </mat-card-content>
         <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
                   <mat-card-content>
+                    <p><mat-error *ngIf="errorMessage$ | async as errorMessage">{{errorMessage}}
+                    </mat-error></p>
                     <p>
                       <mat-form-field class="full-width" appearance="outline">
                         <mat-label>Email</mat-label>
@@ -38,8 +40,7 @@
                     </p>
                   
                     <p>
-                      <button class="full-width" mat-raised-button color="primary" type="submit" >
-                        Sign-in
+                      <button class="full-width" mat-raised-button color="primary" type="submit" [disabled]="signInForm.invalid" >
                       </button>
                     </p>
                     <p class="signup-small">

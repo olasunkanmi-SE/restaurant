@@ -1,10 +1,7 @@
 export interface IResult {
   isSuccess: boolean;
   statusCode: number;
-  message: {
-    statusCode: number;
-    message: string;
-  };
+  message: any;
   path: string;
   timeStamp: string;
   method: string;

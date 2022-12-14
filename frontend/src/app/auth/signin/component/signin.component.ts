@@ -1,11 +1,13 @@
-import { AuthService } from './../../service/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import { form } from 'src/app/configs/constants';
-import { FormCustomValidation } from './../../../shared/utility/form-custom.validation';
-import * as fromAuthReducer from '../../state/auth.reducer';
 import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { form } from 'src/app/configs/constants';
+import * as fromAppReducer from '../../../state/app.reducer';
+import * as fromAuthReducer from '../../state/auth.reducer';
+import { FormCustomValidation } from './../../../shared/utility/form-custom.validation';
+import { AuthService } from './../../service/auth.service';
 
 @Component({
   selector: 'app-signin',
@@ -15,6 +17,7 @@ import { Router } from '@angular/router';
 export class SigninComponent implements OnInit {
   signInForm: any;
   hide: boolean = false;
+  errorMessage$: Observable<string> | undefined;
   constructor(
     private form: FormBuilder,
     private readonly store: Store<fromAuthReducer.IAuthState>,
@@ -34,6 +37,7 @@ export class SigninComponent implements OnInit {
       ],
       password: ['', [Validators.required]],
     });
+    this.errorMessage$ = this.store.pipe(select(fromAppReducer.authError));
   }
 
   get email() {
