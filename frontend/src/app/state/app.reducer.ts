@@ -43,3 +43,8 @@ export const authError = createSelector(
   getAuthFeatureState,
   (state: fromAuth.IAuthState) => state.error
 );
+
+export const authenticated = createSelector(
+  getAuthFeatureState,
+  (state: fromAuth.IAuthState) => state.isAuthenticated
+);

@@ -1,7 +1,11 @@
+import { AuthService } from './../../auth/service/auth.service';
+import { Store, select } from '@ngrx/store';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import * as fromAuthReducer from '../../auth/state/auth.reducer';
+import * as fromAppReducer from '../../state/app.reducer';
 
 @Component({
   selector: 'app-header',
@@ -26,7 +30,15 @@ export class HeaderComponent implements OnInit {
   audios: string[] = [];
   smartDevices: string[] = [];
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  isAuthenticated = false;
+
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private readonly store: Store<fromAuthReducer.IAuthState>,
+    private readonly auth: AuthService
+  ) {
+    this.isAuthenticated = this.auth.IsAuthenticated();
+  }
 
   productsCategory = [
     {
