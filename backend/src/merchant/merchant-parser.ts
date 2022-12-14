@@ -1,3 +1,4 @@
+import { tokenExpiresIn } from './../application/constants/constants';
 import { ISignUpTokens } from './../infrastructure/auth/interfaces/auth.interface';
 import { AuditParser } from './../audit/audit.parser';
 import { Merchant } from './merchant';
@@ -17,6 +18,7 @@ export class MerchantParser {
       organisationAddress: merchant.organisationAddress,
       tokens,
       ...AuditParser.createAuditResponse(merchant.audit),
+      tokenExpiresIn,
     };
     return merchantResponse;
   }

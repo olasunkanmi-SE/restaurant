@@ -8,6 +8,7 @@ import * as authActions from '../state/auth.actions';
 import * as fromAuthReducer from '../state/auth.reducer';
 import { environment } from './../../../environments/environment';
 import { IUser } from './../../shared/models/merchant.model';
+import { StorageService } from './../../shared/services/storage.service';
 import { IAuthService } from './auth-service.interface';
 
 @Injectable({
@@ -15,10 +16,14 @@ import { IAuthService } from './auth-service.interface';
 })
 export class AuthService implements IAuthService {
   private baseUrl: string = environment.backendUrl;
+  tokenExpiration: string | null;
   constructor(
     private readonly http: HttpClient,
-    private readonly store: Store<fromAuthReducer.IAuthState>
-  ) {}
+    private readonly store: Store<fromAuthReducer.IAuthState>,
+    readonly storage: StorageService
+  ) {
+    this.tokenExpiration = this.storage.getItem('expiration');
+  }
 
   protected createUser(payload: IUser): Observable<IUserResponse> {
     return this.auth(payload, urls.signup);
@@ -38,5 +43,13 @@ export class AuthService implements IAuthService {
 
   public signUpUser(props: any) {
     this.store.dispatch(new authActions.CreateUser(props));
+  }
+
+  public IsAuthenticated(): boolean {
+    let authenticated = false;
+    if (this.tokenExpiration && Number(this.tokenExpiration) > Date.now()) {
+      authenticated = true;
+    }
+    return authenticated;
   }
 }

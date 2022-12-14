@@ -40,6 +40,7 @@ export interface IUserResponse {
       refreshToken: string;
       accessToken: string;
     };
+    tokenExpiresIn: number;
   };
   message: {
     statusCode: number;
