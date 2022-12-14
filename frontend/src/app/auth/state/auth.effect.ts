@@ -19,11 +19,11 @@ export class AuthEffect extends AuthService {
   constructor(
     http: HttpClient,
     store: Store<fromAuthReducer.IAuthState>,
-    private readonly storage: StorageService,
+    storage: StorageService,
     private actions$: Actions,
     private router: Router
   ) {
-    super(http, store);
+    super(http, store, storage);
   }
 
   createUser$: Observable<Action> = createEffect(() => {
@@ -56,9 +56,13 @@ export class AuthEffect extends AuthService {
               new authActions.LoginUserSuccess(response)
           ),
           tap((response) => {
+            const tokenExpires: number =
+              response.payload.data.tokenExpiresIn * 1000 + Date.now();
+            console.log(tokenExpires);
             this.storage.saveToken(response.payload.data.tokens?.accessToken);
             this.storage.saveItem('x-correlation-id', generateUuid());
             this.storage.saveItem('x-user-email', response.payload.data.email);
+            this.storage.saveItem('expiration', tokenExpires);
             this.router.navigate(['/']);
           }),
           catchError((error: IResult) =>
