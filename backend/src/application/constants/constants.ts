@@ -17,4 +17,4 @@ export enum MerchantStatus {
   banned = 'banned',
 }
 
-export const tokenExpiresIn = 3600;
+export const tokenExpiresIn = 3600000;

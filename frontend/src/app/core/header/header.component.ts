@@ -40,6 +40,10 @@ export class HeaderComponent implements OnInit {
     this.isAuthenticated = this.auth.IsAuthenticated();
   }
 
+  signOut() {
+    this.auth.logOut();
+  }
+
   productsCategory = [
     {
       categoryName: 'ElectronicsDevices',
