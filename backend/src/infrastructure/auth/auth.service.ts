@@ -1,3 +1,5 @@
+import { MerchantDocument } from './../data_access/repositories/schemas/merchant.schema';
+import { Merchant } from './../../merchant/merchant';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -18,7 +20,7 @@ import { IJwtPayload, ISignUpTokens, IUserPayload } from './interfaces/auth.inte
  * @implements {IAuthService}
  */
 @Injectable()
-export class AuthService implements IAuthService {
+export class AuthService implements IAuthService<Merchant, MerchantDocument> {
   constructor(private readonly jwtService: JwtService, private readonly configService: ConfigService) {}
 
   /**
@@ -96,7 +98,7 @@ export class AuthService implements IAuthService {
    * @memberof AuthService
    */
   async updateRefreshToken(
-    model: GenericDocumentRepository<any>,
+    model: GenericDocumentRepository<any, any>,
     userId: Types.ObjectId,
     refreshToken: string,
   ): Promise<{ accessToken: string }> {
@@ -133,7 +135,7 @@ export class AuthService implements IAuthService {
    * @returns {void}
    * @memberof AuthService
    */
-  async nullifyRefreshToken(model: GenericDocumentRepository<any>, userId: Types.ObjectId) {
+  async nullifyRefreshToken(model: GenericDocumentRepository<Merchant, MerchantDocument>, userId: Types.ObjectId) {
     const docResult: Result<any | null> = await model.findById(userId);
 
     if (docResult) {
@@ -154,7 +156,7 @@ export class AuthService implements IAuthService {
    * @returns {void}
    * @memberof AuthService
    */
-  async logOut(model: GenericDocumentRepository<any>, userId: Types.ObjectId) {
+  async logOut(model: GenericDocumentRepository<Merchant, MerchantDocument>, userId: Types.ObjectId) {
     let result: Result<any | null> = await model.findById(userId);
 
     if (result.isSuccess === false) {
