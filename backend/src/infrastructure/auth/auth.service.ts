@@ -111,7 +111,7 @@ export class AuthService implements IAuthService {
 
     if (!verifyToken) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Access denied');
-      this.logOutOnSecurityBreach(model, userId);
+      this.nullifyRefreshToken(model, userId);
     }
 
     const payload = { userId, email, role };
@@ -133,7 +133,7 @@ export class AuthService implements IAuthService {
    * @returns {void}
    * @memberof AuthService
    */
-  async logOutOnSecurityBreach(model: GenericDocumentRepository<any>, userId: Types.ObjectId) {
+  async nullifyRefreshToken(model: GenericDocumentRepository<any>, userId: Types.ObjectId) {
     const docResult: Result<any | null> = await model.findById(userId);
 
     if (docResult) {
