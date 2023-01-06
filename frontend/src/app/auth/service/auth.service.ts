@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -20,7 +21,8 @@ export class AuthService implements IAuthService {
   constructor(
     private readonly http: HttpClient,
     private readonly store: Store<fromAuthReducer.IAuthState>,
-    readonly storage: StorageService
+    protected readonly storage: StorageService,
+    protected readonly router: Router
   ) {
     this.tokenExpiration = this.storage.getItem('expiration');
   }
@@ -51,5 +53,9 @@ export class AuthService implements IAuthService {
       authenticated = true;
     }
     return authenticated;
+  }
+
+  public logOut() {
+    this.storage.clear();
   }
 }

@@ -180,8 +180,8 @@ export class MerchantService implements IMerchantService {
         default:
           break;
       }
-      Audit.updateContext(context.email, merchant);
     }
+    Audit.updateContext(context.email, merchant);
   }
 
   async getAccessTokenAndUpdateRefreshToken(
