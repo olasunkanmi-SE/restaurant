@@ -21,9 +21,9 @@ export class AuthEffect extends AuthService {
     store: Store<fromAuthReducer.IAuthState>,
     storage: StorageService,
     private actions$: Actions,
-    private router: Router
+    router: Router
   ) {
-    super(http, store, storage);
+    super(http, store, storage, router);
   }
 
   createUser$: Observable<Action> = createEffect(() => {
@@ -63,7 +63,7 @@ export class AuthEffect extends AuthService {
             this.storage.saveItem('x-correlation-id', generateUuid());
             this.storage.saveItem('x-user-email', response.payload.data.email);
             this.storage.saveItem('expiration', tokenExpires);
-            this.router.navigate(['/']);
+            this.router.navigate(['home']);
           }),
           catchError((error: IResult) =>
             of(new authActions.LoginUserFailure(error.message))
