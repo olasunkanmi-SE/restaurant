@@ -1,16 +1,17 @@
-import { StorageService } from './../../shared/services/storage.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
-import { catchError, map, mergeMap, Observable, of, tap } from 'rxjs';
+import { Observable, catchError, map, mergeMap, of, tap } from 'rxjs';
 import { IUserResponse } from 'src/app/shared/models/merchant.model';
+import { generateUuid } from 'src/app/shared/utility/genrate-uuid';
+import { calculateTokenExpiration } from 'src/app/shared/utility/utility';
+import * as fromAuthReducer from '../state/auth.reducer';
 import { IResult } from './../../shared/models/result';
+import { StorageService } from './../../shared/services/storage.service';
 import { AuthService } from './../service/auth.service';
 import * as authActions from './auth.actions';
-import * as fromAuthReducer from '../state/auth.reducer';
-import { Router } from '@angular/router';
-import { generateUuid } from 'src/app/shared/utility/genrate-uuid';
 
 @Injectable({
   providedIn: 'root',
@@ -56,12 +57,13 @@ export class AuthEffect extends AuthService {
               new authActions.LoginUserSuccess(response)
           ),
           tap((response) => {
+            const { tokenExpiresIn, tokens, email } = response.payload.data;
             const tokenExpires: number =
-              response.payload.data.tokenExpiresIn * 1000 + Date.now();
+              calculateTokenExpiration(tokenExpiresIn);
             console.log(tokenExpires);
-            this.storage.saveToken(response.payload.data.tokens?.accessToken);
+            this.storage.saveToken(tokens?.accessToken);
             this.storage.saveItem('x-correlation-id', generateUuid());
-            this.storage.saveItem('x-user-email', response.payload.data.email);
+            this.storage.saveItem('x-user-email', email);
             this.storage.saveItem('expiration', tokenExpires);
             this.router.navigate(['home']);
           }),
