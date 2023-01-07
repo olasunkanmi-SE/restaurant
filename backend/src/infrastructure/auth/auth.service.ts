@@ -1,5 +1,3 @@
-import { MerchantDocument } from './../data_access/repositories/schemas/merchant.schema';
-import { Merchant } from './../../merchant/merchant';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -20,7 +18,7 @@ import { IJwtPayload, ISignUpTokens, IUserPayload } from './interfaces/auth.inte
  * @implements {IAuthService}
  */
 @Injectable()
-export class AuthService implements IAuthService<Merchant, MerchantDocument> {
+export class AuthService implements IAuthService {
   constructor(private readonly jwtService: JwtService, private readonly configService: ConfigService) {}
 
   /**
@@ -113,7 +111,7 @@ export class AuthService implements IAuthService<Merchant, MerchantDocument> {
 
     if (!verifyToken) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Access denied');
-      this.nullifyRefreshToken(model, userId);
+      this.logOutOnSecurityBreach(model, userId);
     }
 
     const payload = { userId, email, role };
@@ -135,7 +133,7 @@ export class AuthService implements IAuthService<Merchant, MerchantDocument> {
    * @returns {void}
    * @memberof AuthService
    */
-  async nullifyRefreshToken(model: GenericDocumentRepository<Merchant, MerchantDocument>, userId: Types.ObjectId) {
+  async logOutOnSecurityBreach(model: GenericDocumentRepository<any, any>, userId: Types.ObjectId) {
     const docResult: Result<any | null> = await model.findById(userId);
 
     if (docResult) {
@@ -156,7 +154,7 @@ export class AuthService implements IAuthService<Merchant, MerchantDocument> {
    * @returns {void}
    * @memberof AuthService
    */
-  async logOut(model: GenericDocumentRepository<Merchant, MerchantDocument>, userId: Types.ObjectId) {
+  async logOut(model: GenericDocumentRepository<any, any>, userId: Types.ObjectId) {
     let result: Result<any | null> = await model.findById(userId);
 
     if (result.isSuccess === false) {

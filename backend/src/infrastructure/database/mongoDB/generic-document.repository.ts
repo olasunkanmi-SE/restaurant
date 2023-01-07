@@ -61,7 +61,7 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
     if (!result) {
       return Result.fail('An Error occured, unable to save document in the db', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    const entity = this.mapper.toDomain(document);
+    const entity = this.mapper.toDomain(result);
     return Result.ok(entity);
   }
 
