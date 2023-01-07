@@ -1,9 +1,13 @@
+import { Merchant } from './../merchant/merchant';
 import { IValidateUser } from './context-validation.interface';
 import { Result } from './../domain/result/result';
-import { GenericDocumentRepository } from './../infrastructure';
+import { GenericDocumentRepository, MerchantDocument } from './../infrastructure';
 
 export class ValidateUser implements IValidateUser {
-  async getUser(model: GenericDocumentRepository<any, any>, props: { email: string; role?: string }): Promise<boolean> {
+  async getUser(
+    model: GenericDocumentRepository<Merchant, MerchantDocument>,
+    props: { email: string; role?: string },
+  ): Promise<boolean> {
     const { email, role } = props;
     let user: Result<any>;
     if (Object.hasOwnProperty.call(props, 'email')) {

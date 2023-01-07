@@ -10,7 +10,6 @@ import {
   Types,
   UpdateQuery,
 } from 'mongoose';
-import { IMapper } from './../../../domain/mapper/mapper';
 import { Result } from './../../../domain/result/result';
 import { IGenericDocument } from './generic-document.interface';
 
@@ -18,7 +17,7 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
   constructor(
     protected readonly DocumentModel: Model<T>,
     private readonly connection: Connection,
-    private readonly mapper: IMapper<TEntity, T>,
+    private readonly mapper: any,
   ) {}
 
   async findOne(filterQuery: FilterQuery<T>, projection?: ProjectionType<T | null>): Promise<Result<TEntity | null>> {

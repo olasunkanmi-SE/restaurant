@@ -43,9 +43,7 @@ describe('Test restaurant service', () => {
     restaurantRepositoryStub,
     merchantRepositoryStub,
     restaurantMapperStub,
-    merchantMapperStub,
     contextServiceStub,
-    validateUserStub,
     merchantServiceStub,
   );
   const contextPromise = Promise.resolve(new Context('Komune@Komune.com', ''));

@@ -1,15 +1,13 @@
-import { Result } from './../../../domain/result/result';
-import { IMapper } from './../../../domain/mapper/mapper';
-import { TYPES } from './../../../application/constants/types';
-import { IRestaurantRepository } from './restaurant-repository.interface';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model, Types } from 'mongoose';
 import { GenericDocumentRepository } from '../../database/mongoDB/generic-document.repository';
+import { Result } from './../../../domain/result/result';
 import { Merchant } from './../../../merchant/merchant';
 import { Restaurant } from './../../../restaurant/restaurant';
+import { RestaurantMapper } from './../../../restaurant/restaurant.mapper';
 import { MerchantRepository } from './merchant-repository';
+import { IRestaurantRepository } from './restaurant-repository.interface';
 import { RestaurantData, RestaurantDocument } from './schemas';
-import { Inject } from '@nestjs/common';
 
 export class RestaurantRepository
   extends GenericDocumentRepository<Restaurant, RestaurantDocument>
@@ -20,7 +18,7 @@ export class RestaurantRepository
     restaurantModel: Model<RestaurantDocument>,
     @InjectConnection() connection: Connection,
     private readonly merchantRepository: MerchantRepository,
-    @Inject(TYPES.IMapper) restaurantMapper: IMapper<Restaurant, RestaurantDocument>,
+    restaurantMapper: RestaurantMapper,
   ) {
     super(restaurantModel, connection, restaurantMapper);
   }

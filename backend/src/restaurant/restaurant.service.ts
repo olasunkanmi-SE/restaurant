@@ -11,8 +11,6 @@ import { throwApplicationError } from './../infrastructure/utilities/exception-i
 import { Location } from './../location/location';
 import { IMerchantService } from './../merchant/interface/merchant-service.interface';
 import { Merchant } from './../merchant/merchant';
-import { MerchantMapper } from './../merchant/merchant.mapper';
-import { IValidateUser } from './../utils/context-validation.interface';
 import { CreateRestaurantDTO } from './create-restaurant.dto';
 import { Restaurant } from './restaurant';
 import { IRestaurantResponseDTO } from './restaurant-response.dto';
@@ -27,9 +25,7 @@ export class RestaurantService implements IRestaurantService {
     private readonly restaurantRepository: IRestaurantRepository,
     private readonly merchantRepository: MerchantRepository,
     private readonly restaurantMapper: RestaurantMapper,
-    private readonly merchantMapper: MerchantMapper,
     @Inject(TYPES.IContextService) private readonly contextService: IContextService,
-    @Inject(TYPES.IValidateUser) private readonly validateUser: IValidateUser,
     @Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService,
   ) {
     this.context = this.contextService.getContext();
