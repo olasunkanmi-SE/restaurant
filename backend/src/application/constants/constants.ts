@@ -13,7 +13,7 @@ export const saltRounds = 10;
 
 export enum MerchantStatus {
   onBoarding = 'onBoarding',
-  boarded = 'borded',
+  boarded = 'boarded',
   banned = 'banned',
 }
 

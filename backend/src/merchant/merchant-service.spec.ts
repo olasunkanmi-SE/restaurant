@@ -9,13 +9,13 @@ import { IAuthService } from './../infrastructure/auth/interfaces/auth-service.i
 import { Context } from './../infrastructure/context';
 import { IContextService } from './../infrastructure/context/context-service.interface';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
-import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { IValidateUser } from './../utils/context-validation.interface';
-import { merchantMockData } from './merchant-mock-data';
+import { merchantMockData, merchantMockDatas } from './merchant-mock-data';
 import { MerchantParser } from './merchant-parser';
 import { IMerchantResponseDTO } from './merchant-response.dto';
 import { MerchantMapper } from './merchant.mapper';
 import { MerchantService } from './merchant.service';
+import { Merchant } from './merchant';
 
 describe('Test merchant service', () => {
   const merchantRepositoryStub: MerchantRepository = sinon.stubInterface<MerchantRepository>();
@@ -48,11 +48,11 @@ describe('Test merchant service', () => {
       contextServiceStub.getContext = (): Promise<Context> => {
         return Promise.resolve(new Context(createMerchantProps.email, ''));
       };
-      merchantRepositoryStub.findOne = async (): Promise<Result<MerchantDocument>> => {
-        return Result.ok(merchantMockData);
+      merchantRepositoryStub.findOne = async (): Promise<Result<Merchant>> => {
+        return merchantMockData;
       };
-      merchantRepositoryStub.find = async (): Promise<Result<MerchantDocument[]>> => {
-        return Result.ok([merchantMockData]);
+      merchantRepositoryStub.find = async (): Promise<Result<Merchant[]>> => {
+        return Result.ok(merchantMockDatas);
       };
       await merchantService.createMerchant(createMerchantProps);
     } catch (error) {
@@ -72,18 +72,18 @@ describe('Test merchant service', () => {
     Audit.createInsertContext = (): Audit => {
       return Audit.create(auditMockData).getValue();
     };
-    merchantRepositoryStub.findOne = async (): Promise<Result<MerchantDocument>> => {
-      return Result.ok(merchantMockData);
+    merchantRepositoryStub.findOne = async (): Promise<Result<Merchant>> => {
+      return merchantMockData;
     };
-    merchantRepositoryStub.create = async (): Promise<Result<MerchantDocument>> => {
-      return Result.ok(merchantMockData);
+    merchantRepositoryStub.create = async (): Promise<Result<Merchant>> => {
+      return merchantMockData;
     };
     const response = {
       id: merchantId,
-      ...merchantMockData,
+      ...merchantMockData.getValue(),
       ...auditMockData,
     };
-    MerchantParser.createMerchantResponse = (): IMerchantResponseDTO => {
+    MerchantParser.createMerchantResponse = (): any => {
       return response;
     };
     const result = await merchantService.createMerchant(createMerchantProps);
@@ -98,8 +98,8 @@ describe('Test merchant service', () => {
     validateUserStub.getUser = async (): Promise<any | undefined> => {
       return merchantMockData;
     };
-    merchantRepositoryStub.findById = async (): Promise<Result<MerchantDocument>> => {
-      return Result.ok(merchantMockData);
+    merchantRepositoryStub.findById = async (): Promise<Result<Merchant>> => {
+      return merchantMockData;
     };
     const result = await merchantService.getMerchantById(merchantId);
     expect(result).to.not.be.undefined;
@@ -119,8 +119,8 @@ describe('Test merchant service', () => {
   it('Should not sign a merchant in and should throw an exception', async () => {
     try {
       const loginProps = { email: 'ola@ola.com', password: '' };
-      merchantRepositoryStub.findOne = async (): Promise<Result<MerchantDocument>> => {
-        return Result.ok(merchantMockData);
+      merchantRepositoryStub.findOne = async (): Promise<Result<Merchant>> => {
+        return merchantMockData;
       };
 
       await merchantService.signIn(loginProps);
@@ -143,14 +143,14 @@ describe('Test merchant service', () => {
     validateUserStub.getUser = async (): Promise<any | undefined> => {
       return merchantMockData;
     };
-    merchantRepositoryStub.findById = async (): Promise<Result<MerchantDocument>> => {
-      return Result.ok({ ...merchantMockData, organisationName: '' });
+    merchantRepositoryStub.findById = async (): Promise<Result<Merchant>> => {
+      return merchantMockData;
     };
     contextServiceStub.getContext = (): Promise<Context> => {
-      return Promise.resolve(new Context(merchantMockData.email, '1234567890'));
+      return Promise.resolve(new Context(merchantMockData.getValue().email, '1234567890'));
     };
-    merchantRepositoryStub.findOneAndUpdate = async (): Promise<Result<MerchantDocument>> => {
-      return Result.ok({ ...merchantMockData, ...props });
+    merchantRepositoryStub.findOneAndUpdate = async (): Promise<Result<Merchant>> => {
+      return merchantMockData;
     };
     const result: Result<IMerchantResponseDTO> = await merchantService.onBoardMerchant(props, merchantId);
     expect(result.isSuccess).to.be.true;

@@ -5,7 +5,6 @@ import { Result } from './../domain/result/result';
 import { Context } from './../infrastructure/context';
 import { ContextService } from './../infrastructure/context/context.service';
 import { LocationRepository } from './../infrastructure/data_access/repositories/location.repository';
-import { LocationDocument } from './../infrastructure/data_access/repositories/schemas/location.schema';
 import { CreateLocationDTO } from './create-location.dto';
 import { Location } from './location';
 import { ILocationResponseDTO } from './location-response.dto';
@@ -28,19 +27,14 @@ export class LocationService implements ILocationService {
       ...createLocationDTO,
       audit,
     }).getValue();
-    const locationDocument = await this.locationRepository.create(this.locationMapper.toPersistence(location));
-    return Result.ok(LocationParser.createLocationResponse(this.locationMapper.toDomain(locationDocument.getValue())));
+    const locationEntity = this.locationMapper.toPersistence(location);
+    const result: Result<Location> = await this.locationRepository.create(locationEntity);
+    return Result.ok(LocationParser.createLocationResponse(result.getValue()));
   }
 
   async getAllRestaurantLocations(): Promise<Result<ILocationResponseDTO[]>> {
-    const locations: Location[] = [];
-    const result: Result<LocationDocument[]> = await this.locationRepository.find({});
-    const locationDocuments = result.getValue();
-    if (locationDocuments.length) {
-      for (const model of locationDocuments) {
-        locations.push(this.locationMapper.toDomain(model));
-      }
-    }
+    const result: Result<Location[]> = await this.locationRepository.find({});
+    const locations = result.getValue();
     return Result.ok(LocationParser.createLocationsResponse(locations), 'Restaurant locations retrieved successfully');
   }
 }

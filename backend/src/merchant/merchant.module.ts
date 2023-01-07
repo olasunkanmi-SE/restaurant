@@ -26,6 +26,7 @@ import { MerchantService } from './merchant.service';
     { provide: TYPES.IAuthService, useClass: AuthService },
     { provide: TYPES.IContextService, useClass: ContextService },
     { provide: TYPES.IValidateUser, useClass: ValidateUser },
+    { provide: TYPES.IMapper, useClass: MerchantMapper },
   ],
   controllers: [MerchantController],
 })

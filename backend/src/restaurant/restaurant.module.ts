@@ -40,6 +40,7 @@ import { RestaurantService } from './restaurant.service';
     { provide: TYPES.IValidateUser, useClass: ValidateUser },
     { provide: TYPES.IMerchantService, useClass: MerchantService },
     { provide: TYPES.IAuthService, useClass: AuthService },
+    { provide: TYPES.IMapper, useClass: RestaurantMapper },
     RestaurantMapper,
     AuditMapper,
     LocationMapper,
