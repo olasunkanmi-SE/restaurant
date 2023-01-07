@@ -5,12 +5,10 @@ import { Mock } from 'typemoq';
 import { GenericDocumentRepository } from '../../../infrastructure';
 import { restaurantMockDocument } from '../../../restaurant/restaurant-mock-data';
 import { AuditMapper } from './../../../audit/audit.mapper';
-import { IMapper } from './../../../domain/mapper/mapper';
 import { Result } from './../../../domain/result/result';
 import { LocationMapper } from './../../../location/location.mapper';
 import { MerchantMapper } from './../../../merchant/merchant.mapper';
 import { Restaurant } from './../../../restaurant/restaurant';
-import { restaurantMockData } from './../../../restaurant/restaurant-mock-data';
 import { RestaurantMapper } from './../../../restaurant/restaurant.mapper';
 import { MerchantRepository } from './merchant-repository';
 import { RestaurantRepository } from './restaurant.repository';
@@ -44,14 +42,6 @@ describe('test the restaurant service', () => {
   const restaurantDocumentPromise = new Promise<RestaurantDocument>((resolve) => {
     return resolve(restaurantMockDocument);
   });
-
-  // it('Should return restaurants', async () => {
-  //   restaurantsRepositoryMock
-  //     .setup((restaurantDocument) => restaurantDocument.find())
-  //     .returns(() => [restaurantDocumentPromise]);
-  //   const result: Result<Restaurant[]> = await restaurantRepository.find({});
-  //   expect(result).to.have.length;
-  // });
 
   it('Should return a restaurant', async () => {
     restaurantsRepositoryMock

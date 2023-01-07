@@ -1,6 +1,5 @@
 import { Types } from 'mongoose';
 import { Audit } from '.././domain/audit';
-import { Result } from '../domain';
 import { auditMockData } from './../audit/audit-mock-data';
 import { Location } from './../location/location';
 import { locationMockData } from './../location/location-mock-data';

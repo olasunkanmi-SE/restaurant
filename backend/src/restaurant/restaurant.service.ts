@@ -40,8 +40,9 @@ export class RestaurantService implements IRestaurantService {
     if (!validateUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
-    const restaurantEntity: Restaurant[] = await (await this.restaurantRepository.find({})).getValue();
-    const existingEmail = restaurantEntity.find((doc) => doc.email === createRestaurantDTO.email);
+    const restaurantEntity: Result<Restaurant[]> = await this.restaurantRepository.find({});
+    const restaurants = restaurantEntity.getValue();
+    const existingEmail = restaurants.find((doc) => doc.email === createRestaurantDTO.email);
 
     if (existingEmail) {
       throwApplicationError(
@@ -87,9 +88,10 @@ export class RestaurantService implements IRestaurantService {
     if (!validateUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
-    const restaurants: Restaurant[] = await (await this.restaurantRepository.find({})).getValue();
+    const restaurants: Result<Restaurant[]> = await this.restaurantRepository.find({});
+    const restaurantValue = restaurants.getValue();
     const restaurantWithMerchantData: Restaurant[] = [];
-    for (const restaurant of restaurants) {
+    for (const restaurant of restaurantValue) {
       restaurantWithMerchantData.push(
         await this.restaurantRepository.getRestaurantWithMerchantDetails(restaurant, restaurant.merchant.id),
       );
@@ -106,7 +108,7 @@ export class RestaurantService implements IRestaurantService {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
     const result = await this.restaurantRepository.findById(id);
-    const restaurant: Restaurant = await result.getValue();
+    const restaurant: Restaurant = result.getValue();
     const restaurantWithMerchantData: Restaurant = await this.restaurantRepository.getRestaurantWithMerchantDetails(
       restaurant,
       restaurant.merchant.id,
