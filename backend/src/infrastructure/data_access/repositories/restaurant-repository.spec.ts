@@ -6,8 +6,10 @@ import { GenericDocumentRepository } from '../../../infrastructure';
 import { restaurantMockDocument } from '../../../restaurant/restaurant-mock-data';
 import { AuditMapper } from './../../../audit/audit.mapper';
 import { Result } from './../../../domain/result/result';
+import { LocationMapper } from './../../../location/location.mapper';
 import { MerchantMapper } from './../../../merchant/merchant.mapper';
 import { Restaurant } from './../../../restaurant/restaurant';
+import { RestaurantMapper } from './../../../restaurant/restaurant.mapper';
 import { MerchantRepository } from './merchant-repository';
 import { RestaurantRepository } from './restaurant.repository';
 import { RestaurantDocument } from './schemas/restaurant.schema';
@@ -17,17 +19,20 @@ describe('test the restaurant service', () => {
   let modelId: Types.ObjectId;
   let restaurantsRepositoryMock: any;
   let restaurantRepository: RestaurantRepository;
+  let restaurantMapperStub: any;
   beforeEach(async () => {
     connection = new Connection();
     modelId = new Types.ObjectId();
     const merchantRepositoryStub: MerchantRepository = sinon.stubInterface<MerchantRepository>();
+    const locationMapperStub = new LocationMapper(new AuditMapper());
     const merchantMapperStub = new MerchantMapper(new AuditMapper());
-    restaurantsRepositoryMock = Mock.ofType<GenericDocumentRepository<RestaurantDocument>>();
-    restaurantRepository = await new RestaurantRepository(
+    restaurantMapperStub = new RestaurantMapper(new AuditMapper(), locationMapperStub, merchantMapperStub);
+    restaurantsRepositoryMock = Mock.ofType<GenericDocumentRepository<Restaurant, RestaurantDocument>>();
+    restaurantRepository = new RestaurantRepository(
       restaurantsRepositoryMock.target,
       connection,
       merchantRepositoryStub,
-      merchantMapperStub,
+      restaurantMapperStub,
     );
   });
   afterEach(() => {
@@ -38,19 +43,11 @@ describe('test the restaurant service', () => {
     return resolve(restaurantMockDocument);
   });
 
-  it('Should return restaurants', async () => {
-    restaurantsRepositoryMock
-      .setup((restaurantDocument) => restaurantDocument.find())
-      .returns(() => [restaurantDocumentPromise]);
-    const result: Result<RestaurantDocument[]> = await restaurantRepository.find({});
-    expect(result).to.have.length;
-  });
-
   it('Should return a restaurant', async () => {
     restaurantsRepositoryMock
       .setup((restaurantDocument) => restaurantDocument.findOne())
       .returns(() => restaurantDocumentPromise);
-    const result: Result<RestaurantDocument> = await restaurantRepository.findOne({
+    const result: Result<Restaurant> = await restaurantRepository.findOne({
       name: 'Sheraton',
     });
     expect(result).to.have.length;
@@ -61,7 +58,7 @@ describe('test the restaurant service', () => {
     restaurantsRepositoryMock
       .setup((restaurantDocument) => restaurantDocument.findOne())
       .returns(() => restaurantDocumentPromise);
-    const result: Result<RestaurantDocument> = await restaurantRepository.findOne({
+    const result: Result<Restaurant> = await restaurantRepository.findOne({
       _id: modelId,
     });
     expect(result).to.have.length;
@@ -79,7 +76,7 @@ describe('test the restaurant service', () => {
     restaurantsRepositoryMock
       .setup((restaurantDocument) => restaurantDocument.findByIdAndUpdate())
       .returns(() => restaurantDocumentPromise);
-    const result: Result<RestaurantDocument> = await restaurantRepository.findOneAndUpdate(query, {
+    const result: Result<Restaurant> = await restaurantRepository.findOneAndUpdate(query, {
       $set: {
         name: 'Transcorp Hilton',
       },

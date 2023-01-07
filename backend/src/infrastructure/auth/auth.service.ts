@@ -96,7 +96,7 @@ export class AuthService implements IAuthService {
    * @memberof AuthService
    */
   async updateRefreshToken(
-    model: GenericDocumentRepository<any>,
+    model: GenericDocumentRepository<any, any>,
     userId: Types.ObjectId,
     refreshToken: string,
   ): Promise<{ accessToken: string }> {
@@ -133,7 +133,7 @@ export class AuthService implements IAuthService {
    * @returns {void}
    * @memberof AuthService
    */
-  async nullifyRefreshToken(model: GenericDocumentRepository<any>, userId: Types.ObjectId) {
+  async nullifyRefreshToken(model: GenericDocumentRepository<any, any>, userId: Types.ObjectId) {
     const docResult: Result<any | null> = await model.findById(userId);
 
     if (docResult) {
@@ -154,7 +154,7 @@ export class AuthService implements IAuthService {
    * @returns {void}
    * @memberof AuthService
    */
-  async logOut(model: GenericDocumentRepository<any>, userId: Types.ObjectId) {
+  async logOut(model: GenericDocumentRepository<any, any>, userId: Types.ObjectId) {
     let result: Result<any | null> = await model.findById(userId);
 
     if (result.isSuccess === false) {

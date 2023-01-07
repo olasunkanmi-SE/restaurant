@@ -15,6 +15,7 @@ import { LocationService } from './location.service';
   providers: [
     { provide: TYPES.ILocationService, useClass: LocationService },
     { provide: TYPES.IContextService, useClass: ContextService },
+    { provide: TYPES.IMapper, useClass: LocationMapper },
     LocationRepository,
     LocationMapper,
     AuditMapper,

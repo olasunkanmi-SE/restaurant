@@ -2,7 +2,6 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
-import { GenericDocumentRepository } from './../infrastructure/database';
 import { MerchantStatus, saltRounds } from './../application/constants/constants';
 import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
@@ -11,7 +10,7 @@ import { IAuthService } from './../infrastructure/auth/interfaces/auth-service.i
 import { ISignUpTokens, IUserPayload } from './../infrastructure/auth/interfaces/auth.interface';
 import { Context, IContextService } from './../infrastructure/context';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
-import { MerchantDocument } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
+import { GenericDocumentRepository } from './../infrastructure/database';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
 import { Merchant } from './../merchant/merchant';
 import { IValidateUser } from './../utils/context-validation.interface';
@@ -38,7 +37,7 @@ export class MerchantService implements IMerchantService {
   async createMerchant(props: CreateMerchantDTO): Promise<Result<IMerchantResponseDTO>> {
     const context: Context = new Context(props.email);
     const { email } = props;
-    const existingMerchant: Result<MerchantDocument> = await this.merchantRepository.findOne({ email });
+    const existingMerchant: Result<Merchant> = await this.merchantRepository.findOne({ email });
     if (existingMerchant.isSuccess && existingMerchant.getValue().email === email) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `Merchant with email ${props.email} already exists`);
     }
@@ -50,14 +49,14 @@ export class MerchantService implements IMerchantService {
       passwordHash: hashedPassword,
       audit,
     }).getValue();
-
-    const docResult = await this.merchantRepository.create(this.merchantMapper.toPersistence(merchant));
+    const merchantModel = this.merchantMapper.toPersistence(merchant);
+    const docResult = await this.merchantRepository.create(merchantModel);
     if (!docResult.isSuccess) {
       throwApplicationError(HttpStatus.NOT_IMPLEMENTED, 'Error while creating merchant');
     }
 
-    const newMerchantDoc = docResult.getValue();
-    const parsedResponse = MerchantParser.createMerchantResponse(this.merchantMapper.toDomain(newMerchantDoc));
+    const newMerchant = docResult.getValue();
+    const parsedResponse = MerchantParser.createMerchantResponse(newMerchant);
     return Result.ok(parsedResponse);
   }
 
@@ -71,11 +70,14 @@ export class MerchantService implements IMerchantService {
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.NOT_FOUND, 'Merchant does not exist');
     }
-    const merchantDoc: MerchantDocument = result.getValue();
-    if (context.email !== merchantDoc.email) {
+    const merchant: Merchant = result.getValue();
+    if (context.email !== merchant.email) {
       throwApplicationError(HttpStatus.UNAUTHORIZED, 'You dont have sufficient priviledge');
     }
-    return Result.ok(MerchantParser.createMerchantResponse(this.merchantMapper.toDomain(merchantDoc)));
+    const parsedResponse = MerchantParser.createMerchantResponse(merchant);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { tokenExpiresIn, ...response } = parsedResponse;
+    return Result.ok(response);
   }
 
   private async hashPassword(password: string): Promise<string> {
@@ -84,33 +86,31 @@ export class MerchantService implements IMerchantService {
 
   private async updateMerchantRefreshToken(merchant: Merchant, token: ISignUpTokens): Promise<Merchant> {
     const hash = await this.authService.hashData(token.refreshToken, saltRounds);
-    const docResult: Result<MerchantDocument> = await this.merchantRepository.findOneAndUpdate(
+    const docResult: Result<Merchant> = await this.merchantRepository.findOneAndUpdate(
       { _id: merchant.id },
       { refreshTokenHash: hash },
     );
     if (!docResult.isSuccess) {
       throwApplicationError(HttpStatus.NOT_MODIFIED, 'Merchant could not be updated');
     }
-    const merchantDoc = docResult.getValue();
-    return this.merchantMapper.toDomain(merchantDoc);
+    return docResult.getValue();
   }
 
   async signIn(props: LoginMerchantDTO): Promise<Result<IMerchantResponseDTO>> {
-    const result: Result<MerchantDocument> = await this.merchantRepository.findOne({
+    const result: Result<Merchant> = await this.merchantRepository.findOne({
       email: props.email,
     });
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.NOT_FOUND, 'Merchant does not exist');
     }
-    const merchantDoc: MerchantDocument = result.getValue();
-    const comparePassWord: boolean = await bcrypt.compare(props.password, merchantDoc.passwordHash);
+    const merchant: Merchant = result.getValue();
+    const comparePassWord: boolean = await bcrypt.compare(props.password, merchant.passwordHash);
     if (!comparePassWord) {
       throwApplicationError(400, 'Incorrect Username or Password');
     }
-    const { id, email, role } = merchantDoc;
+    const { id, email, role } = merchant;
     const userProps: IUserPayload = { userId: id, email, role };
     const tokens = await this.authService.generateAuthTokens(userProps);
-    const merchant: Merchant = this.merchantMapper.toDomain(merchantDoc);
     this.updateMerchantRefreshToken(merchant, tokens);
     const parsedResponse = MerchantParser.createMerchantResponse(merchant);
     parsedResponse.tokens = tokens;
@@ -127,13 +127,11 @@ export class MerchantService implements IMerchantService {
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.NOT_FOUND, 'Merchant does not exist');
     }
-    const merchantDoc: MerchantDocument = result.getValue();
+    const merchant: Merchant = result.getValue();
 
-    if (context.email !== merchantDoc.email) {
+    if (context.email !== merchant.email) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid email');
     }
-
-    const merchant: Merchant = this.merchantMapper.toDomain(merchantDoc);
 
     const data = {
       auditModifiedBy: context.email,
@@ -144,18 +142,16 @@ export class MerchantService implements IMerchantService {
 
     this.updateMerchantData(data, merchant, context);
 
-    const docResult: Result<MerchantDocument> = await this.merchantRepository.findOneAndUpdate(
-      { _id: merchant.id },
-      data,
-    );
+    const docResult: Result<Merchant> = await this.merchantRepository.findOneAndUpdate({ _id: merchant.id }, data);
     if (!docResult.isSuccess) {
       throwApplicationError(HttpStatus.NOT_MODIFIED, 'Merchant could not be updated');
     }
 
-    const updatedMerchantDoc: MerchantDocument = docResult.getValue();
-    const updateMerchant: Merchant = this.merchantMapper.toDomain(updatedMerchantDoc);
-    const parsedResponse = MerchantParser.createMerchantResponse(updateMerchant);
-    return Result.ok(parsedResponse);
+    const updatedMerchant: Merchant = docResult.getValue();
+    const parsedResponse = MerchantParser.createMerchantResponse(updatedMerchant);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { tokenExpiresIn, ...response } = parsedResponse;
+    return Result.ok(response);
   }
 
   updateMerchantData(data: IUpdateMerchant, merchant: Merchant, context: Context) {
@@ -194,14 +190,14 @@ export class MerchantService implements IMerchantService {
   }
 
   private async refreshMerchantToken(
-    model: GenericDocumentRepository<any>,
+    model: GenericDocumentRepository<any, any>,
     userId: Types.ObjectId,
     refreshToken: string,
   ): Promise<{ accessToken: string }> {
     return await this.authService.updateRefreshToken(model, userId, refreshToken);
   }
 
-  private async logOutMerchant(model: GenericDocumentRepository<any>, userId: Types.ObjectId): Promise<void> {
+  private async logOutMerchant(model: GenericDocumentRepository<any, any>, userId: Types.ObjectId): Promise<void> {
     return this.authService.logOut(model, userId);
   }
 

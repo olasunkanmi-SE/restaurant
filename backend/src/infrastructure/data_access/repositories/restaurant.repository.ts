@@ -1,15 +1,16 @@
-import { IRestaurantRepository } from './restaurant-repository.interface';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model, Types } from 'mongoose';
 import { GenericDocumentRepository } from '../../database/mongoDB/generic-document.repository';
+import { Result } from './../../../domain/result/result';
 import { Merchant } from './../../../merchant/merchant';
-import { MerchantMapper } from './../../../merchant/merchant.mapper';
 import { Restaurant } from './../../../restaurant/restaurant';
+import { RestaurantMapper } from './../../../restaurant/restaurant.mapper';
 import { MerchantRepository } from './merchant-repository';
-import { MerchantDocument, RestaurantData, RestaurantDocument } from './schemas';
+import { IRestaurantRepository } from './restaurant-repository.interface';
+import { RestaurantData, RestaurantDocument } from './schemas';
 
 export class RestaurantRepository
-  extends GenericDocumentRepository<RestaurantDocument>
+  extends GenericDocumentRepository<Restaurant, RestaurantDocument>
   implements IRestaurantRepository
 {
   constructor(
@@ -17,15 +18,15 @@ export class RestaurantRepository
     restaurantModel: Model<RestaurantDocument>,
     @InjectConnection() connection: Connection,
     private readonly merchantRepository: MerchantRepository,
-    private readonly merchantMapper: MerchantMapper,
+    restaurantMapper: RestaurantMapper,
   ) {
-    super(restaurantModel, connection);
+    super(restaurantModel, connection, restaurantMapper);
   }
 
   async getRestaurantWithMerchantDetails(restaurant: Restaurant, merchantId: Types.ObjectId): Promise<Restaurant> {
-    const merchantDoc: MerchantDocument = await (await this.merchantRepository.findById(merchantId)).getValue();
-    const merchant: Merchant = this.merchantMapper.toDomain(merchantDoc);
-    restaurant.merchant = merchant;
+    const merchant: Result<Merchant> = await this.merchantRepository.findById(merchantId);
+    const merchantData = merchant.getValue();
+    restaurant.merchant = merchantData;
     return restaurant;
   }
 }
