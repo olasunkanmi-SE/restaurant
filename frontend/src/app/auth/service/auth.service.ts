@@ -49,9 +49,12 @@ export class AuthService implements IAuthService {
 
   public IsAuthenticated(): boolean {
     let authenticated = false;
-    if (this.tokenExpiration && Number(this.tokenExpiration) > Date.now()) {
+    if (this.tokenExpiration && Number(this.tokenExpiration) < Date.now()) {
       authenticated = true;
+    } else {
+      this.logOut();
     }
+
     return authenticated;
   }
 

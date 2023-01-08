@@ -10,6 +10,7 @@ const routes: Routes = [
   },
   {
     path: 'merchants',
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./merchants/merchants.module').then((m) => m.MerchantsModule),
   },
