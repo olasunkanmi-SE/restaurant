@@ -1,29 +1,26 @@
 import { Location } from '@angular/common';
-import { Router, UrlSegment, CanLoad, Route } from '@angular/router';
 import { Injectable } from '@angular/core';
 import {
-  CanActivate,
   ActivatedRouteSnapshot,
+  CanActivate,
+  CanLoad,
+  Route,
+  Router,
   RouterStateSnapshot,
+  UrlSegment,
   UrlTree,
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from '../service/auth.service';
 import { StorageService } from 'src/app/shared/services/storage.service';
+import { AuthService } from '../service/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate, CanLoad {
   IsAuthenticated = false;
-  constructor(
-    private authservice: AuthService,
-    private router: Router,
-    private storage: StorageService,
-    private location: Location,
-    private auth: AuthService
-  ) {
-    this.IsAuthenticated = this.authservice.IsAuthenticated();
+  constructor(private router: Router, private auth: AuthService) {
+    this.IsAuthenticated = this.auth.IsAuthenticated();
   }
   canActivate(
     next: ActivatedRouteSnapshot,

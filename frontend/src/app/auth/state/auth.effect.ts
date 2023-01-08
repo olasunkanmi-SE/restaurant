@@ -58,14 +58,7 @@ export class AuthEffect extends AuthService {
           ),
           tap((response) => {
             const { tokenExpiresIn, tokens, email } = response.payload.data;
-            const tokenExpires: number =
-              calculateTokenExpiration(tokenExpiresIn);
-            console.log(tokenExpires);
-            this.storage.saveToken(tokens?.accessToken);
-            this.storage.saveItem('x-correlation-id', generateUuid());
-            this.storage.saveItem('x-user-email', email);
-            this.storage.saveItem('expiration', tokenExpires);
-            this.router.navigate(['home']);
+            this.storeUserInfoInLocalStorage(tokenExpiresIn, email, tokens);
           }),
           catchError((error: IResult) =>
             of(new authActions.LoginUserFailure(error.message))
@@ -74,4 +67,21 @@ export class AuthEffect extends AuthService {
       )
     );
   });
+
+  storeUserInfoInLocalStorage(
+    tokenExpiresIn: number,
+    email: string,
+    tokens?: {
+      refreshToken: string;
+      accessToken: string;
+    }
+  ) {
+    const tokenExpires: number = calculateTokenExpiration(tokenExpiresIn);
+    console.log(tokenExpires);
+    this.storage.saveToken(tokens?.accessToken);
+    this.storage.saveItem('x-correlation-id', generateUuid());
+    this.storage.saveItem('x-user-email', email);
+    this.storage.saveItem('expiration', tokenExpires);
+    this.router.navigate(['home']);
+  }
 }
