@@ -105,8 +105,8 @@ export class AuthService implements IAuthService {
     if (result.isSuccess === false) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Access denied');
     }
-    const userDoc = await result.getValue();
-    const { refreshTokenHash, role, email } = userDoc._doc;
+    const userEntity = await result.getValue();
+    const { refreshTokenHash, role, email } = userEntity;
     const verifyToken = await bcrypt.compare(refreshToken, refreshTokenHash);
 
     if (!verifyToken) {
@@ -118,7 +118,7 @@ export class AuthService implements IAuthService {
     const newTokens = await this.generateAuthTokens(payload);
     const tokenHash = await this.hashData(newTokens.refreshToken, saltRounds);
 
-    await model.findOneAndUpdate({ _id: userDoc._id }, { refreshTokenHash: tokenHash });
+    await model.findOneAndUpdate({ _id: userEntity.id }, { refreshTokenHash: tokenHash });
 
     return {
       accessToken: newTokens.accessToken,
@@ -160,9 +160,9 @@ export class AuthService implements IAuthService {
     if (result.isSuccess === false) {
       throwApplicationError(HttpStatus.NOT_FOUND, 'User does not exist');
     }
-    const userDoc = await result.getValue();
+    const user = await result.getValue();
 
-    if (result && userDoc._doc.refreshTokenHash !== undefined && userDoc._doc.refreshTokenHash !== null) {
+    if (result && user.refreshTokenHash !== undefined && user.refreshTokenHash !== null) {
       result = await model.findOneAndUpdate(
         {
           _id: userId,
