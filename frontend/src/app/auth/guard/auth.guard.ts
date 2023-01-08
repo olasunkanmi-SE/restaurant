@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
@@ -11,7 +10,6 @@ import {
   UrlTree,
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { StorageService } from 'src/app/shared/services/storage.service';
 import { AuthService } from '../service/auth.service';
 
 @Injectable({
