@@ -56,19 +56,19 @@ export class Merchant extends Entity<IMerchant> {
     this._email = email;
   }
 
-  get organisationName(): string {
+  get organisationName(): string | undefined {
     return this._organisationName;
   }
 
-  set organisationName(organisationName: string) {
+  set organisationName(organisationName: string | undefined) {
     this._organisationName = organisationName;
   }
 
-  get phoneNumber(): string {
+  get phoneNumber(): string | undefined {
     return this._phoneNumber;
   }
 
-  set phoneNumber(phoneNumber: string) {
+  set phoneNumber(phoneNumber: string | undefined) {
     this._phoneNumber = phoneNumber;
   }
 
@@ -80,27 +80,27 @@ export class Merchant extends Entity<IMerchant> {
     this._passwordHash = passwordHash;
   }
 
-  get role(): string {
+  get role(): string | undefined {
     return this._role;
   }
 
-  set role(role: string) {
+  set role(role: string | undefined) {
     this._role = role;
   }
 
-  get isActive(): boolean {
+  get isActive(): boolean | undefined {
     return this._isActive;
   }
 
-  set isActive(isActive: boolean) {
+  set isActive(isActive: boolean | undefined) {
     this._isActive = isActive;
   }
 
-  get status(): string {
+  get status(): string | undefined {
     return this._status;
   }
 
-  set status(status: string) {
+  set status(status: string | undefined) {
     this._status = status;
   }
 

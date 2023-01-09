@@ -55,27 +55,27 @@ export class Restaurant extends Entity<IRestaurant> {
     this._isActive = isActive;
   }
 
-  get webUrl(): string {
+  get webUrl(): string | undefined {
     return this._webUrl;
   }
 
-  set webUrl(webUrl: string) {
+  set webUrl(webUrl: string | undefined) {
     this._webUrl = webUrl;
   }
 
-  get logoUrl(): string {
+  get logoUrl(): string | undefined {
     return this._logoUrl;
   }
 
-  set logoUrl(logoUrl: string) {
+  set logoUrl(logoUrl: string | undefined) {
     this._logoUrl = logoUrl;
   }
 
-  get timeZone(): string {
+  get timeZone(): string | undefined {
     return this._timeZone;
   }
 
-  set timeZone(timeZone: string) {
+  set timeZone(timeZone: string | undefined) {
     this._timeZone = timeZone;
   }
 
