@@ -29,6 +29,7 @@ export class AuthGuard implements CanActivate, CanLoad {
     | boolean
     | UrlTree {
     if (!this.IsAuthenticated) {
+      this.auth.logOut();
       return this.router.navigate(['/auth/login']);
     }
     return true;
@@ -38,8 +39,9 @@ export class AuthGuard implements CanActivate, CanLoad {
     route: Route,
     segments: UrlSegment[]
   ): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.IsAuthenticated) {
-      return this.router.navigate(['']);
+    if (!this.IsAuthenticated) {
+      this.auth.logOut();
+      return this.router.navigate(['/auth/login']);
     }
     return true;
   }
