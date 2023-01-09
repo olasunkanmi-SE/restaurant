@@ -35,11 +35,11 @@ export class Location extends Entity<ILocation> {
     this._address = address;
   }
 
-  get address2() {
+  get address2(): string | undefined {
     return this._address2;
   }
 
-  set address2(address: string) {
+  set address2(address: string | undefined) {
     this._address2 = address;
   }
 
@@ -75,19 +75,19 @@ export class Location extends Entity<ILocation> {
     this._state = state;
   }
 
-  get longitude(): string {
+  get longitude(): string | undefined {
     return this._longitude;
   }
 
-  set longitude(longitude: string) {
+  set longitude(longitude: string | undefined) {
     this._longitude = longitude;
   }
 
-  get latitude(): string {
+  get latitude(): string | undefined {
     return this._latitude;
   }
 
-  set latitude(latitude: string) {
+  set latitude(latitude: string | undefined) {
     this._latitude = latitude;
   }
 

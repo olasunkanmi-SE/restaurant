@@ -16,7 +16,7 @@ import { AuthService } from './../../service/auth.service';
 })
 export class SigninComponent implements OnInit {
   signInForm: any;
-  hide: boolean = false;
+  hide: boolean = true;
   errorMessage$: Observable<string> | undefined;
   constructor(
     private form: FormBuilder,
