@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { AuthService } from './../../auth/service/auth.service';
 import { Store, select } from '@ngrx/store';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -35,13 +36,19 @@ export class HeaderComponent implements OnInit {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private readonly store: Store<fromAuthReducer.IAuthState>,
-    private readonly auth: AuthService
+    private readonly auth: AuthService,
+    private readonly router: Router
   ) {
     this.isAuthenticated = this.auth.IsAuthenticated();
   }
 
   signOut() {
+    this.isAuthenticated = false;
     this.auth.logOut();
+    this.router.navigate(['/']);
+  }
+  signIn() {
+    this.router.navigate(['/auth/login']);
   }
 
   productsCategory = [

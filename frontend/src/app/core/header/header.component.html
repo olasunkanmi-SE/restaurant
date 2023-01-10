@@ -31,7 +31,15 @@
 
       <span class="spacer"></span>
       <span class="main-menu">
-        <a ><button  *ngIf="isAuthenticated" mat-button [matMenuTriggerFor]="products">Products</button></a>
+        <a
+          ><button
+            *ngIf="isAuthenticated"
+            mat-button
+            [matMenuTriggerFor]="products"
+          >
+            Products
+          </button></a
+        >
         <mat-menu #products="matMenu">
           <button mat-menu-item [matMenuTriggerFor]="electronics">
             Electronic Devices
@@ -90,17 +98,20 @@
           <button mat-menu-item>Headphones & Headsets</button>
           <button mat-menu-item>Portable Speakers</button>
         </mat-menu>
-       <a ><button  mat-button *ngIf="isAuthenticated"  >Notifications</button> </a>
+        <a
+          ><button mat-button *ngIf="isAuthenticated">Notifications</button>
+        </a>
         <!-- 
         <span class="badge badge-light">
           <mat-icon class="icon" [inline]="true">shopping_cart</mat-icon>
           cart <span class="cart"> 4</span>
         </span> -->
-       <a (click)="signOut()" [routerLink]="['/auth/login']">
-        <button *ngIf="isAuthenticated" mat-button>
-           Sign Out
-        </button>
-       </a> 
+        <a (click)="signOut()">
+          <button *ngIf="isAuthenticated" mat-button>Sign Out</button>
+        </a>
+        <a (click)="signIn()">
+          <button *ngIf="!isAuthenticated" mat-button>Sign In</button>
+        </a>
       </span>
     </mat-toolbar>
     <ng-content></ng-content>
