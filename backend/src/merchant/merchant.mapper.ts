@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { MerchantData } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
+import { MerchantDataModel } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { AuditMapper } from './../audit/audit.mapper';
 import { IMapper } from './../domain/mapper/mapper';
 import { Merchant } from './merchant';
 
 @Injectable()
-export class MerchantMapper implements IMapper<Merchant, MerchantData> {
+export class MerchantMapper implements IMapper<Merchant, MerchantDataModel> {
   constructor(private readonly auditMapper: AuditMapper) {}
-  toPersistence(entity: Merchant): MerchantData {
-    const document: MerchantData = {
+  toPersistence(entity: Merchant): MerchantDataModel {
+    const document: MerchantDataModel = {
       _id: entity.id,
       firstName: entity.firstName,
       lastName: entity.lastName,
@@ -31,7 +31,7 @@ export class MerchantMapper implements IMapper<Merchant, MerchantData> {
     return document;
   }
 
-  toDomain(doc: MerchantData): Merchant {
+  toDomain(doc: MerchantDataModel): Merchant {
     const {
       _id,
       firstName,

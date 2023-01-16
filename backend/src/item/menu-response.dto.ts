@@ -1,6 +1,9 @@
-import { Audit } from './../domain/audit/audit';
+import { Types } from 'mongoose';
 import { portion } from './../infrastructure/data_access/repositories/interfaces/item-model.interface';
-export interface IITem {
+import { IAudit } from './../infrastructure/database/mongoDB/base-document.interface';
+
+export interface ITemResponseDTO extends IAudit {
+  id: Types.ObjectId;
   name: string;
   description?: string;
   portion: portion;
@@ -8,7 +11,6 @@ export interface IITem {
   quantity?: number;
   image: string;
   tags?: string[];
-  maximumPermitted?: number;
+  maximumPermitted: number;
   taxRate?: number;
-  audit: Audit;
 }

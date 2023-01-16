@@ -7,7 +7,10 @@ import { AuthModule } from './../infrastructure/auth/auth.module';
 import { AuthService } from './../infrastructure/auth/auth.service';
 import { ContextService } from './../infrastructure/context/context.service';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
-import { MerchantData, MerchantSchema } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
+import {
+  MerchantDataModel,
+  MerchantSchema,
+} from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { ContextMiddleWare } from './../infrastructure/middlewares/context.middleware';
 import { ValidateUser } from './../utils/context-validation';
 import { MerchantController } from './merchant.controller';
@@ -15,7 +18,7 @@ import { MerchantMapper } from './merchant.mapper';
 import { MerchantService } from './merchant.service';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: MerchantData.name, schema: MerchantSchema }]), AuthModule],
+  imports: [MongooseModule.forFeature([{ name: MerchantDataModel.name, schema: MerchantSchema }]), AuthModule],
   providers: [
     MerchantRepository,
     MerchantMapper,
