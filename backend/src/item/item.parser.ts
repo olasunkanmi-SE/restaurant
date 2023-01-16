@@ -1,6 +1,6 @@
 import { AuditParser } from 'src/audit';
 import { Item } from './item';
-import { ITemResponseDTO } from './menu-response.dto';
+import { ITemResponseDTO } from './item-response.dto';
 
 export class ItemParser {
   static createItemResponse(item: Item): ITemResponseDTO {

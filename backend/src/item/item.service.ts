@@ -12,7 +12,7 @@ import { IMerchantService } from './../merchant/interface/merchant-service.inter
 import { CreateItemDTO } from './create-item-schema';
 import { Item } from './item';
 import { IItemService } from './item-service.interface';
-import { ITemResponseDTO } from './menu-response.dto';
+import { ITemResponseDTO } from './item-response.dto';
 import { ItemParser } from './item.parser';
 
 @Injectable()

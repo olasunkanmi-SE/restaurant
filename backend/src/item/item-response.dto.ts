@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
-import { portion } from './../infrastructure/data_access/repositories/interfaces/item-model.interface';
-import { IAudit } from './../infrastructure/database/mongoDB/base-document.interface';
+import { portion } from '../infrastructure/data_access/repositories/interfaces/item-model.interface';
+import { IAudit } from '../infrastructure/database/mongoDB/base-document.interface';
 
 export interface ITemResponseDTO extends IAudit {
   id: Types.ObjectId;
