@@ -1,12 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { BaseDocument } from 'src/infrastructure/database';
-import { ITemData, portion } from './../interfaces/item-model.interface';
+import { ITemDataModelInterface, portion } from './../interfaces/item-model.interface';
+import { Document } from 'mongoose';
 
 export type ItemDocument = ItemDataModel & Document;
 
 @Schema({ versionKey: false })
-export class ItemDataModel extends BaseDocument implements ITemData {
-  @Prop({ type: String, required: true })
+export class ItemDataModel extends BaseDocument implements ITemDataModelInterface {
+  @Prop({ type: String, required: true, unique: true })
   name: string;
 
   @Prop({ type: String })

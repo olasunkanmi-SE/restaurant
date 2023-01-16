@@ -3,7 +3,7 @@ import { IValidateUser } from './context-validation.interface';
 import { Result } from './../domain/result/result';
 import { GenericDocumentRepository, MerchantDocument } from './../infrastructure';
 
-export class ValidateUser implements IValidateUser {
+export class ValidateUser implements IValidateUser<Merchant, MerchantDocument> {
   async getUser(
     model: GenericDocumentRepository<Merchant, MerchantDocument>,
     props: { email: string; role?: string },

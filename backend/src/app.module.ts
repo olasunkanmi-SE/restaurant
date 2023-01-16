@@ -1,4 +1,4 @@
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { AppController } from './app.controller';
@@ -12,8 +12,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
 import { AuthModule } from './infrastructure/auth';
 import { ContextService } from './infrastructure/context';
-import { MerchantModule } from './merchant/merchant.module';
 import { ContextMiddleWare } from './infrastructure/middlewares';
+import { ItemModule } from './item/item.module';
+import { MerchantModule } from './merchant/merchant.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { ContextMiddleWare } from './infrastructure/middlewares';
     RestaurantModule,
     MerchantModule,
     AuthModule,
+    ItemModule,
   ],
   controllers: [AppController],
   providers: [

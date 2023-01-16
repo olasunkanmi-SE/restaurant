@@ -16,6 +16,7 @@ import { IMerchantResponseDTO } from './merchant-response.dto';
 import { MerchantMapper } from './merchant.mapper';
 import { MerchantService } from './merchant.service';
 import { Merchant } from './merchant';
+import { MerchantDocument } from 'src/infrastructure';
 
 describe('Test merchant service', () => {
   const merchantRepositoryStub: MerchantRepository = sinon.stubInterface<MerchantRepository>();
@@ -24,7 +25,8 @@ describe('Test merchant service', () => {
   const authServiceStub: IAuthService = sinon.stubInterface<IAuthService>();
 
   const contextServiceStub: IContextService = sinon.stubInterface<IContextService>();
-  const validateUserStub: IValidateUser = sinon.stubInterface<IValidateUser>();
+  const validateUserStub: IValidateUser<Merchant, MerchantDocument> =
+    sinon.stubInterface<IValidateUser<Merchant, MerchantDocument>>();
 
   const merchantService = new MerchantService(
     merchantRepositoryStub,
@@ -55,7 +57,7 @@ describe('Test merchant service', () => {
         return Result.ok(merchantMockDatas);
       };
       await merchantService.createMerchant(createMerchantProps);
-    } catch (error) {
+    } catch (error: any) {
       expect(error.status).to.eq(400);
       expect(error.response.error).to.eq('Merchant with email ola@tesla.com already exists');
     }
@@ -124,7 +126,7 @@ describe('Test merchant service', () => {
       };
 
       await merchantService.signIn(loginProps);
-    } catch (error) {
+    } catch (error: any) {
       expect(error.response.error).to.eq('Incorrect Username or Password');
     }
   });

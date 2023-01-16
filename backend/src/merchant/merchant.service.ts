@@ -1,3 +1,7 @@
+import {
+  MerchantDataModel,
+  MerchantDocument,
+} from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 /* eslint-disable prettier/prettier */
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
@@ -31,7 +35,7 @@ export class MerchantService implements IMerchantService {
     private readonly contextService: IContextService,
     @Inject(TYPES.IAuthService)
     private readonly authService: IAuthService,
-    @Inject(TYPES.IValidateUser) private readonly validateUser: IValidateUser,
+    @Inject(TYPES.IValidateUser) private readonly validateMerchant: IValidateUser<Merchant, MerchantDocument>,
   ) {}
 
   async createMerchant(props: CreateMerchantDTO): Promise<Result<IMerchantResponseDTO>> {
@@ -49,10 +53,10 @@ export class MerchantService implements IMerchantService {
       passwordHash: hashedPassword,
       audit,
     }).getValue();
-    const merchantModel = this.merchantMapper.toPersistence(merchant);
+    const merchantModel: MerchantDataModel = this.merchantMapper.toPersistence(merchant);
     const docResult = await this.merchantRepository.create(merchantModel);
     if (!docResult.isSuccess) {
-      throwApplicationError(HttpStatus.NOT_IMPLEMENTED, 'Error while creating merchant');
+      throwApplicationError(HttpStatus.SERVICE_UNAVAILABLE, 'Error while creating merchant');
     }
 
     const newMerchant = docResult.getValue();
@@ -214,6 +218,6 @@ export class MerchantService implements IMerchantService {
    */
   async validateContext(): Promise<boolean> {
     const context: Context = await this.contextService.getContext();
-    return await this.validateUser.getUser(this.merchantRepository, { email: context.email });
+    return await this.validateMerchant.getUser(this.merchantRepository, { email: context.email });
   }
 }

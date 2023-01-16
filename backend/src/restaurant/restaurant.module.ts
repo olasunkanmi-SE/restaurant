@@ -9,7 +9,10 @@ import { LocationRepository } from './../infrastructure/data_access/repositories
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { RestaurantRepository } from './../infrastructure/data_access/repositories/restaurant.repository';
 import { LocationData, LocationSchema } from './../infrastructure/data_access/repositories/schemas/location.schema';
-import { MerchantData, MerchantSchema } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
+import {
+  MerchantDataModel,
+  MerchantSchema,
+} from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import {
   RestaurantData,
   RestaurantSchema,
@@ -28,7 +31,7 @@ import { RestaurantService } from './restaurant.service';
     MongooseModule.forFeature([
       { name: LocationData.name, schema: LocationSchema },
       { name: RestaurantData.name, schema: RestaurantSchema },
-      { name: MerchantData.name, schema: MerchantSchema },
+      { name: MerchantDataModel.name, schema: MerchantSchema },
     ]),
   ],
   controllers: [RestaurantsController],

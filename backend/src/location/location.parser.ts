@@ -22,9 +22,7 @@ export class LocationParser {
 
   static createLocationsResponse(locations: Location[]): ILocationResponseDTO[] {
     const locationsResponse: ILocationResponseDTO[] = [];
-    for (const location of locations) {
-      locationsResponse.push(this.createLocationResponse(location));
-    }
+    locations.forEach((location) => locationsResponse.push(LocationParser.createLocationResponse(location)));
     return locationsResponse;
   }
 }

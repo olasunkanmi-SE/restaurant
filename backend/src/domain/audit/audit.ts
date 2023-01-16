@@ -12,35 +12,35 @@ export class Audit extends ValueObjects<IAudit> {
     return this.props.auditCreatedBy;
   }
 
-  get auditModifiedBy(): string {
+  get auditModifiedBy(): string | undefined {
     return this.props.auditModifiedBy;
   }
 
-  set auditModifiedBy(email: string) {
+  set auditModifiedBy(email: string | undefined) {
     this.props.auditModifiedBy = email;
   }
 
-  get auditModifiedDateTime(): string {
+  get auditModifiedDateTime(): string | undefined {
     return this.props.auditModifiedDateTime;
   }
 
-  set auditModifiedDateTime(date: string) {
+  set auditModifiedDateTime(date: string | undefined) {
     this.props.auditModifiedDateTime = date;
   }
 
-  get auditDeletedBy(): string {
+  get auditDeletedBy(): string | undefined {
     return this.props.auditDeletedBy;
   }
 
-  set auditDeletedBy(email: string) {
+  set auditDeletedBy(email: string | undefined) {
     this.props.auditDeletedBy = email;
   }
 
-  get auditDeletedDateTime(): string {
+  get auditDeletedDateTime(): string | undefined {
     return this.props.auditDeletedDateTime;
   }
 
-  set auditDeletedDateTime(date: string) {
+  set auditDeletedDateTime(date: string | undefined) {
     this.props.auditDeletedDateTime = date;
   }
 

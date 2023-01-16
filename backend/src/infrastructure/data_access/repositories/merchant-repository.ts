@@ -5,12 +5,12 @@ import { Merchant } from './../../../merchant/merchant';
 import { MerchantMapper } from './../../../merchant/merchant.mapper';
 import { GenericDocumentRepository } from './../../database/';
 import { MerchantDocument } from './schemas';
-import { MerchantData } from './schemas/merchant.schema';
+import { MerchantDataModel } from './schemas/merchant.schema';
 
 @Injectable()
 export class MerchantRepository extends GenericDocumentRepository<Merchant, MerchantDocument> {
   constructor(
-    @InjectModel(MerchantData.name) merchantModel: Model<MerchantDocument>,
+    @InjectModel(MerchantDataModel.name) merchantModel: Model<MerchantDocument>,
     @InjectConnection() connection: Connection,
     merchantMapper: MerchantMapper,
   ) {
