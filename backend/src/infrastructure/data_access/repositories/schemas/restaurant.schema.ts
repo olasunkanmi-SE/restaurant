@@ -4,7 +4,7 @@ import mongoose, { Document, Types } from 'mongoose';
 import { BaseDocument } from '../../../database/mongoDB/base-document';
 import { IRestaurantdata } from '../interfaces/restaurant-model.interface';
 import { LocationData, LocationSchema } from './location.schema';
-import { MerchantData } from './merchant.schema';
+import { MerchantDataModel } from './merchant.schema';
 
 export type RestaurantDocument = RestaurantData & Document;
 
@@ -38,9 +38,9 @@ export class RestaurantData extends BaseDocument implements IRestaurantdata {
   @Prop({ type: Types.ObjectId })
   merchantId: Types.ObjectId;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: MerchantData.name })
-  @Type(() => MerchantData)
-  merchant: MerchantData;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: MerchantDataModel.name })
+  @Type(() => MerchantDataModel)
+  merchant: MerchantDataModel;
 }
 
 export const RestaurantSchema = SchemaFactory.createForClass(RestaurantData);

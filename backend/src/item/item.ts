@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { Entity, Result } from '../domain';
+import { Audit, Entity, Result } from '../domain';
 import { portion } from './../infrastructure/data_access/repositories/interfaces/item-model.interface';
 import { IITem } from './item.entity.interface';
 
@@ -13,6 +13,7 @@ export class Item extends Entity<IITem> implements IITem {
   private _tags: string[];
   private _maximumPermitted: number;
   private _taxRate: number;
+  private _audit: Audit;
 
   constructor(id: Types.ObjectId, props: IITem) {
     super(id);
@@ -25,6 +26,7 @@ export class Item extends Entity<IITem> implements IITem {
     this._tags = props.tags;
     this._maximumPermitted = props.maximumPermitted;
     this._taxRate = props.taxRate;
+    this._audit = props.audit;
   }
 
   get name(): string {
@@ -35,11 +37,11 @@ export class Item extends Entity<IITem> implements IITem {
     this._name = name;
   }
 
-  get description(): string | undefined {
+  get description(): string {
     return this._description;
   }
 
-  set description(description: string | undefined) {
+  set description(description: string) {
     this._description = description;
   }
 
@@ -63,7 +65,7 @@ export class Item extends Entity<IITem> implements IITem {
     return this._quantity;
   }
 
-  set quantity(quantity: number | undefined) {
+  set quantity(quantity: number) {
     this._quantity = quantity;
   }
 
@@ -83,7 +85,7 @@ export class Item extends Entity<IITem> implements IITem {
     this._tags = tags;
   }
 
-  get maximumPermitted(): number {
+  get maximumPermitted(): number | undefined {
     return this._maximumPermitted;
   }
 
@@ -99,7 +101,15 @@ export class Item extends Entity<IITem> implements IITem {
     this._taxRate = taxRate;
   }
 
-  static create(props: IITem, id: Types.ObjectId): Result<Item> {
+  get audit(): Audit {
+    return this._audit;
+  }
+
+  set audit(audit: Audit) {
+    this._audit = audit;
+  }
+
+  static create(props: IITem, id?: Types.ObjectId): Result<Item> {
     return Result.ok(new Item(id, props));
   }
 }

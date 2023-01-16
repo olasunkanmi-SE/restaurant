@@ -4,10 +4,10 @@ import { BaseDocument } from '../../../../infrastructure/database';
 import { IMerchantData } from '../interfaces/merchant-model.interface';
 import { MerchantStatus } from './../../../../application/constants/constants';
 
-export type MerchantDocument = MerchantData & Document;
+export type MerchantDocument = MerchantDataModel & Document;
 
 @Schema({ versionKey: false })
-export class MerchantData extends BaseDocument implements IMerchantData {
+export class MerchantDataModel extends BaseDocument implements IMerchantData {
   @Prop({ type: String })
   firstName: string;
 
@@ -42,4 +42,4 @@ export class MerchantData extends BaseDocument implements IMerchantData {
   refreshTokenHash: string;
 }
 
-export const MerchantSchema = SchemaFactory.createForClass(MerchantData);
+export const MerchantSchema = SchemaFactory.createForClass(MerchantDataModel);

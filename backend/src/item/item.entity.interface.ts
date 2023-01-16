@@ -1,3 +1,4 @@
+import { Audit } from './../domain/audit/audit';
 import { portion } from './../infrastructure/data_access/repositories/interfaces/item-model.interface';
 export interface IITem {
   name: string;
@@ -7,6 +8,7 @@ export interface IITem {
   quantity?: number;
   image: string;
   tags?: string[];
-  maximumPermitted: number;
+  maximumPermitted?: number;
   taxRate?: number;
+  audit: Audit;
 }

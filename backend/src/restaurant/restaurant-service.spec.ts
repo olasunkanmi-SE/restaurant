@@ -6,7 +6,7 @@ import { auditMockData } from './../audit/audit-mock-data';
 import { AuditMapper } from './../audit/audit.mapper';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
-import { Context } from './../infrastructure';
+import { Context, MerchantDocument } from './../infrastructure';
 import { IContextService } from './../infrastructure/context/context-service.interface';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
 import { IRestaurantRepository } from './../infrastructure/data_access/repositories/restaurant-repository.interface';
@@ -37,7 +37,8 @@ describe('Test restaurant service', () => {
     merchantMapperStub,
   );
   const contextServiceStub: IContextService = sinon.stubInterface<IContextService>();
-  const validateUserStub: IValidateUser = sinon.stubInterface<IValidateUser>();
+  const validateUserStub: IValidateUser<Merchant, MerchantDocument> =
+    sinon.stubInterface<IValidateUser<Merchant, MerchantDocument>>();
   const merchantServiceStub: IMerchantService = sinon.stubInterface<IMerchantService>();
   const restaurantService = new RestaurantService(
     restaurantRepositoryStub,
@@ -112,7 +113,7 @@ describe('Test restaurant service', () => {
         email: 'support@Sheraton.com',
       };
       await restaurantService.createRestaurant(createRestaurantDTO);
-    } catch (error) {
+    } catch (error: any) {
       expect(error.status).to.eq(400);
       expect(error.response.error).to.eq('Restaurant with email support@Sheraton.com already exists');
     }
