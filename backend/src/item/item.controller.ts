@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post, Get } from '@nestjs/common';
 import { TYPES } from './../application/constants/types';
 import { Result } from './../domain/result/result';
 import { CreateItemDTO } from './create-item-schema';
@@ -11,5 +11,10 @@ export class ItemController {
   @Post()
   async createItem(@Body() request: CreateItemDTO): Promise<Result<ITemResponseDTO>> {
     return this.itemService.createItem(request);
+  }
+
+  @Get()
+  async getItems(): Promise<Result<ITemResponseDTO[]>> {
+    return this.itemService.getItems();
   }
 }
