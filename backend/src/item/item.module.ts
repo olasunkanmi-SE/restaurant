@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TYPES } from './../application/constants/types';
@@ -12,10 +12,13 @@ import {
   MerchantDataModel,
   MerchantSchema,
 } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
+import { ContextMiddleWare } from './../infrastructure/middlewares/context.middleware';
 import { MerchantMapper } from './../merchant/merchant.mapper';
 import { MerchantService } from './../merchant/merchant.service';
 import { ValidateUser } from './../utils/context-validation';
+import { ItemController } from './item.controller';
 import { ItemMapper } from './item.mapper';
+import { ItemService } from './item.service';
 
 @Module({
   imports: [
@@ -24,12 +27,13 @@ import { ItemMapper } from './item.mapper';
       { name: MerchantDataModel.name, schema: MerchantSchema },
     ]),
   ],
-  controllers: [],
+  controllers: [ItemController],
   providers: [
     { provide: TYPES.IContextService, useClass: ContextService },
     { provide: TYPES.IMerchantService, useClass: MerchantService },
     { provide: TYPES.IAuthService, useClass: AuthService },
     { provide: TYPES.IValidateUser, useClass: ValidateUser },
+    { provide: TYPES.IItemService, useClass: ItemService },
     ITemRepository,
     ItemMapper,
     MerchantRepository,
@@ -38,4 +42,8 @@ import { ItemMapper } from './item.mapper';
     AuditMapper,
   ],
 })
-export class ItemModule {}
+export class ItemModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ContextMiddleWare).exclude().forRoutes(ItemController);
+  }
+}

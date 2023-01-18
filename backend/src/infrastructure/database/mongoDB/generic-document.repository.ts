@@ -44,10 +44,7 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
     options?: QueryOptions<T>,
   ): Promise<Result<TEntity[] | null>> {
     const documents = await this.DocumentModel.find(filterQuery, projection, options);
-    if (!documents) {
-      return Result.fail('Error getting documents from database', HttpStatus.NOT_FOUND);
-    }
-    const entities = documents.map((document) => this.mapper.toDomain(document));
+    const entities = documents && documents.length ? documents.map((document) => this.mapper.toDomain(document)) : [];
     return Result.ok(entities);
   }
 

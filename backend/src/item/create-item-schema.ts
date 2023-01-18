@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString, Length, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, Length, Max, MaxLength, Min } from 'class-validator';
 import { portion } from './../infrastructure/data_access/repositories/interfaces/item-model.interface';
 
 export class CreateItemDTO {
@@ -21,7 +21,8 @@ export class CreateItemDTO {
   price: number;
 
   @IsNumber()
-  @MaxLength(1000)
+  @Max(1000)
+  @Min(0)
   @IsOptional()
   quantity: number;
 

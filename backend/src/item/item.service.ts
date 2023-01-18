@@ -1,4 +1,3 @@
-import { ItemMapper } from './item.mapper';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { IContextService } from '.././infrastructure/context';
 import { TYPES } from './../application/constants/types';
@@ -11,8 +10,9 @@ import { throwApplicationError } from './../infrastructure/utilities/exception-i
 import { IMerchantService } from './../merchant/interface/merchant-service.interface';
 import { CreateItemDTO } from './create-item-schema';
 import { Item } from './item';
-import { IItemService } from './item-service.interface';
 import { ITemResponseDTO } from './item-response.dto';
+import { IItemService } from './item-service.interface';
+import { ItemMapper } from './item.mapper';
 import { ItemParser } from './item.parser';
 
 @Injectable()
@@ -36,7 +36,7 @@ export class ItemService implements IItemService {
     }
 
     const existingItem = await this.iTemRepository.findOne({ name });
-    if (existingItem) {
+    if (existingItem.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `Item ${name} already exists`);
     }
 
@@ -51,5 +51,16 @@ export class ItemService implements IItemService {
     const newItem: Item = result.getValue();
     const requestResponse = ItemParser.createItemResponse(newItem);
     return Result.ok(requestResponse);
+  }
+
+  async getItems(): Promise<Result<ITemResponseDTO[]>> {
+    const validUser: boolean = await this.merchantService.validateContext();
+    if (!validUser) {
+      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
+    }
+    const result: Result<Item[]> = await this.iTemRepository.find({});
+    const items = result.getValue();
+    const reponse: ITemResponseDTO[] = ItemParser.createItemsresponse(items);
+    return Result.ok(reponse);
   }
 }
