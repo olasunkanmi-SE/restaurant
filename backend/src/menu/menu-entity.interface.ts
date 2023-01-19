@@ -1,6 +1,8 @@
-import { IITem } from './../item/item.entity.interface';
+import { Audit } from './../domain/audit/audit';
+import { Item } from './../item/item';
 export interface IMenu {
   name: string;
   description?: string;
-  items?: IITem[];
+  items?: Item[];
+  audit: Audit;
 }
