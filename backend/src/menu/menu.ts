@@ -1,18 +1,21 @@
-import { Result } from './../domain/result/result';
-import { IITem } from './../item/item.entity.interface';
-import { Entity } from 'src/domain';
-import { IMenu } from './menu-entity.interface';
+import { Audit } from './../domain/audit/audit';
 import { Types } from 'mongoose';
+import { Entity } from 'src/domain';
+import { Result } from './../domain/result/result';
+import { Item } from './../item/item';
+import { IMenu } from './menu-entity.interface';
 
 export class Menu extends Entity<IMenu> implements IMenu {
   _name: string;
   _description: string;
-  _items: IITem[];
+  _items: Item[];
+  _audit: Audit;
   constructor(id: Types.ObjectId, props: IMenu) {
     super(id);
     this._name = props.name;
     this._description = props.description;
     this._items = props.items;
+    this._audit = props.audit;
   }
 
   get name(): string {
@@ -31,12 +34,16 @@ export class Menu extends Entity<IMenu> implements IMenu {
     this._description = value;
   }
 
-  get items(): IITem[] | undefined {
+  get items(): Item[] | undefined {
     return this._items;
   }
 
-  set items(value: IITem[] | undefined) {
+  set items(value: Item[] | undefined) {
     this._items = value;
+  }
+
+  get audit(): Audit {
+    return this._audit;
   }
 
   static create(props: IMenu, id: Types.ObjectId): Result<Menu> {
