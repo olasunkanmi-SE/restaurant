@@ -22,10 +22,6 @@ export class RestaurantParser {
   }
 
   static createRestaurantsParser(restaurants: Restaurant[]): IRestaurantResponseDTO[] {
-    const restaurantsResponse: IRestaurantResponseDTO[] = [];
-    for (const restaurant of restaurants) {
-      restaurantsResponse.push(this.createRestaurantResponse(restaurant));
-    }
-    return restaurantsResponse;
+    return restaurants.map((restaurant) => this.createRestaurantResponse(restaurant));
   }
 }
