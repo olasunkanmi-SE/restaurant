@@ -46,7 +46,7 @@ export class Menu extends Entity<IMenu> implements IMenu {
     return this._audit;
   }
 
-  static create(props: IMenu, id: Types.ObjectId): Result<Menu> {
+  static create(props: IMenu, id?: Types.ObjectId): Result<Menu> {
     return Result.ok(new Menu(id, props));
   }
 }

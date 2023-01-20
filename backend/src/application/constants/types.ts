@@ -5,6 +5,7 @@ export const TYPES = {
   IMerchantService: Symbol('IMerchantService'),
   IRestaurantRepository: Symbol('IRestaurantRepository'),
   IItemService: Symbol('IItemService'),
+  IMenuService: Symbol('IMenuService'),
   jwtAccessTokenSecret: 'JWT_ACCESS_TOKEN_SECRET',
   AccessTokenExpiresIn: 'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
   jwtRefreshTokenSecret: 'JWT_REFRESH_TOKEN_SECRET',

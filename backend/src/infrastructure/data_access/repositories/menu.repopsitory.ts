@@ -7,7 +7,7 @@ import { Model, Connection } from 'mongoose';
 import { MenuMapper } from 'src/menu/menu.mapper';
 
 @Injectable()
-export class menuRepository extends GenericDocumentRepository<Menu, MenuDocument> {
+export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument> {
   constructor(
     @InjectModel(MenuDataModel.name) menuDataModel: Model<MenuDocument>,
     @InjectConnection() connection: Connection,

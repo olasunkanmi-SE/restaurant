@@ -5,7 +5,7 @@ import { Menu } from './menu';
 import { IMenuResponseDTO } from './menu-response.dto';
 
 export class MenuParser {
-  createMenuResponse(menu: Menu): IMenuResponseDTO {
+  static createMenuResponse(menu: Menu): IMenuResponseDTO {
     const { id, name, description, items, audit } = menu;
     let itemsResponse: ITemResponseDTO[] = [];
     if (items && items.length) {
@@ -20,7 +20,7 @@ export class MenuParser {
     };
   }
 
-  createMenusResponse(menus: Menu[]): IMenuResponseDTO[] {
+  static createMenusResponse(menus: Menu[]): IMenuResponseDTO[] {
     return menus.map((menu) => this.createMenuResponse(menu));
   }
 }
