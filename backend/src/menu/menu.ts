@@ -10,12 +10,14 @@ export class Menu extends Entity<IMenu> implements IMenu {
   _description: string;
   _items: Item[];
   _audit: Audit;
+  _discount: number;
   constructor(id: Types.ObjectId, props: IMenu) {
     super(id);
     this._name = props.name;
     this._description = props.description;
     this._items = props.items;
     this._audit = props.audit;
+    this._discount = props.discount;
   }
 
   get name(): string {
@@ -46,7 +48,15 @@ export class Menu extends Entity<IMenu> implements IMenu {
     return this._audit;
   }
 
-  static create(props: IMenu, id: Types.ObjectId): Result<Menu> {
+  get discount(): number {
+    return this._discount;
+  }
+
+  set discount(value: number) {
+    this._discount = value;
+  }
+
+  static create(props: IMenu, id?: Types.ObjectId): Result<Menu> {
     return Result.ok(new Menu(id, props));
   }
 }

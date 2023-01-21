@@ -1,5 +1,5 @@
 import { Result } from './../../../domain/result/result';
-import { FilterQuery, ProjectionType, QueryOptions, SaveOptions, UpdateQuery } from 'mongoose';
+import { FilterQuery, ProjectionType, QueryOptions, SaveOptions, UpdateQuery, ClientSession } from 'mongoose';
 
 export interface IGenericDocument<TEntity, T> {
   findOne(filterQuery: FilterQuery<T>, projection?: ProjectionType<T | null>): Promise<Result<TEntity | null>>;
@@ -20,5 +20,7 @@ export interface IGenericDocument<TEntity, T> {
 
   deleteMany(filterQuery: FilterQuery<T>): Promise<boolean>;
 
-  startTransaction(): Promise<void>;
+  startSession(): Promise<ClientSession>;
+
+  insertMany(docs: any): Promise<Result<TEntity[]>>;
 }

@@ -1,18 +1,37 @@
-import { Injectable } from '@nestjs/common';
+import { Result } from './../../../domain/result/result';
+import { Injectable, HttpStatus } from '@nestjs/common';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
+import { Connection, FilterQuery, Model, Types } from 'mongoose';
 import { GenericDocumentRepository } from 'src/infrastructure/database';
+import { MenuMapper } from 'src/menu/menu.mapper';
 import { Menu } from './../../../menu/menu';
 import { MenuDataModel, MenuDocument } from './schemas/menu.schema';
-import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Model, Connection } from 'mongoose';
-import { MenuMapper } from 'src/menu/menu.mapper';
 
 @Injectable()
-export class menuRepository extends GenericDocumentRepository<Menu, MenuDocument> {
+export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument> {
+  menuMapper: MenuMapper;
   constructor(
     @InjectModel(MenuDataModel.name) menuDataModel: Model<MenuDocument>,
     @InjectConnection() connection: Connection,
     menuMapper: MenuMapper,
   ) {
     super(menuDataModel, connection, menuMapper);
+    this.menuMapper = menuMapper;
+  }
+
+  async getMenus(filterQuery: FilterQuery<Menu>): Promise<any | any[]> {
+    const documents = await this.DocumentModel.find(filterQuery).populate('items').exec();
+    if (!documents) {
+      return Result.fail('Error getting Menus from database', HttpStatus.NOT_FOUND);
+    }
+    return documents.map((menu) => this.menuMapper.toDomain(menu));
+  }
+
+  async getMenuById(id: Types.ObjectId): Promise<any> {
+    const document = await this.DocumentModel.findById(id).populate('items').exec();
+    if (!document) {
+      return Result.fail('Error getting menu from database', HttpStatus.NOT_FOUND);
+    }
+    return this.menuMapper.toDomain(document);
   }
 }

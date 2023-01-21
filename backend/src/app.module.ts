@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { TYPES } from './application/constants/types';
 import { ApplicationExceptionsFilter, ApplicationLogger } from './infrastructure';
 import { LocationModule } from './location/location.module';
+import { MenuModule } from './menu/menu.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
 
 import { MongooseModule } from '@nestjs/mongoose';
@@ -41,6 +42,7 @@ import { MerchantModule } from './merchant/merchant.module';
     MerchantModule,
     AuthModule,
     ItemModule,
+    MenuModule,
   ],
   controllers: [AppController],
   providers: [
