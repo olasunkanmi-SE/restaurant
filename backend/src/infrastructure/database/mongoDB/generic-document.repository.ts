@@ -1,5 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import {
+  ClientSession,
   Connection,
   Document,
   FilterQuery,
@@ -91,8 +92,13 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
     return (await result).deletedCount >= 1;
   }
 
-  async startTransaction(): Promise<void> {
-    const session = await this.connection.startSession();
-    return session.startTransaction();
+  async startSession(): Promise<ClientSession> {
+    return await this.connection.startSession();
+  }
+
+  async insertMany(docs: any): Promise<Result<TEntity[]>> {
+    const documents = await this.DocumentModel.insertMany(docs);
+    const entities: TEntity[] = documents.map((doc) => this.mapper.toDomain(doc));
+    return Result.ok(entities);
   }
 }

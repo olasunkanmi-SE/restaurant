@@ -5,4 +5,5 @@ export interface IMenu {
   description?: string;
   items?: Item[];
   audit: Audit;
+  discount: number;
 }
