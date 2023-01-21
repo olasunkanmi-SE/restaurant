@@ -5,5 +5,6 @@ export interface IMenuResponseDTO extends IAudit {
   id: Types.ObjectId;
   name: string;
   description?: string;
+  discount: number;
   items?: ITemResponseDTO[];
 }

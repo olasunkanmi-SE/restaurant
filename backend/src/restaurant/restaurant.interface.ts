@@ -9,6 +9,7 @@ export interface IRestaurant {
   webUrl?: string;
   logoUrl?: string;
   timeZone?: string;
+  //Todo a restaurant can have multiple locations
   location: Location;
   audit: Audit;
   merchant: Merchant;

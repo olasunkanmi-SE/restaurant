@@ -3,4 +3,5 @@ export interface IMenuData {
   readonly name: string;
   readonly description?: string;
   readonly items?: ItemDataModel[];
+  readonly discount: number;
 }

@@ -15,6 +15,7 @@ import { IMenu } from './menu-entity.interface';
 import { IMenuResponseDTO } from './menu-response.dto';
 import { IMenuService } from './menu-service.interface';
 import { MenuParser } from './menu.parser';
+import { Types } from 'mongoose';
 @Injectable()
 export class MenuService implements IMenuService {
   private context: Promise<Context>;
@@ -36,8 +37,8 @@ export class MenuService implements IMenuService {
     }
     const { name, itemIds } = props;
     const existingMenu: Result<Menu> = await this.menuRepository.findOne({ name });
-    if (existingMenu) {
-      throwApplicationError(HttpStatus.BAD_REQUEST, 'Duedate most be greater than start Date');
+    if (existingMenu.isSuccess) {
+      throwApplicationError(HttpStatus.BAD_REQUEST, `${name}, already exists`);
     }
     const context: Context = await this.context;
     const audit: Audit = Audit.createInsertContext(context);
@@ -52,7 +53,22 @@ export class MenuService implements IMenuService {
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Menu could not be created');
     }
-    const response = MenuParser.createMenuResponse(result.getValue());
+    const menu = result.getValue();
+    let response: IMenuResponseDTO | undefined;
+    const createdMenu = await this.menuRepository.getMenuById(menu.id);
+    if (createdMenu) {
+      response = MenuParser.createMenuResponse(createdMenu);
+    }
     return Result.ok(response);
+  }
+
+  async getMenus(): Promise<Result<IMenuResponseDTO[]>> {
+    const menus = await this.menuRepository.getMenus({});
+    return Result.ok(MenuParser.createMenusResponse(menus));
+  }
+
+  async getMenuById(id: Types.ObjectId): Promise<Result<IMenuResponseDTO>> {
+    const menu = await this.menuRepository.getMenuById(id);
+    return Result.ok(MenuParser.createMenuResponse(menu));
   }
 }

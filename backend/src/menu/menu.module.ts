@@ -51,6 +51,6 @@ import { MenuController } from './menu.controller';
 })
 export class MenuModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(ContextMiddleWare).exclude().forRoutes(ItemController);
+    consumer.apply(ContextMiddleWare).exclude().forRoutes(MenuController);
   }
 }
