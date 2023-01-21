@@ -13,6 +13,8 @@ export const restaurantMock: IRestaurant = {
   email: 'support@Sheraton.com',
   isActive: true,
   phoneNumber: '018938383',
+  imageUrl: 'http://',
+  opened: false,
   location: Location.create(locationMockData).getValue(),
   merchant: Merchant.create(merchantMock).getValue(),
   audit: Audit.create(auditMockData).getValue(),

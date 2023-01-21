@@ -17,6 +17,8 @@ export class Restaurant extends Entity<IRestaurant> {
   private _audit: Audit;
   private _phoneNumber: string;
   private _merchant: Merchant;
+  private _opened: boolean;
+  private _imageUrl: string;
   constructor(id: Types.ObjectId, props: IRestaurant) {
     super(id);
     this._name = props.name;
@@ -29,6 +31,8 @@ export class Restaurant extends Entity<IRestaurant> {
     this._audit = props.audit;
     this._phoneNumber = props.phoneNumber;
     this._merchant = props.merchant;
+    this._opened = props.opened;
+    this._imageUrl = props.imageUrl;
   }
 
   get name(): string {
@@ -109,6 +113,22 @@ export class Restaurant extends Entity<IRestaurant> {
 
   set audit(audit) {
     this._audit = audit;
+  }
+
+  get opened(): boolean {
+    return this._opened;
+  }
+
+  set opened(opened: boolean) {
+    this._opened = opened;
+  }
+
+  get imageUrl(): string {
+    return this._imageUrl;
+  }
+
+  set imageUrl(imageUrl: string) {
+    this._imageUrl = imageUrl;
   }
 
   static create(props: IRestaurant, id?: Types.ObjectId): Result<Restaurant> {

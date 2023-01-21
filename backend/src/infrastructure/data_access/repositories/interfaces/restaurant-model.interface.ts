@@ -11,4 +11,6 @@ export interface IRestaurantdata {
   readonly phoneNumber: string;
   readonly merchantId: Types.ObjectId;
   readonly location: LocationData;
+  readonly opened: boolean;
+  readonly imageUrl: string;
 }

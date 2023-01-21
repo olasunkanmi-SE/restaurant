@@ -29,6 +29,14 @@ export class CreateRestaurantDTO {
 
   @IsString()
   @MaxLength(256)
+  readonly imageUrl: string;
+
+  @IsBoolean()
+  @IsOptional()
+  readonly opened: boolean;
+
+  @IsString()
+  @MaxLength(256)
   @IsOptional()
   readonly timeZone: string;
 

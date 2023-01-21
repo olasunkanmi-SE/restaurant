@@ -26,6 +26,12 @@ export class RestaurantData extends BaseDocument implements IRestaurantdata {
   logoUrl?: string;
 
   @Prop({ type: String })
+  imageUrl: string;
+
+  @Prop({ type: Boolean, default: false })
+  opened: boolean;
+
+  @Prop({ type: String })
   timeZone?: string;
 
   @Prop({ type: String })

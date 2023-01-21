@@ -15,16 +15,19 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
     private readonly merchantMapper: MerchantMapper,
   ) {}
   toPersistence(entity: Restaurant): RestaurantData {
+    const { name, email, isActive, webUrl, logoUrl, timeZone, id, phoneNumber, opened, imageUrl } = entity;
     const merchantId: Types.ObjectId = entity.merchant.id;
     const document: RestaurantData = {
-      _id: entity.id,
-      name: entity.name,
-      email: entity.email,
-      isActive: entity.isActive,
-      webUrl: entity.webUrl,
-      logoUrl: entity.logoUrl,
-      timeZone: entity.timeZone,
-      phoneNumber: entity.phoneNumber,
+      _id: id,
+      name,
+      email,
+      isActive,
+      webUrl,
+      logoUrl,
+      timeZone,
+      phoneNumber,
+      opened,
+      imageUrl,
       location: this.locationMapper.toPersistence(entity.location),
       merchantId,
       merchant: this.merchantMapper.toPersistence(entity.merchant),
@@ -39,7 +42,7 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
   }
 
   toDomain(document: RestaurantData): Restaurant {
-    const { name, email, isActive, webUrl, logoUrl, timeZone, _id, phoneNumber } = document;
+    const { name, email, isActive, webUrl, logoUrl, timeZone, _id, phoneNumber, opened, imageUrl } = document;
     const entity: Restaurant = Restaurant.create(
       {
         name,
@@ -49,6 +52,8 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
         logoUrl,
         phoneNumber,
         timeZone,
+        opened,
+        imageUrl,
         location: this.locationMapper.toDomain(document.location),
         merchant: this.merchantMapper.toDomain(document.merchant),
         audit: this.auditMapper.toDomain(document),
