@@ -3,8 +3,9 @@ import { Entity } from '../domain/entity/';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result';
 import { Location } from './../location/location';
+import { Menu } from './../menu/menu';
 import { Merchant } from './../merchant/merchant';
-import { IRestaurant } from './restaurant.interface';
+import { IRestaurant, PaymentMethod } from './restaurant.interface';
 
 export class Restaurant extends Entity<IRestaurant> {
   private _name: string;
@@ -17,6 +18,12 @@ export class Restaurant extends Entity<IRestaurant> {
   private _audit: Audit;
   private _phoneNumber: string;
   private _merchant: Merchant;
+  private _opened: boolean;
+  private _imageUrl: string;
+  private _paymentMethod: PaymentMethod[];
+  private _openingHour: number;
+  private _closingHour: number;
+  private _menus: Menu[];
   constructor(id: Types.ObjectId, props: IRestaurant) {
     super(id);
     this._name = props.name;
@@ -29,6 +36,12 @@ export class Restaurant extends Entity<IRestaurant> {
     this._audit = props.audit;
     this._phoneNumber = props.phoneNumber;
     this._merchant = props.merchant;
+    this._opened = props.opened;
+    this._imageUrl = props.imageUrl;
+    this._paymentMethod = props.paymentMethod;
+    this._openingHour = props.openingHour;
+    this._closingHour = props.closingHour;
+    this._menus = props.menus;
   }
 
   get name(): string {
@@ -109,6 +122,54 @@ export class Restaurant extends Entity<IRestaurant> {
 
   set audit(audit) {
     this._audit = audit;
+  }
+
+  get opened(): boolean {
+    return this._opened;
+  }
+
+  set opened(opened: boolean) {
+    this._opened = opened;
+  }
+
+  get imageUrl(): string {
+    return this._imageUrl;
+  }
+
+  set imageUrl(imageUrl: string) {
+    this._imageUrl = imageUrl;
+  }
+
+  get paymentMethod(): PaymentMethod[] {
+    return this._paymentMethod;
+  }
+
+  set PaymentMethod(paymentMethods: PaymentMethod[]) {
+    this._paymentMethod = paymentMethods;
+  }
+
+  get openingHour(): number {
+    return this._openingHour;
+  }
+
+  set openingHour(openingHour: number) {
+    this._openingHour = openingHour;
+  }
+
+  get closingHour(): number {
+    return this._closingHour;
+  }
+
+  set closingHour(closingHour: number) {
+    this._closingHour = closingHour;
+  }
+
+  get menus(): Menu[] {
+    return this._menus;
+  }
+
+  set menus(menus: Menu[]) {
+    this._menus = menus;
   }
 
   static create(props: IRestaurant, id?: Types.ObjectId): Result<Restaurant> {

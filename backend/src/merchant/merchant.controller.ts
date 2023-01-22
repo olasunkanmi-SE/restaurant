@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { Types } from 'mongoose';
-import { GetCurrentUserId } from 'src/infrastructure/decorators/get-user-id.decorator';
-import { GetCurrentUser } from 'src/infrastructure/decorators/get-user.decorator';
+import { GetCurrentUserId } from '../infrastructure/decorators/get-user-id.decorator';
+import { GetCurrentUser } from '../infrastructure/decorators/get-user.decorator';
 import { TYPES } from './../application/constants/types';
 import { Result } from './../domain/result/result';
 import { AccessAuthGuard } from './../infrastructure/guards/access-auth.guard';

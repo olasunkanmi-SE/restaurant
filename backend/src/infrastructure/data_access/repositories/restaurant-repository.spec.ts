@@ -6,7 +6,9 @@ import { GenericDocumentRepository } from '../../../infrastructure';
 import { restaurantMockDocument } from '../../../restaurant/restaurant-mock-data';
 import { AuditMapper } from './../../../audit/audit.mapper';
 import { Result } from './../../../domain/result/result';
+import { ItemMapper } from './../../../item/item.mapper';
 import { LocationMapper } from './../../../location/location.mapper';
+import { MenuMapper } from './../../../menu/menu.mapper';
 import { MerchantMapper } from './../../../merchant/merchant.mapper';
 import { Restaurant } from './../../../restaurant/restaurant';
 import { RestaurantMapper } from './../../../restaurant/restaurant.mapper';
@@ -23,10 +25,13 @@ describe('test the restaurant service', () => {
   beforeEach(async () => {
     connection = new Connection();
     modelId = new Types.ObjectId();
+    const auditMapperStub = new AuditMapper();
     const merchantRepositoryStub: MerchantRepository = sinon.stubInterface<MerchantRepository>();
-    const locationMapperStub = new LocationMapper(new AuditMapper());
-    const merchantMapperStub = new MerchantMapper(new AuditMapper());
-    restaurantMapperStub = new RestaurantMapper(new AuditMapper(), locationMapperStub, merchantMapperStub);
+    const locationMapperStub = new LocationMapper(auditMapperStub);
+    const merchantMapperStub = new MerchantMapper(auditMapperStub);
+    const itemMapperStub = new ItemMapper(auditMapperStub);
+    const menuMapper = new MenuMapper(auditMapperStub, itemMapperStub);
+    restaurantMapperStub = new RestaurantMapper(auditMapperStub, locationMapperStub, merchantMapperStub, menuMapper);
     restaurantsRepositoryMock = Mock.ofType<GenericDocumentRepository<Restaurant, RestaurantDocument>>();
     restaurantRepository = new RestaurantRepository(
       restaurantsRepositoryMock.target,

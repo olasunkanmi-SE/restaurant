@@ -1,6 +1,6 @@
 import { Audit } from './../domain/audit/audit';
 import { Types } from 'mongoose';
-import { Entity } from 'src/domain';
+import { Entity } from '../domain';
 import { Result } from './../domain/result/result';
 import { Item } from './../item/item';
 import { IMenu } from './menu-entity.interface';
@@ -47,7 +47,7 @@ export class Menu extends Entity<IMenu> implements IMenu {
   get audit(): Audit {
     return this._audit;
   }
-  
+
   get discount(): number {
     return this._discount;
   }
