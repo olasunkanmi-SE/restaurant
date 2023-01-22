@@ -1,6 +1,6 @@
-import { IsString, IsNotEmpty, MaxLength } from 'class-validator';
+import { IsString, IsNotEmpty, MaxLength, IsOptional } from 'class-validator';
 
-export class createAddonDTO {
+export class CreateAddonDTO {
   @IsString()
   @IsNotEmpty()
   @MaxLength(128)
@@ -13,5 +13,6 @@ export class createAddonDTO {
 
   @IsString()
   @MaxLength(256)
+  @IsOptional()
   readonly description: string;
 }

@@ -11,6 +11,7 @@ import { RestaurantModule } from './restaurant/restaurant.module';
 
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
+import { AddonModule } from './addon/addon.module';
 import { AuthModule } from './infrastructure/auth';
 import { ContextService } from './infrastructure/context';
 import { ContextMiddleWare } from './infrastructure/middlewares';
@@ -43,6 +44,7 @@ import { MerchantModule } from './merchant/merchant.module';
     AuthModule,
     ItemModule,
     MenuModule,
+    AddonModule,
   ],
   controllers: [AppController],
   providers: [

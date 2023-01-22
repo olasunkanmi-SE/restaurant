@@ -13,7 +13,7 @@ export class AddonDataModel extends BaseDocument implements IAddonDataModel {
   @Prop({ type: String, required: false })
   description: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, unique: true })
   code: string;
 }
 

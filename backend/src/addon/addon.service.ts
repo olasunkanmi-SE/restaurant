@@ -13,7 +13,7 @@ import { Addon } from './addon';
 import { IAddonService } from './addon-service.interface';
 import { AddonMapper } from './addon.mapper';
 import { AddonDataModel } from './addon.schema';
-import { createAddonDTO } from './create-addon.dto';
+import { CreateAddonDTO } from './create-addon.dto';
 
 @Injectable()
 export class AddonService implements IAddonService {
@@ -28,7 +28,7 @@ export class AddonService implements IAddonService {
     this.context = this.contextService.getContext();
   }
 
-  async createAddon(props: createAddonDTO): Promise<Result<IAddonResponseDTO>> {
+  async createAddon(props: CreateAddonDTO): Promise<Result<IAddonResponseDTO>> {
     const { code } = props;
     const validUser: boolean = await this.merchantService.validateContext();
     if (!validUser) {
@@ -41,7 +41,7 @@ export class AddonService implements IAddonService {
     }
     const context: Context = await this.context;
     const audit: Audit = Audit.createInsertContext(context);
-    const addon: Addon = Addon.create({ ...props, audit });
+    const addon: Addon = Addon.create({ ...props, code: props.code.toUpperCase(), audit });
     const addonModel: AddonDataModel = this.addonMapper.toPersistence(addon);
     const result: Result<Addon> = await this.addonRepository.create(addonModel);
     if (!result.isSuccess) {
