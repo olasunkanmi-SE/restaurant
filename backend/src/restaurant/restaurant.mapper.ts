@@ -1,11 +1,12 @@
-import { MerchantMapper } from './../merchant/merchant.mapper';
 import { Injectable } from '@nestjs/common';
+import { Types } from 'mongoose';
+import { MenuMapper } from 'src/menu/menu.mapper';
 import { AuditMapper } from './../audit/audit.mapper';
 import { IMapper } from './../domain/mapper/mapper';
 import { RestaurantData } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
 import { LocationMapper } from './../location/location.mapper';
+import { MerchantMapper } from './../merchant/merchant.mapper';
 import { Restaurant } from './restaurant';
-import { Types } from 'mongoose';
 
 @Injectable()
 export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
@@ -13,9 +14,25 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
     private readonly auditMapper: AuditMapper,
     private readonly locationMapper: LocationMapper,
     private readonly merchantMapper: MerchantMapper,
+    private readonly menuMapper: MenuMapper,
   ) {}
   toPersistence(entity: Restaurant): RestaurantData {
-    const { name, email, isActive, webUrl, logoUrl, timeZone, id, phoneNumber, opened, imageUrl } = entity;
+    const {
+      name,
+      email,
+      isActive,
+      webUrl,
+      logoUrl,
+      timeZone,
+      id,
+      phoneNumber,
+      opened,
+      imageUrl,
+      paymentMethod,
+      openingHour,
+      closingHour,
+      menus,
+    } = entity;
     const merchantId: Types.ObjectId = entity.merchant.id;
     const document: RestaurantData = {
       _id: id,
@@ -28,6 +45,10 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
       phoneNumber,
       opened,
       imageUrl,
+      paymentMethod,
+      openingHour,
+      closingHour,
+      menus: menus.map((menu) => this.menuMapper.toPersistence(menu)),
       location: this.locationMapper.toPersistence(entity.location),
       merchantId,
       merchant: this.merchantMapper.toPersistence(entity.merchant),
@@ -42,7 +63,22 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
   }
 
   toDomain(document: RestaurantData): Restaurant {
-    const { name, email, isActive, webUrl, logoUrl, timeZone, _id, phoneNumber, opened, imageUrl } = document;
+    const {
+      name,
+      email,
+      isActive,
+      webUrl,
+      logoUrl,
+      timeZone,
+      _id,
+      phoneNumber,
+      opened,
+      imageUrl,
+      paymentMethod,
+      openingHour,
+      closingHour,
+      menus,
+    } = document;
     const entity: Restaurant = Restaurant.create(
       {
         name,
@@ -54,6 +90,10 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
         timeZone,
         opened,
         imageUrl,
+        paymentMethod,
+        openingHour,
+        closingHour,
+        menus: menus.map((menu) => this.menuMapper.toDomain(menu)),
         location: this.locationMapper.toDomain(document.location),
         merchant: this.merchantMapper.toDomain(document.merchant),
         audit: this.auditMapper.toDomain(document),

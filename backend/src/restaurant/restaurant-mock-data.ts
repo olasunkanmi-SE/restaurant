@@ -1,3 +1,5 @@
+import { menuMockData } from './../menu/menu-mock.data';
+import { Menu } from './../menu/menu';
 import { Types } from 'mongoose';
 import { Audit } from '.././domain/audit';
 import { auditMockData } from './../audit/audit-mock-data';
@@ -15,6 +17,10 @@ export const restaurantMock: IRestaurant = {
   phoneNumber: '018938383',
   imageUrl: 'http://',
   opened: false,
+  paymentMethod: [],
+  openingHour: 0,
+  closingHour: 0,
+  menus: [Menu.create(menuMockData).getValue()],
   location: Location.create(locationMockData).getValue(),
   merchant: Merchant.create(merchantMock).getValue(),
   audit: Audit.create(auditMockData).getValue(),

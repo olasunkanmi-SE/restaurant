@@ -1,6 +1,18 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsObject, IsOptional, IsString, MaxLength } from 'class-validator';
+import { Menu } from './../menu/menu';
+import {
+  IsBoolean,
+  IsEmail,
+  IsNotEmpty,
+  IsObject,
+  IsOptional,
+  IsString,
+  MaxLength,
+  IsNumber,
+  IsArray,
+} from 'class-validator';
 import { Types } from 'mongoose';
 import { CreateLocationDTO } from './../location/create-location.dto';
+import { PaymentMethod } from './restaurant.interface';
 export class CreateRestaurantDTO {
   @IsString()
   @IsNotEmpty()
@@ -31,6 +43,12 @@ export class CreateRestaurantDTO {
   @MaxLength(256)
   readonly imageUrl: string;
 
+  @IsNumber()
+  readonly openingHour: number;
+
+  @IsNumber()
+  readonly closingHour: number;
+
   @IsBoolean()
   @IsOptional()
   readonly opened: boolean;
@@ -44,6 +62,14 @@ export class CreateRestaurantDTO {
   @MaxLength(256)
   @IsOptional()
   readonly phoneNumber: string;
+
+  @IsString({ each: true })
+  @IsOptional()
+  readonly paymentMethod: PaymentMethod[];
+
+  @IsArray()
+  @IsOptional()
+  readonly menus: Menu[];
 
   @IsObject()
   @IsNotEmpty()
