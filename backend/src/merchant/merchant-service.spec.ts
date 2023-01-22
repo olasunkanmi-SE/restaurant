@@ -8,7 +8,7 @@ import { Result } from './../domain/result/result';
 import { IAuthService } from './../infrastructure/auth/interfaces/auth-service.interface';
 import { Context } from './../infrastructure/context';
 import { IContextService } from './../infrastructure/context/context-service.interface';
-import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
+import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import { IValidateUser } from './../utils/context-validation.interface';
 import { merchantMockData, merchantMockDatas } from './merchant-mock-data';
 import { MerchantParser } from './merchant-parser';

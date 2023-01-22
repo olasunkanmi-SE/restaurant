@@ -12,7 +12,7 @@ import { MenuMapper } from './../../../menu/menu.mapper';
 import { MerchantMapper } from './../../../merchant/merchant.mapper';
 import { Restaurant } from './../../../restaurant/restaurant';
 import { RestaurantMapper } from './../../../restaurant/restaurant.mapper';
-import { MerchantRepository } from './merchant-repository';
+import { MerchantRepository } from './merchant.repository';
 import { RestaurantRepository } from './restaurant.repository';
 import { RestaurantDocument } from './schemas/restaurant.schema';
 

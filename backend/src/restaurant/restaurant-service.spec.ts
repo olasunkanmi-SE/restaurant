@@ -10,7 +10,7 @@ import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
 import { Context, MerchantDocument } from './../infrastructure';
 import { IContextService } from './../infrastructure/context/context-service.interface';
-import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
+import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import { IRestaurantRepository } from './../infrastructure/data_access/repositories/restaurant-repository.interface';
 import { LocationMapper } from './../location/location.mapper';
 import { IMerchantService } from './../merchant/interface/merchant-service.interface';

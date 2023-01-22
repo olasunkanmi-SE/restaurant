@@ -6,7 +6,7 @@ import { AuditMapper } from './../audit/audit.mapper';
 import { AuthService } from './../infrastructure/auth/auth.service';
 import { ContextService } from './../infrastructure/context/context.service';
 import { ITemRepository } from './../infrastructure/data_access/repositories/item.repository';
-import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
+import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import { ItemDataModel, ItemSchema } from './../infrastructure/data_access/repositories/schemas/item.schema';
 import {
   MerchantDataModel,
