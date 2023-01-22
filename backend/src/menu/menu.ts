@@ -47,6 +47,14 @@ export class Menu extends Entity<IMenu> implements IMenu {
   get audit(): Audit {
     return this._audit;
   }
+  
+  get discount(): number {
+    return this._discount;
+  }
+
+  set discount(value: number) {
+    this._discount = value;
+  }
 
   get discount(): number {
     return this._discount;
