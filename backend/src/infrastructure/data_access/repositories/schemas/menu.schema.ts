@@ -13,9 +13,6 @@ export class MenuDataModel extends BaseDocument implements IMenuData {
 
   @Prop({ type: String, required: false })
   description: string;
-  
-  @Prop({ type: Number, required: true, default: 0.0 })
-  discount: number;
 
   @Prop({ type: Number, required: true, default: 0.0 })
   discount: number;
