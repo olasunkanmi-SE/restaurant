@@ -10,11 +10,11 @@ export class ItemController {
 
   @Post()
   async createItem(@Body() request: CreateItemDTO): Promise<Result<ITemResponseDTO>> {
-    return this.itemService.createItem(request);
+    return await this.itemService.createItem(request);
   }
 
   @Get()
   async getItems(): Promise<Result<ITemResponseDTO[]>> {
-    return this.itemService.getItems();
+    return await this.itemService.getItems();
   }
 }

@@ -49,8 +49,8 @@ export class ItemService implements IItemService {
       throwApplicationError(HttpStatus.SERVICE_UNAVAILABLE, 'Error while creating item, please try again later');
     }
     const newItem: Item = result.getValue();
-    const requestResponse = ItemParser.createItemResponse(newItem);
-    return Result.ok(requestResponse);
+    const itemResponse = ItemParser.createItemResponse(newItem);
+    return Result.ok(itemResponse);
   }
 
   async getItems(): Promise<Result<ITemResponseDTO[]>> {

@@ -8,7 +8,7 @@ import { AuditMapper } from './../audit/audit.mapper';
 import { AuthService } from './../infrastructure/auth/auth.service';
 import { ContextService } from './../infrastructure/context/context.service';
 import { LocationRepository } from './../infrastructure/data_access/repositories/location.repository';
-import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
+import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import { RestaurantRepository } from './../infrastructure/data_access/repositories/restaurant.repository';
 import { LocationData, LocationSchema } from './../infrastructure/data_access/repositories/schemas/location.schema';
 import {

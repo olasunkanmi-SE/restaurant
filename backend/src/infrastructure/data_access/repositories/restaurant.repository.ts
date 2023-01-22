@@ -5,7 +5,7 @@ import { Result } from './../../../domain/result/result';
 import { Merchant } from './../../../merchant/merchant';
 import { Restaurant } from './../../../restaurant/restaurant';
 import { RestaurantMapper } from './../../../restaurant/restaurant.mapper';
-import { MerchantRepository } from './merchant-repository';
+import { MerchantRepository } from './merchant.repository';
 import { IRestaurantRepository } from './restaurant-repository.interface';
 import { RestaurantData, RestaurantDocument } from './schemas';
 
