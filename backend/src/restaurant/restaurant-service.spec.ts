@@ -1,5 +1,7 @@
+import { ItemMapper } from './../item/item.mapper';
 import { expect } from 'chai';
 import { Types } from 'mongoose';
+import { MenuMapper } from '../menu/menu.mapper';
 import * as sinon from 'ts-sinon';
 import { Merchant } from '../merchant';
 import { auditMockData } from './../audit/audit-mock-data';
@@ -29,12 +31,16 @@ import { RestaurantService } from './restaurant.service';
 describe('Test restaurant service', () => {
   const restaurantRepositoryStub: IRestaurantRepository = sinon.stubInterface<IRestaurantRepository>();
   const merchantRepositoryStub: MerchantRepository = sinon.stubInterface<MerchantRepository>();
-  const locationMapperStub = new LocationMapper(new AuditMapper());
-  const merchantMapperStub = new MerchantMapper(new AuditMapper());
+  const auditMapperStub = new AuditMapper();
+  const locationMapperStub = new LocationMapper(auditMapperStub);
+  const merchantMapperStub = new MerchantMapper(auditMapperStub);
+  const itemMapperStub = new ItemMapper(auditMapperStub);
+  const menuMapperStub = new MenuMapper(auditMapperStub, itemMapperStub);
   const restaurantMapperStub: RestaurantMapper = new RestaurantMapper(
     new AuditMapper(),
     locationMapperStub,
     merchantMapperStub,
+    menuMapperStub,
   );
   const contextServiceStub: IContextService = sinon.stubInterface<IContextService>();
   const validateUserStub: IValidateUser<Merchant, MerchantDocument> =
@@ -64,6 +70,7 @@ describe('Test restaurant service', () => {
       auditCreatedBy: '',
       auditCreatedDateTime: new Date(),
     },
+    menus: [],
   };
   it('Create a restaurant', async () => {
     contextServiceStub.getContext = (): Promise<Context> => {

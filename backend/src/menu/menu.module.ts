@@ -2,7 +2,7 @@ import { MenuService } from './menu.service';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
-import { MenuMapper } from 'src/menu/menu.mapper';
+import { MenuMapper } from '../menu/menu.mapper';
 import { TYPES } from './../application/constants/types';
 import { AuditMapper } from './../audit/audit.mapper';
 import { AuthService } from './../infrastructure/auth/auth.service';
@@ -17,7 +17,6 @@ import {
   MerchantSchema,
 } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { ContextMiddleWare } from './../infrastructure/middlewares/context.middleware';
-import { ItemController } from './../item/item.controller';
 import { ItemMapper } from './../item/item.mapper';
 import { MerchantMapper } from './../merchant/merchant.mapper';
 import { MerchantService } from './../merchant/merchant.service';

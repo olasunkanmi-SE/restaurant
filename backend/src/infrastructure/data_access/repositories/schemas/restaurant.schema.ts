@@ -3,7 +3,9 @@ import { Type } from 'class-transformer';
 import mongoose, { Document, Types } from 'mongoose';
 import { BaseDocument } from '../../../database/mongoDB/base-document';
 import { IRestaurantdata } from '../interfaces/restaurant-model.interface';
+import { PaymentBy, PaymentMethod } from './../../../../restaurant/restaurant.interface';
 import { LocationData, LocationSchema } from './location.schema';
+import { MenuDataModel } from './menu.schema';
 import { MerchantDataModel } from './merchant.schema';
 
 export type RestaurantDocument = RestaurantData & Document;
@@ -26,10 +28,25 @@ export class RestaurantData extends BaseDocument implements IRestaurantdata {
   logoUrl?: string;
 
   @Prop({ type: String })
+  imageUrl: string;
+
+  @Prop({ type: Boolean, default: false })
+  opened: boolean;
+
+  @Prop({ type: String })
   timeZone?: string;
 
   @Prop({ type: String })
   phoneNumber: string;
+
+  @Prop({ type: Number })
+  openingHour: number;
+
+  @Prop({ type: Number })
+  closingHour: number;
+
+  @Prop({ type: Array<string>, default: [PaymentBy.Cash] })
+  paymentMethod: PaymentMethod[];
 
   @Prop({ type: LocationSchema })
   @Type(() => LocationData)
@@ -41,6 +58,12 @@ export class RestaurantData extends BaseDocument implements IRestaurantdata {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: MerchantDataModel.name })
   @Type(() => MerchantDataModel)
   merchant: MerchantDataModel;
+
+  @Prop({
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: MenuDataModel.name, default: [] }],
+  })
+  @Type(() => MenuDataModel)
+  menus: MenuDataModel[];
 }
 
 export const RestaurantSchema = SchemaFactory.createForClass(RestaurantData);

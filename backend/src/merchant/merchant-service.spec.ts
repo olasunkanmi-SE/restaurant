@@ -16,7 +16,7 @@ import { IMerchantResponseDTO } from './merchant-response.dto';
 import { MerchantMapper } from './merchant.mapper';
 import { MerchantService } from './merchant.service';
 import { Merchant } from './merchant';
-import { MerchantDocument } from 'src/infrastructure';
+import { MerchantDocument } from '../infrastructure';
 
 describe('Test merchant service', () => {
   const merchantRepositoryStub: MerchantRepository = sinon.stubInterface<MerchantRepository>();

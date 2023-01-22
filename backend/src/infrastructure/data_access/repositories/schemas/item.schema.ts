@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { BaseDocument } from 'src/infrastructure/database';
-import { ITemDataModelInterface, portion } from './../interfaces/item-model.interface';
 import { Document } from 'mongoose';
+import { BaseDocument } from '../../../../infrastructure/database';
+import { ITemDataModelInterface, portion } from './../interfaces/item-model.interface';
 
 export type ItemDocument = ItemDataModel & Document;
 
