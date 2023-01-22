@@ -1,5 +1,5 @@
 import { ItemMapper } from './../item/item.mapper';
-import { MenuMapper } from 'src/menu/menu.mapper';
+import { MenuMapper } from '../menu/menu.mapper';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';

@@ -2,7 +2,7 @@ import { auditMockData } from './../audit/audit-mock-data';
 import { itemMockData } from './../item/item-mock.data';
 import { Item } from './../item/item';
 import { IMenu } from './menu-entity.interface';
-import { Audit } from 'src/domain';
+import { Audit } from '../domain';
 
 export const menuMockData: IMenu = {
   name: '',

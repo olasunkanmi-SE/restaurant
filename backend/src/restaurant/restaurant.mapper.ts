@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
-import { MenuMapper } from 'src/menu/menu.mapper';
+import { MenuMapper } from '../menu/menu.mapper';
 import { AuditMapper } from './../audit/audit.mapper';
 import { IMapper } from './../domain/mapper/mapper';
 import { RestaurantData } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
@@ -48,7 +48,7 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
       paymentMethod,
       openingHour,
       closingHour,
-      menus: menus.map((menu) => this.menuMapper.toPersistence(menu)),
+      menus: menus.length ? menus.map((menu) => this.menuMapper.toPersistence(menu)) : [],
       location: this.locationMapper.toPersistence(entity.location),
       merchantId,
       merchant: this.merchantMapper.toPersistence(entity.merchant),
@@ -93,7 +93,7 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
         paymentMethod,
         openingHour,
         closingHour,
-        menus: menus.map((menu) => this.menuMapper.toDomain(menu)),
+        menus: menus.length ? menus.map((menu) => this.menuMapper.toDomain(menu)) : [],
         location: this.locationMapper.toDomain(document.location),
         merchant: this.merchantMapper.toDomain(document.merchant),
         audit: this.auditMapper.toDomain(document),

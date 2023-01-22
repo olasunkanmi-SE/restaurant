@@ -1,7 +1,7 @@
 import { ItemMapper } from './../item/item.mapper';
 import { expect } from 'chai';
 import { Types } from 'mongoose';
-import { MenuMapper } from 'src/menu/menu.mapper';
+import { MenuMapper } from '../menu/menu.mapper';
 import * as sinon from 'ts-sinon';
 import { Merchant } from '../merchant';
 import { auditMockData } from './../audit/audit-mock-data';
@@ -70,6 +70,7 @@ describe('Test restaurant service', () => {
       auditCreatedBy: '',
       auditCreatedDateTime: new Date(),
     },
+    menus: [],
   };
   it('Create a restaurant', async () => {
     contextServiceStub.getContext = (): Promise<Context> => {

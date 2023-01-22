@@ -1,5 +1,5 @@
 import { auditMockData } from './../audit/audit-mock-data';
-import { Audit } from 'src/domain';
+import { Audit } from '../domain';
 import { IITem } from './item.entity.interface';
 
 export const itemMockData: IITem = {

@@ -1,10 +1,10 @@
-import { Result } from './../../../domain/result/result';
-import { Injectable, HttpStatus } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, FilterQuery, Model, Types } from 'mongoose';
-import { GenericDocumentRepository } from 'src/infrastructure/database';
-import { MenuMapper } from 'src/menu/menu.mapper';
+import { GenericDocumentRepository } from '../../../infrastructure/database';
+import { Result } from './../../../domain/result/result';
 import { Menu } from './../../../menu/menu';
+import { MenuMapper } from './../../../menu/menu.mapper';
 import { MenuDataModel, MenuDocument } from './schemas/menu.schema';
 
 @Injectable()

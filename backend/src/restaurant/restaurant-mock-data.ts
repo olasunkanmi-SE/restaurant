@@ -53,4 +53,5 @@ export const restaurantMockDocument: any = {
   auditModifiedBy: '',
   auditCreatedBy: 'Ola',
   auditCreatedDateTime: new Date(),
+  menus: [],
 };
