@@ -5,7 +5,7 @@ import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
 import { IContextService } from './../infrastructure/context/context-service.interface';
-import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
+import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import { IRestaurantRepository } from './../infrastructure/data_access/repositories/restaurant-repository.interface';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
 import { Location } from './../location/location';

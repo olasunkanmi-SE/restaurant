@@ -1,12 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import { BaseDocument } from '../../../../infrastructure/database';
-import { ITemDataModelInterface, portion } from './../interfaces/item-model.interface';
+import { ITemModel, portion } from './../interfaces/item-model.interface';
+import { Type } from 'class-transformer';
+import { AddonDataModel } from '../../../../addon';
 
 export type ItemDocument = ItemDataModel & Document;
 
 @Schema({ versionKey: false })
-export class ItemDataModel extends BaseDocument implements ITemDataModelInterface {
+export class ItemDataModel extends BaseDocument implements ITemModel {
   @Prop({ type: String, required: true, unique: true })
   name: string;
 
@@ -33,6 +35,12 @@ export class ItemDataModel extends BaseDocument implements ITemDataModelInterfac
 
   @Prop({ type: Number })
   taxRate: number;
+
+  @Prop({
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: AddonDataModel.name }],
+  })
+  @Type(() => AddonDataModel)
+  addons: AddonDataModel[];
 }
 
 export const ItemSchema = SchemaFactory.createForClass(ItemDataModel);

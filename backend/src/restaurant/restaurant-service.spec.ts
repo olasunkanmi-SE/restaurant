@@ -1,3 +1,4 @@
+import { AddonMapper } from './../addon/addon.mapper';
 import { ItemMapper } from './../item/item.mapper';
 import { expect } from 'chai';
 import { Types } from 'mongoose';
@@ -10,7 +11,7 @@ import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
 import { Context, MerchantDocument } from './../infrastructure';
 import { IContextService } from './../infrastructure/context/context-service.interface';
-import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
+import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import { IRestaurantRepository } from './../infrastructure/data_access/repositories/restaurant-repository.interface';
 import { LocationMapper } from './../location/location.mapper';
 import { IMerchantService } from './../merchant/interface/merchant-service.interface';
@@ -34,7 +35,8 @@ describe('Test restaurant service', () => {
   const auditMapperStub = new AuditMapper();
   const locationMapperStub = new LocationMapper(auditMapperStub);
   const merchantMapperStub = new MerchantMapper(auditMapperStub);
-  const itemMapperStub = new ItemMapper(auditMapperStub);
+  const addonMapperStub = new AddonMapper();
+  const itemMapperStub = new ItemMapper(auditMapperStub, addonMapperStub);
   const menuMapperStub = new MenuMapper(auditMapperStub, itemMapperStub);
   const restaurantMapperStub: RestaurantMapper = new RestaurantMapper(
     new AuditMapper(),

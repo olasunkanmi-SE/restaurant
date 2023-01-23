@@ -13,7 +13,7 @@ import { Result } from './../domain/result/result';
 import { IAuthService } from './../infrastructure/auth/interfaces/auth-service.interface';
 import { ISignUpTokens, IUserPayload } from './../infrastructure/auth/interfaces/auth.interface';
 import { Context, IContextService } from './../infrastructure/context';
-import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
+import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import { GenericDocumentRepository } from './../infrastructure/database';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
 import { Merchant } from './../merchant/merchant';

@@ -12,5 +12,6 @@ export const itemMockData: IITem = {
   tags: [''],
   maximumPermitted: 5,
   taxRate: 0.25,
+  addons: [],
   audit: Audit.create(auditMockData).getValue(),
 };

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
-import { Merchant } from './../../../merchant/merchant';
-import { MerchantMapper } from './../../../merchant/merchant.mapper';
-import { GenericDocumentRepository } from './../../database/';
+import { Merchant } from '../../../merchant/merchant';
+import { MerchantMapper } from '../../../merchant/merchant.mapper';
+import { GenericDocumentRepository } from '../../database';
 import { MerchantDocument } from './schemas';
 import { MerchantDataModel } from './schemas/merchant.schema';
 

@@ -1,3 +1,4 @@
+import { AddonMapper } from './../addon/addon.mapper';
 import { ItemMapper } from './../item/item.mapper';
 import { MenuMapper } from '../menu/menu.mapper';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
@@ -8,7 +9,7 @@ import { AuditMapper } from './../audit/audit.mapper';
 import { AuthService } from './../infrastructure/auth/auth.service';
 import { ContextService } from './../infrastructure/context/context.service';
 import { LocationRepository } from './../infrastructure/data_access/repositories/location.repository';
-import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant-repository';
+import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import { RestaurantRepository } from './../infrastructure/data_access/repositories/restaurant.repository';
 import { LocationData, LocationSchema } from './../infrastructure/data_access/repositories/schemas/location.schema';
 import {
@@ -54,6 +55,7 @@ import { RestaurantService } from './restaurant.service';
     MerchantMapper,
     MenuMapper,
     ItemMapper,
+    AddonMapper,
   ],
 })
 export class RestaurantModule implements NestModule {
