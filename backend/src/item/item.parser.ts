@@ -1,5 +1,5 @@
 import { AddonParser } from './../addon/addon.parser';
-import { AuditParser } from 'src/audit';
+import { AuditParser } from '../audit';
 import { Item } from './item';
 import { ITemResponseDTO } from './item-response.dto';
 

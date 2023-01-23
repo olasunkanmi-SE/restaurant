@@ -2,7 +2,7 @@ import { IAddonService } from './addon-service.interface';
 import { IAddonResponseDTO } from './addon-response.dto';
 import { Result } from './../domain/result/result';
 import { CreateAddonDTO } from './create-addon.dto';
-import { TYPES } from 'src/application';
+import { TYPES } from '../application';
 import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
 
 @Controller('addons')

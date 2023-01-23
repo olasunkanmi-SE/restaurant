@@ -1,4 +1,4 @@
-import { AuditParser } from 'src/audit';
+import { AuditParser } from '../audit';
 import { Addon } from './addon';
 import { IAddonResponseDTO } from './addon-response.dto';
 

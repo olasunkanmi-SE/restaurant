@@ -3,7 +3,7 @@ import mongoose, { Document } from 'mongoose';
 import { BaseDocument } from '../../../../infrastructure/database';
 import { ITemModel, portion } from './../interfaces/item-model.interface';
 import { Type } from 'class-transformer';
-import { AddonDataModel } from 'src/addon';
+import { AddonDataModel } from '../../../../addon';
 
 export type ItemDocument = ItemDataModel & Document;
 

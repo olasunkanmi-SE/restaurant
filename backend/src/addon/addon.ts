@@ -1,6 +1,6 @@
 import { Result } from './../domain/result/result';
 import { Audit } from './../domain/audit/audit';
-import { Entity } from 'src/domain';
+import { Entity } from '../domain';
 import { IAddon } from './addon-entity.interface';
 import { Types } from 'mongoose';
 
