@@ -1,4 +1,4 @@
-import { AuditParser } from 'src/audit';
+import { AuditParser } from '../audit';
 import { ITemResponseDTO } from './../item/item-response.dto';
 import { ItemParser } from './../item/item.parser';
 import { Menu } from './menu';

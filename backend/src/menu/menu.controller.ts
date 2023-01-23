@@ -3,7 +3,7 @@ import { IMenuResponseDTO } from './menu-response.dto';
 import { CreateMenuDTO } from './create-menu.schema';
 import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import { IMenuService } from './menu-service.interface';
-import { TYPES } from 'src/application';
+import { TYPES } from '../application';
 import { Types } from 'mongoose';
 
 @Controller('menus')

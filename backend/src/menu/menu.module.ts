@@ -1,3 +1,4 @@
+import { AddonMapper } from './../addon/addon.mapper';
 import { MenuService } from './menu.service';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -41,6 +42,7 @@ import { MenuController } from './menu.controller';
     MerchantRepository,
     MerchantMapper,
     JwtService,
+    AddonMapper,
     { provide: TYPES.IContextService, useClass: ContextService },
     { provide: TYPES.IMerchantService, useClass: MerchantService },
     { provide: TYPES.IAuthService, useClass: AuthService },

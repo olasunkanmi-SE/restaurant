@@ -15,4 +15,5 @@ export const TYPES = {
   IContextService: Symbol('IContextService'),
   IValidateUser: Symbol('IValidateUser'),
   IMapper: Symbol('IMapper'),
+  IaddonRepository: Symbol('IaddonRepository'),
 };

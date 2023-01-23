@@ -1,5 +1,6 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString, Length, Max, MaxLength, Min } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, Length, Max, MaxLength, Min, IsArray } from 'class-validator';
 import { portion } from './../infrastructure/data_access/repositories/interfaces/item-model.interface';
+import { Types } from 'mongoose';
 
 export class CreateItemDTO {
   @IsString()
@@ -42,4 +43,8 @@ export class CreateItemDTO {
   @IsNumber()
   @IsOptional()
   taxRate: number;
+
+  @IsArray()
+  @IsOptional()
+  addons: Types.ObjectId[];
 }

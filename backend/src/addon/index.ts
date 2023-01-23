@@ -4,3 +4,8 @@ export * from './addon-response.dto';
 export * from './addon.mapper';
 export * from './addon.parser';
 export * from './addon.schema';
+export * from './addon-service.interface';
+export * from './addon.service';
+export * from './create-addon.dto';
+export * from './addon.module';
+export * from './addon.controller';

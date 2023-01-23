@@ -1,3 +1,4 @@
+import { AddonMapper } from './../addon/addon.mapper';
 import { ItemMapper } from './../item/item.mapper';
 import { expect } from 'chai';
 import { Types } from 'mongoose';
@@ -34,7 +35,8 @@ describe('Test restaurant service', () => {
   const auditMapperStub = new AuditMapper();
   const locationMapperStub = new LocationMapper(auditMapperStub);
   const merchantMapperStub = new MerchantMapper(auditMapperStub);
-  const itemMapperStub = new ItemMapper(auditMapperStub);
+  const addonMapperStub = new AddonMapper();
+  const itemMapperStub = new ItemMapper(auditMapperStub, addonMapperStub);
   const menuMapperStub = new MenuMapper(auditMapperStub, itemMapperStub);
   const restaurantMapperStub: RestaurantMapper = new RestaurantMapper(
     new AuditMapper(),

@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
-import { TYPES } from 'src/application';
+import { TYPES } from '../application';
 import { AuditMapper } from './../audit/audit.mapper';
 import { AuthService } from './../infrastructure/auth/auth.service';
 import { ContextService } from './../infrastructure/context/context.service';

@@ -40,6 +40,7 @@ import { ItemService } from './item.service';
     { provide: TYPES.IValidateUser, useClass: ValidateUser },
     { provide: TYPES.IItemService, useClass: ItemService },
     { provide: TYPES.IAddonService, useClass: AddonService },
+    { provide: TYPES.IaddonRepository, useClass: AddonRepository },
     ITemRepository,
     ItemMapper,
     MerchantRepository,
