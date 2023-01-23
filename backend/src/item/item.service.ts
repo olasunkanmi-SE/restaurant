@@ -1,5 +1,7 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { IContextService } from '.././infrastructure/context';
+import { Addon } from '../addon';
+import { IaddonRepository } from '../infrastructure';
 import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
@@ -24,12 +26,13 @@ export class ItemService implements IItemService {
     @Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService,
     private readonly iTemRepository: ITemRepository,
     private readonly itemMapper: ItemMapper,
+    @Inject(TYPES.IaddonRepository) private readonly addonRepository: IaddonRepository,
   ) {
     this.context = this.contextService.getContext();
   }
 
   async createItem(props: CreateItemDTO): Promise<Result<ITemResponseDTO>> {
-    const { name } = props;
+    const { name, addons } = props;
     const validUser: boolean = await this.merchantService.validateContext();
     if (!validUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
@@ -42,13 +45,19 @@ export class ItemService implements IItemService {
 
     const context: Context = await this.context;
     const audit: Audit = Audit.createInsertContext(context);
-    const item: Item = Item.create({ ...props, audit }).getValue();
+    let addonsEntity: Addon[] = [];
+    if (addons && addons.length) {
+      addonsEntity = await this.addonRepository.getAddonsById(addons);
+    }
+    const item: Item = Item.create({ ...props, addons: addonsEntity, audit }).getValue();
     const itemModel: ItemDataModel = this.itemMapper.toPersistence(item);
     const result: Result<Item> = await this.iTemRepository.create(itemModel);
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.SERVICE_UNAVAILABLE, 'Error while creating item, please try again later');
     }
-    const newItem: Item = result.getValue();
+    const x = result.getValue().id;
+    const itemDoc = await this.iTemRepository.getItemwithAddons(x);
+    const newItem = this.itemMapper.toDomain(itemDoc);
     const itemResponse = ItemParser.createItemResponse(newItem);
     return Result.ok(itemResponse);
   }

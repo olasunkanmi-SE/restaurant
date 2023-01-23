@@ -1,3 +1,4 @@
+import { AddonParser } from './../addon/addon.parser';
 import { AuditParser } from 'src/audit';
 import { Item } from './item';
 import { ITemResponseDTO } from './item-response.dto';
@@ -15,6 +16,7 @@ export class ItemParser {
       tags: item.tags,
       maximumPermitted: item.maximumPermitted,
       taxRate: item.taxRate,
+      addons: AddonParser.createAddonsResponse(item.addons),
       ...AuditParser.createAuditResponse(item.audit),
     };
     return ITemResponse;

@@ -1,3 +1,4 @@
+import { Addon } from './../addon/addon';
 import { Types } from 'mongoose';
 import { Audit, Entity, Result } from '../domain';
 import { portion } from './../infrastructure/data_access/repositories/interfaces/item-model.interface';
@@ -14,6 +15,7 @@ export class Item extends Entity<IITem> implements IITem {
   private _maximumPermitted: number;
   private _taxRate: number;
   private _audit: Audit;
+  private _addons: Addon[];
 
   constructor(id: Types.ObjectId, props: IITem) {
     super(id);
@@ -27,6 +29,7 @@ export class Item extends Entity<IITem> implements IITem {
     this._maximumPermitted = props.maximumPermitted;
     this._taxRate = props.taxRate;
     this._audit = props.audit;
+    this._addons = props.addons;
   }
 
   get name(): string {
@@ -107,6 +110,14 @@ export class Item extends Entity<IITem> implements IITem {
 
   set audit(audit: Audit) {
     this._audit = audit;
+  }
+
+  get addons(): Addon[] {
+    return this._addons;
+  }
+
+  set addons(addons: Addon[]) {
+    this._addons = addons;
   }
 
   static create(props: IITem, id?: Types.ObjectId): Result<Item> {

@@ -1,5 +1,6 @@
 export interface IAddonDataModel {
-  readonly category: string;
+  readonly name: string;
   readonly description?: string;
   readonly code: string;
+  readonly quantity: number;
 }

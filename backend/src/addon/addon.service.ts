@@ -29,15 +29,15 @@ export class AddonService implements IAddonService {
   }
 
   async createAddon(props: CreateAddonDTO): Promise<Result<IAddonResponseDTO>> {
-    const { code } = props;
+    const { name } = props;
     const validUser: boolean = await this.merchantService.validateContext();
     if (!validUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
 
-    const existingItem = await this.addonRepository.findOne({ code });
+    const existingItem = await this.addonRepository.findOne({ name });
     if (existingItem.isSuccess) {
-      throwApplicationError(HttpStatus.BAD_REQUEST, `Item ${code} already exists`);
+      throwApplicationError(HttpStatus.BAD_REQUEST, `Item ${name} already exists`);
     }
     const context: Context = await this.context;
     const audit: Audit = Audit.createInsertContext(context);

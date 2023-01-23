@@ -1,3 +1,4 @@
+import { AddonMapper } from './../addon/addon.mapper';
 import { ItemMapper } from './../item/item.mapper';
 import { MenuMapper } from '../menu/menu.mapper';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
@@ -54,6 +55,7 @@ import { RestaurantService } from './restaurant.service';
     MerchantMapper,
     MenuMapper,
     ItemMapper,
+    AddonMapper,
   ],
 })
 export class RestaurantModule implements NestModule {

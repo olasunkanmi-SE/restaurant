@@ -1,6 +1,6 @@
 export type portion = 'sharing' | 'single';
 
-export interface ITemDataModelInterface {
+export interface ITemModel {
   readonly name: string;
   readonly description?: string;
   readonly portion: portion;

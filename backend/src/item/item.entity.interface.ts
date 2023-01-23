@@ -1,3 +1,4 @@
+import { Addon } from './../addon/addon';
 import { Audit } from './../domain/audit/audit';
 import { portion } from './../infrastructure/data_access/repositories/interfaces/item-model.interface';
 export interface IITem {
@@ -11,4 +12,5 @@ export interface IITem {
   maximumPermitted?: number;
   taxRate?: number;
   audit: Audit;
+  addons: Addon[];
 }
