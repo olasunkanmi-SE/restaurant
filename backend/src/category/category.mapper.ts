@@ -1,8 +1,10 @@
+import { Injectable } from '@nestjs/common';
 import { AuditMapper } from './../audit/audit.mapper';
 import { IMapper } from './../domain/mapper/mapper';
 import { CategoryDataModel } from './../infrastructure/data_access/repositories/schemas/category.schema';
 import { Category } from './category';
 
+@Injectable()
 export class CategoryMapper implements IMapper<Category, CategoryDataModel> {
   constructor(private readonly auditMapper: AuditMapper) {}
 

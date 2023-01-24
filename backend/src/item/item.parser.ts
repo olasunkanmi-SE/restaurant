@@ -23,8 +23,6 @@ export class ItemParser {
   }
 
   static createItemsresponse(items: Item[]): ITemResponseDTO[] {
-    const itemResponses: ITemResponseDTO[] = [];
-    items.forEach((item) => itemResponses.push(ItemParser.createItemResponse(item)));
-    return itemResponses;
+    return items.map((item) => ItemParser.createItemResponse(item));
   }
 }
