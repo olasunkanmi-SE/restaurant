@@ -6,11 +6,6 @@ export class CreateAddonDTO {
   @MaxLength(128)
   readonly name: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(128)
-  readonly code: string;
-
   @IsNumber()
   @IsNotEmpty()
   readonly quantity: number;
