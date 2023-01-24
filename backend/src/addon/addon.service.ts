@@ -41,7 +41,7 @@ export class AddonService implements IAddonService {
     }
     const context: Context = await this.context;
     const audit: Audit = Audit.createInsertContext(context);
-    const addon: Addon = Addon.create({ ...props, code: props.code.toUpperCase(), audit });
+    const addon: Addon = Addon.create({ ...props, audit });
     const addonModel: AddonDataModel = this.addonMapper.toPersistence(addon);
     const result: Result<Addon> = await this.addonRepository.create(addonModel);
     if (!result.isSuccess) {

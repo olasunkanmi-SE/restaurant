@@ -34,9 +34,6 @@ export class AddonDataModel implements IAddonDataModel {
   @Prop({ type: String, required: false })
   description: string;
 
-  @Prop({ type: String, required: true, unique: true })
-  code: string;
-
   @Prop({ type: Number, required: true })
   quantity: number;
 }

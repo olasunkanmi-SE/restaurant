@@ -6,7 +6,6 @@ import { Types } from 'mongoose';
 
 export class Addon extends Entity<IAddon> implements IAddon {
   private _name: string;
-  private _code: string;
   private _description: string | undefined;
   private _audit: Audit;
   private _quantity: number;
@@ -14,7 +13,6 @@ export class Addon extends Entity<IAddon> implements IAddon {
     super(id);
     this._name = props.name;
     this._description = props.description;
-    this._code = props.code;
     this._audit = props.audit;
     this._quantity = props.quantity;
   }
@@ -25,14 +23,6 @@ export class Addon extends Entity<IAddon> implements IAddon {
 
   set name(name: string) {
     this._name = name;
-  }
-
-  get code(): string {
-    return this._code;
-  }
-
-  set code(code: string) {
-    this._code = code;
   }
 
   get audit(): Audit {

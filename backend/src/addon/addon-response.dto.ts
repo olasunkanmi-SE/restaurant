@@ -3,7 +3,6 @@ import { IAudit } from './../infrastructure/database/mongoDB/base-document.inter
 export interface IAddonResponseDTO extends IAudit {
   id: Types.ObjectId;
   name: string;
-  code: string;
   quantity: number;
   description: string | undefined;
 }
