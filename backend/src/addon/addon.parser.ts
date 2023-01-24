@@ -4,8 +4,8 @@ import { IAddonResponseDTO } from './addon-response.dto';
 
 export class AddonParser {
   static createAddonResponse(addon: Addon): IAddonResponseDTO {
-    const { name, description, code, audit, id, quantity } = addon;
-    return { id, name, description, quantity, code, ...AuditParser.createAuditResponse(audit) };
+    const { name, description, audit, id, quantity } = addon;
+    return { id, name, description, quantity, ...AuditParser.createAuditResponse(audit) };
   }
 
   static createAddonsResponse(addons: Addon[]): IAddonResponseDTO[] {
