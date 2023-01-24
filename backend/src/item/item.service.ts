@@ -1,4 +1,5 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { Types } from 'mongoose';
 import { IContextService } from '.././infrastructure/context';
 import { Addon } from '../addon';
 import { IaddonRepository } from '../infrastructure';
@@ -55,8 +56,8 @@ export class ItemService implements IItemService {
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.SERVICE_UNAVAILABLE, 'Error while creating item, please try again later');
     }
-    const x = result.getValue().id;
-    const itemDoc = await this.iTemRepository.getItemwithAddons(x);
+    const itemId: Types.ObjectId = result.getValue().id;
+    const itemDoc = await this.iTemRepository.getItemwithAddons(itemId);
     const newItem = this.itemMapper.toDomain(itemDoc);
     const itemResponse = ItemParser.createItemResponse(newItem);
     return Result.ok(itemResponse);
