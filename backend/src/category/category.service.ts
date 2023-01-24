@@ -20,7 +20,7 @@ import { Types } from 'mongoose';
 export class CategoryService implements ICategoryService {
   private context: Promise<Context>;
   constructor(
-    private readonly contextService: IContextService,
+    @Inject(TYPES.IContextService) private readonly contextService: IContextService,
     @Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService,
     private readonly categoryRepository: CategoryRepository,
     private readonly categoryMapper: CategoryMapper,

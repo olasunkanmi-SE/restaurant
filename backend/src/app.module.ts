@@ -17,6 +17,7 @@ import { ContextService } from './infrastructure/context';
 import { ContextMiddleWare } from './infrastructure/middlewares';
 import { ItemModule } from './item/item.module';
 import { MerchantModule } from './merchant/merchant.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { MerchantModule } from './merchant/merchant.module';
     ItemModule,
     MenuModule,
     AddonModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [
