@@ -6,8 +6,9 @@ import { ICategoryResponseDTO } from './category-response.dto';
 @Injectable()
 export class CategoryParser {
   static createCategoryResponse(category: Category): ICategoryResponseDTO {
-    const { name, description, code } = category;
+    const { name, description, code, id } = category;
     const categoryResponse: ICategoryResponseDTO = {
+      id,
       name,
       description,
       code,

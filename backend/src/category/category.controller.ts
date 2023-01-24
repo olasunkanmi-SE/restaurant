@@ -6,7 +6,7 @@ import { TYPES } from './../application/constants/types';
 import { ICategoryService } from './category-service.interface';
 import { Types } from 'mongoose';
 
-@Controller()
+@Controller('categories')
 export class CategoryController {
   constructor(@Inject(TYPES.ICategoryService) private readonly categoryService: ICategoryService) {}
 
