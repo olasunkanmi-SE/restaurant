@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { IsString, IsNotEmpty, MaxLength, IsOptional, IsNumber } from 'class-validator';
 
 export class CreateAddonDTO {
@@ -14,4 +15,7 @@ export class CreateAddonDTO {
   @MaxLength(256)
   @IsOptional()
   readonly description: string;
+
+  @IsNotEmpty()
+  categoryId: Types.ObjectId;
 }

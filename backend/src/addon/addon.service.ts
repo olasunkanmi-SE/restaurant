@@ -1,3 +1,5 @@
+import { Category } from './../category/category';
+import { CategoryRepository } from './../infrastructure/data_access/repositories/category.repository';
 import { IAddonResponseDTO } from './addon-response.dto';
 import { AddonParser } from './addon.parser';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
@@ -22,6 +24,7 @@ export class AddonService implements IAddonService {
     @Inject(TYPES.IContextService)
     private readonly contextService: IContextService,
     @Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService,
+    private readonly categoryRepository: CategoryRepository,
     private readonly addonRepository: AddonRepository,
     private readonly addonMapper: AddonMapper,
   ) {
@@ -41,7 +44,12 @@ export class AddonService implements IAddonService {
     }
     const context: Context = await this.context;
     const audit: Audit = Audit.createInsertContext(context);
-    const addon: Addon = Addon.create({ ...props, audit });
+    const categoryResult: Result<Category> = await this.categoryRepository.findById(props.categoryId);
+    if (!categoryResult.isSuccess) {
+      throwApplicationError(HttpStatus.NOT_FOUND, 'category does not exist');
+    }
+    const category = categoryResult.getValue();
+    const addon: Addon = Addon.create({ ...props, audit, category });
     const addonModel: AddonDataModel = this.addonMapper.toPersistence(addon);
     const result: Result<Addon> = await this.addonRepository.create(addonModel);
     if (!result.isSuccess) {

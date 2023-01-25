@@ -7,10 +7,16 @@ import { AddonDataModel, AddonSchema } from './../addon/addon.schema';
 import { AddonService } from './../addon/addon.service';
 import { TYPES } from './../application/constants/types';
 import { AuditMapper } from './../audit/audit.mapper';
+import { CategoryMapper } from './../category/category.mapper';
 import { AuthService } from './../infrastructure/auth/auth.service';
 import { ContextService } from './../infrastructure/context/context.service';
 import { AddonRepository } from './../infrastructure/data_access/repositories/addon.repository';
+import { CategoryRepository } from './../infrastructure/data_access/repositories/category.repository';
 import { ITemRepository } from './../infrastructure/data_access/repositories/item.repository';
+import {
+  CategoryDataModel,
+  CategorySchema,
+} from './../infrastructure/data_access/repositories/schemas/category.schema';
 import { ItemDataModel, ItemSchema } from './../infrastructure/data_access/repositories/schemas/item.schema';
 import {
   MerchantDataModel,
@@ -30,6 +36,7 @@ import { ItemService } from './item.service';
       { name: ItemDataModel.name, schema: ItemSchema },
       { name: MerchantDataModel.name, schema: MerchantSchema },
       { name: AddonDataModel.name, schema: AddonSchema },
+      { name: CategoryDataModel.name, schema: CategorySchema },
     ]),
   ],
   controllers: [ItemController],
@@ -50,6 +57,8 @@ import { ItemService } from './item.service';
     AddonRepository,
     AddonMapper,
     AddonRepository,
+    CategoryRepository,
+    CategoryMapper,
   ],
 })
 export class ItemModule implements NestModule {

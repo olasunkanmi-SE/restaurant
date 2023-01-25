@@ -1,6 +1,8 @@
+import { CategoryDataModel } from './../infrastructure/data_access/repositories/schemas/category.schema';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, SchemaTypes, Types } from 'mongoose';
+import mongoose, { Document, SchemaTypes, Types } from 'mongoose';
 import { IAddonDataModel } from './../infrastructure/data_access/repositories/schemas/addon-model.interface';
+import { Type } from 'class-transformer';
 
 export type AddonDocument = AddonDataModel & Document;
 
@@ -28,6 +30,7 @@ export class AddonDataModel implements IAddonDataModel {
 
   @Prop({ type: String })
   auditDeletedDateTime?: string;
+
   @Prop({ type: String, required: true })
   name: string;
 
@@ -36,6 +39,10 @@ export class AddonDataModel implements IAddonDataModel {
 
   @Prop({ type: Number, required: true })
   quantity: number;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: CategoryDataModel.name })
+  @Type(() => CategoryDataModel)
+  category: CategoryDataModel;
 }
 
 export const AddonSchema = SchemaFactory.createForClass(AddonDataModel);
