@@ -1,18 +1,19 @@
-import { AddonMapper } from './../addon/addon.mapper';
-import { ItemMapper } from './../item/item.mapper';
 import { expect } from 'chai';
 import { Types } from 'mongoose';
-import { MenuMapper } from '../menu/menu.mapper';
 import * as sinon from 'ts-sinon';
+import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
+import { MenuMapper } from '../menu/menu.mapper';
 import { Merchant } from '../merchant';
+import { AddonMapper } from './../addon/addon.mapper';
 import { auditMockData } from './../audit/audit-mock-data';
 import { AuditMapper } from './../audit/audit.mapper';
+import { CategoryMapper } from './../category/category.mapper';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
 import { Context, MerchantDocument } from './../infrastructure';
 import { IContextService } from './../infrastructure/context/context-service.interface';
-import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import { IRestaurantRepository } from './../infrastructure/data_access/repositories/restaurant-repository.interface';
+import { ItemMapper } from './../item/item.mapper';
 import { LocationMapper } from './../location/location.mapper';
 import { IMerchantService } from './../merchant/interface/merchant-service.interface';
 import { merchantMockData } from './../merchant/merchant-mock-data';
@@ -35,7 +36,8 @@ describe('Test restaurant service', () => {
   const auditMapperStub = new AuditMapper();
   const locationMapperStub = new LocationMapper(auditMapperStub);
   const merchantMapperStub = new MerchantMapper(auditMapperStub);
-  const addonMapperStub = new AddonMapper();
+  const categoryMapperStub = new CategoryMapper(auditMapperStub);
+  const addonMapperStub = new AddonMapper(auditMapperStub);
   const itemMapperStub = new ItemMapper(auditMapperStub, addonMapperStub);
   const menuMapperStub = new MenuMapper(auditMapperStub, itemMapperStub);
   const restaurantMapperStub: RestaurantMapper = new RestaurantMapper(
