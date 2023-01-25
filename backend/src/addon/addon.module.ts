@@ -3,10 +3,16 @@ import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TYPES } from '../application';
 import { AuditMapper } from './../audit/audit.mapper';
+import { CategoryMapper } from './../category/category.mapper';
 import { AuthService } from './../infrastructure/auth/auth.service';
 import { ContextService } from './../infrastructure/context/context.service';
 import { AddonRepository } from './../infrastructure/data_access/repositories/addon.repository';
+import { CategoryRepository } from './../infrastructure/data_access/repositories/category.repository';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant.repository';
+import {
+  CategoryDataModel,
+  CategorySchema,
+} from './../infrastructure/data_access/repositories/schemas/category.schema';
 import {
   MerchantDataModel,
   MerchantSchema,
@@ -25,6 +31,7 @@ import { AddonService } from './addon.service';
     MongooseModule.forFeature([
       { name: AddonDataModel.name, schema: AddonSchema },
       { name: MerchantDataModel.name, schema: MerchantSchema },
+      { name: CategoryDataModel.name, schema: CategorySchema },
     ]),
   ],
   controllers: [AddonController],
@@ -40,6 +47,8 @@ import { AddonService } from './addon.service';
     MerchantMapper,
     JwtService,
     AuditMapper,
+    CategoryRepository,
+    CategoryMapper,
   ],
 })
 export class AddonModule implements NestModule {

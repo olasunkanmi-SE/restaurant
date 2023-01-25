@@ -1,10 +1,12 @@
 import { AuditMapper } from './../audit/audit.mapper';
+import { CategoryMapper } from './../category/category.mapper';
 import { IMapper } from './../domain/mapper/mapper';
 import { Addon } from './addon';
 import { AddonDataModel } from './addon.schema';
 export class AddonMapper implements IMapper<Addon, AddonDataModel> {
+  constructor(private readonly auditMapper: AuditMapper) {}
   toPersistence(entity: Addon): AddonDataModel {
-    const { name, description, audit, quantity } = entity;
+    const { name, description, audit, quantity, category } = entity;
     const {
       auditCreatedBy,
       auditCreatedDateTime,
@@ -18,6 +20,7 @@ export class AddonMapper implements IMapper<Addon, AddonDataModel> {
       name,
       description,
       quantity,
+      category: new CategoryMapper(this.auditMapper).toPersistence(category),
       auditCreatedBy,
       auditCreatedDateTime,
       auditModifiedBy,
@@ -28,7 +31,16 @@ export class AddonMapper implements IMapper<Addon, AddonDataModel> {
   }
 
   toDomain(model: AddonDataModel): Addon {
-    const { name, description, _id, quantity } = model;
-    return Addon.create({ name, description, quantity, audit: new AuditMapper().toDomain(model) }, _id);
+    const { name, description, _id, quantity, category } = model;
+    return Addon.create(
+      {
+        name,
+        description,
+        category: new CategoryMapper(this.auditMapper).toDomain(category),
+        quantity,
+        audit: new AuditMapper().toDomain(model),
+      },
+      _id,
+    );
   }
 }

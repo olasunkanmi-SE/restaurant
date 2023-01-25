@@ -1,7 +1,7 @@
 import { ICategoryResponseDTO } from './category-response.dto';
 import { CategoryParser } from './category.parser';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { CategoryDataModel } from 'src/infrastructure/data_access/repositories/schemas/category.schema';
+import { CategoryDataModel } from '../infrastructure/data_access/repositories/schemas/category.schema';
 import { Context } from '../infrastructure';
 import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';

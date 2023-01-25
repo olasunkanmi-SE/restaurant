@@ -35,7 +35,7 @@ export class CategoryMapper implements IMapper<Category, CategoryDataModel> {
   toDomain(model: CategoryDataModel): Category {
     const { _id, name, code, description } = model;
     const entity: Category = Category.create(
-      { name, code, description, audit: this.auditMapper.toDomain(model) },
+      { name, code, description, audit: new AuditMapper().toDomain(model) },
       _id,
     ).getValue();
     return entity;
