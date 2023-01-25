@@ -7,6 +7,7 @@ import { Merchant } from '../merchant';
 import { AddonMapper } from './../addon/addon.mapper';
 import { auditMockData } from './../audit/audit-mock-data';
 import { AuditMapper } from './../audit/audit.mapper';
+import { CategoryMapper } from './../category/category.mapper';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
 import { Context, MerchantDocument } from './../infrastructure';
