@@ -55,7 +55,8 @@ export class AddonService implements IAddonService {
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.SERVICE_UNAVAILABLE, 'Error while creating addon, please try again later');
     }
-    const newAddon = result.getValue();
+    const addonDoc = await this.addonRepository.getAddonWithCategory(result.getValue().id);
+    const newAddon = this.addonMapper.toDomain(addonDoc);
     const addonResponse = AddonParser.createAddonResponse(newAddon);
     return Result.ok(addonResponse);
   }
@@ -65,8 +66,8 @@ export class AddonService implements IAddonService {
     if (!validUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
-    const result: Result<Addon[]> = await this.addonRepository.find({});
-    const addons: Addon[] = result.getValue();
+    const addonsDoc = await this.addonRepository.getAddons();
+    const addons: Addon[] = addonsDoc.map((addon) => this.addonMapper.toDomain(addon));
     const response: IAddonResponseDTO[] = AddonParser.createAddonsResponse(addons);
     return Result.ok(response);
   }

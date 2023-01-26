@@ -18,10 +18,20 @@ export class AddonRepository extends GenericDocumentRepository<Addon, AddonDocum
     super(addonModel, connection, addonMapper);
   }
 
-  async getAddonsById(addonsIds: Types.ObjectId[]): Promise<Addon[]> {
-    const result: Result<Addon[]> = await this.find({
+  async getAddonsById(addonsIds: Types.ObjectId[]): Promise<any> {
+    const addons = await this.DocumentModel.find({
       _id: { $in: addonsIds },
-    });
-    return result.getValue();
+    })
+      .populate('category')
+      .exec();
+    return addons;
+  }
+
+  async getAddonWithCategory(id: Types.ObjectId): Promise<any> {
+    return await this.DocumentModel.findById(id).populate('category').exec();
+  }
+
+  async getAddons(): Promise<any> {
+    return await this.DocumentModel.find({}).populate('category').exec();
   }
 }

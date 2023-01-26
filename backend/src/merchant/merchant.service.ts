@@ -61,7 +61,8 @@ export class MerchantService implements IMerchantService {
 
     const newMerchant = docResult.getValue();
     const parsedResponse = MerchantParser.createMerchantResponse(newMerchant);
-    return Result.ok(parsedResponse);
+    const { tokenExpiresIn, ...response } = parsedResponse;
+    return Result.ok(response);
   }
 
   async getMerchantById(id: Types.ObjectId): Promise<Result<IMerchantResponseDTO>> {
