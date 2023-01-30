@@ -1,6 +1,8 @@
+import { Injectable } from '@nestjs/common';
 import { BaseDocument } from '../infrastructure/database/mongoDB/base-document';
 import { Audit } from './../domain/audit/audit';
 import { IMapper } from './../domain/mapper/mapper';
+@Injectable()
 export class AuditMapper implements IMapper<Audit, BaseDocument> {
   toPersistence(entity: Audit): BaseDocument {
     const model = {

@@ -8,7 +8,7 @@ import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
 import { Context } from './../infrastructure/context/context';
 import { ITemRepository } from './../infrastructure/data_access/repositories/item.repository';
-import { ItemDataModel } from './../infrastructure/data_access/repositories/schemas/item.schema';
+import { ItemDataModel, ItemDocument } from './../infrastructure/data_access/repositories/schemas/item.schema';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
 import { IMerchantService } from './../merchant/interface/merchant-service.interface';
 import { CreateItemDTO } from './create-item-schema';
@@ -39,7 +39,7 @@ export class ItemService implements IItemService {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
 
-    const existingItem = await this.iTemRepository.findOne({ name });
+    const existingItem = await this.iTemRepository.getItem(name);
     if (existingItem.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `Item ${name} already exists`);
     }
@@ -52,11 +52,11 @@ export class ItemService implements IItemService {
     }
     const item: Item = Item.create({ ...props, addons: addonsEntity, audit }).getValue();
     const itemModel: ItemDataModel = this.itemMapper.toPersistence(item);
-    const result: Result<Item> = await this.iTemRepository.create(itemModel);
+    const result: Result<ItemDocument> = await this.iTemRepository.createItem(itemModel);
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.SERVICE_UNAVAILABLE, 'Error while creating item, please try again later');
     }
-    const itemId: Types.ObjectId = result.getValue().id;
+    const itemId: Types.ObjectId = result.getValue()._id;
     const itemDoc = await this.iTemRepository.getItemwithAddons(itemId);
     const newItem = this.itemMapper.toDomain(itemDoc);
     const itemResponse = ItemParser.createItemResponse(newItem);
