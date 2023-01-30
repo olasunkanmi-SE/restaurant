@@ -33,7 +33,7 @@ export class ITemRepository extends GenericDocumentRepository<Item, ItemDocument
       ...itemModel,
       _id: new Types.ObjectId(),
     });
-    const result = await (await doc.save()).toJSON();
+    const result = (await doc.save()).toJSON();
     if (!result) {
       return Result.fail('An Error occured, unable to save document in the db', HttpStatus.INTERNAL_SERVER_ERROR);
     }
