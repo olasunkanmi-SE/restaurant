@@ -7,4 +7,5 @@ export interface IItemRepository extends IGenericDocument<Item, ItemDataModel> {
   getItemwithAddons(id: Types.ObjectId): Promise<any>;
   getItem(name: string): Promise<Result<Item>>;
   createItem(itemModel: ItemDataModel): Promise<Result<ItemDocument>>;
+  getItems(name: string): Promise<Result<Item[]>>;
 }
