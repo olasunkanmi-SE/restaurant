@@ -1,10 +1,10 @@
-import { menuMockData } from './../menu/menu-mock.data';
-import { Menu } from './../menu/menu';
 import { Types } from 'mongoose';
 import { Audit } from '.././domain/audit';
 import { auditMockData } from './../audit/audit-mock-data';
 import { Location } from './../location/location';
 import { locationMockData } from './../location/location-mock-data';
+import { Menu } from './../menu/menu';
+import { menuMockData } from './../menu/menu-mock.data';
 import { Merchant } from './../merchant/merchant';
 import { merchantMock, merchantMockData } from './../merchant/merchant-mock-data';
 import { Restaurant } from './restaurant';
@@ -53,5 +53,6 @@ export const restaurantMockDocument: any = {
   auditModifiedBy: '',
   auditCreatedBy: 'Ola',
   auditCreatedDateTime: new Date(),
-  menus: [],
+  menus: [menuMockData],
+  audit: Audit.create(auditMockData).getValue(),
 };

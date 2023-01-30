@@ -5,10 +5,11 @@ import { GenericDocumentRepository } from '../../../infrastructure/database';
 import { Result } from './../../../domain/result/result';
 import { Menu } from './../../../menu/menu';
 import { MenuMapper } from './../../../menu/menu.mapper';
+import { IMenuRepository } from './menu-repository.interface';
 import { MenuDataModel, MenuDocument } from './schemas/menu.schema';
 
 @Injectable()
-export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument> {
+export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument> implements IMenuRepository {
   menuMapper: MenuMapper;
   constructor(
     @InjectModel(MenuDataModel.name) menuDataModel: Model<MenuDocument>,
@@ -47,7 +48,7 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
     return Result.ok(result);
   }
 
-  populateDataModel() {
+  private populateDataModel() {
     return {
       path: 'items',
       populate: {

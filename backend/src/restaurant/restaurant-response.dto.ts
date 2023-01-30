@@ -1,3 +1,4 @@
+import { IMenuResponseDTO } from './../menu/menu-response.dto';
 import { Types } from 'mongoose';
 import { IAudit } from './../infrastructure/database/mongoDB/base-document.interface';
 import { ILocationResponseDTO } from './../location/location-response.dto';
@@ -12,4 +13,5 @@ export interface IRestaurantResponseDTO extends IAudit {
   timeZone?: string;
   location: ILocationResponseDTO;
   merchant: IMerchantResponseDTO;
+  menus: IMenuResponseDTO[];
 }

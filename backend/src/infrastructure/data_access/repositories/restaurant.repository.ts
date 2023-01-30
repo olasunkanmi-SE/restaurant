@@ -13,6 +13,7 @@ export class RestaurantRepository
   extends GenericDocumentRepository<Restaurant, RestaurantDocument>
   implements IRestaurantRepository
 {
+  restaurantMapper: RestaurantMapper;
   constructor(
     @InjectModel(RestaurantData.name)
     restaurantModel: Model<RestaurantDocument>,
@@ -21,6 +22,21 @@ export class RestaurantRepository
     restaurantMapper: RestaurantMapper,
   ) {
     super(restaurantModel, connection, restaurantMapper);
+    this.restaurantMapper = restaurantMapper;
+  }
+
+  async getRestaurant(restaurantId: Types.ObjectId): Promise<Restaurant> {
+    const restaurantDoc = await this.DocumentModel.findById(restaurantId)
+      .populate('merchant')
+      .populate(this.populateDataModel());
+    const restaurant: Restaurant = this.restaurantMapper.toDomain(restaurantDoc);
+    return restaurant;
+  }
+
+  async getRestaurants(): Promise<Restaurant[]> {
+    const restaurantDoc = await this.DocumentModel.find().populate('merchant').populate(this.populateDataModel());
+    const restaurants: Restaurant[] = restaurantDoc.map((doc) => this.restaurantMapper.toDomain(doc));
+    return restaurants;
   }
 
   async getRestaurantWithMerchantDetails(restaurant: Restaurant, merchantId: Types.ObjectId): Promise<Restaurant> {
@@ -28,5 +44,20 @@ export class RestaurantRepository
     const merchantData = merchant.getValue();
     restaurant.merchant = merchantData;
     return restaurant;
+  }
+
+  private populateDataModel() {
+    return {
+      path: 'menus',
+      populate: {
+        path: 'items',
+        populate: {
+          path: 'addons',
+          populate: {
+            path: 'category',
+          },
+        },
+      },
+    };
   }
 }

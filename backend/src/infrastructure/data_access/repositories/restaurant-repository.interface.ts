@@ -4,4 +4,6 @@ import { IGenericDocument } from './../../database/mongoDB/generic-document.inte
 import { RestaurantDocument } from './schemas';
 export interface IRestaurantRepository extends IGenericDocument<Restaurant, RestaurantDocument> {
   getRestaurantWithMerchantDetails(restaurant: Restaurant, merchantId: Types.ObjectId): Promise<Restaurant>;
+  getRestaurant(restaurantId: Types.ObjectId): Promise<Restaurant>;
+  getRestaurants(): Promise<Restaurant[]>;
 }

@@ -1,17 +1,18 @@
-import { AddonMapper } from './../addon/addon.mapper';
-import { ItemMapper } from './../item/item.mapper';
-import { MenuMapper } from '../menu/menu.mapper';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
+import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
+import { MenuMapper } from '../menu/menu.mapper';
+import { AddonMapper } from './../addon/addon.mapper';
 import { TYPES } from './../application/constants/types';
 import { AuditMapper } from './../audit/audit.mapper';
 import { AuthService } from './../infrastructure/auth/auth.service';
 import { ContextService } from './../infrastructure/context/context.service';
 import { LocationRepository } from './../infrastructure/data_access/repositories/location.repository';
-import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
+import { MenuRepository } from './../infrastructure/data_access/repositories/menu.repopsitory';
 import { RestaurantRepository } from './../infrastructure/data_access/repositories/restaurant.repository';
 import { LocationData, LocationSchema } from './../infrastructure/data_access/repositories/schemas/location.schema';
+import { MenuDataModel, MenuSchema } from './../infrastructure/data_access/repositories/schemas/menu.schema';
 import {
   MerchantDataModel,
   MerchantSchema,
@@ -21,6 +22,7 @@ import {
   RestaurantSchema,
 } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
 import { ContextMiddleWare } from './../infrastructure/middlewares/context.middleware';
+import { ItemMapper } from './../item/item.mapper';
 import { LocationMapper } from './../location/location.mapper';
 import { MerchantMapper } from './../merchant/merchant.mapper';
 import { MerchantService } from './../merchant/merchant.service';
@@ -35,6 +37,7 @@ import { RestaurantService } from './restaurant.service';
       { name: LocationData.name, schema: LocationSchema },
       { name: RestaurantData.name, schema: RestaurantSchema },
       { name: MerchantDataModel.name, schema: MerchantSchema },
+      { name: MenuDataModel.name, schema: MenuSchema },
     ]),
   ],
   controllers: [RestaurantsController],
@@ -47,6 +50,7 @@ import { RestaurantService } from './restaurant.service';
     { provide: TYPES.IMerchantService, useClass: MerchantService },
     { provide: TYPES.IAuthService, useClass: AuthService },
     { provide: TYPES.IMapper, useClass: RestaurantMapper },
+    { provide: TYPES.IMenuRepository, useClass: MenuRepository },
     RestaurantMapper,
     AuditMapper,
     LocationMapper,
