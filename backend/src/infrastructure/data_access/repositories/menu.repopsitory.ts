@@ -35,6 +35,18 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
     return this.menuMapper.toDomain(document);
   }
 
+  async createMenu(menuModel: MenuDataModel): Promise<Result<any>> {
+    const doc = new this.DocumentModel({
+      ...menuModel,
+      _id: new Types.ObjectId(),
+    });
+    const result = (await doc.save()).toJSON();
+    if (!result) {
+      return Result.fail('An Error occured, unable to save document in the db', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    return Result.ok(result);
+  }
+
   populateDataModel() {
     return {
       path: 'items',

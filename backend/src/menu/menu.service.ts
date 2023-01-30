@@ -49,12 +49,14 @@ export class MenuService implements IMenuService {
     const menuProps: IMenu = { ...props, audit };
     const menuEntity = Menu.create(menuProps).getValue();
     const menuModel = this.menuMapper.toPersistence(menuEntity);
-    const result: Result<Menu> = await this.menuRepository.create(menuModel);
+    const result: Result<any> = await this.menuRepository.createMenu(menuModel);
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Menu could not be created');
     }
-    const menu = result.getValue();
-    return Result.ok(MenuParser.createMenuResponse(menu));
+    const menuId: Types.ObjectId = result.getValue()._id;
+    const menuDoc = await this.menuRepository.getMenuById(menuId);
+    const newMenu = this.menuMapper.toDomain(menuDoc);
+    return Result.ok(MenuParser.createMenuResponse(newMenu));
   }
 
   async getMenus(): Promise<Result<IMenuResponseDTO[]>> {
