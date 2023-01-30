@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Connection, Model, Types } from 'mongoose';
+import { Connection, FilterQuery, Model, Types } from 'mongoose';
 import { GenericDocumentRepository } from '../../../infrastructure/database';
 import { ItemMapper } from '../../../item/item.mapper';
 import { Result } from './../../../domain/result/result';
@@ -49,10 +49,8 @@ export class ITemRepository extends GenericDocumentRepository<Item, ItemDocument
     return Result.ok(item);
   }
 
-  async getItems(props?: unknown): Promise<Result<Item[]>> {
-    const itemDocs = await this.DocumentModel.find(props || {})
-      .populate('addons')
-      .exec();
+  async getItems(filterQuery: FilterQuery<Item>): Promise<Result<Item[]>> {
+    const itemDocs = await this.DocumentModel.find(filterQuery).populate('addons').exec();
     if (!itemDocs) {
       return Result.fail('Error getting document from database', HttpStatus.NOT_FOUND);
     }

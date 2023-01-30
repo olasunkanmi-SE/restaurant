@@ -64,6 +64,9 @@ export class MenuService implements IMenuService {
 
   async getMenuById(id: Types.ObjectId): Promise<Result<IMenuResponseDTO>> {
     const menu = await this.menuRepository.getMenuById(id);
+    if (menu.isSuccess === false) {
+      throwApplicationError(HttpStatus.NOT_FOUND, 'Menu does not exist');
+    }
     return Result.ok(MenuParser.createMenuResponse(menu));
   }
 }

@@ -20,7 +20,23 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
   }
 
   async getMenus(filterQuery: FilterQuery<Menu>): Promise<any | any[]> {
-    const populateModel = {
+    const documents = await this.DocumentModel.find(filterQuery).populate(this.populateDataModel()).exec();
+    if (!documents) {
+      return Result.fail('Error getting Menus from database', HttpStatus.NOT_FOUND);
+    }
+    return documents.map((menu) => this.menuMapper.toDomain(menu));
+  }
+
+  async getMenuById(id: Types.ObjectId): Promise<any> {
+    const document = await this.DocumentModel.findById(id).populate(this.populateDataModel()).exec();
+    if (!document) {
+      return Result.fail('Error getting menu from database', HttpStatus.NOT_FOUND);
+    }
+    return this.menuMapper.toDomain(document);
+  }
+
+  populateDataModel() {
+    return {
       path: 'items',
       populate: {
         path: 'addons',
@@ -29,18 +45,5 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
         },
       },
     };
-    const documents = await this.DocumentModel.find(filterQuery).populate(populateModel).exec();
-    if (!documents) {
-      return Result.fail('Error getting Menus from database', HttpStatus.NOT_FOUND);
-    }
-    return documents.map((menu) => this.menuMapper.toDomain(menu));
-  }
-
-  async getMenuById(id: Types.ObjectId): Promise<any> {
-    const document = await this.DocumentModel.findById(id).populate('items').exec();
-    if (!document) {
-      return Result.fail('Error getting menu from database', HttpStatus.NOT_FOUND);
-    }
-    return this.menuMapper.toDomain(document);
   }
 }
