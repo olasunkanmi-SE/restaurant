@@ -20,7 +20,16 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
   }
 
   async getMenus(filterQuery: FilterQuery<Menu>): Promise<any | any[]> {
-    const documents = await this.DocumentModel.find(filterQuery).populate('items').exec();
+    const populateModel = {
+      path: 'items',
+      populate: {
+        path: 'addons',
+        populate: {
+          path: 'category',
+        },
+      },
+    };
+    const documents = await this.DocumentModel.find(filterQuery).populate(populateModel).exec();
     if (!documents) {
       return Result.fail('Error getting Menus from database', HttpStatus.NOT_FOUND);
     }

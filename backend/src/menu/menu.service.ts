@@ -43,7 +43,7 @@ export class MenuService implements IMenuService {
     const context: Context = await this.context;
     const audit: Audit = Audit.createInsertContext(context);
     if (itemIds && itemIds.length) {
-      const result = await this.itemRepository.find({ _id: { $in: itemIds } });
+      const result = await this.itemRepository.getItems({ _id: { $in: itemIds } });
       props.items = result.getValue();
     }
     const menuProps: IMenu = { ...props, audit };
@@ -54,12 +54,7 @@ export class MenuService implements IMenuService {
       throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Menu could not be created');
     }
     const menu = result.getValue();
-    let response: IMenuResponseDTO | undefined;
-    const createdMenu = await this.menuRepository.getMenuById(menu.id);
-    if (createdMenu) {
-      response = MenuParser.createMenuResponse(createdMenu);
-    }
-    return Result.ok(response);
+    return Result.ok(MenuParser.createMenuResponse(menu));
   }
 
   async getMenus(): Promise<Result<IMenuResponseDTO[]>> {

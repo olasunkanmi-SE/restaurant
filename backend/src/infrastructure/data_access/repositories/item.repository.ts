@@ -49,8 +49,10 @@ export class ITemRepository extends GenericDocumentRepository<Item, ItemDocument
     return Result.ok(item);
   }
 
-  async getItems(): Promise<Result<Item[]>> {
-    const itemDocs = await this.DocumentModel.find({}).populate('addons').exec();
+  async getItems(props?: unknown): Promise<Result<Item[]>> {
+    const itemDocs = await this.DocumentModel.find(props || {})
+      .populate('addons')
+      .exec();
     if (!itemDocs) {
       return Result.fail('Error getting document from database', HttpStatus.NOT_FOUND);
     }
