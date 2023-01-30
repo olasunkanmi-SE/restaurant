@@ -48,7 +48,7 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
       paymentMethod,
       openingHour,
       closingHour,
-      menus: menus.length ? menus.map((menu) => this.menuMapper.toPersistence(menu)) : [],
+      menus: menus && menus.length ? menus.map((menu) => this.menuMapper.toPersistence(menu)) : [],
       location: this.locationMapper.toPersistence(entity.location),
       merchantId,
       merchant: this.merchantMapper.toPersistence(entity.merchant),

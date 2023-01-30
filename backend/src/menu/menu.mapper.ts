@@ -25,6 +25,7 @@ export class MenuMapper implements IMapper<Menu, MenuDataModel> {
       mappedItems = items.map((item) => this.itemMapper.toPersistence(item));
     }
     const menuDocument: MenuDataModel = {
+      _id: entity.id,
       name,
       description,
       discount,
