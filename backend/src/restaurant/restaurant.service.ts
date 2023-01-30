@@ -1,11 +1,12 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { Context } from '../infrastructure/context';
+import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
 import { IContextService } from './../infrastructure/context/context-service.interface';
-import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
+import { IMenuRepository } from './../infrastructure/data_access/repositories/menu-repository.interface';
 import { IRestaurantRepository } from './../infrastructure/data_access/repositories/restaurant-repository.interface';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
 import { Location } from './../location/location';
@@ -25,45 +26,49 @@ export class RestaurantService implements IRestaurantService {
     private readonly restaurantRepository: IRestaurantRepository,
     private readonly merchantRepository: MerchantRepository,
     private readonly restaurantMapper: RestaurantMapper,
+    @Inject(TYPES.IMenuRepository) private readonly menuRepository: IMenuRepository,
     @Inject(TYPES.IContextService) private readonly contextService: IContextService,
     @Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService,
   ) {
     this.context = this.contextService.getContext();
   }
 
-  async createRestaurant(createRestaurantDTO: CreateRestaurantDTO): Promise<Result<IRestaurantResponseDTO>> {
+  async createRestaurant(props: CreateRestaurantDTO): Promise<Result<IRestaurantResponseDTO>> {
     const validateUser = await this.merchantService.validateContext();
     if (!validateUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
     const restaurantEntity: Result<Restaurant[]> = await this.restaurantRepository.find({});
     const restaurants = restaurantEntity.getValue();
-    const existingEmail = restaurants.find((doc) => doc.email === createRestaurantDTO.email);
+    const existingEmail = restaurants.find((doc) => doc.email === props.email);
 
     if (existingEmail) {
-      throwApplicationError(
-        HttpStatus.BAD_REQUEST,
-        `Restaurant with email ${createRestaurantDTO.email} already exists`,
-      );
+      throwApplicationError(HttpStatus.BAD_REQUEST, `Restaurant with email ${props.email} already exists`);
     }
 
     const audit: Audit = Audit.createInsertContext(await this.context);
     const location: Location = Location.create(
       {
-        ...createRestaurantDTO.location,
+        ...props.location,
         audit,
       },
       new Types.ObjectId(),
     ).getValue();
 
-    const result = await this.merchantRepository.findById(createRestaurantDTO.merchantId);
+    const result = await this.merchantRepository.findById(props.merchantId);
     const merchant: Merchant = result.getValue();
+
+    let menus: [] = [];
+    if (props.menus) {
+      menus = await this.menuRepository.getMenus({ _id: { $in: props.menus } });
+    }
 
     const restaurant: Restaurant = Restaurant.create(
       {
-        ...createRestaurantDTO,
+        ...props,
         location,
         merchant,
+        menus,
         audit,
       },
       new Types.ObjectId(),
@@ -71,12 +76,8 @@ export class RestaurantService implements IRestaurantService {
 
     const docResult = await this.restaurantRepository.create(this.restaurantMapper.toPersistence(restaurant));
     const newRestaurant = docResult.getValue();
-    const restaurantWithMerchantDetails = await this.restaurantRepository.getRestaurantWithMerchantDetails(
-      newRestaurant,
-      createRestaurantDTO.merchantId,
-    );
-
-    return Result.ok(RestaurantParser.createRestaurantResponse(restaurantWithMerchantDetails));
+    const response = await this.restaurantRepository.getRestaurant(newRestaurant.id);
+    return Result.ok(RestaurantParser.createRestaurantResponse(response));
   }
 
   async getRestaurants(): Promise<Result<IRestaurantResponseDTO[]>> {
@@ -84,18 +85,8 @@ export class RestaurantService implements IRestaurantService {
     if (!validateUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
-    const restaurants: Result<Restaurant[]> = await this.restaurantRepository.find({});
-    const restaurantValue = restaurants.getValue();
-    const restaurantWithMerchantData: Restaurant[] = [];
-    for (const restaurant of restaurantValue) {
-      restaurantWithMerchantData.push(
-        await this.restaurantRepository.getRestaurantWithMerchantDetails(restaurant, restaurant.merchant.id),
-      );
-    }
-    return Result.ok(
-      RestaurantParser.createRestaurantsParser(restaurantWithMerchantData),
-      'Restaurants retrieved successfully',
-    );
+    const restaurants: Restaurant[] = await this.restaurantRepository.getRestaurants();
+    return Result.ok(RestaurantParser.createRestaurantsParser(restaurants), 'Restaurants retrieved successfully');
   }
 
   async getRestaurantById(id: Types.ObjectId): Promise<Result<IRestaurantResponseDTO>> {
@@ -104,11 +95,8 @@ export class RestaurantService implements IRestaurantService {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
     const result = await this.restaurantRepository.findById(id);
-    const restaurant: Restaurant = result.getValue();
-    const restaurantWithMerchantData: Restaurant = await this.restaurantRepository.getRestaurantWithMerchantDetails(
-      restaurant,
-      restaurant.merchant.id,
-    );
+    const restaurantId: Types.ObjectId = result.getValue().id;
+    const restaurantWithMerchantData: Restaurant = await this.restaurantRepository.getRestaurant(restaurantId);
     const context = await this.contextService.getContext();
     const email = context.email;
     const userDoc = await this.merchantRepository.findOne({ email });

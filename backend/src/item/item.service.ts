@@ -68,9 +68,12 @@ export class ItemService implements IItemService {
     if (!validUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
-    const result: Result<Item[]> = await this.iTemRepository.find({});
+    const result: Result<Item[]> = await this.iTemRepository.getItems({});
     const items = result.getValue();
-    const reponse: ITemResponseDTO[] = ItemParser.createItemsresponse(items);
+    let reponse: ITemResponseDTO[] = [];
+    if (items && items.length) {
+      reponse = ItemParser.createItemsresponse(items);
+    }
     return Result.ok(reponse);
   }
 }

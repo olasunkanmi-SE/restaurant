@@ -17,4 +17,5 @@ export const TYPES = {
   IMapper: Symbol('IMapper'),
   IaddonRepository: Symbol('IaddonRepository'),
   ICategoryService: Symbol('ICategoryService'),
+  IMenuRepository: Symbol('IMenuRepository'),
 };

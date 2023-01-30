@@ -1,3 +1,4 @@
+import { MenuParser } from './../menu/menu.parser';
 import { MerchantParser } from './../merchant/merchant-parser';
 import { AuditParser } from './../audit/audit.parser';
 import { LocationParser } from './../location/location.parser';
@@ -5,7 +6,7 @@ import { Restaurant } from './restaurant';
 import { IRestaurantResponseDTO } from './restaurant-response.dto';
 export class RestaurantParser {
   static createRestaurantResponse(restaurant: Restaurant): IRestaurantResponseDTO {
-    const { audit, location, merchant } = restaurant;
+    const { audit, location, merchant, menus } = restaurant;
     const restaurantResponse: IRestaurantResponseDTO = {
       id: restaurant.id,
       name: restaurant.name,
@@ -14,6 +15,7 @@ export class RestaurantParser {
       webUrl: restaurant.webUrl,
       logoUrl: restaurant.logoUrl,
       timeZone: restaurant.timeZone,
+      menus: MenuParser.createMenusResponse(menus),
       location: LocationParser.createLocationResponse(location),
       ...AuditParser.createAuditResponse(audit),
       merchant: MerchantParser.createMerchantResponse(merchant),
@@ -22,6 +24,6 @@ export class RestaurantParser {
   }
 
   static createRestaurantsParser(restaurants: Restaurant[]): IRestaurantResponseDTO[] {
-    return restaurants.map((restaurant) => this.createRestaurantResponse(restaurant));
+    return restaurants.length ? restaurants.map((restaurant) => this.createRestaurantResponse(restaurant)) : [];
   }
 }

@@ -124,7 +124,7 @@ export class MerchantService implements IMerchantService {
 
   async onBoardMerchant(props: OnBoardMerchantDTO, id: Types.ObjectId): Promise<Result<IMerchantResponseDTO>> {
     const context: Context = await this.contextService.getContext();
-    const isValidUser = this.validateContext();
+    const isValidUser = await this.validateContext();
     if (!isValidUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }

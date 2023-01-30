@@ -43,23 +43,20 @@ export class MenuService implements IMenuService {
     const context: Context = await this.context;
     const audit: Audit = Audit.createInsertContext(context);
     if (itemIds && itemIds.length) {
-      const result = await this.itemRepository.find({ _id: { $in: itemIds } });
+      const result = await this.itemRepository.getItems({ _id: { $in: itemIds } });
       props.items = result.getValue();
     }
     const menuProps: IMenu = { ...props, audit };
     const menuEntity = Menu.create(menuProps).getValue();
     const menuModel = this.menuMapper.toPersistence(menuEntity);
-    const result: Result<Menu> = await this.menuRepository.create(menuModel);
+    const result: Result<any> = await this.menuRepository.createMenu(menuModel);
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Menu could not be created');
     }
-    const menu = result.getValue();
-    let response: IMenuResponseDTO | undefined;
-    const createdMenu = await this.menuRepository.getMenuById(menu.id);
-    if (createdMenu) {
-      response = MenuParser.createMenuResponse(createdMenu);
-    }
-    return Result.ok(response);
+    const menuId: Types.ObjectId = result.getValue()._id;
+    const menuDoc = await this.menuRepository.getMenuById(menuId);
+    const newMenu = this.menuMapper.toDomain(menuDoc);
+    return Result.ok(MenuParser.createMenuResponse(newMenu));
   }
 
   async getMenus(): Promise<Result<IMenuResponseDTO[]>> {
@@ -69,6 +66,9 @@ export class MenuService implements IMenuService {
 
   async getMenuById(id: Types.ObjectId): Promise<Result<IMenuResponseDTO>> {
     const menu = await this.menuRepository.getMenuById(id);
+    if (menu.isSuccess === false) {
+      throwApplicationError(HttpStatus.NOT_FOUND, 'Menu does not exist');
+    }
     return Result.ok(MenuParser.createMenuResponse(menu));
   }
 }
