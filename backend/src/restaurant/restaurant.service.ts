@@ -1,5 +1,6 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { Types } from 'mongoose';
+import { InjectConnection } from '@nestjs/mongoose';
+import { Connection, Types } from 'mongoose';
 import { Context } from '../infrastructure/context';
 import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import { TYPES } from './../application/constants/types';
@@ -29,55 +30,67 @@ export class RestaurantService implements IRestaurantService {
     @Inject(TYPES.IMenuRepository) private readonly menuRepository: IMenuRepository,
     @Inject(TYPES.IContextService) private readonly contextService: IContextService,
     @Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService,
+    @InjectConnection() private readonly connection: Connection,
   ) {
     this.context = this.contextService.getContext();
   }
 
   async createRestaurant(props: CreateRestaurantDTO): Promise<Result<IRestaurantResponseDTO>> {
-    const validateUser = await this.merchantService.validateContext();
-    if (!validateUser) {
-      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
+    const session = await this.connection.startSession();
+    try {
+      const validateUser = await this.merchantService.validateContext();
+      if (!validateUser) {
+        throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
+      }
+      const restaurantEntity: Result<Restaurant[]> = await this.restaurantRepository.find({});
+      const restaurants = restaurantEntity.getValue();
+      const existingEmail = restaurants.find((doc) => doc.email === props.email);
+
+      if (existingEmail) {
+        throwApplicationError(HttpStatus.BAD_REQUEST, `Restaurant with email ${props.email} already exists`);
+      }
+
+      const audit: Audit = Audit.createInsertContext(await this.context);
+      const location: Location = Location.create(
+        {
+          ...props.location,
+          audit,
+        },
+        new Types.ObjectId(),
+      ).getValue();
+
+      const result = await this.merchantRepository.findById(props.merchantId);
+      const merchant: Merchant = result.getValue();
+
+      let menus: [] = [];
+      if (props.menus) {
+        menus = await this.menuRepository.getMenus({ _id: { $in: props.menus } });
+      }
+
+      const restaurant: Restaurant = Restaurant.create(
+        {
+          ...props,
+          location,
+          merchant,
+          menus,
+          audit,
+        },
+        new Types.ObjectId(),
+      ).getValue();
+
+      const docResult = await this.restaurantRepository.create(this.restaurantMapper.toPersistence(restaurant));
+      if (!docResult.isSuccess) {
+        throwApplicationError(HttpStatus.BAD_REQUEST, 'Restaurant could not be created try again later');
+      }
+      await session.commitTransaction();
+      const newRestaurant = docResult.getValue();
+      const response = await this.restaurantRepository.getRestaurant(newRestaurant.id);
+      return Result.ok(RestaurantParser.createRestaurantResponse(response));
+    } catch (error) {
+      await session.abortTransaction();
+    } finally {
+      session.endSession();
     }
-    const restaurantEntity: Result<Restaurant[]> = await this.restaurantRepository.find({});
-    const restaurants = restaurantEntity.getValue();
-    const existingEmail = restaurants.find((doc) => doc.email === props.email);
-
-    if (existingEmail) {
-      throwApplicationError(HttpStatus.BAD_REQUEST, `Restaurant with email ${props.email} already exists`);
-    }
-
-    const audit: Audit = Audit.createInsertContext(await this.context);
-    const location: Location = Location.create(
-      {
-        ...props.location,
-        audit,
-      },
-      new Types.ObjectId(),
-    ).getValue();
-
-    const result = await this.merchantRepository.findById(props.merchantId);
-    const merchant: Merchant = result.getValue();
-
-    let menus: [] = [];
-    if (props.menus) {
-      menus = await this.menuRepository.getMenus({ _id: { $in: props.menus } });
-    }
-
-    const restaurant: Restaurant = Restaurant.create(
-      {
-        ...props,
-        location,
-        merchant,
-        menus,
-        audit,
-      },
-      new Types.ObjectId(),
-    ).getValue();
-
-    const docResult = await this.restaurantRepository.create(this.restaurantMapper.toPersistence(restaurant));
-    const newRestaurant = docResult.getValue();
-    const response = await this.restaurantRepository.getRestaurant(newRestaurant.id);
-    return Result.ok(RestaurantParser.createRestaurantResponse(response));
   }
 
   async getRestaurants(): Promise<Result<IRestaurantResponseDTO[]>> {
