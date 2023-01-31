@@ -35,7 +35,7 @@ import { RestaurantService } from './restaurant.service';
 describe('Test restaurant service', () => {
   let connection: Connection;
   beforeEach(async () => {
-    connection = await new Connection();
+    connection = new Connection();
   });
   afterEach(() => {
     connection.close();
