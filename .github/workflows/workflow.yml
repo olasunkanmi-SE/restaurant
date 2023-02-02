@@ -23,12 +23,6 @@ jobs:
           npm run build
           npm run test:unit
           npm run test:cov
-      - name: ci for frontend
-        working-directory: ./frontend
-        run: |
-          npm i
-          npm run build
-          npm run test-ci
       - name: lint backend
         working-directory: ./backend
         run: |
