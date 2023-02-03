@@ -16,6 +16,13 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "16"
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ./backend/node_modules
+            ./frontend/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
       - name: ci for backend
         working-directory: ./backend
         run: |
@@ -37,10 +44,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: |
-            ./backend/node_modules
-            ./frontend/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
