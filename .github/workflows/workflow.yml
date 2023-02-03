@@ -2,9 +2,9 @@ name: CI for restaurant
 
 on:
   pull_request:
-    branches: [release, main]
+    branches: [sprint, main]
   push:
-    branches: [release, main]
+    branches: [sprint, main]
 
 jobs:
   build:
@@ -16,6 +16,13 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "16"
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ./backend/node_modules
+            ./frontend/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
       - name: ci for backend
         working-directory: ./backend
         run: |
@@ -23,6 +30,11 @@ jobs:
           npm run build
           npm run test:unit
           npm run test:cov
+      - name: ci for frontend
+        working-directory: ./frontend
+        run: |
+          npm i
+          npm run build
       - name: lint backend
         working-directory: ./backend
         run: |
