@@ -27,6 +27,11 @@ jobs:
         working-directory: ./backend
         run: |
           npm run format
+      - name: ci for frontend
+        working-directory: ./frontend
+        run: |
+          npm i
+          npm run build
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
