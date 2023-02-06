@@ -1,4 +1,4 @@
-import { Menu } from "semantic-ui-react";
+import { Input, Menu } from "semantic-ui-react";
 
 export type MenuItems = {
   names: string[];
@@ -26,6 +26,9 @@ export const Header = ({ names, handleItemClick, activeItem }: MenuItems) => {
       <Menu>
         {renderedMenu}
         <Menu.Menu position="right">
+          <Menu.Item>
+            <Input icon="search" placeholder="Search..." />
+          </Menu.Item>
           <Menu.Item
             name="logout"
             active={activeItem === "logout"}
