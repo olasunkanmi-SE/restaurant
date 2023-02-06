@@ -11,13 +11,3 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
         monospace;
 }
-
-checkout {
-    position: "absolute";
-    bottom: 0;
-    right: 0;
-    z-Index: 9999;
-    background-color: "black";
-    color: "#fff";
-    cursor: "pointer";
-}
