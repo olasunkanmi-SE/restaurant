@@ -1,0 +1,18 @@
+[{
+    "id": 1,
+    "name": "Amala",
+    "price": 10.99,
+    "imgUrl":"https://i0.wp.com/newsbreak.ng/wp-content/uploads/2022/06/amala.jpg?fit=16001068&ssl=1"
+},
+{
+    "id": 2,
+    "name": "Jollof Rice",
+    "price": 11.99,
+    "imgUrl":"https://i0.wp.com/afrovitalityeats.com/wp-content/uploads/2016/06/Jollof-Rice-with-Grilled-Salmon.jpg?resize=1200%2C900&ssl=1"
+},
+{
+    "id": 3 ,
+    "name": "Chicken and Chips",
+    "price": 12.99,
+    "imgUrl":"https://cdn.mos.cms.futurecdn.net/rJVxqTHxNZM2C4XYuTY5uA.jpg"
+}]
