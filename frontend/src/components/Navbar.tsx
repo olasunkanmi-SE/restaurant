@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 
 export const Menu = () => {
   return (
-    <Navbar bg="light" expand="lg" shadow-sm mb-3 sticky="top">
+    <Navbar bg="light" expand="lg" className="shadow-sm mb-3" sticky="top">
       <Container fluid>
         <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />

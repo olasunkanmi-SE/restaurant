@@ -12,10 +12,10 @@ export const SnackBar = () => {
         cursor: "pointer",
       }}
     >
-      <div style={{ textAlign: "center" }} className="d-flex justify-content-between mb-3">
-        <div className="me-auto p-2">3</div>
-        <div className="p-2">Checkout</div>
-        <div className="p-2">RM 50.20</div>
+      <div style={{ textAlign: "center" }} className="d-flex justify-content-between align-items-baseline">
+        <span className="p-2">3</span>
+        <span className="p-2">Checkout</span>
+        <span className="p-2">RM 50.20</span>
       </div>
     </div>
   );
