@@ -6,7 +6,7 @@ import { AddonDataModel } from './addon.schema';
 export class AddonMapper implements IMapper<Addon, AddonDataModel> {
   constructor(private readonly auditMapper: AuditMapper) {}
   toPersistence(entity: Addon): AddonDataModel {
-    const { name, description, audit, quantity, category } = entity;
+    const { name, description, audit, quantity, category, unitPrice } = entity;
     const {
       auditCreatedBy,
       auditCreatedDateTime,
@@ -20,6 +20,7 @@ export class AddonMapper implements IMapper<Addon, AddonDataModel> {
       name,
       description,
       quantity,
+      unitPrice,
       category: new CategoryMapper(this.auditMapper).toPersistence(category),
       auditCreatedBy,
       auditCreatedDateTime,
@@ -31,13 +32,14 @@ export class AddonMapper implements IMapper<Addon, AddonDataModel> {
   }
 
   toDomain(model: AddonDataModel): Addon {
-    const { name, description, _id, quantity, category } = model;
+    const { name, description, _id, quantity, category, unitPrice } = model;
     return Addon.create(
       {
         name,
         description,
         category: new CategoryMapper(this.auditMapper).toDomain(category),
         quantity,
+        unitPrice,
         audit: new AuditMapper().toDomain(model),
       },
       _id,

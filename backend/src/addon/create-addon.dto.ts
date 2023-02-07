@@ -11,6 +11,10 @@ export class CreateAddonDTO {
   @IsNotEmpty()
   readonly quantity: number;
 
+  @IsNumber()
+  @IsNotEmpty()
+  readonly unitPrice: number;
+
   @IsString()
   @MaxLength(256)
   @IsOptional()

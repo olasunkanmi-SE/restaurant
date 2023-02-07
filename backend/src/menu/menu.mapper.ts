@@ -11,7 +11,7 @@ import { Menu } from './menu';
 export class MenuMapper implements IMapper<Menu, MenuDataModel> {
   constructor(private readonly auditMapper: AuditMapper, private readonly itemMapper: ItemMapper) {}
   toPersistence(entity: Menu): MenuDataModel {
-    const { items, name, description, audit, discount } = entity;
+    const { items, name, description, audit, discount, imageUrl, basePrice } = entity;
     const {
       auditCreatedBy,
       auditCreatedDateTime,
@@ -29,6 +29,8 @@ export class MenuMapper implements IMapper<Menu, MenuDataModel> {
       name,
       description,
       discount,
+      imageUrl,
+      basePrice,
       items: mappedItems,
       auditCreatedBy,
       auditCreatedDateTime,
@@ -41,13 +43,21 @@ export class MenuMapper implements IMapper<Menu, MenuDataModel> {
   }
 
   toDomain(model: MenuDataModel): Menu {
-    const { _id, items, name, description, discount } = model;
+    const { _id, items, name, description, discount, imageUrl, basePrice } = model;
     let itemsToDomain: Item[] = [];
     if (items && items.length) {
       itemsToDomain = items.map((item) => this.itemMapper.toDomain(item));
     }
     const entity: Menu = Menu.create(
-      { items: itemsToDomain, name, description, discount, audit: this.auditMapper.toDomain(model) },
+      {
+        items: itemsToDomain,
+        name,
+        description,
+        discount,
+        imageUrl,
+        basePrice,
+        audit: this.auditMapper.toDomain(model),
+      },
       _id,
     ).getValue();
     return entity;

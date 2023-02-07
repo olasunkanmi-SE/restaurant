@@ -6,4 +6,5 @@ export interface IAddon {
   quantity: number;
   audit: Audit;
   category: Category;
+  unitPrice: number;
 }
