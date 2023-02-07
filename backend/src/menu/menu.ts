@@ -12,6 +12,7 @@ export class Menu extends Entity<IMenu> implements IMenu {
   _audit: Audit;
   _discount: number;
   _imageUrl: string;
+  _basePrice: number;
   constructor(id: Types.ObjectId, props: IMenu) {
     super(id);
     this._name = props.name;
@@ -20,6 +21,7 @@ export class Menu extends Entity<IMenu> implements IMenu {
     this._audit = props.audit;
     this._discount = props.discount;
     this._imageUrl = props.imageUrl;
+    this._basePrice = props.basePrice;
   }
 
   get name(): string {
@@ -56,6 +58,14 @@ export class Menu extends Entity<IMenu> implements IMenu {
 
   set discount(value: number) {
     this._discount = value;
+  }
+
+  get basePrice(): number {
+    return this._basePrice;
+  }
+
+  set basePrice(value: number) {
+    this._basePrice = value;
   }
 
   get imageUrl(): string {

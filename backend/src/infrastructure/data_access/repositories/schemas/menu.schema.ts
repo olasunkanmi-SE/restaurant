@@ -20,6 +20,9 @@ export class MenuDataModel extends BaseDocument implements IMenuDataModel {
   @Prop({ type: Number, required: true, default: 0.0 })
   discount: number;
 
+  @Prop({ type: Number, required: true, default: 0.0 })
+  basePrice: number;
+
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: ItemDataModel.name }])
   @Type(() => ItemDataModel)
   items: ItemDataModel[];

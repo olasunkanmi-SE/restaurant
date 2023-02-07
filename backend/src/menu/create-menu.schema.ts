@@ -24,6 +24,10 @@ export class CreateMenuDTO {
   @IsOptional()
   readonly discount;
 
+  @IsNumber()
+  @IsNotEmpty()
+  readonly basePrice;
+
   @IsOptional()
   @IsArray()
   items: Item[];

@@ -7,4 +7,5 @@ export interface IMenu {
   audit: Audit;
   imageUrl: string;
   discount: number;
+  basePrice: number;
 }

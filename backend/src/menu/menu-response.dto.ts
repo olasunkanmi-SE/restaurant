@@ -7,5 +7,6 @@ export interface IMenuResponseDTO extends IAudit {
   description?: string;
   discount: number;
   imageUrl: string;
+  basePrice: number;
   items?: ITemResponseDTO[];
 }
