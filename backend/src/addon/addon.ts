@@ -11,6 +11,7 @@ export class Addon extends Entity<IAddon> implements IAddon {
   private _audit: Audit;
   private _quantity: number;
   private _category: Category;
+  private _unitPrice: number;
   constructor(id: Types.ObjectId, props: IAddon) {
     super(id);
     this._name = props.name;
@@ -18,6 +19,7 @@ export class Addon extends Entity<IAddon> implements IAddon {
     this._audit = props.audit;
     this._quantity = props.quantity;
     this._category = props.category;
+    this._unitPrice = props.unitPrice;
   }
 
   get name(): string {
@@ -58,6 +60,14 @@ export class Addon extends Entity<IAddon> implements IAddon {
 
   set quantity(quantity: number) {
     this._quantity = quantity;
+  }
+
+  get unitPrice(): number {
+    return this._unitPrice;
+  }
+
+  set unitPrice(unitPrice: number) {
+    this._unitPrice = unitPrice;
   }
 
   static create(props: IAddon, id?: Types.ObjectId): Addon {

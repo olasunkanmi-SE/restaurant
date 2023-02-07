@@ -4,4 +4,5 @@ export interface IMenuDataModel {
   readonly description?: string;
   readonly items?: ItemDataModel[];
   readonly discount: number;
+  readonly imageUrl: string;
 }

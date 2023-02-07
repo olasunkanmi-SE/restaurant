@@ -1,4 +1,4 @@
-import { Col, Container, Row } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { Route, Routes } from "react-router-dom";
 import { About, Store, Home } from "./pages";
 import { Menu } from "./components";

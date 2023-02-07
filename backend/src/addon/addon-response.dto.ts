@@ -6,5 +6,6 @@ export interface IAddonResponseDTO extends IAudit {
   name: string;
   quantity: number;
   category: ICategoryResponseDTO;
+  unitPrice: number;
   description: string | undefined;
 }

@@ -10,4 +10,5 @@ export const menuMockData: IMenu = {
   items: [Item.create(itemMockData).getValue()],
   audit: Audit.create(auditMockData).getValue(),
   discount: 0,
+  imageUrl: 'http://',
 };

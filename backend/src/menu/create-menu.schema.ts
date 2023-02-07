@@ -13,6 +13,9 @@ export class CreateMenuDTO {
   @Length(2, 256)
   readonly description?: string;
 
+  @IsString()
+  readonly imageUrl: string;
+
   @IsOptional()
   @IsArray()
   readonly itemIds?: Types.ObjectId[];

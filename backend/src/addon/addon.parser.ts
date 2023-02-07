@@ -5,12 +5,13 @@ import { IAddonResponseDTO } from './addon-response.dto';
 
 export class AddonParser {
   static createAddonResponse(addon: Addon): IAddonResponseDTO {
-    const { name, description, audit, id, quantity, category } = addon;
+    const { name, description, audit, id, quantity, category, unitPrice } = addon;
     return {
       id,
       name,
       description,
       quantity,
+      unitPrice,
       category: CategoryParser.createCategoryResponse(category),
       ...AuditParser.createAuditResponse(audit),
     };

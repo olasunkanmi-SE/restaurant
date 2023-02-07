@@ -6,7 +6,7 @@ import { IMenuResponseDTO } from './menu-response.dto';
 
 export class MenuParser {
   static createMenuResponse(menu: Menu): IMenuResponseDTO {
-    const { id, name, description, items, audit, discount } = menu;
+    const { id, name, description, items, audit, discount, imageUrl } = menu;
     let itemsResponse: ITemResponseDTO[] = [];
     if (items && items.length) {
       itemsResponse = ItemParser.createItemsresponse(items);
@@ -16,6 +16,7 @@ export class MenuParser {
       name,
       description,
       discount,
+      imageUrl,
       items: itemsResponse,
       ...AuditParser.createAuditResponse(audit),
     };
