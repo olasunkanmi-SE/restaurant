@@ -5,5 +5,7 @@ export interface IMenu {
   description?: string;
   items?: Item[];
   audit: Audit;
+  imageUrl: string;
   discount: number;
+  basePrice: number;
 }

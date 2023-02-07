@@ -40,6 +40,9 @@ export class AddonDataModel implements IAddonDataModel {
   @Prop({ type: Number, required: true })
   quantity: number;
 
+  @Prop({ type: Number, required: true })
+  unitPrice: number;
+
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: CategoryDataModel.name })
   @Type(() => CategoryDataModel)
   category: CategoryDataModel;

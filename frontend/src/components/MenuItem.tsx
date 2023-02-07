@@ -1,14 +1,13 @@
 import Card from "react-bootstrap/Card";
 
 type menuItemProps = {
-  id: string;
-  url: string;
+  url?: string;
   name: string;
 };
 
-export const MenuItem = ({ id, url, name }: menuItemProps) => {
+export const MenuItem = ({ url, name }: menuItemProps) => {
   return (
-    <Card style={{ width: "18rem" }}>
+    <Card style={{ border: "none" }}>
       <Card.Img style={{ objectFit: "cover" }} variant="top" src={url} />
       <Card.Body>
         <p style={{ textAlign: "center" }}>{name}</p>
