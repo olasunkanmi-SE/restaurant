@@ -21,4 +21,5 @@ export interface IMerchantService {
 
   logOut(userId: Types.ObjectId): Promise<void>;
   validateContext(): Promise<boolean>;
+  getMerchants(): Promise<Result<IMerchantResponseDTO[]>>;
 }
