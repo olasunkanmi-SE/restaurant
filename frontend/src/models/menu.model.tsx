@@ -8,6 +8,8 @@ export interface IMenu extends IAudit {
     description?: string;
     items?: IItem[];
     discount: number;
+    imageUrl: string;
+    basePrice: number;
   }[];
   isSucess?: boolean;
 }
