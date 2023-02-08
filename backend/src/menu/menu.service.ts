@@ -1,4 +1,6 @@
+import { CategoryRepository } from './../infrastructure/data_access/repositories/category.repository';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { Types } from 'mongoose';
 import { Context } from '../infrastructure/context';
 import { MenuMapper } from '../menu/menu.mapper';
 import { TYPES } from './../application/constants/types';
@@ -15,7 +17,6 @@ import { IMenu } from './menu-entity.interface';
 import { IMenuResponseDTO } from './menu-response.dto';
 import { IMenuService } from './menu-service.interface';
 import { MenuParser } from './menu.parser';
-import { Types } from 'mongoose';
 @Injectable()
 export class MenuService implements IMenuService {
   private context: Promise<Context>;
@@ -25,6 +26,7 @@ export class MenuService implements IMenuService {
     private readonly contextService: IContextService,
     @Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService,
     private readonly itemRepository: ITemRepository,
+    private readonly categoryRepository: CategoryRepository,
     private readonly menuMapper: MenuMapper,
   ) {
     this.context = this.contextService.getContext();
@@ -35,7 +37,7 @@ export class MenuService implements IMenuService {
     if (!validUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
     }
-    const { name, itemIds } = props;
+    const { name, itemIds, categoryId } = props;
     const existingMenu: Result<Menu> = await this.menuRepository.findOne({ name });
     if (existingMenu.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `${name}, already exists`);
@@ -46,6 +48,11 @@ export class MenuService implements IMenuService {
       const result = await this.itemRepository.getItems({ _id: { $in: itemIds } });
       props.items = result.getValue();
     }
+    const categoryResponse = await this.categoryRepository.findById(categoryId);
+    if (!categoryResponse.isSuccess) {
+      throwApplicationError(HttpStatus.NOT_FOUND, `category does not exist`);
+    }
+    props.category = categoryResponse.getValue();
     const menuProps: IMenu = { ...props, audit };
     const menuEntity = Menu.create(menuProps).getValue();
     const menuModel = this.menuMapper.toPersistence(menuEntity);

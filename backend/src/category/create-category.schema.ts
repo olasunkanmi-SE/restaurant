@@ -1,5 +1,5 @@
 import { IsString, IsNotEmpty, Length, MaxLength, IsOptional } from 'class-validator';
-export class createCategoryDTO {
+export class CreateCategoryDTO {
   @IsString()
   @IsNotEmpty()
   @Length(2, 256)

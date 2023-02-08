@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import mongoose, { Document } from 'mongoose';
 import { BaseDocument } from '../../../../infrastructure/database';
 import { IMenuDataModel } from './../interfaces/menu-model.interface';
+import { CategoryDataModel } from './category.schema';
 import { ItemDataModel } from './item.schema';
 
 export type MenuDocument = MenuDataModel & Document;
@@ -26,6 +27,10 @@ export class MenuDataModel extends BaseDocument implements IMenuDataModel {
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: ItemDataModel.name }])
   @Type(() => ItemDataModel)
   items: ItemDataModel[];
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: CategoryDataModel.name })
+  @Type(() => CategoryDataModel)
+  category: CategoryDataModel;
 }
 
 export const MenuSchema = SchemaFactory.createForClass(MenuDataModel);
