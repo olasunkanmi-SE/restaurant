@@ -2,10 +2,14 @@ import { tokenExpiresIn } from './../application/constants/constants';
 import { ISignUpTokens } from './../infrastructure/auth/interfaces/auth.interface';
 import { AuditParser } from './../audit/audit.parser';
 import { Merchant } from './merchant';
-import { IMerchantResponseDTO } from './merchant-response.dto';
+import { IMerchantResponseDTO, IMerchantSignedInResponseDTO } from './merchant-response.dto';
 export class MerchantParser {
-  static createMerchantResponse(merchant: Merchant, tokens?: ISignUpTokens): IMerchantResponseDTO {
-    const merchantResponse: IMerchantResponseDTO = {
+  static createMerchantResponse(
+    merchant: Merchant,
+    tokens?: ISignUpTokens,
+    signedIn = false,
+  ): IMerchantResponseDTO | IMerchantSignedInResponseDTO {
+    let merchantResponse: IMerchantResponseDTO | IMerchantSignedInResponseDTO = {
       id: merchant.id,
       firstName: merchant.firstName,
       lastName: merchant.lastName,
@@ -18,8 +22,13 @@ export class MerchantParser {
       organisationAddress: merchant.organisationAddress,
       tokens,
       ...AuditParser.createAuditResponse(merchant.audit),
-      tokenExpiresIn,
     };
+    if (signedIn) {
+      merchantResponse = {
+        ...merchantResponse,
+        tokenExpiresIn,
+      };
+    }
     return merchantResponse;
   }
 

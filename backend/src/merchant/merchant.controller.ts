@@ -29,6 +29,13 @@ export class MerchantController {
     return this.merchantService.getMerchantById(merchantId);
   }
 
+  @UseGuards(AccessAuthGuard)
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async getMerchants(): Promise<Result<IMerchantResponseDTO[]>> {
+    return this.merchantService.getMerchants();
+  }
+
   @Post('/signin')
   @HttpCode(HttpStatus.OK)
   async login(@Body() request: LoginMerchantDTO): Promise<Result<IMerchantResponseDTO>> {
