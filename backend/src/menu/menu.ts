@@ -1,6 +1,7 @@
-import { Audit } from './../domain/audit/audit';
 import { Types } from 'mongoose';
 import { Entity } from '../domain';
+import { Category } from './../category/category';
+import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
 import { Item } from './../item/item';
 import { IMenu } from './menu-entity.interface';
@@ -13,6 +14,7 @@ export class Menu extends Entity<IMenu> implements IMenu {
   _discount: number;
   _imageUrl: string;
   _basePrice: number;
+  _category: Category;
   constructor(id: Types.ObjectId, props: IMenu) {
     super(id);
     this._name = props.name;
@@ -22,6 +24,7 @@ export class Menu extends Entity<IMenu> implements IMenu {
     this._discount = props.discount;
     this._imageUrl = props.imageUrl;
     this._basePrice = props.basePrice;
+    this._category = props.category;
   }
 
   get name(): string {
@@ -74,6 +77,14 @@ export class Menu extends Entity<IMenu> implements IMenu {
 
   set imageUrl(imageUrl: string) {
     this._imageUrl = imageUrl;
+  }
+
+  get category(): Category {
+    return this._category;
+  }
+
+  set category(category: Category) {
+    this._category = category;
   }
 
   static create(props: IMenu, id?: Types.ObjectId): Result<Menu> {
