@@ -6,11 +6,17 @@ import { MenuMapper } from '../menu/menu.mapper';
 import { AddonMapper } from './../addon/addon.mapper';
 import { TYPES } from './../application/constants/types';
 import { AuditMapper } from './../audit/audit.mapper';
+import { CategoryMapper } from './../category/category.mapper';
 import { AuthService } from './../infrastructure/auth/auth.service';
 import { ContextService } from './../infrastructure/context/context.service';
+import { CategoryRepository } from './../infrastructure/data_access/repositories/category.repository';
 import { LocationRepository } from './../infrastructure/data_access/repositories/location.repository';
 import { MenuRepository } from './../infrastructure/data_access/repositories/menu.repopsitory';
 import { RestaurantRepository } from './../infrastructure/data_access/repositories/restaurant.repository';
+import {
+  CategoryDataModel,
+  CategorySchema,
+} from './../infrastructure/data_access/repositories/schemas/category.schema';
 import { LocationData, LocationSchema } from './../infrastructure/data_access/repositories/schemas/location.schema';
 import { MenuDataModel, MenuSchema } from './../infrastructure/data_access/repositories/schemas/menu.schema';
 import {
@@ -38,6 +44,7 @@ import { RestaurantService } from './restaurant.service';
       { name: RestaurantData.name, schema: RestaurantSchema },
       { name: MerchantDataModel.name, schema: MerchantSchema },
       { name: MenuDataModel.name, schema: MenuSchema },
+      { name: CategoryDataModel.name, schema: CategorySchema },
     ]),
   ],
   controllers: [RestaurantsController],
@@ -60,6 +67,8 @@ import { RestaurantService } from './restaurant.service';
     MenuMapper,
     ItemMapper,
     AddonMapper,
+    CategoryMapper,
+    CategoryRepository,
   ],
 })
 export class RestaurantModule implements NestModule {

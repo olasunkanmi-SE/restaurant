@@ -1,6 +1,7 @@
-import { Item } from './../item/item';
-import { IsString, IsNotEmpty, Length, IsOptional, IsArray, IsNumber } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString, Length } from 'class-validator';
 import { Types } from 'mongoose';
+import { Category } from '../category/category';
+import { Item } from './../item/item';
 
 export class CreateMenuDTO {
   @IsString()
@@ -20,6 +21,9 @@ export class CreateMenuDTO {
   @IsArray()
   readonly itemIds?: Types.ObjectId[];
 
+  @IsArray()
+  readonly categoryId: Types.ObjectId;
+
   @IsNumber()
   @IsOptional()
   readonly discount;
@@ -27,6 +31,9 @@ export class CreateMenuDTO {
   @IsNumber()
   @IsNotEmpty()
   readonly basePrice;
+
+  @IsArray()
+  category: Category;
 
   @IsOptional()
   @IsArray()

@@ -1,3 +1,4 @@
+import { CategoryMapper } from './../../../category/category.mapper';
 import { expect } from 'chai';
 import mongoose, { Connection, Types } from 'mongoose';
 import * as sinon from 'ts-sinon';
@@ -32,7 +33,8 @@ describe('test the restaurant service', () => {
     const merchantMapperStub = new MerchantMapper(auditMapperStub);
     const addonMapperStub = new AddonMapper(auditMapperStub);
     const itemMapperStub = new ItemMapper(auditMapperStub, addonMapperStub);
-    const menuMapper = new MenuMapper(auditMapperStub, itemMapperStub);
+    const categoryMapperStub = new CategoryMapper(auditMapperStub);
+    const menuMapper = new MenuMapper(auditMapperStub, itemMapperStub, categoryMapperStub);
     restaurantMapperStub = new RestaurantMapper(auditMapperStub, locationMapperStub, merchantMapperStub, menuMapper);
     restaurantsRepositoryMock = Mock.ofType<GenericDocumentRepository<Restaurant, RestaurantDocument>>();
     restaurantRepository = new RestaurantRepository(

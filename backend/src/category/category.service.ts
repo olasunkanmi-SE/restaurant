@@ -13,7 +13,7 @@ import { IMerchantService } from './../merchant/interface/merchant-service.inter
 import { Category } from './category';
 import { ICategoryService } from './category-service.interface';
 import { CategoryMapper } from './category.mapper';
-import { createCategoryDTO } from './create-category.schema';
+import { CreateCategoryDTO } from './create-category.schema';
 import { Types } from 'mongoose';
 
 @Injectable()
@@ -27,7 +27,7 @@ export class CategoryService implements ICategoryService {
   ) {
     this.context = this.contextService.getContext();
   }
-  async createCategory(props: createCategoryDTO): Promise<Result<ICategoryResponseDTO>> {
+  async createCategory(props: CreateCategoryDTO): Promise<Result<ICategoryResponseDTO>> {
     const { name } = props;
     const code = name.toUpperCase();
     const validUser: boolean = await this.merchantService.validateContext();

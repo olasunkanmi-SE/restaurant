@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Item } from '../item/item';
 import { AuditMapper } from './../audit/audit.mapper';
+import { CategoryMapper } from './../category/category.mapper';
 import { IMapper } from './../domain/mapper/mapper';
 import { ItemDataModel } from './../infrastructure/data_access/repositories/schemas/item.schema';
 import { MenuDataModel } from './../infrastructure/data_access/repositories/schemas/menu.schema';
@@ -9,9 +10,13 @@ import { Menu } from './menu';
 
 @Injectable()
 export class MenuMapper implements IMapper<Menu, MenuDataModel> {
-  constructor(private readonly auditMapper: AuditMapper, private readonly itemMapper: ItemMapper) {}
+  constructor(
+    private readonly auditMapper: AuditMapper,
+    private readonly itemMapper: ItemMapper,
+    private readonly categoryMapper: CategoryMapper,
+  ) {}
   toPersistence(entity: Menu): MenuDataModel {
-    const { items, name, description, audit, discount, imageUrl, basePrice } = entity;
+    const { items, name, description, audit, discount, imageUrl, basePrice, category } = entity;
     const {
       auditCreatedBy,
       auditCreatedDateTime,
@@ -31,6 +36,7 @@ export class MenuMapper implements IMapper<Menu, MenuDataModel> {
       discount,
       imageUrl,
       basePrice,
+      category: this.categoryMapper.toPersistence(category),
       items: mappedItems,
       auditCreatedBy,
       auditCreatedDateTime,
@@ -43,7 +49,7 @@ export class MenuMapper implements IMapper<Menu, MenuDataModel> {
   }
 
   toDomain(model: MenuDataModel): Menu {
-    const { _id, items, name, description, discount, imageUrl, basePrice } = model;
+    const { _id, items, name, description, discount, imageUrl, basePrice, category } = model;
     let itemsToDomain: Item[] = [];
     if (items && items.length) {
       itemsToDomain = items.map((item) => this.itemMapper.toDomain(item));
@@ -53,6 +59,7 @@ export class MenuMapper implements IMapper<Menu, MenuDataModel> {
         items: itemsToDomain,
         name,
         description,
+        category: this.categoryMapper.toDomain(category),
         discount,
         imageUrl,
         basePrice,
