@@ -13,5 +13,8 @@ export interface IMerchantResponseDTO extends IAudit {
   status?: string;
   organisationAddress: string;
   tokens?: ISignUpTokens;
+}
+
+export interface IMerchantSignedInResponseDTO extends IMerchantResponseDTO {
   tokenExpiresIn?: number;
 }

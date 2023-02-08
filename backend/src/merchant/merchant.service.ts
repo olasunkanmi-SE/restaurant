@@ -23,7 +23,7 @@ import { CreateMerchantDTO, LoginMerchantDTO, OnBoardMerchantDTO } from './dtos'
 import { IMerchantService } from './interface/merchant-service.interface';
 import { IUpdateMerchant } from './interface/update-merchant.interface';
 import { MerchantParser } from './merchant-parser';
-import { IMerchantResponseDTO } from './merchant-response.dto';
+import { IMerchantResponseDTO, IMerchantSignedInResponseDTO } from './merchant-response.dto';
 import { MerchantMapper } from './merchant.mapper';
 
 @Injectable()
@@ -60,9 +60,7 @@ export class MerchantService implements IMerchantService {
     }
 
     const newMerchant = docResult.getValue();
-    const parsedResponse = MerchantParser.createMerchantResponse(newMerchant);
-    const { tokenExpiresIn, ...response } = parsedResponse;
-    return Result.ok(response);
+    return Result.ok(MerchantParser.createMerchantResponse(newMerchant));
   }
 
   async getMerchantById(id: Types.ObjectId): Promise<Result<IMerchantResponseDTO>> {
@@ -79,10 +77,17 @@ export class MerchantService implements IMerchantService {
     if (context.email !== merchant.email) {
       throwApplicationError(HttpStatus.UNAUTHORIZED, 'You dont have sufficient priviledge');
     }
-    const parsedResponse = MerchantParser.createMerchantResponse(merchant);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { tokenExpiresIn, ...response } = parsedResponse;
-    return Result.ok(response);
+    return Result.ok(MerchantParser.createMerchantResponse(merchant));
+  }
+
+  async getMerchants(): Promise<Result<IMerchantResponseDTO[]>> {
+    const isValidUser = await this.validateContext();
+    if (!isValidUser) {
+      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
+    }
+    const result = await this.merchantRepository.find({});
+    const merchants = result.getValue();
+    return Result.ok(MerchantParser.merchantsResponse(merchants));
   }
 
   private async hashPassword(password: string): Promise<string> {
@@ -101,7 +106,7 @@ export class MerchantService implements IMerchantService {
     return docResult.getValue();
   }
 
-  async signIn(props: LoginMerchantDTO): Promise<Result<IMerchantResponseDTO>> {
+  async signIn(props: LoginMerchantDTO): Promise<Result<IMerchantSignedInResponseDTO>> {
     const result: Result<Merchant> = await this.merchantRepository.findOne({
       email: props.email,
     });
@@ -117,8 +122,7 @@ export class MerchantService implements IMerchantService {
     const userProps: IUserPayload = { userId: id, email, role };
     const tokens = await this.authService.generateAuthTokens(userProps);
     this.updateMerchantRefreshToken(merchant, tokens);
-    const parsedResponse = MerchantParser.createMerchantResponse(merchant);
-    parsedResponse.tokens = tokens;
+    const parsedResponse = MerchantParser.createMerchantResponse(merchant, tokens, true);
     return Result.ok(parsedResponse);
   }
 
@@ -153,10 +157,7 @@ export class MerchantService implements IMerchantService {
     }
 
     const updatedMerchant: Merchant = docResult.getValue();
-    const parsedResponse = MerchantParser.createMerchantResponse(updatedMerchant);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { tokenExpiresIn, ...response } = parsedResponse;
-    return Result.ok(response);
+    return Result.ok(MerchantParser.createMerchantResponse(updatedMerchant));
   }
 
   updateMerchantData(data: IUpdateMerchant, merchant: Merchant, context: Context) {
