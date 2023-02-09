@@ -21,7 +21,7 @@ export class CreateMenuDTO {
   @IsArray()
   readonly itemIds?: Types.ObjectId[];
 
-  @IsArray()
+  @IsNotEmpty()
   readonly categoryId: Types.ObjectId;
 
   @IsNumber()
@@ -32,7 +32,6 @@ export class CreateMenuDTO {
   @IsNotEmpty()
   readonly basePrice;
 
-  @IsArray()
   category: Category;
 
   @IsOptional()
