@@ -22,7 +22,6 @@ import {
   MerchantDataModel,
   MerchantSchema,
 } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
-import { ContextMiddleWare } from './../infrastructure/middlewares/context.middleware';
 import { ItemMapper } from './../item/item.mapper';
 import { MerchantMapper } from './../merchant/merchant.mapper';
 import { MerchantService } from './../merchant/merchant.service';

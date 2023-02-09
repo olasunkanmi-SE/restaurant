@@ -20,7 +20,6 @@ export class CreateMenuDTO {
   @IsOptional()
   @IsArray()
   readonly itemIds?: Types.ObjectId[];
-
   @IsNotEmpty()
   readonly categoryId: Types.ObjectId;
 
