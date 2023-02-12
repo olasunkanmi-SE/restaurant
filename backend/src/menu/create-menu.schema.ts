@@ -23,6 +23,9 @@ export class CreateMenuDTO {
   @IsNotEmpty()
   readonly categoryId: Types.ObjectId;
 
+  @IsArray()
+  readonly categoryId: Types.ObjectId;
+
   @IsNumber()
   @IsOptional()
   readonly discount;
