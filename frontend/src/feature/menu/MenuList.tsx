@@ -10,7 +10,7 @@ export const MenuList = () => {
     isError,
     error,
     data: menus,
-  } = useQuery<IMenu, Error>("menus", getMenus, { staleTime: 0, cacheTime: 0 });
+  } = useQuery<IMenu, Error>("menus", getMenus, { staleTime: 1000, cacheTime: 10000 });
   console.log(menus);
   let response;
   if (isLoading) {
