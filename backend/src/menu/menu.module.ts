@@ -29,6 +29,7 @@ import { MerchantService } from './../merchant/merchant.service';
 import { ValidateUser } from './../utils/context-validation';
 import { MenuController } from './menu.controller';
 import { MenuService } from './menu.service';
+import { MerchantRepository } from 'src/infrastructure';
 
 @Module({
   imports: [
