@@ -21,7 +21,7 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
   }
 
   async getMenus(filterQuery: FilterQuery<Menu>): Promise<any | any[]> {
-    const documents = await this.DocumentModel.find(filterQuery).populate(this.populateDataModel()).exec();
+    const documents = await this.DocumentModel.find(filterQuery).populate(this.populateItems()).exec();
     if (!documents) {
       return Result.fail('Error getting Menus from database', HttpStatus.NOT_FOUND);
     }
@@ -29,7 +29,7 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
   }
 
   async getMenuById(id: Types.ObjectId): Promise<any> {
-    const document = await this.DocumentModel.findById(id).populate(this.populateDataModel()).exec();
+    const document = await this.DocumentModel.findById(id).populate(this.populateItems()).populate('category').exec();
     if (!document) {
       return Result.fail('Error getting menu from database', HttpStatus.NOT_FOUND);
     }
@@ -48,7 +48,7 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
     return Result.ok(result);
   }
 
-  private populateDataModel() {
+  private populateItems() {
     return {
       path: 'items',
       populate: {
