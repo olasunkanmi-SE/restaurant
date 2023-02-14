@@ -29,7 +29,6 @@ export class CreateMenuDTO {
   readonly discount;
 
   @IsNumber()
-  @IsNotEmpty()
   readonly basePrice;
 
   category: Category;
