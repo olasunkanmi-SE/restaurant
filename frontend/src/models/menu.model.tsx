@@ -5,7 +5,7 @@ export interface IMenu extends IAudit {
   data: {
     id: string;
     name: string;
-    description?: string;
+    description: string;
     items?: IItem[];
     discount: number;
     imageUrl: string;

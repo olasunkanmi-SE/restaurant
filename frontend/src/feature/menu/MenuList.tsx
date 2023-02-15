@@ -10,7 +10,7 @@ export const MenuList = () => {
     isError,
     error,
     data: menus,
-  } = useQuery<IMenu, Error>("menus", getMenus, { staleTime: 1000, cacheTime: 10000 });
+  } = useQuery<IMenu, Error>("menus", getMenus, { staleTime: 1000000, cacheTime: 1000000 });
   console.log(menus);
   let response;
   if (isLoading) {
@@ -19,15 +19,16 @@ export const MenuList = () => {
     response = <p>`${error.message}`</p>;
   } else {
     response = menus?.data?.map((menu) => {
+      const { imageUrl, name, basePrice, description } = menu;
       return (
         <Col md={3} key={menu.id}>
-          <MenuItem url={menu.imageUrl} name={menu.name} />
+          <MenuItem url={imageUrl} name={name} basePrice={basePrice} description={description} />
         </Col>
       );
     });
   }
   return (
-    <Row md={3} xs={2} lg={4} className="g-3">
+    <Row md={3} xs={1} lg={3} className="g-3">
       {response}
     </Row>
   );
