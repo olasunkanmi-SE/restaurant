@@ -5,7 +5,7 @@ import { GenericDocumentRepository } from '../../../infrastructure/database';
 import { Result } from './../../../domain/result/result';
 import { Menu } from './../../../menu/menu';
 import { MenuMapper } from './../../../menu/menu.mapper';
-import { IMenuRepository } from '../repositories/interfaces';
+import { IMenuRepository } from '../repositories/interfaces/menu-repository.interface';
 import { MenuDataModel, MenuDocument } from './schemas/menu.schema';
 
 @Injectable()

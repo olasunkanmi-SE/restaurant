@@ -5,7 +5,7 @@ import { GenericDocumentRepository } from '../../../infrastructure/database';
 import { ItemMapper } from '../../../item/item.mapper';
 import { Result } from './../../../domain/result/result';
 import { Item } from './../../../item/item';
-import { IItemRepository } from '../repositories/interfaces';
+import { IItemRepository } from '../repositories/interfaces/item-repository.interface';
 import { ItemDataModel, ItemDocument } from './schemas/item.schema';
 
 @Injectable()

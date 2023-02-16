@@ -6,7 +6,7 @@ import { Merchant } from './../../../merchant/merchant';
 import { Restaurant } from './../../../restaurant/restaurant';
 import { RestaurantMapper } from './../../../restaurant/restaurant.mapper';
 import { MerchantRepository } from './merchant.repository';
-import { IRestaurantRepository } from './interfaces';
+import { IRestaurantRepository } from './interfaces/restaurant-repository.interface';
 import { RestaurantData, RestaurantDocument } from './schemas';
 
 export class RestaurantRepository
