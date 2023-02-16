@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
 import { BaseDocument } from '../../../../infrastructure/database';
-import { ITemModel, portion } from './../interfaces/item-model.interface';
+import { ITemModel, portion } from '../models/item-model.interface';
 import { Type } from 'class-transformer';
 import { AddonDataModel } from '../../../../addon';
 

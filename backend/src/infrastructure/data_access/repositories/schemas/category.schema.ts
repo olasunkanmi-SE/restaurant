@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { BaseDocument } from '../../../../infrastructure/database';
-import { ICategoryModel } from '../interfaces/category-model.iterface';
+import { ICategoryModel } from '../models/category-model.iterface';
 
 export type CategoryDocument = CategoryDataModel & Document;
 

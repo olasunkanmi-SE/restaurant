@@ -1,4 +1,4 @@
-import { ItemDataModel } from './../schemas/item.schema';
+import { ItemDataModel } from '../schemas/item.schema';
 export interface IMenuDataModel {
   readonly name: string;
   readonly description?: string;

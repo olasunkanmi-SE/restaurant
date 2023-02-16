@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Type } from 'class-transformer';
 import mongoose, { Document } from 'mongoose';
 import { BaseDocument } from '../../../../infrastructure/database';
-import { IMenuDataModel } from './../interfaces/menu-model.interface';
+import { IMenuDataModel } from '../models/menu-model.interface';
 import { CategoryDataModel } from './category.schema';
 import { ItemDataModel } from './item.schema';
 

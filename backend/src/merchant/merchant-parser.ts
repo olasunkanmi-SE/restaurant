@@ -3,12 +3,10 @@ import { ISignUpTokens } from './../infrastructure/auth/interfaces/auth.interfac
 import { AuditParser } from './../audit/audit.parser';
 import { Merchant } from './merchant';
 import { IMerchantResponseDTO, IMerchantSignedInResponseDTO } from './merchant-response.dto';
+
+export type MerchantApiResponse = IMerchantResponseDTO | IMerchantSignedInResponseDTO;
 export class MerchantParser {
-  static createMerchantResponse(
-    merchant: Merchant,
-    tokens?: ISignUpTokens,
-    signedIn = false,
-  ): IMerchantResponseDTO | IMerchantSignedInResponseDTO {
+  static createMerchantResponse(merchant: Merchant, tokens?: ISignUpTokens, signedIn = false): MerchantApiResponse {
     let merchantResponse: IMerchantResponseDTO | IMerchantSignedInResponseDTO = {
       id: merchant.id,
       firstName: merchant.firstName,
