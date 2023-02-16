@@ -1,4 +1,4 @@
-import { Role } from 'src/order_manager/order.manager.entity';
+import { Role } from './../../../../order_manager/order.manager.entity';
 import { MerchantDataModel } from '../schemas';
 
 export interface IOrderManagerDataModel {

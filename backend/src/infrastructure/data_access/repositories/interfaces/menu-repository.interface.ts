@@ -1,7 +1,7 @@
-import { Result } from './../../../domain/result/result';
+import { Result } from '../../../../domain/result/result';
 import { FilterQuery, Types } from 'mongoose';
-import { Menu } from './../../../menu/menu';
-import { MenuDataModel } from './schemas/menu.schema';
+import { Menu } from '../../../../menu/menu';
+import { MenuDataModel } from '../schemas/menu.schema';
 
 export interface IMenuRepository {
   getMenus(filterQuery: FilterQuery<Menu>): Promise<any | any[]>;
