@@ -29,6 +29,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     });
   };
   // const removeFromCart = (): CartItem[] | [] => {};
+  //Fix the issue with UseMemo
   const value: shoppingCartProps = {
     totalPrice: state.totalPrice,
     cart: state.cart,

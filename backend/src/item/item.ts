@@ -1,7 +1,7 @@
 import { Addon } from './../addon/addon';
 import { Types } from 'mongoose';
 import { Audit, Entity, Result } from '../domain';
-import { portion } from './../infrastructure/data_access/repositories/interfaces/item-model.interface';
+import { portion } from '../infrastructure/data_access/repositories/models/item-model.interface';
 import { IITem } from './item.entity.interface';
 
 export class Item extends Entity<IITem> implements IITem {

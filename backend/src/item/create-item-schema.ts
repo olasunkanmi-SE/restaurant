@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString, Length, Max, MaxLength, Min, IsArray } from 'class-validator';
-import { portion } from './../infrastructure/data_access/repositories/interfaces/item-model.interface';
+import { portion } from '../infrastructure/data_access/repositories/models/item-model.interface';
 import { Types } from 'mongoose';
 
 export class CreateItemDTO {

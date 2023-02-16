@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { BaseDocument } from '../../../../infrastructure/database';
-import { IMerchantData } from '../interfaces/merchant-model.interface';
+import { IMerchantData } from '../models/merchant-model.interface';
 import { MerchantStatus } from './../../../../application/constants/constants';
 
 export type MerchantDocument = MerchantDataModel & Document;

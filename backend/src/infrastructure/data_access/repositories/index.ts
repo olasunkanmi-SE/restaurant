@@ -1,5 +1,5 @@
 export * from './schemas';
-export * from './interfaces';
+export * from './models';
 export * from './location.repository';
 export * from './restaurant.repository';
 export * from './addon-repository.interface';

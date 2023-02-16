@@ -71,6 +71,7 @@
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^8.0.3",
     "jest": "^27.2.5",
     "prettier": "^2.3.2",
     "source-map-support": "^0.5.20",
@@ -97,5 +98,10 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run build"
+    }
   }
 }
