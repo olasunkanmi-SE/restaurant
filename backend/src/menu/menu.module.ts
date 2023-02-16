@@ -59,8 +59,8 @@ import { MenuService } from './menu.service';
     { provide: TYPES.IMenuService, useClass: MenuService },
   ],
 })
-export class MenuModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(ContextMiddleWare).exclude().forRoutes(MenuController);
-  }
+export class MenuModule {
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer.apply(ContextMiddleWare).exclude().forRoutes(MenuController);
+  // }
 }
