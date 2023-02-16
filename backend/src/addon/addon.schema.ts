@@ -1,7 +1,7 @@
 import { CategoryDataModel } from './../infrastructure/data_access/repositories/schemas/category.schema';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, SchemaTypes, Types } from 'mongoose';
-import { IAddonDataModel } from './../infrastructure/data_access/repositories/schemas/addon-model.interface';
+import { IAddonDataModel } from '../infrastructure/data_access/repositories/models/addon-model.interface';
 import { Type } from 'class-transformer';
 
 export type AddonDocument = AddonDataModel & Document;

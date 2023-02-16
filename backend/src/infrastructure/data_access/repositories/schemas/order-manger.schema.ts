@@ -2,15 +2,14 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Type } from 'class-transformer';
 import mongoose, { Document } from 'mongoose';
 import { BaseDocument } from 'src/infrastructure/database';
-import { Merchant } from 'src/merchant';
-import { IOrderManagerDataModel } from '../interfaces/order-manager-model.interface';
+import { IOrderManagerDataModel } from '../models/order-manager-model.interface';
 import { Role } from './../../../../order_manager/order.manager.entity';
 import { MerchantDataModel } from './merchant.schema';
 
-export type OrderManagerDocument = OrderManagerDataModel & Document & BaseDocument;
+export type OrderManagerDocument = OrderManagerDataModel & Document;
 
 @Schema({ versionKey: false })
-export class OrderManagerDataModel implements IOrderManagerDataModel {
+export class OrderManagerDataModel extends BaseDocument implements IOrderManagerDataModel {
   @Prop({ type: String, required: true })
   firstName: string;
 
@@ -25,7 +24,7 @@ export class OrderManagerDataModel implements IOrderManagerDataModel {
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: MerchantDataModel.name })
   @Type(() => MerchantDataModel)
-  merchant: Merchant;
+  merchant: MerchantDataModel;
 
   @Prop({ type: String, required: true })
   readonly role: Role;

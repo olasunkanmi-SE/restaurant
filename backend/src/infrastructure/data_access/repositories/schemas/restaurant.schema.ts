@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Type } from 'class-transformer';
 import mongoose, { Document, Types } from 'mongoose';
 import { BaseDocument } from '../../../database/mongoDB/base-document';
-import { IRestaurantdata } from '../interfaces/restaurant-model.interface';
+import { IRestaurantdata } from '../models/restaurant-model.interface';
 import { PaymentBy, PaymentMethod } from './../../../../restaurant/restaurant.interface';
 import { LocationData, LocationSchema } from './location.schema';
 import { MenuDataModel } from './menu.schema';
