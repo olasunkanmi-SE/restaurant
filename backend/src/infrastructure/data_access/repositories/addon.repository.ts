@@ -5,7 +5,7 @@ import { Addon } from '../../../addon';
 import { GenericDocumentRepository } from '../../../infrastructure/database';
 import { AddonMapper } from './../../../addon/addon.mapper';
 import { AddonDataModel, AddonDocument } from './../../../addon/addon.schema';
-import { IaddonRepository } from './addon-repository.interface';
+import { IaddonRepository } from './interfaces/addon-repository.interface';
 
 @Injectable()
 export class AddonRepository extends GenericDocumentRepository<Addon, AddonDocument> implements IaddonRepository {

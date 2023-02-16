@@ -1,5 +1,5 @@
 import { menuMockData } from './../menu/menu-mock.data';
-import { IMenuRepository } from './../infrastructure/data_access/repositories/menu-repository.interface';
+import { IMenuRepository } from './../infrastructure/data_access/repositories/interfaces';
 import { expect } from 'chai';
 import mongoose, { Connection, Types } from 'mongoose';
 import * as sinon from 'ts-sinon';
@@ -14,7 +14,7 @@ import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
 import { Context, MerchantDocument } from './../infrastructure';
 import { IContextService } from './../infrastructure/context/context-service.interface';
-import { IRestaurantRepository } from './../infrastructure/data_access/repositories/restaurant-repository.interface';
+import { IRestaurantRepository } from './../infrastructure/data_access/repositories/interfaces';
 import { ItemMapper } from './../item/item.mapper';
 import { LocationMapper } from './../location/location.mapper';
 import { IMerchantService } from './../merchant/interface/merchant-service.interface';
