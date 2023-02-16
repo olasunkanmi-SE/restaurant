@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 import { Audit, Entity, Result } from '../domain';
+import { Merchant } from './../merchant/merchant';
 import { IOrderManager, Role } from './order.manager.entity';
 
 export class OrderManager extends Entity<IOrderManager> implements IOrderManager {
@@ -7,7 +8,7 @@ export class OrderManager extends Entity<IOrderManager> implements IOrderManager
   _lastName: string;
   _email: string;
   _phoneNumber?: string;
-  _merchantId: Types.ObjectId;
+  _merchant: Merchant;
   _role: Role;
   _audit: Audit;
 
@@ -19,7 +20,7 @@ export class OrderManager extends Entity<IOrderManager> implements IOrderManager
     this._role = props.role;
     this._email = props.email;
     this._phoneNumber = props.phoneNumber;
-    this._merchantId = props.merchantId;
+    this._merchant = props.merchant;
   }
 
   get firstName(): string {
@@ -54,12 +55,12 @@ export class OrderManager extends Entity<IOrderManager> implements IOrderManager
     this._phoneNumber = phoneNumber;
   }
 
-  get merchantId(): Types.ObjectId {
-    return this._merchantId;
+  get merchant(): Merchant {
+    return this._merchant;
   }
 
-  set merchantId(merchantId: Types.ObjectId) {
-    this._merchantId = merchantId;
+  set merchant(merchant: Merchant) {
+    this._merchant = merchant;
   }
 
   get role(): Role {

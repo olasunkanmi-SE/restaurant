@@ -1,5 +1,5 @@
-import { Types } from 'mongoose';
 import { Audit } from './../domain/audit/audit';
+import { Merchant } from './../merchant/merchant';
 
 export type Role = 'ADMIN' | 'SUPERADMIN';
 
@@ -8,7 +8,7 @@ export interface IOrderManager {
   lastName: string;
   email: string;
   phoneNumber?: string;
-  merchantId: Types.ObjectId;
+  merchant: Merchant;
   role: Role;
   audit: Audit;
 }
