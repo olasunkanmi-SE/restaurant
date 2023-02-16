@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Type } from 'class-transformer';
 import mongoose, { Document } from 'mongoose';
-import { BaseDocument } from 'src/infrastructure/database';
+import { BaseDocument } from '../../../../infrastructure/database';
 import { IOrderManagerDataModel } from '../models/order-manager-model.interface';
 import { Role } from './../../../../order_manager/order.manager.entity';
 import { MerchantDataModel } from './merchant.schema';
