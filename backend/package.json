@@ -99,8 +99,8 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },
-  "husky":{
-    "hooks":{
+  "husky": {
+    "hooks": {
       "pre-push": "npm run build"
     }
   }
