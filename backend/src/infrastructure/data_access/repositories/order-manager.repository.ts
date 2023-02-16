@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
-import { GenericDocumentRepository } from 'src/infrastructure/database';
+import { GenericDocumentRepository } from '../../../infrastructure/database';
 import { OrderManagerMapper } from './../../../order_manager/order-manager.mapper';
 import { OrderManager } from './../../../order_manager/order.manager';
 import { OrderManagerDataModel, OrderManagerDocument } from './schemas/order-manger.schema';
