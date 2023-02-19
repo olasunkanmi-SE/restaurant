@@ -19,10 +19,10 @@ export const MenuList = () => {
     response = <p>`${error.message}`</p>;
   } else {
     response = menus?.data?.map((menu) => {
-      const { imageUrl, name, basePrice, description } = menu;
+      const { imageUrl, name, basePrice, description, id } = menu;
       return (
         <Col md={3} key={menu.id}>
-          <MenuItem url={imageUrl} name={name} basePrice={basePrice} description={description} />
+          <MenuItem id={id} url={imageUrl} name={name} basePrice={basePrice} description={description} />
         </Col>
       );
     });

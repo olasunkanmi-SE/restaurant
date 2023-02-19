@@ -2,8 +2,10 @@ import { Button, Nav } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink } from "react-router-dom";
+import { useShoppingCart } from "../contexts";
 
 export const Menu = () => {
+  const { totalPrice } = useShoppingCart();
   return (
     <Navbar sticky="top" className="bg-white shadow-sm mb-3">
       <Container>
@@ -62,7 +64,7 @@ export const Menu = () => {
             }}
             className="rounded-circle bg-danger d-flex justify-content-center align-items-center"
           >
-            3
+            {totalPrice}
           </div>
         </Button>
       </Container>

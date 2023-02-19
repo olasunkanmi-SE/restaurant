@@ -2,12 +2,21 @@ export enum CartActionsType {
   ADD_TO_CART = "ADD_TO_CART",
   REMOVE_FROM_CART = "REMOVE_FROM_CART",
   UPDATE_PRICE = "UPDATE_PRICE",
-  GET_CART_QUANTITY = "GET_CART_QUANTITY",
+  GET_ITEM_QUANTITY = "GET_ITEM_QUANTITY",
 }
 
 export type Addon = {
+  id: string;
   name: string;
   price: number;
+};
+
+export type Item = {
+  id: string;
+  name: string;
+  price: number;
+  maximumPermitted: number;
+  addons: Addon[];
 };
 
 export type CartItem = {
@@ -15,7 +24,7 @@ export type CartItem = {
   name: string;
   basePrice: number;
   quantity: number;
-  addons: Addon[];
+  items?: Item[];
 };
 
 export type CartAction = {
@@ -35,52 +44,19 @@ export type cartState = {
   cart: CartItem[];
 };
 
-const addToCart = (state: cartState, payload: CartItem): [quantity: number, price: number] => {
-  let qty: number = state.quantity;
-  let price: number = state.totalPrice;
-
-  if (!state.cart.length) {
-    qty = state.quantity + 1;
-    price = payload.basePrice;
-  }
-
-  if (state.cart.length) {
-    state.cart.forEach((item) => (price += item.basePrice));
-    qty = state.quantity + 1;
-  }
-  return [qty, price];
-};
-
 export const cartReducer = (state = initialCartState, action: CartAction): cartState => {
   const { type, payload } = action;
   switch (type) {
     case CartActionsType.ADD_TO_CART:
-      const [qty, price] = addToCart(state, payload);
       return {
         ...state,
         cart: [...state.cart, payload],
-        quantity: qty,
-        totalPrice: price,
       };
     case CartActionsType.REMOVE_FROM_CART:
-      const filteredItems: CartItem[] = state.cart.filter((item) => item.id !== payload.id);
-      let total = 0;
-      // let total: number = state.totalPrice - payload.basePrice;
-      filteredItems.forEach((item) => (total += item.basePrice));
       return {
         ...state,
-        cart: filteredItems,
-        quantity: state.quantity - 1,
-        totalPrice: total,
       };
-    case CartActionsType.UPDATE_PRICE:
-      let cartTotal = 0;
-      state.cart.length ?? state.cart.forEach((item) => (cartTotal += item.basePrice));
-      return {
-        ...state,
-        totalPrice: cartTotal,
-      };
-    case CartActionsType.GET_CART_QUANTITY:
+    case CartActionsType.GET_ITEM_QUANTITY:
       let quantity = state.cart.length ?? state.cart.filter((item) => item.id === payload.id)?.length;
       return {
         ...state,
