@@ -1,15 +1,18 @@
 import Card from "react-bootstrap/Card";
 import { formatCurrency } from "../utility/formatCurrency";
 import { Button } from "react-bootstrap";
+import { useShoppingCart } from "../contexts";
 
 type menuItemProps = {
+  id: string;
   url?: string;
   name: string;
   basePrice: number;
   description: string;
 };
 
-export const MenuItem = ({ url, name, basePrice, description }: menuItemProps) => {
+export const MenuItem = ({ id, url, name, basePrice, description }: menuItemProps) => {
+  const { addToCart, removeFromCart, quantity, cart } = useShoppingCart();
   return (
     <Card style={{ border: "none" }}>
       <Card.Img style={{ objectFit: "cover" }} height="400px" variant="top" src={url} />
@@ -19,8 +22,15 @@ export const MenuItem = ({ url, name, basePrice, description }: menuItemProps) =
           <span className="ms-2 text-muted">{formatCurrency(basePrice)}</span>
         </Card.Text>
         <div className="mt-auto">
-          <Button className="w-100">Add to Cart +</Button>
+          <Button onClick={() => addToCart({ id, name, basePrice, quantity })} className="w-100">
+            Add to Cart +
+          </Button>
+          <div></div>
+          <Button onClick={() => removeFromCart({ id, name, basePrice, quantity })} className="w-100">
+            Remove from Cart -
+          </Button>
         </div>
+        <div>{cart.map((c) => c.name)}</div>
       </Card.Body>
     </Card>
   );
