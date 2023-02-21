@@ -1,4 +1,3 @@
-import { Role } from './../../../../order_manager/order.manager.entity';
 import { MerchantDataModel } from '../schemas';
 
 export interface IOrderManagerDataModel {
@@ -7,5 +6,5 @@ export interface IOrderManagerDataModel {
   readonly email: string;
   readonly phoneNumber?: string;
   readonly merchant: MerchantDataModel;
-  readonly role: Role;
+  readonly role: number;
 }

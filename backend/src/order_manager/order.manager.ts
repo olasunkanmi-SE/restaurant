@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 import { Audit, Entity, Result } from '../domain';
 import { Merchant } from './../merchant/merchant';
-import { IOrderManager, Role } from './order.manager.entity';
+import { IOrderManager } from './order.manager.entity';
 
 export class OrderManager extends Entity<IOrderManager> implements IOrderManager {
   _firstName: string;
@@ -9,8 +9,9 @@ export class OrderManager extends Entity<IOrderManager> implements IOrderManager
   _email: string;
   _phoneNumber?: string;
   _merchant: Merchant;
-  _role: Role;
+  _role: number;
   _audit: Audit;
+  _password: string;
 
   constructor(id: Types.ObjectId, props: IOrderManager) {
     super(id);
@@ -21,6 +22,7 @@ export class OrderManager extends Entity<IOrderManager> implements IOrderManager
     this._email = props.email;
     this._phoneNumber = props.phoneNumber;
     this._merchant = props.merchant;
+    this._password = props.password;
   }
 
   get firstName(): string {
@@ -63,11 +65,11 @@ export class OrderManager extends Entity<IOrderManager> implements IOrderManager
     this._merchant = merchant;
   }
 
-  get role(): Role {
+  get role(): number {
     return this._role;
   }
 
-  set role(role: Role) {
+  set role(role: number) {
     this._role = role;
   }
 
@@ -77,6 +79,14 @@ export class OrderManager extends Entity<IOrderManager> implements IOrderManager
 
   set audit(audit: Audit) {
     this._audit = audit;
+  }
+
+  get password(): string {
+    return this._password;
+  }
+
+  set password(password: string) {
+    this._password = password;
   }
 
   static create(props: IOrderManager, id?: Types.ObjectId): Result<OrderManager> {

@@ -1,5 +1,4 @@
 import { Types } from 'mongoose';
-import { Role } from '../order_manager/order.manager.entity';
 import { IAudit } from './../infrastructure/database/mongoDB/base-document.interface';
 import { MerchantApiResponse } from './../merchant/merchant-parser';
 export interface IOrderManagerDTO extends IAudit {
@@ -9,5 +8,5 @@ export interface IOrderManagerDTO extends IAudit {
   email: string;
   phoneNumber: string;
   merchant: MerchantApiResponse;
-  role: Role;
+  role: number;
 }

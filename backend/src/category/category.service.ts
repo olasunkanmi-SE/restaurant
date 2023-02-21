@@ -18,7 +18,7 @@ import { Types } from 'mongoose';
 
 @Injectable()
 export class CategoryService implements ICategoryService {
-  private context: Promise<Context>;
+  private context: Context;
   constructor(
     @Inject(TYPES.IContextService) private readonly contextService: IContextService,
     @Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService,
@@ -30,11 +30,7 @@ export class CategoryService implements ICategoryService {
   async createCategory(props: CreateCategoryDTO): Promise<Result<ICategoryResponseDTO>> {
     const { name } = props;
     const code = name.toUpperCase();
-    const validUser: boolean = await this.merchantService.validateContext();
-    if (!validUser) {
-      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
-    }
-
+    await this.merchantService.validateContext();
     const existingItem = await this.categoryRepository.findOne({ name });
     if (existingItem.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `Item ${name} already exists`);
@@ -53,20 +49,14 @@ export class CategoryService implements ICategoryService {
   }
 
   async getCategories(): Promise<Result<ICategoryResponseDTO[]>> {
-    const validUser: boolean = await this.merchantService.validateContext();
-    if (!validUser) {
-      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
-    }
+    await this.merchantService.validateContext();
     const result: Result<Category[]> = await this.categoryRepository.find({});
     const response: ICategoryResponseDTO[] = CategoryParser.createCategoriesResponse(result.getValue());
     return Result.ok(response);
   }
 
   async getCategoryById(id: Types.ObjectId): Promise<Result<ICategoryResponseDTO>> {
-    const validUser: boolean = await this.merchantService.validateContext();
-    if (!validUser) {
-      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
-    }
+    await this.merchantService.validateContext();
     const result: Result<Category> = await this.categoryRepository.findById(id);
     const response: ICategoryResponseDTO = CategoryParser.createCategoryResponse(result.getValue());
     return Result.ok(response);

@@ -9,7 +9,7 @@ import { OrderManager } from './order.manager';
 export class OrderManagerMapper implements IMapper<OrderManager, OrderManagerDataModel> {
   constructor(private readonly merchantMapper: MerchantMapper, private readonly auditMapper: AuditMapper) {}
   toPersistence(entity: OrderManager): OrderManagerDataModel {
-    const { firstName, lastName, email, phoneNumber, merchant, role, audit } = entity;
+    const { firstName, lastName, email, phoneNumber, merchant, role, audit, password } = entity;
     const {
       auditCreatedBy,
       auditCreatedDateTime,
@@ -26,6 +26,7 @@ export class OrderManagerMapper implements IMapper<OrderManager, OrderManagerDat
       phoneNumber,
       merchant: this.merchantMapper.toPersistence(merchant),
       role,
+      password,
       auditCreatedBy,
       auditCreatedDateTime,
       auditModifiedBy,
@@ -37,7 +38,7 @@ export class OrderManagerMapper implements IMapper<OrderManager, OrderManagerDat
   }
 
   toDomain(model: OrderManagerDataModel): OrderManager {
-    const { _id, firstName, lastName, email, phoneNumber, merchant, role } = model;
+    const { _id, firstName, lastName, email, phoneNumber, merchant, role, password } = model;
     const orderManagerEntity: OrderManager = OrderManager.create(
       {
         firstName,
@@ -47,6 +48,7 @@ export class OrderManagerMapper implements IMapper<OrderManager, OrderManagerDat
         merchant: this.merchantMapper.toDomain(merchant),
         role,
         audit: this.auditMapper.toDomain(model),
+        password,
       },
       _id,
     ).getValue();

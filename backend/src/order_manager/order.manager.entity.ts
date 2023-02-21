@@ -2,6 +2,10 @@ import { Audit } from './../domain/audit/audit';
 import { Merchant } from './../merchant/merchant';
 
 export type Role = 'ADMIN' | 'SUPERADMIN';
+export enum RoleEnum {
+  'ADMIN',
+  'SUPERADMIN',
+}
 
 export interface IOrderManager {
   firstName: string;
@@ -9,6 +13,7 @@ export interface IOrderManager {
   email: string;
   phoneNumber?: string;
   merchant: Merchant;
-  role: Role;
+  role: number;
+  password: string;
   audit: Audit;
 }

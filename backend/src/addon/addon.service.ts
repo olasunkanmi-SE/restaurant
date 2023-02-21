@@ -19,7 +19,7 @@ import { CreateAddonDTO } from './create-addon.dto';
 
 @Injectable()
 export class AddonService implements IAddonService {
-  private context: Promise<Context>;
+  private context: Context;
   constructor(
     @Inject(TYPES.IContextService)
     private readonly contextService: IContextService,
@@ -33,11 +33,7 @@ export class AddonService implements IAddonService {
 
   async createAddon(props: CreateAddonDTO): Promise<Result<IAddonResponseDTO>> {
     const { name } = props;
-    const validUser: boolean = await this.merchantService.validateContext();
-    if (!validUser) {
-      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
-    }
-
+    await this.merchantService.validateContext();
     const existingItem = await this.addonRepository.findOne({ name });
     if (existingItem.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `Item ${name} already exists`);
@@ -62,10 +58,7 @@ export class AddonService implements IAddonService {
   }
 
   async getAddons(): Promise<Result<IAddonResponseDTO[]>> {
-    const validUser: boolean = await this.merchantService.validateContext();
-    if (!validUser) {
-      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
-    }
+    await this.merchantService.validateContext();
     const addonsDoc = await this.addonRepository.getAddons();
     const addons: Addon[] = addonsDoc.map((addon) => this.addonMapper.toDomain(addon));
     const response: IAddonResponseDTO[] = AddonParser.createAddonsResponse(addons);
