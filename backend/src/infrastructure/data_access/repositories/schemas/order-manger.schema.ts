@@ -3,7 +3,7 @@ import { Type } from 'class-transformer';
 import mongoose, { Document } from 'mongoose';
 import { BaseDocument } from '../../../../infrastructure/database';
 import { IOrderManagerDataModel } from '../models/order-manager-model.interface';
-import { Role } from './../../../../order_manager/order.manager.entity';
+import { RoleEnum } from './../../../../order_manager/order.manager.entity';
 import { MerchantDataModel } from './merchant.schema';
 
 export type OrderManagerDocument = OrderManagerDataModel & Document;
@@ -16,7 +16,7 @@ export class OrderManagerDataModel extends BaseDocument implements IOrderManager
   @Prop({ type: String, required: true })
   lastName: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, unique: true })
   email: string;
 
   @Prop({ type: String })
@@ -26,8 +26,11 @@ export class OrderManagerDataModel extends BaseDocument implements IOrderManager
   @Type(() => MerchantDataModel)
   merchant: MerchantDataModel;
 
+  @Prop({ type: String, required: true, default: RoleEnum.ADMIN })
+  readonly role: number;
+
   @Prop({ type: String, required: true })
-  readonly role: Role;
+  readonly password: string;
 }
 
 export const OrderManagerSchema = SchemaFactory.createForClass(OrderManagerDataModel);
