@@ -39,9 +39,7 @@ export class ItemService implements IItemService {
     if (existingItem.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `Item ${name} already exists`);
     }
-
-    const context: Context = await this.context;
-    const audit: Audit = Audit.createInsertContext(context);
+    const audit: Audit = Audit.createInsertContext(this.context);
     let addonsEntity: Addon[] = [];
     if (addons && addons.length) {
       addonsEntity = await this.addonRepository.getAddonsById(addons);

@@ -35,9 +35,7 @@ export class CategoryService implements ICategoryService {
     if (existingItem.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `Item ${name} already exists`);
     }
-
-    const context: Context = await this.context;
-    const audit: Audit = Audit.createInsertContext(context);
+    const audit: Audit = Audit.createInsertContext(this.context);
     const category: Category = Category.create({ ...props, audit, code }).getValue();
     const categoryModel: CategoryDataModel = this.categoryMapper.toPersistence(category);
     const result: Result<Category> = await this.categoryRepository.create(categoryModel);

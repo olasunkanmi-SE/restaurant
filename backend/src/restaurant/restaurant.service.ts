@@ -46,7 +46,7 @@ export class RestaurantService implements IRestaurantService {
         throwApplicationError(HttpStatus.BAD_REQUEST, `Restaurant with email ${props.email} already exists`);
       }
 
-      const audit: Audit = Audit.createInsertContext(await this.context);
+      const audit: Audit = Audit.createInsertContext(this.context);
       const location: Location = Location.create(
         {
           ...props.location,
@@ -100,7 +100,7 @@ export class RestaurantService implements IRestaurantService {
     const result = await this.restaurantRepository.findById(id);
     const restaurantId: Types.ObjectId = result.getValue().id;
     const restaurantWithMerchantData: Restaurant = await this.restaurantRepository.getRestaurant(restaurantId);
-    const context = await this.contextService.getContext();
+    const context = this.contextService.getContext();
     const email = context.email;
     const userDoc = await this.merchantRepository.findOne({ email });
     const user: Merchant = userDoc.getValue();
