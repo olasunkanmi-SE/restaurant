@@ -61,6 +61,6 @@ export class MerchantController {
   @UseGuards(AccessAuthGuard)
   @Post('/logout')
   async logOut(@GetCurrentUserId() userId: Types.ObjectId) {
-    return this.merchantService.logOut(userId);
+    return this.merchantService.signOut(userId);
   }
 }
