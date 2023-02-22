@@ -1,10 +1,10 @@
+import { AuthService } from './../infrastructure/auth/auth.service';
 import { Result } from './../domain/result/result';
 import { OrderManagerMapper } from './order-manager.mapper';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { saltRounds } from './../application/constants/constants';
 import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
-import { IAuthService } from './../infrastructure/auth/interfaces/auth-service.interface';
 import { Context } from './../infrastructure/context/context';
 import { IContextService } from './../infrastructure/context/context-service.interface';
 import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant.repository';
@@ -18,18 +18,22 @@ import { OrderManager } from './order.manager';
 import { OrderManagerParser } from './order-manger.parser';
 import { IOrderManagerDTO } from './order-manager-response.dto';
 import { Types } from 'mongoose';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 @Injectable()
-export class OrderManagerService {
+export class OrderManagerService extends AuthService {
   private context: Context;
   constructor(
+    jwtService: JwtService,
+    configService: ConfigService,
     private readonly contextService: IContextService,
-    @Inject(TYPES.IAuthService) private readonly authService: IAuthService,
     private readonly orderManagerRepository: OrderManagerRepository,
     @Inject(TYPES.IValidateUser)
     private readonly validateOrderManager: IValidateUser<OrderManager, OrderManagerDocument>,
     private readonly merchantRepository: MerchantRepository,
     private readonly mapper: OrderManagerMapper,
   ) {
+    super(jwtService, configService);
     this.context = this.contextService.getContext();
   }
 
@@ -46,7 +50,7 @@ export class OrderManagerService {
       merchant = validateMerchant.getValue();
     }
 
-    const hashedPassword = await this.authService.hashData(password, saltRounds);
+    const hashedPassword = await this.hashData(password, saltRounds);
     const audit = Audit.createInsertContext(this.context);
     const orderManagerEntity: OrderManager = OrderManager.create({
       ...props,

@@ -7,7 +7,6 @@ import { GenericDocumentRepository } from '../database';
 import { throwApplicationError } from '../utilities/exception-instance';
 import { saltRounds } from './../../application/constants/constants';
 import { Result } from './../../domain/result/result';
-import { IAuthService } from './interfaces/auth-service.interface';
 import { IJwtPayload, ISignUpTokens, IUserPayload } from './interfaces/auth.interface';
 
 /**
@@ -18,7 +17,7 @@ import { IJwtPayload, ISignUpTokens, IUserPayload } from './interfaces/auth.inte
  * @implements {IAuthService}
  */
 @Injectable()
-export class AuthService implements IAuthService {
+export class AuthService {
   constructor(private readonly jwtService: JwtService, private readonly configService: ConfigService) {}
 
   /**
@@ -28,7 +27,7 @@ export class AuthService implements IAuthService {
    * @returns {Promise<ISignUpTokens>}
    * @memberof AuthService
    */
-  async generateAuthTokens(payload: IUserPayload): Promise<ISignUpTokens> {
+  protected async generateAuthTokens(payload: IUserPayload): Promise<ISignUpTokens> {
     const { userId, email, role } = payload;
     const jwtPayload: IJwtPayload = {
       sub: userId,
@@ -53,7 +52,7 @@ export class AuthService implements IAuthService {
    * @returns {Promise<string>}
    * @memberof AuthService
    */
-  private async signAccessToken(jwtPayload: IJwtPayload): Promise<string> {
+  protected async signAccessToken(jwtPayload: IJwtPayload): Promise<string> {
     return this.jwtService.signAsync(jwtPayload, {
       secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
       expiresIn: this.configService.get<string>('JWT_ACCESS_TOKEN_EXPIRATION_TIME'),
@@ -67,7 +66,7 @@ export class AuthService implements IAuthService {
    * @returns {Promise<string>}
    * @memberof AuthService
    */
-  private async signRefreshToken(jwtPayload: IJwtPayload): Promise<string> {
+  protected async signRefreshToken(jwtPayload: IJwtPayload): Promise<string> {
     return this.jwtService.signAsync(jwtPayload, {
       secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
       expiresIn: this.configService.get<string>('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
@@ -82,7 +81,7 @@ export class AuthService implements IAuthService {
    * @returns {Promise<string>}
    * @memberof AuthService
    */
-  async hashData(prop: string, saltRound: number): Promise<string> {
+  protected async hashData(prop: string, saltRound: number): Promise<string> {
     return bcrypt.hash(prop, saltRound);
   }
 
@@ -95,7 +94,7 @@ export class AuthService implements IAuthService {
    * @returns {Promise<{ accessToken: string }>}
    * @memberof AuthService
    */
-  async updateRefreshToken(
+  protected async updateRefreshToken(
     model: GenericDocumentRepository<any, any>,
     userId: Types.ObjectId,
     refreshToken: string,
@@ -133,7 +132,7 @@ export class AuthService implements IAuthService {
    * @returns {void}
    * @memberof AuthService
    */
-  async nullifyRefreshToken(model: GenericDocumentRepository<any, any>, userId: Types.ObjectId) {
+  protected async nullifyRefreshToken(model: GenericDocumentRepository<any, any>, userId: Types.ObjectId) {
     const docResult: Result<any | null> = await model.findById(userId);
 
     if (docResult) {
@@ -154,7 +153,7 @@ export class AuthService implements IAuthService {
    * @returns {void}
    * @memberof AuthService
    */
-  async logOut(model: GenericDocumentRepository<any, any>, userId: Types.ObjectId) {
+  protected async logOut(model: GenericDocumentRepository<any, any>, userId: Types.ObjectId) {
     let result: Result<any | null> = await model.findById(userId);
 
     if (result.isSuccess === false) {

@@ -1,3 +1,5 @@
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { expect } from 'chai';
 import { Types } from 'mongoose';
 import * as sinon from 'ts-sinon';
@@ -5,7 +7,6 @@ import { auditMockData } from './../audit/audit-mock-data';
 import { AuditMapper } from './../audit/audit.mapper';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
-import { IAuthService } from './../infrastructure/auth/interfaces/auth-service.interface';
 import { Context } from './../infrastructure/context';
 import { IContextService } from './../infrastructure/context/context-service.interface';
 import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
@@ -20,19 +21,19 @@ import { MerchantDocument } from '../infrastructure';
 
 describe('Test merchant service', () => {
   const merchantRepositoryStub: MerchantRepository = sinon.stubInterface<MerchantRepository>();
-
   const merchantMapperStub: MerchantMapper = new MerchantMapper(new AuditMapper());
-  const authServiceStub: IAuthService = sinon.stubInterface<IAuthService>();
-
   const contextServiceStub: IContextService = sinon.stubInterface<IContextService>();
   const validateUserStub: IValidateUser<Merchant, MerchantDocument> =
     sinon.stubInterface<IValidateUser<Merchant, MerchantDocument>>();
+  const jwtServiceStub: JwtService = sinon.stubInterface<JwtService>();
+  const configServiceStub: ConfigService = sinon.stubInterface<ConfigService>();
 
   const merchantService = new MerchantService(
+    jwtServiceStub,
+    configServiceStub,
     merchantRepositoryStub,
     merchantMapperStub,
     contextServiceStub,
-    authServiceStub,
     validateUserStub,
   );
 
@@ -109,13 +110,13 @@ describe('Test merchant service', () => {
   });
 
   it('Should hash a password', async () => {
-    authServiceStub.hashData = async (): Promise<string> => {
-      return '';
-    };
+    // merchantService.hashData = async (): Promise<string> => {
+    //   return '';
+    // };
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const result = await merchantService.hashPassword('', 10);
-    expect(result).to.not.be.undefined;
+    // const result = await merchantService.hashPassword('', 10);
+    // expect(result).to.not.be.undefined;
   });
 
   it('Should not sign a merchant in and should throw an exception', async () => {

@@ -19,7 +19,7 @@ export interface IMerchantService {
     refreshToken: string,
   ): Promise<Result<{ accessToken: string }>>;
 
-  logOut(userId: Types.ObjectId): Promise<void>;
+  signOut(userId: Types.ObjectId): Promise<void>;
   validateContext(): Promise<boolean>;
   getMerchants(): Promise<Result<IMerchantResponseDTO[]>>;
 }

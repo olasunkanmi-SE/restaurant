@@ -39,8 +39,7 @@ export class MenuService implements IMenuService {
     if (existingMenu.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `${name}, already exists`);
     }
-    const context: Context = await this.context;
-    const audit: Audit = Audit.createInsertContext(context);
+    const audit: Audit = Audit.createInsertContext(this.context);
     if (itemIds && itemIds.length) {
       const result = await this.itemRepository.getItems({ _id: { $in: itemIds } });
       props.items = result.getValue();

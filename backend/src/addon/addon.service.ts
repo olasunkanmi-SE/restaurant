@@ -38,8 +38,7 @@ export class AddonService implements IAddonService {
     if (existingItem.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `Item ${name} already exists`);
     }
-    const context: Context = await this.context;
-    const audit: Audit = Audit.createInsertContext(context);
+    const audit: Audit = Audit.createInsertContext(this.context);
     const categoryResult: Result<Category> = await this.categoryRepository.findById(props.categoryId);
     if (!categoryResult.isSuccess) {
       throwApplicationError(HttpStatus.NOT_FOUND, 'category does not exist');
