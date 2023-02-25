@@ -68,7 +68,7 @@ export class MerchantService extends AuthService implements IMerchantService {
   }
 
   async getMerchantById(id: Types.ObjectId): Promise<Result<IMerchantResponseDTO>> {
-    const context: Context = await this.contextService.getContext();
+    const context: Context = this.contextService.getContext();
     const isValidUser = await this.validateContext();
     if (!isValidUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
@@ -127,7 +127,7 @@ export class MerchantService extends AuthService implements IMerchantService {
   }
 
   async onBoardMerchant(props: OnBoardMerchantDTO, id: Types.ObjectId): Promise<Result<IMerchantResponseDTO>> {
-    const context: Context = await this.contextService.getContext();
+    const context: Context = this.contextService.getContext();
     const isValidUser = await this.validateContext();
     if (!isValidUser) {
       throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
@@ -219,7 +219,7 @@ export class MerchantService extends AuthService implements IMerchantService {
    * @memberof AuthService
    */
   async validateContext(): Promise<boolean> {
-    const context: Context = await this.contextService.getContext();
+    const context: Context = this.contextService.getContext();
     return await this.validateMerchant.getUser(this.merchantRepository, { email: context.email });
   }
 }
