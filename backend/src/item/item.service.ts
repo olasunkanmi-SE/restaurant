@@ -20,7 +20,7 @@ import { ItemParser } from './item.parser';
 
 @Injectable()
 export class ItemService implements IItemService {
-  private context: Promise<Context>;
+  private context: Context;
   constructor(
     @Inject(TYPES.IContextService)
     private readonly contextService: IContextService,
@@ -34,18 +34,12 @@ export class ItemService implements IItemService {
 
   async createItem(props: CreateItemDTO): Promise<Result<ITemResponseDTO>> {
     const { name, addons } = props;
-    const validUser: boolean = await this.merchantService.validateContext();
-    if (!validUser) {
-      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
-    }
-
+    await this.merchantService.validateContext();
     const existingItem = await this.iTemRepository.getItem(name);
     if (existingItem.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `Item ${name} already exists`);
     }
-
-    const context: Context = await this.context;
-    const audit: Audit = Audit.createInsertContext(context);
+    const audit: Audit = Audit.createInsertContext(this.context);
     let addonsEntity: Addon[] = [];
     if (addons && addons.length) {
       addonsEntity = await this.addonRepository.getAddonsById(addons);
@@ -64,10 +58,7 @@ export class ItemService implements IItemService {
   }
 
   async getItems(): Promise<Result<ITemResponseDTO[]>> {
-    const validUser: boolean = await this.merchantService.validateContext();
-    if (!validUser) {
-      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
-    }
+    await this.merchantService.validateContext();
     const result: Result<Item[]> = await this.iTemRepository.getItems({});
     const items = result.getValue();
     let reponse: ITemResponseDTO[] = [];

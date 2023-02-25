@@ -19,7 +19,7 @@ import { IMenuService } from './menu-service.interface';
 import { MenuParser } from './menu.parser';
 @Injectable()
 export class MenuService implements IMenuService {
-  private context: Promise<Context>;
+  private context: Context;
   constructor(
     private readonly menuRepository: MenuRepository,
     @Inject(TYPES.IContextService)
@@ -33,17 +33,13 @@ export class MenuService implements IMenuService {
   }
 
   async createMenu(props: CreateMenuDTO): Promise<Result<IMenuResponseDTO>> {
-    const validUser: boolean = await this.merchantService.validateContext();
-    if (!validUser) {
-      throwApplicationError(HttpStatus.FORBIDDEN, 'Invalid Email');
-    }
+    await this.merchantService.validateContext();
     const { name, itemIds, categoryId } = props;
     const existingMenu: Result<Menu> = await this.menuRepository.findOne({ name });
     if (existingMenu.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `${name}, already exists`);
     }
-    const context: Context = await this.context;
-    const audit: Audit = Audit.createInsertContext(context);
+    const audit: Audit = Audit.createInsertContext(this.context);
     if (itemIds && itemIds.length) {
       const result = await this.itemRepository.getItems({ _id: { $in: itemIds } });
       props.items = result.getValue();
@@ -67,6 +63,7 @@ export class MenuService implements IMenuService {
   }
 
   async getMenus(): Promise<Result<IMenuResponseDTO[]>> {
+    await this.merchantService.validateContext();
     const menus = await this.menuRepository.getMenus({});
     return Result.ok(MenuParser.createMenusResponse(menus));
   }

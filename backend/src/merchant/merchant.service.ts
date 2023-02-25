@@ -1,3 +1,4 @@
+import { AuthService } from './../infrastructure/auth/auth.service';
 import {
   MerchantDataModel,
   MerchantDocument,
@@ -6,20 +7,21 @@ import {
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
+import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import { MerchantStatus, saltRounds } from './../application/constants/constants';
 import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
-import { IAuthService } from './../infrastructure/auth/interfaces/auth-service.interface';
 import { ISignUpTokens, IUserPayload } from './../infrastructure/auth/interfaces/auth.interface';
 import { Context, IContextService } from './../infrastructure/context';
-import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import { GenericDocumentRepository } from './../infrastructure/database';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
 import { Merchant } from './../merchant/merchant';
 import { IValidateUser } from './../utils/context-validation.interface';
 import { CreateMerchantDTO, LoginMerchantDTO, OnBoardMerchantDTO } from './dtos';
 
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { IMerchantService } from './interface/merchant-service.interface';
 import { IUpdateMerchant } from './interface/update-merchant.interface';
 import { MerchantParser } from './merchant-parser';
@@ -27,16 +29,18 @@ import { IMerchantResponseDTO, IMerchantSignedInResponseDTO } from './merchant-r
 import { MerchantMapper } from './merchant.mapper';
 
 @Injectable()
-export class MerchantService implements IMerchantService {
+export class MerchantService extends AuthService implements IMerchantService {
   constructor(
+    jwtService: JwtService,
+    configService: ConfigService,
     private readonly merchantRepository: MerchantRepository,
     private readonly merchantMapper: MerchantMapper,
     @Inject(TYPES.IContextService)
     private readonly contextService: IContextService,
-    @Inject(TYPES.IAuthService)
-    private readonly authService: IAuthService,
     @Inject(TYPES.IValidateUser) private readonly validateMerchant: IValidateUser<Merchant, MerchantDocument>,
-  ) {}
+  ) {
+    super(jwtService, configService);
+  }
 
   async createMerchant(props: CreateMerchantDTO): Promise<Result<IMerchantResponseDTO>> {
     const context: Context = new Context(props.email);
@@ -47,7 +51,7 @@ export class MerchantService implements IMerchantService {
     }
 
     const audit: Audit = Audit.createInsertContext(context);
-    const hashedPassword = await this.hashPassword(props.passwordHash);
+    const hashedPassword = await this.hashData(props.passwordHash, saltRounds);
     const merchant: Merchant = Merchant.create({
       ...props,
       passwordHash: hashedPassword,
@@ -90,12 +94,8 @@ export class MerchantService implements IMerchantService {
     return Result.ok(MerchantParser.merchantsResponse(merchants));
   }
 
-  private async hashPassword(password: string): Promise<string> {
-    return this.authService.hashData(password, saltRounds);
-  }
-
   private async updateMerchantRefreshToken(merchant: Merchant, token: ISignUpTokens): Promise<Merchant> {
-    const hash = await this.authService.hashData(token.refreshToken, saltRounds);
+    const hash = await this.hashData(token.refreshToken, saltRounds);
     const docResult: Result<Merchant> = await this.merchantRepository.findOneAndUpdate(
       { _id: merchant.id },
       { refreshTokenHash: hash },
@@ -120,7 +120,7 @@ export class MerchantService implements IMerchantService {
     }
     const { id, email, role } = merchant;
     const userProps: IUserPayload = { userId: id, email, role };
-    const tokens = await this.authService.generateAuthTokens(userProps);
+    const tokens = await this.generateAuthTokens(userProps);
     this.updateMerchantRefreshToken(merchant, tokens);
     const parsedResponse = MerchantParser.createMerchantResponse(merchant, tokens, true);
     return Result.ok(parsedResponse);
@@ -200,14 +200,14 @@ export class MerchantService implements IMerchantService {
     userId: Types.ObjectId,
     refreshToken: string,
   ): Promise<{ accessToken: string }> {
-    return await this.authService.updateRefreshToken(model, userId, refreshToken);
+    return await this.updateRefreshToken(model, userId, refreshToken);
   }
 
   private async logOutMerchant(model: GenericDocumentRepository<any, any>, userId: Types.ObjectId): Promise<void> {
-    return this.authService.logOut(model, userId);
+    return this.logOut(model, userId);
   }
 
-  async logOut(userId: Types.ObjectId): Promise<void> {
+  async signOut(userId: Types.ObjectId): Promise<void> {
     return this.logOutMerchant(this.merchantRepository, userId);
   }
 
