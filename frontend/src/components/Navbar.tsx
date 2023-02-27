@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import { useShoppingCart } from "../contexts";
 
 export const Menu = () => {
-  const { totalPrice } = useShoppingCart();
+  const { quantity } = useShoppingCart();
   return (
     <Navbar sticky="top" className="bg-white shadow-sm mb-3">
       <Container>
@@ -64,7 +64,7 @@ export const Menu = () => {
             }}
             className="rounded-circle bg-danger d-flex justify-content-center align-items-center"
           >
-            {totalPrice}
+            {quantity}
           </div>
         </Button>
       </Container>
