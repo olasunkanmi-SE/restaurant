@@ -132,11 +132,11 @@ type storeItemProps = {
   // items: any[];
 };
 
-type itemProps = {
-  name: string;
-  maxQuantity: number;
-  price: number;
-};
+// type itemProps = {
+//   name: string;
+//   maxQuantity: number;
+//   price: number;
+// };
 
 export const StoreItem = ({ name, description, imageUrl, basePrice }: storeItemProps) => {
   return (
