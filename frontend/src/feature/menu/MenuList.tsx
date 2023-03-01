@@ -28,8 +28,15 @@ export const MenuList = () => {
     });
   }
   return (
-    <Row md={3} xs={1} lg={3} className="g-3">
-      {response}
-    </Row>
+    <>
+      <Row md={3} xs={1} lg={3} className="g-3">
+        {response}
+      </Row>
+      <Row>
+        <Col style={{ overflow: "hidden" }} xs={12} md={12} lg={6}>
+          2 of 3 (wider)jnfwoeifnowefogwoefowfowehfohwiooehfow eoufhoweuhfoujsdnjsca scacascacascndjksdn
+        </Col>
+      </Row>
+    </>
   );
 };

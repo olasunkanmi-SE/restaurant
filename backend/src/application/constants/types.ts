@@ -18,4 +18,6 @@ export const TYPES = {
   IaddonRepository: Symbol('IaddonRepository'),
   ICategoryService: Symbol('ICategoryService'),
   IMenuRepository: Symbol('IMenuRepository'),
+  IItemRepository: Symbol('IItemRepository'),
+  IAddonRepository: Symbol('IAddonRepository'),
 };

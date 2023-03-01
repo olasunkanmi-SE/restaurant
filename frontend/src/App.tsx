@@ -6,7 +6,7 @@ import { ShoppingCartProvider } from "./contexts/shoppingCartContext";
 function App() {
   return (
     <ShoppingCartProvider>
-      <Container className="mb-4">
+      <Container className="mb-4 fluid='md'">
         <Menu />
         <Routes>
           <Route path="/" element={<Home />}></Route>
