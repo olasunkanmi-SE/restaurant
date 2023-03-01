@@ -1,4 +1,4 @@
-import { auditMockData } from 'src/audit/audit-mock-data';
+import { auditMockData } from '../audit/audit-mock-data';
 import { Audit } from '../domain';
 import { IAddon } from './addon-entity.interface';
 import { Category, categoryMockData } from '../category';

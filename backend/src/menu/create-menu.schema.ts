@@ -1,6 +1,6 @@
 import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString, Length } from 'class-validator';
 import { Types } from 'mongoose';
-import { Addon } from 'src/addon';
+import { Addon } from '../addon';
 import { Category } from '../category/category';
 import { Item } from './../item/item';
 
