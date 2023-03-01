@@ -6,11 +6,7 @@ export class Item extends Entity<IITem> implements IITem {
   private _name: string;
   private _description: string;
   private _price: number;
-  private _quantity: number;
-  private _image: string;
-  private _tags: string[];
   private _maximumPermitted: number;
-  private _taxRate: number;
   private _audit: Audit;
 
   constructor(id: Types.ObjectId, props: IITem) {
@@ -18,7 +14,6 @@ export class Item extends Entity<IITem> implements IITem {
     this._name = props.name;
     this._description = props.description;
     this._price = props.price;
-    this._quantity = props.quantity;
     this._maximumPermitted = props.maximumPermitted;
     this._audit = props.audit;
   }
@@ -45,14 +40,6 @@ export class Item extends Entity<IITem> implements IITem {
 
   set price(price: number) {
     this._price = price;
-  }
-
-  get quantity(): number | undefined {
-    return this._quantity;
-  }
-
-  set quantity(quantity: number) {
-    this._quantity = quantity;
   }
 
   get maximumPermitted(): number | undefined {

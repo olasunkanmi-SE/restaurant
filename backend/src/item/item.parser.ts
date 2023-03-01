@@ -9,7 +9,6 @@ export class ItemParser {
       name: item.name,
       description: item.description,
       price: item.price,
-      quantity: item.quantity,
       maximumPermitted: item.maximumPermitted,
       ...AuditParser.createAuditResponse(item.audit),
     };

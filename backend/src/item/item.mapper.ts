@@ -13,7 +13,6 @@ export class ItemMapper implements IMapper<Item, ItemDataModel> {
       name: entity.name,
       description: entity.description,
       price: entity.price,
-      quantity: entity.quantity,
       maximumPermitted: entity.maximumPermitted,
       auditCreatedBy: entity.audit.auditCreatedBy,
       auditCreatedDateTime: entity.audit.auditCreatedDateTime,
@@ -25,13 +24,12 @@ export class ItemMapper implements IMapper<Item, ItemDataModel> {
     return document;
   }
   toDomain(model: ItemDataModel): Item {
-    const { _id, name, description, price, quantity, maximumPermitted } = model;
+    const { _id, name, description, price, maximumPermitted } = model;
     const entity: Item = Item.create(
       {
         name,
         price,
         description,
-        quantity,
         maximumPermitted,
         audit: this.auditMapper.toDomain(model),
       },

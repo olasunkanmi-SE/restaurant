@@ -6,7 +6,6 @@ export const itemMockData: IITem = {
   name: 'Amala',
   description: '',
   price: 50,
-  quantity: 5,
   maximumPermitted: 5,
   audit: Audit.create(auditMockData).getValue(),
 };

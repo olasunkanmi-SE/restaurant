@@ -16,9 +16,6 @@ export class ItemDataModel extends BaseDocument implements ITemModel {
   @Prop({ type: Number, required: true })
   price: number;
 
-  @Prop({ type: Number })
-  quantity: number;
-
   @Prop({ type: Number, required: true })
   maximumPermitted: number;
 }
