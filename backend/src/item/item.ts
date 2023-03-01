@@ -1,13 +1,10 @@
-import { Addon } from './../addon/addon';
 import { Types } from 'mongoose';
 import { Audit, Entity, Result } from '../domain';
-import { portion } from '../infrastructure/data_access/repositories/models/item-model.interface';
 import { IITem } from './item.entity.interface';
 
 export class Item extends Entity<IITem> implements IITem {
   private _name: string;
   private _description: string;
-  private _portion: portion;
   private _price: number;
   private _quantity: number;
   private _image: string;
@@ -15,21 +12,15 @@ export class Item extends Entity<IITem> implements IITem {
   private _maximumPermitted: number;
   private _taxRate: number;
   private _audit: Audit;
-  private _addons: Addon[];
 
   constructor(id: Types.ObjectId, props: IITem) {
     super(id);
     this._name = props.name;
     this._description = props.description;
-    this._portion = props.portion;
     this._price = props.price;
     this._quantity = props.quantity;
-    this._image = props.image;
-    this._tags = props.tags;
     this._maximumPermitted = props.maximumPermitted;
-    this._taxRate = props.taxRate;
     this._audit = props.audit;
-    this._addons = props.addons;
   }
 
   get name(): string {
@@ -48,14 +39,6 @@ export class Item extends Entity<IITem> implements IITem {
     this._description = description;
   }
 
-  get portion(): portion {
-    return this._portion;
-  }
-
-  set portion(portion: portion) {
-    this._portion = portion;
-  }
-
   get price(): number {
     return this._price;
   }
@@ -72,22 +55,6 @@ export class Item extends Entity<IITem> implements IITem {
     this._quantity = quantity;
   }
 
-  get image(): string {
-    return this._image;
-  }
-
-  set image(image: string) {
-    this._image = image;
-  }
-
-  get tags(): string[] {
-    return this._tags;
-  }
-
-  set tags(tags: string[]) {
-    this._tags = tags;
-  }
-
   get maximumPermitted(): number | undefined {
     return this._maximumPermitted;
   }
@@ -96,28 +63,12 @@ export class Item extends Entity<IITem> implements IITem {
     this._maximumPermitted = maximumPermitted;
   }
 
-  get taxRate(): number {
-    return this._taxRate;
-  }
-
-  set taxRate(taxRate: number) {
-    this._taxRate = taxRate;
-  }
-
   get audit(): Audit {
     return this._audit;
   }
 
   set audit(audit: Audit) {
     this._audit = audit;
-  }
-
-  get addons(): Addon[] {
-    return this._addons;
-  }
-
-  set addons(addons: Addon[]) {
-    this._addons = addons;
   }
 
   static create(props: IITem, id?: Types.ObjectId): Result<Item> {

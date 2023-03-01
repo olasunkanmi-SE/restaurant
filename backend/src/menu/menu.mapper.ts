@@ -7,6 +7,7 @@ import { ItemDataModel } from './../infrastructure/data_access/repositories/sche
 import { MenuDataModel } from './../infrastructure/data_access/repositories/schemas/menu.schema';
 import { ItemMapper } from './../item/item.mapper';
 import { Menu } from './menu';
+import { Addon, AddonDataModel, AddonMapper } from '../addon';
 
 @Injectable()
 export class MenuMapper implements IMapper<Menu, MenuDataModel> {
@@ -14,9 +15,10 @@ export class MenuMapper implements IMapper<Menu, MenuDataModel> {
     private readonly auditMapper: AuditMapper,
     private readonly itemMapper: ItemMapper,
     private readonly categoryMapper: CategoryMapper,
+    private readonly addonMapper: AddonMapper,
   ) {}
   toPersistence(entity: Menu): MenuDataModel {
-    const { items, name, description, audit, discount, imageUrl, basePrice, category } = entity;
+    const { items, name, description, audit, discount, imageUrl, basePrice, category, addons } = entity;
     const {
       auditCreatedBy,
       auditCreatedDateTime,
@@ -25,9 +27,13 @@ export class MenuMapper implements IMapper<Menu, MenuDataModel> {
       auditDeletedBy,
       auditDeletedDateTime,
     } = audit;
-    let mappedItems: ItemDataModel[] = [];
+    let itemsToPersistence: ItemDataModel[] = [];
     if (items && items.length) {
-      mappedItems = items.map((item) => this.itemMapper.toPersistence(item));
+      itemsToPersistence = items.map((item) => this.itemMapper.toPersistence(item));
+    }
+    let addonsToPersistence: AddonDataModel[] = [];
+    if (addons && addons.length) {
+      addonsToPersistence = addons.map((addon) => this.addonMapper.toPersistence(addon));
     }
     const menuDocument: MenuDataModel = {
       _id: entity.id,
@@ -37,7 +43,8 @@ export class MenuMapper implements IMapper<Menu, MenuDataModel> {
       imageUrl,
       basePrice,
       category: this.categoryMapper.toPersistence(category),
-      items: mappedItems,
+      items: itemsToPersistence,
+      addons: addonsToPersistence,
       auditCreatedBy,
       auditCreatedDateTime,
       auditModifiedBy,
@@ -49,14 +56,19 @@ export class MenuMapper implements IMapper<Menu, MenuDataModel> {
   }
 
   toDomain(model: MenuDataModel): Menu {
-    const { _id, items, name, description, discount, imageUrl, basePrice, category } = model;
+    const { _id, items, name, description, discount, imageUrl, basePrice, category, addons } = model;
     let itemsToDomain: Item[] = [];
     if (items && items.length) {
       itemsToDomain = items.map((item) => this.itemMapper.toDomain(item));
     }
+    let addonsToDomain: Addon[] = [];
+    if (addons && addons.length) {
+      addonsToDomain = addons.map((addon) => this.addonMapper.toDomain(addon));
+    }
     const entity: Menu = Menu.create(
       {
         items: itemsToDomain,
+        addons: addonsToDomain,
         name,
         description,
         category: this.categoryMapper.toDomain(category),

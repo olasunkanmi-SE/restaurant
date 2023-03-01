@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
-import { IsString, IsNotEmpty, MaxLength, IsOptional, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty, MaxLength, IsOptional, IsNumber, IsArray } from 'class-validator';
+import { Menu } from '../menu';
 
 export class CreateAddonDTO {
   @IsString()
@@ -22,4 +23,12 @@ export class CreateAddonDTO {
 
   @IsNotEmpty()
   categoryId: Types.ObjectId;
+
+  @IsOptional()
+  @IsArray()
+  menuIds: Types.ObjectId[];
+
+  @IsOptional()
+  @IsArray()
+  menus: Menu[];
 }
