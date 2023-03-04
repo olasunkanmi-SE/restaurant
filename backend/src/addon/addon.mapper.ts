@@ -21,7 +21,7 @@ export class AddonMapper implements IMapper<Addon, AddonDataModel> {
       description,
       quantity,
       unitPrice,
-      category: new CategoryMapper(this.auditMapper).toPersistence(category),
+      category: new CategoryMapper().toPersistence(category),
       auditCreatedBy,
       auditCreatedDateTime,
       auditModifiedBy,
@@ -37,7 +37,7 @@ export class AddonMapper implements IMapper<Addon, AddonDataModel> {
       {
         name,
         description,
-        category: new CategoryMapper(this.auditMapper).toDomain(category),
+        category: new CategoryMapper().toDomain(category),
         quantity,
         unitPrice,
         audit: new AuditMapper().toDomain(model),

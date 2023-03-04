@@ -6,8 +6,6 @@ import { Category } from './category';
 
 @Injectable()
 export class CategoryMapper implements IMapper<Category, CategoryDataModel> {
-  constructor(private readonly auditMapper: AuditMapper) {}
-
   toPersistence(entity: Category): CategoryDataModel {
     const { name, description, code, id, audit } = entity;
     const {

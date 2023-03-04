@@ -101,4 +101,10 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
     const entities: TEntity[] = documents.map((doc) => this.mapper.toDomain(doc));
     return Result.ok(entities);
   }
+
+  async updateOne(filter: any, query: any): Promise<Result<TEntity>> {
+    const document = await this.DocumentModel.updateOne(filter, { $set: query });
+    const entity: TEntity = this.mapper.toDomain(document);
+    return Result.ok(entity);
+  }
 }

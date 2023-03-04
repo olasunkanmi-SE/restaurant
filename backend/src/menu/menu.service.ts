@@ -74,11 +74,29 @@ export class MenuService implements IMenuService {
     return Result.ok(MenuParser.createMenusResponse(menus));
   }
 
-  async getMenuById(id: Types.ObjectId): Promise<Result<IMenuResponseDTO>> {
+  async getMenuById(id: Types.ObjectId): Promise<any> {
     const menu = await this.menuRepository.getMenuById(id);
     if (menu.isSuccess === false) {
       throwApplicationError(HttpStatus.NOT_FOUND, 'Menu does not exist');
     }
     return Result.ok(MenuParser.createMenuResponse(menu));
+  }
+
+  async updateMenu(props: any, id: Types.ObjectId): Promise<Result<IMenuResponseDTO>> {
+    const menuIdQuery = { _id: id };
+    const menuDoc = await this.menuRepository.findById(menuIdQuery);
+    if (!menuDoc.isSuccess) {
+      throwApplicationError(HttpStatus.NOT_FOUND, 'Could not retrieve menu');
+    }
+    const propsWithAuditInfo = {
+      ...props,
+      ...Audit.updateContext(this.context.email, menuDoc.getValue()),
+    };
+    const updatedMenu = await this.menuRepository.updateMenu(menuIdQuery, propsWithAuditInfo);
+    let response: Result<IMenuResponseDTO> | undefined;
+    updatedMenu instanceof Menu
+      ? (response = Result.ok(MenuParser.createMenuResponse(updatedMenu)))
+      : throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Could not update menu');
+    return response;
   }
 }
