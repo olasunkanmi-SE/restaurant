@@ -1,10 +1,11 @@
 import { Result } from './../domain/result/result';
 import { IMenuResponseDTO } from './menu-response.dto';
 import { CreateMenuDTO } from './create-menu.schema';
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Patch, Post } from '@nestjs/common';
 import { IMenuService } from './menu-service.interface';
 import { TYPES } from '../application';
 import { Types } from 'mongoose';
+import { UpdateMenuDTO } from './update-menu.schema';
 
 @Controller('menus')
 export class MenuController {
@@ -23,5 +24,13 @@ export class MenuController {
   @Get('/:id')
   async getMenu(@Param('id') menuId: Types.ObjectId): Promise<Result<IMenuResponseDTO>> {
     return this.menuService.getMenuById(menuId);
+  }
+
+  @Patch('/:id')
+  async updateMenuById(
+    @Body() req: UpdateMenuDTO,
+    @Param('id') menuId: Types.ObjectId,
+  ): Promise<Result<IMenuResponseDTO>> {
+    return this.menuService.updateMenu(req, menuId);
   }
 }
