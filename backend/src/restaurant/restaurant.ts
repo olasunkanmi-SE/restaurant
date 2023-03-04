@@ -24,6 +24,7 @@ export class Restaurant extends Entity<IRestaurant> {
   private _openingHour: number;
   private _closingHour: number;
   private _menus: Menu[];
+  private _merchantId: Types.ObjectId;
   constructor(id: Types.ObjectId, props: IRestaurant) {
     super(id);
     this._name = props.name;
@@ -42,6 +43,7 @@ export class Restaurant extends Entity<IRestaurant> {
     this._openingHour = props.openingHour;
     this._closingHour = props.closingHour;
     this._menus = props.menus;
+    this._merchantId = props.merchantId;
   }
 
   get name(): string {
@@ -106,6 +108,14 @@ export class Restaurant extends Entity<IRestaurant> {
 
   set location(location: Location) {
     this._location = location;
+  }
+
+  get merchantId(): Types.ObjectId {
+    return this._merchantId;
+  }
+
+  set metchantId(merchantId: Types.ObjectId) {
+    this._merchantId = merchantId;
   }
 
   get merchant(): Merchant {
