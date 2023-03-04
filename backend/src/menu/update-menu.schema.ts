@@ -1,7 +1,4 @@
-import { IsArray, IsNumber, IsObject, IsOptional, IsString, Length } from 'class-validator';
-import { Addon } from '../addon';
-import { Category } from '../category/category';
-import { Item } from './../item/item';
+import { IsArray, IsNumber, IsOptional, IsString, Length } from 'class-validator';
 import { Types } from 'mongoose';
 
 export class UpdateMenuDTO {

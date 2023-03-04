@@ -4,7 +4,6 @@ import {
   Connection,
   Document,
   FilterQuery,
-  HydratedDocument,
   Model,
   ProjectionType,
   QueryOptions,
