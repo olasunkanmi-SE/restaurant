@@ -1,5 +1,7 @@
+import { Addon } from '../addon';
 import { Category } from '../category/category';
 import { Audit } from '../domain';
+import { addonMockData } from './../addon/addon-mock.data';
 import { auditMockData } from './../audit/audit-mock-data';
 import { categoryMockData } from './../category/category-mock.data';
 import { Item } from './../item/item';
@@ -14,5 +16,6 @@ export const menuMockData: IMenu = {
   discount: 0,
   basePrice: 8,
   imageUrl: 'http://',
+  addons: [Addon.create(addonMockData)],
   category: Category.create(categoryMockData).getValue(),
 };

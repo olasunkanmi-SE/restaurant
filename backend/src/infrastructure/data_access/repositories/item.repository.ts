@@ -21,7 +21,7 @@ export class ITemRepository extends GenericDocumentRepository<Item, ItemDocument
   }
 
   async getItemwithAddons(id: Types.ObjectId): Promise<any> {
-    const itemDoc = await this.DocumentModel.findById(id).populate('addons').exec();
+    const itemDoc = await this.DocumentModel.findById(id).exec();
     if (!itemDoc) {
       return Result.fail('Error getting document from database', HttpStatus.NOT_FOUND);
     }
@@ -41,7 +41,7 @@ export class ITemRepository extends GenericDocumentRepository<Item, ItemDocument
   }
 
   async getItem(name: string): Promise<Result<Item>> {
-    const itemDoc = await this.DocumentModel.findOne({ name }).populate('addons').exec();
+    const itemDoc = await this.DocumentModel.findOne({ name }).exec();
     if (!itemDoc) {
       return Result.fail('Error getting document from database', HttpStatus.NOT_FOUND);
     }
@@ -50,7 +50,7 @@ export class ITemRepository extends GenericDocumentRepository<Item, ItemDocument
   }
 
   async getItems(filterQuery: FilterQuery<Item>): Promise<Result<Item[]>> {
-    const itemDocs = await this.DocumentModel.find(filterQuery).populate('addons').exec();
+    const itemDocs = await this.DocumentModel.find(filterQuery).exec();
     if (!itemDocs) {
       return Result.fail('Error getting document from database', HttpStatus.NOT_FOUND);
     }

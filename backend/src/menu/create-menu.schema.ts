@@ -1,5 +1,6 @@
 import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString, Length } from 'class-validator';
 import { Types } from 'mongoose';
+import { Addon } from '../addon';
 import { Category } from '../category/category';
 import { Item } from './../item/item';
 
@@ -21,6 +22,9 @@ export class CreateMenuDTO {
   @IsArray()
   readonly itemIds?: Types.ObjectId[];
 
+  @IsArray()
+  readonly addonIds?: Types.ObjectId[];
+
   @IsNotEmpty()
   readonly categoryId: Types.ObjectId;
 
@@ -36,4 +40,8 @@ export class CreateMenuDTO {
   @IsOptional()
   @IsArray()
   items: Item[];
+
+  @IsOptional()
+  @IsArray()
+  addons: Addon[];
 }

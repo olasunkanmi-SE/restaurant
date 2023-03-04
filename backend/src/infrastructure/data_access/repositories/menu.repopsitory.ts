@@ -59,4 +59,12 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
       },
     };
   }
+
+  async updateMenu(filter: any, query: any): Promise<Menu | Result<Menu>> {
+    const document = await (await this.DocumentModel.findOneAndUpdate(filter, query)).populate(this.populateItems());
+    if (!document) {
+      return Result.fail('Error while updating menu', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    return this.menuMapper.toDomain(document);
+  }
 }

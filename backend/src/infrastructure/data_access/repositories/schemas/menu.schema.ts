@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import mongoose, { Document } from 'mongoose';
 import { BaseDocument } from '../../../../infrastructure/database';
 import { IMenuDataModel } from '../models/menu-model.interface';
+import { AddonDataModel } from './../../../../addon/addon.schema';
 import { CategoryDataModel } from './category.schema';
 import { ItemDataModel } from './item.schema';
 
@@ -24,13 +25,19 @@ export class MenuDataModel extends BaseDocument implements IMenuDataModel {
   @Prop({ type: Number, required: true, default: 0.0 })
   basePrice: number;
 
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: CategoryDataModel.name })
+  @Type(() => CategoryDataModel)
+  category: CategoryDataModel;
+
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: ItemDataModel.name }])
   @Type(() => ItemDataModel)
   items: ItemDataModel[];
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: CategoryDataModel.name })
-  @Type(() => CategoryDataModel)
-  category: CategoryDataModel;
+  @Prop({
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: AddonDataModel.name }],
+  })
+  @Type(() => AddonDataModel)
+  addons: AddonDataModel[];
 }
 
 export const MenuSchema = SchemaFactory.createForClass(MenuDataModel);

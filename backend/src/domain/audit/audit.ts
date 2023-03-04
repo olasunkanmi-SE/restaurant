@@ -56,13 +56,13 @@ export class Audit extends ValueObjects<IAudit> {
     return Audit.create(audit).getValue();
   }
 
-  static updateContext(email: string, entity: any): Audit {
+  static updateContext(email: string, entity: any): IAudit {
     const audit: IAudit = {
-      auditCreatedDateTime: entity.auditCreatedDateTime,
-      auditCreatedBy: entity.auditCreatedBy,
+      auditCreatedDateTime: entity.audit.auditCreatedDateTime,
+      auditCreatedBy: entity.audit.auditCreatedBy,
       auditModifiedBy: email,
       auditModifiedDateTime: new Date().toISOString(),
     };
-    return Audit.create(audit).getValue();
+    return audit;
   }
 }

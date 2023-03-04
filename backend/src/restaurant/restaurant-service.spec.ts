@@ -47,9 +47,9 @@ describe('Test restaurant service', () => {
   const locationMapperStub = new LocationMapper(auditMapperStub);
   const merchantMapperStub = new MerchantMapper(auditMapperStub);
   const addonMapperStub = new AddonMapper(auditMapperStub);
-  const itemMapperStub = new ItemMapper(auditMapperStub, addonMapperStub);
-  const categoryMapperStub = new CategoryMapper(auditMapperStub);
-  const menuMapperStub = new MenuMapper(auditMapperStub, itemMapperStub, categoryMapperStub);
+  const itemMapperStub = new ItemMapper(auditMapperStub);
+  const categoryMapperStub = new CategoryMapper();
+  const menuMapperStub = new MenuMapper(auditMapperStub, itemMapperStub, categoryMapperStub, addonMapperStub);
   const restaurantMapperStub: RestaurantMapper = new RestaurantMapper(
     new AuditMapper(),
     locationMapperStub,
