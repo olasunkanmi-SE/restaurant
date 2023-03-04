@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MerchantRepository } from '../infrastructure';
@@ -24,7 +24,6 @@ import {
   MerchantDataModel,
   MerchantSchema,
 } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
-import { ContextMiddleWare } from './../infrastructure/middlewares/context.middleware';
 import { ItemMapper } from './../item/item.mapper';
 import { MerchantMapper } from './../merchant/merchant.mapper';
 import { MerchantService } from './../merchant/merchant.service';
@@ -63,8 +62,8 @@ import { MenuService } from './menu.service';
     { provide: TYPES.IMenuService, useClass: MenuService },
   ],
 })
-export class MenuModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(ContextMiddleWare).exclude().forRoutes(MenuController);
-  }
+export class MenuModule {
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer.apply(ContextMiddleWare).exclude().forRoutes(MenuController);
+  // }
 }
