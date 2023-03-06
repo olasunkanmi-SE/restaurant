@@ -21,7 +21,7 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
   }
 
   async getMenus(filterQuery: FilterQuery<Menu>): Promise<any | any[]> {
-    const documents = await this.DocumentModel.find(filterQuery).populate(this.populateItems()).exec();
+    const documents = await this.DocumentModel.find(filterQuery).populate('category').exec();
     if (!documents) {
       return Result.fail('Error getting Menus from database', HttpStatus.NOT_FOUND);
     }
@@ -29,7 +29,7 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
   }
 
   async getMenuById(id: Types.ObjectId): Promise<any> {
-    const document = await this.DocumentModel.findById(id).populate(this.populateItems()).populate('category').exec();
+    const document = await this.DocumentModel.findById(id).populate('category').exec();
     if (!document) {
       return Result.fail('Error getting menu from database', HttpStatus.NOT_FOUND);
     }
@@ -48,6 +48,7 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
     return Result.ok(result);
   }
 
+  //use this as a sample to populate nested models
   private populateItems() {
     return {
       path: 'items',
@@ -61,10 +62,11 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
   }
 
   async updateMenu(filter: any, query: any): Promise<Menu | Result<Menu>> {
-    const document = await (await this.DocumentModel.findOneAndUpdate(filter, query)).populate(this.populateItems());
+    const document = await this.DocumentModel.findOneAndUpdate(filter, query);
     if (!document) {
       return Result.fail('Error while updating menu', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    return this.menuMapper.toDomain(document);
+    const menu = await this.getMenuById(document.id);
+    return this.menuMapper.toDomain(menu);
   }
 }

@@ -29,7 +29,7 @@ export class MenuDataModel extends BaseDocument implements IMenuDataModel {
   @Type(() => CategoryDataModel)
   category: CategoryDataModel;
 
-  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: ItemDataModel.name }])
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: ItemDataModel.name }] })
   @Type(() => ItemDataModel)
   items: ItemDataModel[];
 
