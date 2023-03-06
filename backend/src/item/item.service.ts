@@ -6,7 +6,7 @@ import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
 import { Context } from './../infrastructure/context/context';
 import { ITemRepository } from './../infrastructure/data_access/repositories/item.repository';
-import { ItemDataModel, ItemDocument } from './../infrastructure/data_access/repositories/schemas/item.schema';
+import { ItemDataModel } from './../infrastructure/data_access/repositories/schemas/item.schema';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
 import { IMerchantService } from './../merchant/interface/merchant-service.interface';
 import { CreateItemDTO } from './create-item-schema';
@@ -39,14 +39,13 @@ export class ItemService implements IItemService {
     const audit: Audit = Audit.createInsertContext(this.context);
     const item: Item = Item.create({ ...props, audit }).getValue();
     const itemModel: ItemDataModel = this.itemMapper.toPersistence(item);
-    const result: Result<ItemDocument> = await this.iTemRepository.createItem(itemModel);
+    const result: Result<Item> = await this.iTemRepository.createItem(itemModel);
     if (!result.isSuccess) {
       throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Error while creating item, please try again later');
     }
-    const itemId: Types.ObjectId = result.getValue()._id;
-    const itemDoc = await this.iTemRepository.getItemwithAddons(itemId);
-    const newItem = this.itemMapper.toDomain(itemDoc);
-    const itemResponse = ItemParser.createItemResponse(newItem);
+    const itemId: Types.ObjectId = result.getValue().id;
+    const newItem = await this.iTemRepository.getItemById(itemId);
+    const itemResponse = ItemParser.createItemResponse(newItem.getValue());
     return Result.ok(itemResponse);
   }
 
@@ -59,5 +58,14 @@ export class ItemService implements IItemService {
       reponse = ItemParser.createItemsresponse(items);
     }
     return Result.ok(reponse);
+  }
+
+  async getItemById(id: Types.ObjectId): Promise<Result<ITemResponseDTO>> {
+    const item = await this.iTemRepository.getItemById(id);
+    if (!item.isSuccess) {
+      throwApplicationError(HttpStatus.BAD_REQUEST, `Item does not exists`);
+    }
+    const response: ITemResponseDTO = ItemParser.createItemResponse(item.getValue());
+    return Result.ok(response);
   }
 }

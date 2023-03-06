@@ -1,3 +1,4 @@
+import { Item } from './../../../item/item';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, FilterQuery, Model, Types } from 'mongoose';
@@ -22,6 +23,10 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
 
   async getMenus(filterQuery: FilterQuery<Menu>): Promise<any | any[]> {
     const documents = await this.DocumentModel.find(filterQuery).populate('category').exec();
+    documents.forEach((doc) => {
+      if (doc.items && doc.items.length) {
+      }
+    });
     if (!documents) {
       return Result.fail('Error getting Menus from database', HttpStatus.NOT_FOUND);
     }
