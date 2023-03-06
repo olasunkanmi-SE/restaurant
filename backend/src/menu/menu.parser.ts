@@ -12,7 +12,7 @@ export class MenuParser {
     if (items && items.length) {
       itemsResponse = ItemParser.createItemsresponse(items);
     }
-    return {
+    const x = {
       id,
       name,
       description,
@@ -23,6 +23,7 @@ export class MenuParser {
       items: itemsResponse,
       ...AuditParser.createAuditResponse(audit),
     };
+    return x;
   }
 
   static createMenusResponse(menus: Menu[]): IMenuResponseDTO[] {
