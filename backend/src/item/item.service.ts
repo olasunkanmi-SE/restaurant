@@ -41,7 +41,7 @@ export class ItemService implements IItemService {
     const itemModel: ItemDataModel = this.itemMapper.toPersistence(item);
     const result: Result<ItemDocument> = await this.iTemRepository.createItem(itemModel);
     if (!result.isSuccess) {
-      throwApplicationError(HttpStatus.SERVICE_UNAVAILABLE, 'Error while creating item, please try again later');
+      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Error while creating item, please try again later');
     }
     const itemId: Types.ObjectId = result.getValue()._id;
     const itemDoc = await this.iTemRepository.getItemwithAddons(itemId);
