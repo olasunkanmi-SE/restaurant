@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { Audit } from './../domain/audit/audit';
 import { Location } from './../location/location';
 import { Menu } from './../menu/menu';
@@ -21,6 +22,7 @@ export interface IRestaurant {
   //Todo a restaurant can have multiple locations
   location: Location;
   audit: Audit;
+  merchantId: Types.ObjectId;
   merchant: Merchant;
   openingHour: number;
   closingHour: number;

@@ -78,6 +78,7 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
       openingHour,
       closingHour,
       menus,
+      merchantId,
     } = document;
     const entity: Restaurant = Restaurant.create(
       {
@@ -93,6 +94,7 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
         paymentMethod,
         openingHour,
         closingHour,
+        merchantId,
         menus: menus.length ? menus.map((menu) => this.menuMapper.toDomain(menu)) : [],
         location: this.locationMapper.toDomain(document.location),
         merchant: this.merchantMapper.toDomain(document.merchant),

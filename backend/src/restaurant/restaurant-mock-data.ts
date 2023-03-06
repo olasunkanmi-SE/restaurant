@@ -20,6 +20,7 @@ export const restaurantMock: IRestaurant = {
   paymentMethod: [],
   openingHour: 0,
   closingHour: 0,
+  merchantId: new Types.ObjectId(),
   menus: [Menu.create(menuMockData).getValue()],
   location: Location.create(locationMockData).getValue(),
   merchant: Merchant.create(merchantMock).getValue(),
