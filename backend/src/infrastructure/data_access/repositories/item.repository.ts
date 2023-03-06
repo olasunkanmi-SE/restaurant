@@ -19,7 +19,7 @@ export class ITemRepository extends GenericDocumentRepository<Item, ItemDocument
     super(itemModel, connection, itemMapper);
     this.itemMapper = itemMapper;
   }
-
+  
   async getItemById(id: Types.ObjectId): Promise<Result<Item>> {
     const itemDoc: Result<Item> = await this.findById(id);
     if (!itemDoc) {
