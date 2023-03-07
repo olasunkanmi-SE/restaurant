@@ -4,12 +4,15 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import { MenuMapper } from '../menu/menu.mapper';
 import { AddonMapper } from './../addon/addon.mapper';
+import { AddonDataModel, AddonSchema } from './../addon/addon.schema';
 import { TYPES } from './../application/constants/types';
 import { AuditMapper } from './../audit/audit.mapper';
 import { CategoryMapper } from './../category/category.mapper';
 import { AuthService } from './../infrastructure/auth/auth.service';
 import { ContextService } from './../infrastructure/context/context.service';
+import { AddonRepository } from './../infrastructure/data_access/repositories/addon.repository';
 import { CategoryRepository } from './../infrastructure/data_access/repositories/category.repository';
+import { ITemRepository } from './../infrastructure/data_access/repositories/item.repository';
 import { LocationRepository } from './../infrastructure/data_access/repositories/location.repository';
 import { MenuRepository } from './../infrastructure/data_access/repositories/menu.repopsitory';
 import { RestaurantRepository } from './../infrastructure/data_access/repositories/restaurant.repository';
@@ -17,6 +20,7 @@ import {
   CategoryDataModel,
   CategorySchema,
 } from './../infrastructure/data_access/repositories/schemas/category.schema';
+import { ItemDataModel, ItemSchema } from './../infrastructure/data_access/repositories/schemas/item.schema';
 import { LocationData, LocationSchema } from './../infrastructure/data_access/repositories/schemas/location.schema';
 import { MenuDataModel, MenuSchema } from './../infrastructure/data_access/repositories/schemas/menu.schema';
 import {
@@ -45,6 +49,8 @@ import { RestaurantService } from './restaurant.service';
       { name: MerchantDataModel.name, schema: MerchantSchema },
       { name: MenuDataModel.name, schema: MenuSchema },
       { name: CategoryDataModel.name, schema: CategorySchema },
+      { name: ItemDataModel.name, schema: ItemSchema },
+      { name: AddonDataModel.name, schema: AddonSchema },
     ]),
   ],
   controllers: [RestaurantsController],
@@ -58,6 +64,8 @@ import { RestaurantService } from './restaurant.service';
     { provide: TYPES.IAuthService, useClass: AuthService },
     { provide: TYPES.IMapper, useClass: RestaurantMapper },
     { provide: TYPES.IMenuRepository, useClass: MenuRepository },
+    { provide: TYPES.IItemRepository, useClass: ITemRepository },
+    { provide: TYPES.IAddonRepository, useClass: AddonRepository },
     RestaurantMapper,
     AuditMapper,
     LocationMapper,

@@ -47,7 +47,7 @@ export class MenuService implements IMenuService {
       props.items = result.getValue();
     }
     if (addonIds && addonIds.length) {
-      const addons = await this.addonRepository.getAddonsById(addonIds);
+      const addons = await this.addonRepository.getAddonsByIds(addonIds);
       props.addons = addons;
     }
     const categoryResponse = await this.categoryRepository.findById(categoryId);

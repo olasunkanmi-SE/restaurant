@@ -54,4 +54,15 @@ export class ITemRepository extends GenericDocumentRepository<Item, ItemDocument
       itemDocs && itemDocs.length ? itemDocs.map((document) => this.itemMapper.toDomain(document)) : [];
     return Result.ok(items);
   }
+
+  async getItemsByIds(itemIds: Types.ObjectId[]): Promise<Item[] | []> {
+    const itemDocs = await this.DocumentModel.find({
+      _id: { $in: itemIds },
+    }).exec();
+    let items: Item[] = [];
+    if (itemDocs && itemDocs.length) {
+      items = itemDocs.map((doc) => this.itemMapper.toDomain(doc));
+    }
+    return items;
+  }
 }

@@ -12,7 +12,7 @@ export class AddonParser {
       description,
       quantity,
       unitPrice,
-      category: CategoryParser.createCategoryResponse(category),
+      category: category ? CategoryParser.createCategoryResponse(category) : undefined,
       ...AuditParser.createAuditResponse(audit),
     };
   }

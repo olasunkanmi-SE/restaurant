@@ -1,3 +1,4 @@
+import { Item } from './../../../../item/item';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Type } from 'class-transformer';
 import mongoose, { Document } from 'mongoose';
@@ -33,11 +34,25 @@ export class MenuDataModel extends BaseDocument implements IMenuDataModel {
   @Type(() => ItemDataModel)
   items: ItemDataModel[];
 
-  @Prop({
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: AddonDataModel.name }],
-  })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: AddonDataModel.name }] })
   @Type(() => AddonDataModel)
   addons: AddonDataModel[];
 }
 
 export const MenuSchema = SchemaFactory.createForClass(MenuDataModel);
+
+MenuSchema.virtual('itemDetails', {
+  ref: ItemDataModel.name,
+  localField: 'items',
+  foreignField: '_id',
+  justOne: false,
+  autopopulate: true,
+});
+
+MenuSchema.virtual('addonDetails', {
+  ref: AddonDataModel.name,
+  localField: 'addons',
+  foreignField: '_id',
+  justOne: false,
+  autopopulate: true,
+});
