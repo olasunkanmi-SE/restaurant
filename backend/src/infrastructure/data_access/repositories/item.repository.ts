@@ -19,25 +19,21 @@ export class ITemRepository extends GenericDocumentRepository<Item, ItemDocument
     super(itemModel, connection, itemMapper);
     this.itemMapper = itemMapper;
   }
-
-  async getItemwithAddons(id: Types.ObjectId): Promise<any> {
-    const itemDoc = await this.DocumentModel.findById(id).exec();
+  
+  async getItemById(id: Types.ObjectId): Promise<Result<Item>> {
+    const itemDoc: Result<Item> = await this.findById(id);
     if (!itemDoc) {
       return Result.fail('Error getting document from database', HttpStatus.NOT_FOUND);
     }
     return itemDoc;
   }
 
-  async createItem(itemModel: ItemDataModel): Promise<Result<any>> {
-    const doc = new this.DocumentModel({
-      ...itemModel,
-      _id: new Types.ObjectId(),
-    });
-    const result = (await doc.save()).toJSON();
-    if (!result) {
+  async createItem(itemModel: ItemDataModel): Promise<Result<Item>> {
+    const doc = await this.create(itemModel);
+    if (!doc) {
       return Result.fail('An Error occured, unable to save document in the db', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    return Result.ok(result);
+    return doc;
   }
 
   async getItem(name: string): Promise<Result<Item>> {
