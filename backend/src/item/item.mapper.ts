@@ -1,6 +1,5 @@
 import { MenuMapper } from './../menu/menu.mapper';
 import { Injectable } from '@nestjs/common';
-import { ModuleRef } from '@nestjs/core';
 import { AuditMapper } from '../audit/audit.mapper';
 import { IMapper } from '../domain/mapper/mapper';
 import { ItemDataModel } from '../infrastructure/data_access/repositories/schemas/item.schema';

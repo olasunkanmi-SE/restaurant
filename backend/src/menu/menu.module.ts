@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ContextMiddleWare } from 'src/infrastructure/middlewares';
 import { MerchantRepository } from '../infrastructure';
 import { MenuMapper } from '../menu/menu.mapper';
 import { AddonMapper } from './../addon/addon.mapper';
@@ -30,7 +31,6 @@ import { MerchantService } from './../merchant/merchant.service';
 import { ValidateUser } from './../utils/context-validation';
 import { MenuController } from './menu.controller';
 import { MenuService } from './menu.service';
-import { ContextMiddleWare } from 'src/infrastructure/middlewares';
 
 @Module({
   imports: [
