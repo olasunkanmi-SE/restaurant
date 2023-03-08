@@ -2,6 +2,7 @@ import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { IAddonRepository } from '../infrastructure';
 import { Context } from '../infrastructure/context';
+import { Item } from '../item';
 import { MenuMapper } from '../menu/menu.mapper';
 import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
@@ -18,6 +19,8 @@ import { IMenu } from './menu-entity.interface';
 import { IMenuResponseDTO } from './menu-response.dto';
 import { IMenuService } from './menu-service.interface';
 import { MenuParser } from './menu.parser';
+import { UpdateMenuDTO } from './update-menu.schema';
+import { Addon } from '../addon';
 @Injectable()
 export class MenuService implements IMenuService {
   private context: Context;
@@ -63,9 +66,8 @@ export class MenuService implements IMenuService {
       throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Menu could not be created');
     }
     const menuId: Types.ObjectId = result.getValue()._id;
-    const menuDoc = await this.menuRepository.getMenuById(menuId);
-    const newMenu = this.menuMapper.toDomain(menuDoc);
-    return Result.ok(MenuParser.createMenuResponse(newMenu));
+    const menu = (await this.menuRepository.getMenuById(menuId)).getValue();
+    return Result.ok(MenuParser.createMenuResponse(menu));
   }
 
   async getMenus(): Promise<Result<IMenuResponseDTO[]>> {
@@ -79,21 +81,38 @@ export class MenuService implements IMenuService {
     if (menu.isSuccess === false) {
       throwApplicationError(HttpStatus.NOT_FOUND, 'Menu does not exist');
     }
-    return Result.ok(MenuParser.createMenuResponse(menu));
+    return Result.ok(MenuParser.createMenuResponse(menu.getValue()));
   }
 
-  async updateMenu(props: any, id: Types.ObjectId): Promise<Result<IMenuResponseDTO>> {
+  async updateMenu(props: UpdateMenuDTO, id: Types.ObjectId): Promise<Result<IMenuResponseDTO>> {
     const menuIdQuery = { _id: id };
-    const menuDoc = await this.menuRepository.findById(menuIdQuery);
-    if (!menuDoc.isSuccess) {
+    const result = await this.menuRepository.findById(menuIdQuery);
+
+    if (!result.isSuccess) {
       throwApplicationError(HttpStatus.NOT_FOUND, 'Could not retrieve menu');
     }
+    const menu = result.getValue();
+    let items: Item[] | [];
+    let addons: Addon[] | [];
+
+    if (props.itemIds) {
+      items = await this.itemRepository.getItemsByIds(props.itemIds);
+    }
+    if (props.addonIds) {
+      addons = await this.addonRepository.getAddonsByIds(props.addonIds);
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { itemIds, addonIds, ...others } = props;
     const propsWithAuditInfo = {
-      ...props,
-      ...Audit.updateContext(this.context.email, menuDoc.getValue()),
+      ...others,
+      items: props.itemIds && menu.items ? [...menu.items, ...items] : items,
+      addons: props.addonIds && menu.addons ? [...menu.addons, ...addons] : addons,
+      ...Audit.updateContext(this.context.email, menu),
     };
+
     const updatedMenu = await this.menuRepository.updateMenu(menuIdQuery, propsWithAuditInfo);
     let response: Result<IMenuResponseDTO> | undefined;
+
     updatedMenu instanceof Menu
       ? (response = Result.ok(MenuParser.createMenuResponse(updatedMenu)))
       : throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Could not update menu');

@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Connection, FilterQuery, Model, Types } from 'mongoose';
+import { Connection, Model, Types } from 'mongoose';
 import { Addon } from '../../../addon';
 import { GenericDocumentRepository } from '../../../infrastructure/database';
 import { AddonMapper } from './../../../addon/addon.mapper';
 import { AddonDataModel, AddonDocument } from './../../../addon/addon.schema';
-import { Result } from './../../../domain/result';
 import { IAddonRepository } from './interfaces/addon-repository.interface';
 
 @Injectable()
