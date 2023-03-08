@@ -1,7 +1,8 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MerchantRepository } from '../infrastructure';
+import { ContextMiddleWare } from '../infrastructure/middlewares';
 import { MenuMapper } from '../menu/menu.mapper';
 import { AddonMapper } from './../addon/addon.mapper';
 import { AddonDataModel, AddonSchema } from './../addon/addon.schema';
@@ -62,8 +63,8 @@ import { MenuService } from './menu.service';
     { provide: TYPES.IMenuService, useClass: MenuService },
   ],
 })
-export class MenuModule {
-  // configure(consumer: MiddlewareConsumer) {
-  //   consumer.apply(ContextMiddleWare).exclude().forRoutes(MenuController);
-  // }
+export class MenuModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ContextMiddleWare).exclude().forRoutes(MenuController);
+  }
 }

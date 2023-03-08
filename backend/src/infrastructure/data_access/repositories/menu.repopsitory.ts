@@ -57,7 +57,7 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
       if (addons.length !== value.addons.length) {
         await this.findOneAndUpdate({ _id: key }, { addons: addons.map((i) => i.id) });
       }
-      const menu = await this.getMenuById(key);
+      const menu = (await this.getMenuById(key)).getValue();
       if (menu) {
         menu.items = items;
         menu.addons = addons;
@@ -75,7 +75,7 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
     return menus;
   }
 
-  async getMenuById(id: Types.ObjectId): Promise<any> {
+  async getMenuById(id: Types.ObjectId): Promise<Result<Menu>> {
     const document = await this.DocumentModel.findById(id)
       .populate('itemDetails')
       .populate('addonDetails')
@@ -101,7 +101,7 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
         menu.items = menuItems;
       }
     }
-    return menu;
+    return Result.ok(menu);
   }
 
   async createMenu(menuModel: MenuDataModel): Promise<Result<any>> {
@@ -134,7 +134,7 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
     if (!document) {
       return Result.fail('Error while updating menu', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    const menu = await this.getMenuById(document.id);
-    return this.menuMapper.toDomain(menu);
+    const menu = (await this.getMenuById(document.id)).getValue();
+    return menu;
   }
 }

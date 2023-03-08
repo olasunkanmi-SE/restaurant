@@ -1,0 +1,2 @@
+1. Should be able to add new items and addons while creating a menu
+2. Write missing unit tests
