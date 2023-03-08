@@ -1,3 +1,4 @@
+import { Item } from './../../../../item/item';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Type } from 'class-transformer';
 import mongoose, { Document } from 'mongoose';
