@@ -10,7 +10,7 @@ export class UpdateMenuDTO {
   @IsString()
   @IsOptional()
   @Length(2, 256)
-  readonly description?: string;
+  readonly description: string;
 
   @IsString()
   @IsOptional()
