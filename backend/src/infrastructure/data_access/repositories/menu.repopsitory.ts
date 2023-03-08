@@ -38,7 +38,6 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
         menu.items.map((item) => item.id),
       );
     });
-
     if (!documents) {
       return Result.fail('Error getting Menus from database', HttpStatus.NOT_FOUND);
     }
