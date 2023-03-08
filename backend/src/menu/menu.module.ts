@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ContextMiddleWare } from 'src/infrastructure/middlewares';
 import { MerchantRepository } from '../infrastructure';
 import { MenuMapper } from '../menu/menu.mapper';
 import { AddonMapper } from './../addon/addon.mapper';
