@@ -1,12 +1,17 @@
-import { Item } from './../../../item/item';
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, FilterQuery, Model, Types } from 'mongoose';
+import { Addon } from '../../../addon';
 import { GenericDocumentRepository } from '../../../infrastructure/database';
+import { Item } from '../../../item';
+import { IMenuRepository } from '../repositories/interfaces/menu-repository.interface';
+import { AddonMapper } from './../../../addon/addon.mapper';
+import { TYPES } from './../../../application/constants/types';
 import { Result } from './../../../domain/result/result';
+import { ItemMapper } from './../../../item/item.mapper';
 import { Menu } from './../../../menu/menu';
 import { MenuMapper } from './../../../menu/menu.mapper';
-import { IMenuRepository } from '../repositories/interfaces/menu-repository.interface';
+import { IAddonRepository, IItemRepository } from './interfaces';
 import { MenuDataModel, MenuDocument } from './schemas/menu.schema';
 
 @Injectable()
@@ -14,6 +19,10 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
   menuMapper: MenuMapper;
   constructor(
     @InjectModel(MenuDataModel.name) menuDataModel: Model<MenuDocument>,
+    @Inject(TYPES.IItemRepository) private readonly itemRepository: IItemRepository,
+    @Inject(TYPES.IAddonRepository) private readonly addonsRepository: IAddonRepository,
+    private readonly addonMapper: AddonMapper,
+    private readonly itemMapper: ItemMapper,
     @InjectConnection() connection: Connection,
     menuMapper: MenuMapper,
   ) {
@@ -23,22 +32,76 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
 
   async getMenus(filterQuery: FilterQuery<Menu>): Promise<any | any[]> {
     const documents = await this.DocumentModel.find(filterQuery).populate('category').exec();
-    documents.forEach((doc) => {
-      if (doc.items && doc.items.length) {
-      }
-    });
     if (!documents) {
       return Result.fail('Error getting Menus from database', HttpStatus.NOT_FOUND);
     }
-    return documents.map((menu) => this.menuMapper.toDomain(menu));
+    const menus = documents.map((doc) => this.menuMapper.toDomain(doc));
+    return await this.deleteAndSetItemsAndAddons(menus);
+  }
+
+  async deleteAndSetItemsAndAddons(menus: Menu[]): Promise<Menu[]> {
+    const itemsMap = new Map<
+      Types.ObjectId,
+      { items: Types.ObjectId[] | Item[]; addons?: Types.ObjectId[] | Addon[] }
+    >();
+    menus.forEach((menu) => {
+      itemsMap.set(menu.id, { items: menu.items.map((item) => item.id), addons: menu.addons.map((addon) => addon.id) });
+    });
+
+    for (const [key, value] of itemsMap) {
+      const items = await this.itemRepository.getItemsByIds(value.items as Types.ObjectId[]);
+      const addons = await this.addonsRepository.getAddonsByIds(value.addons as Types.ObjectId[]);
+      if (items.length !== value.items.length) {
+        await this.findOneAndUpdate({ _id: key }, { items: items.map((i) => i.id) });
+      }
+      if (addons.length !== value.addons.length) {
+        await this.findOneAndUpdate({ _id: key }, { addons: addons.map((i) => i.id) });
+      }
+      const menu = await this.getMenuById(key);
+      if (menu) {
+        menu.items = items;
+        menu.addons = addons;
+      }
+      if (items && items.length) itemsMap.set(key, { items });
+      if (addons && addons.length) itemsMap.set(key, { addons, items });
+    }
+
+    menus.forEach((menu) => {
+      if (itemsMap.has(menu.id)) {
+        menu.items = itemsMap.get(menu.id).items as Item[];
+        menu.addons = itemsMap.get(menu.id).addons as Addon[];
+      }
+    });
+    return menus;
   }
 
   async getMenuById(id: Types.ObjectId): Promise<any> {
-    const document = await this.DocumentModel.findById(id).populate('category').exec();
+    const document = await this.DocumentModel.findById(id)
+      .populate('itemDetails')
+      .populate('addonDetails')
+      .populate('category')
+      .exec();
+    const menu: Menu = this.menuMapper.toDomain(document);
     if (!document) {
       return Result.fail('Error getting menu from database', HttpStatus.NOT_FOUND);
     }
-    return this.menuMapper.toDomain(document);
+    const { addons, items } = menu;
+    if (addons && addons.length) {
+      const addonIds = addons.map((addon) => addon.id);
+      const menuAddons = await this.addonsRepository.getAddonsByIds(addonIds);
+      if (menuAddons && menuAddons.length) {
+        menu.addons = menuAddons;
+      }
+    }
+
+    if (items && items.length) {
+      const itemsIds = items.map((item) => item.id);
+      const menuItems = await this.itemRepository.getItemsByIds(itemsIds);
+      if (menuItems && menuItems.length) {
+        menu.items = menuItems;
+      }
+    }
+    return menu;
   }
 
   async createMenu(menuModel: MenuDataModel): Promise<Result<any>> {

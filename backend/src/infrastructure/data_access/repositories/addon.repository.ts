@@ -20,7 +20,7 @@ export class AddonRepository extends GenericDocumentRepository<Addon, AddonDocum
     this.addonMapper = addonMapper;
   }
 
-  async getAddonsById(addonsIds: Types.ObjectId[]): Promise<Addon[]> {
+  async getAddonsByIds(addonsIds: Types.ObjectId[]): Promise<Addon[] | []> {
     const addonDocs = await this.DocumentModel.find({
       _id: { $in: addonsIds },
     })
@@ -41,8 +41,8 @@ export class AddonRepository extends GenericDocumentRepository<Addon, AddonDocum
     return await this.DocumentModel.find({}).populate('category').exec();
   }
 
-  async getAddonsByIds(filterQuery: FilterQuery<Addon>): Promise<Result<Addon[]>> {
-    const addonDocs = await this.DocumentModel.find(filterQuery);
-    return Result.ok(addonDocs.map((doc) => this.addonMapper.toDomain(doc)));
-  }
+  // async getAddonsByIds(filterQuery: FilterQuery<Addon>): Promise<Result<Addon[]>> {
+  //   const addonDocs = await this.DocumentModel.find(filterQuery);
+  //   return Result.ok(addonDocs.map((doc) => this.addonMapper.toDomain(doc)));
+  // }
 }

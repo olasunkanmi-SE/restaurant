@@ -8,4 +8,5 @@ export interface IItemRepository extends IGenericDocument<Item, ItemDataModel> {
   getItem(name: string): Promise<Result<Item>>;
   createItem(itemModel: ItemDataModel): Promise<Result<Item>>;
   getItems(filterQuery: FilterQuery<Item>): Promise<Result<Item[]>>;
+  getItemsByIds(itemIds: Types.ObjectId[]): Promise<Item[] | []>;
 }

@@ -71,7 +71,7 @@ export class MenuMapper implements IMapper<Menu, MenuDataModel> {
         addons: addonsToDomain,
         name,
         description,
-        category: this.categoryMapper.toDomain(category),
+        category: category ? this.categoryMapper.toDomain(category) : undefined,
         discount,
         imageUrl,
         basePrice,
