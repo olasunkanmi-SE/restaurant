@@ -4,7 +4,7 @@ import Navbar from "react-bootstrap/Navbar";
 import { NavLink } from "react-router-dom";
 import { useShoppingCart } from "../contexts";
 
-export const Menu = () => {
+export const Navigation = () => {
   const { quantity } = useShoppingCart();
   return (
     <Navbar sticky="top" className="bg-white shadow-sm mb-3">
@@ -13,8 +13,8 @@ export const Menu = () => {
           <Nav.Link to="/" as={NavLink}>
             Home
           </Nav.Link>
-          <Nav.Link to="/store" as={NavLink}>
-            Store
+          <Nav.Link to="/menu" as={NavLink}>
+            Menu
           </Nav.Link>
           <Nav.Link to="/about" as={NavLink}>
             About
