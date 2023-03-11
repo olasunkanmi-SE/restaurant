@@ -142,8 +142,7 @@ export const StoreItem = ({ name, description, imageUrl, basePrice }: storeItemP
   return (
     <>
       <Row>
-        <Col></Col>
-        <Col xs={12} md={12} lg={6} className="mb-3">
+        <Col className="mb-3">
           <Card>
             <div className="d-flex">
               <Card.Img style={{ objectFit: "cover" }} height="100px" variant="left" src={imageUrl} />
@@ -157,11 +156,9 @@ export const StoreItem = ({ name, description, imageUrl, basePrice }: storeItemP
             </div>
           </Card>
         </Col>
-        <Col></Col>
       </Row>
       <Row>
-        <Col></Col>
-        <Col xs={12} md={12} lg={6}>
+        <Col>
           <div>
             <p>Addons</p>
           </div>
@@ -172,13 +169,20 @@ export const StoreItem = ({ name, description, imageUrl, basePrice }: storeItemP
                   <Card.Body className="d-flex flex-column">
                     {item.addons.map((addon) => (
                       <div style={{ textAlign: "left" }} key={addon.id} className="d-flex justify-content-between">
-                        <Card.Text>{addon.name}</Card.Text>
-                        <Card.Text>NGR {addon.price}</Card.Text>
+                        <Card.Text>
+                          {addon.name}{" "}
+                          <span>
+                            <br />
+                            NGR {addon.price}
+                          </span>
+                        </Card.Text>
                         <Card.Text className="text-end">
-                          <Button variant="outline-danger" className="rounded-circle me-2">
-                            -
+                          <Button variant="outline-info" className="rounded-circle me-2 btn-sm">
+                            <span style={{ fontWeight: "bold" }}>-</span>
                           </Button>
-                          <Button className="rounded-circle me-2">+</Button>
+                          <Button className="rounded-circle me-2 btn btn-sm align-items-center ">
+                            <span style={{ fontWeight: "bold" }}>+</span>
+                          </Button>
                         </Card.Text>
                       </div>
                     ))}
@@ -188,7 +192,6 @@ export const StoreItem = ({ name, description, imageUrl, basePrice }: storeItemP
             ))}
           </>
         </Col>
-        <Col></Col>
       </Row>
     </>
   );
