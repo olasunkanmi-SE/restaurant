@@ -21,7 +21,7 @@ export const MenuList = () => {
     response = menus?.data?.map((menu) => {
       const { imageUrl, name, basePrice, description, id } = menu;
       return (
-        <Col md={12} key={menu.id}>
+        <Col xs={6} key={menu.id}>
           <MenuItem id={id} url={imageUrl} name={name} basePrice={basePrice} description={description} />
         </Col>
       );
