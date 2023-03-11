@@ -1,3 +1,5 @@
+import { MenuList } from "../feature";
+
 export const Home = () => {
-  return <h1>Home</h1>;
+  return <MenuList />;
 };

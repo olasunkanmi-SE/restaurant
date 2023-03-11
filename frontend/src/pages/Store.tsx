@@ -1,5 +1,4 @@
 import { Fragment } from "react";
-import { MenuList } from "../feature";
 import { StoreItem } from "../components";
 
 export const Store = () => {
@@ -11,7 +10,6 @@ export const Store = () => {
         imageUrl="https://i0.wp.com/travelandmunchies.com/wp-content/uploads/2022/11/IMG_8133-scaled.jpg?fit=2560%2C1828&ssl=1"
         basePrice={5}
       />
-      <MenuList />
     </Fragment>
   );
 };
