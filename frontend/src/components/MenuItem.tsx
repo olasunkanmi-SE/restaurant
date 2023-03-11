@@ -15,7 +15,9 @@ export const MenuItem = ({ id, url, name, basePrice, description }: menuItemProp
   const { addToCart, removeFromCart, quantity, cart } = useShoppingCart();
   return (
     <Card style={{ border: "none" }}>
-      <Card.Img style={{ objectFit: "cover", borderRadius: "30px" }} height="200px" variant="top" src={url} />
+      <div style={{ backgroundColor: "#f8f9fa" }}>
+        <Card.Img style={{ objectFit: "cover", borderRadius: "20px" }} height="200px" variant="top" src={url} />
+      </div>
       <Card.Body className="d-flex flex-column">
         <Card.Text className="d-flex justify-content-between align-items-baseline mb-4">
           <span className="fs-6">{name}</span>
