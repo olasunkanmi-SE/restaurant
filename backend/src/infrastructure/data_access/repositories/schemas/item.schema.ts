@@ -1,4 +1,3 @@
-import { Item } from './../../../../item/item';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { BaseDocument } from '../../../../infrastructure/database';

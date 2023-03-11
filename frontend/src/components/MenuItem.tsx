@@ -26,9 +26,11 @@ export const MenuItem = ({ id, url, name, basePrice, description }: menuItemProp
             Add to Cart +
           </Button>
           <div></div>
-          <Button onClick={() => removeFromCart({ id, name, basePrice, quantity })} className="w-100">
-            Remove from Cart -
-          </Button>
+          {quantity ? (
+            <Button onClick={() => removeFromCart({ id, name, basePrice, quantity })} className="w-100">
+              Remove from Cart -
+            </Button>
+          ) : null}
         </div>
         <div>{cart.map((c) => c.name)}</div>
       </Card.Body>
