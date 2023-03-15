@@ -1,7 +1,7 @@
 import Card from "react-bootstrap/Card";
-import { formatCurrency } from "../utility/formatCurrency";
 import { Button } from "react-bootstrap";
 import { useShoppingCart } from "../contexts";
+import { formatCurrency } from "../utility/utils";
 
 type menuItemProps = {
   id: string;

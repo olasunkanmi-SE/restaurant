@@ -4,7 +4,13 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Card } from "react-bootstrap";
-import { CSSProperties } from "react";
+import { FormInput } from "./form/form-input";
+
+export type RegisterFormProps = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
 
 const validateInputSchema = z
   .object({
@@ -27,31 +33,34 @@ export const AuthForm = () => {
   } = useForm<validationSchema>({ resolver: zodResolver(validateInputSchema) });
 
   const onSubmit: SubmitHandler<validationSchema> = (data) => console.log(data);
-  const errorStyle: CSSProperties = {
-    color: "red",
-  };
   return (
     <Card>
       <Card.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <Form.Group className="mb-3" controlId="email">
-            <Form.Label>Email</Form.Label>
-            <Form.Control {...register("email")} placeholder="Enter email" />
-            <small style={errorStyle}>{errors.email?.message}</small>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="password">
-            <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Password" {...register("password")} />
-            <small style={errorStyle}>{errors.password?.message}</small>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="confirmPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="confirmPassword" {...register("confirmPassword")} />
-            <small style={errorStyle}>{errors.confirmPassword?.message}</small>
-          </Form.Group>
-          <Button className="w-100" style={{ float: "right" }} variant="primary" type="submit">
+          <FormInput<RegisterFormProps>
+            id="email"
+            name="email"
+            placeholder="email"
+            register={register}
+            errors={errors}
+          />
+          <FormInput<RegisterFormProps>
+            id="password"
+            name="password"
+            type="password"
+            placeholder="password"
+            register={register}
+            errors={errors}
+          />
+          <FormInput<RegisterFormProps>
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            placeholder="confirm password"
+            register={register}
+            errors={errors}
+          />
+          <Button className="w-100" variant="primary" type="submit">
             Submit
           </Button>
         </Form>

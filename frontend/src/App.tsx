@@ -15,7 +15,8 @@ function App() {
               <Route path="/about" element={<About />}></Route>
               <Route path="/menu" element={<Menu />}></Route>
               <Route path="/register" element={<SignUp />}></Route>
-              <Route path="*" element={<Navigate to="/" />}></Route>
+              <Route path="/register" element={<SignUp />}></Route>
+              <Route path="*" element={<Navigate to=".." />}></Route>
             </Routes>
           </Col>
         </section>
