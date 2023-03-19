@@ -38,7 +38,7 @@ export class MenuService implements IMenuService {
 
   async createMenu(props: CreateMenuDTO): Promise<Result<IMenuResponseDTO>> {
     await this.merchantService.validateContext();
-    const { name, itemIds, categoryId, addonIds } = props;
+    const { name, itemIds, categoryId } = props;
     const existingMenu: Result<Menu> = await this.menuRepository.findOne({ name });
     if (existingMenu.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `${name}, already exists`);
@@ -47,10 +47,6 @@ export class MenuService implements IMenuService {
     if (itemIds && itemIds.length) {
       const result = await this.itemRepository.getItems({ _id: { $in: itemIds } });
       props.items = result.getValue();
-    }
-    if (addonIds && addonIds.length) {
-      const addons = await this.addonRepository.getAddonsByIds(addonIds);
-      props.addons = addons;
     }
     const categoryResponse = await this.categoryRepository.findById(categoryId);
     if (!categoryResponse.isSuccess) {
