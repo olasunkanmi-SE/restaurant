@@ -2,8 +2,8 @@ import { Col, Container } from "react-bootstrap";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Navigation } from "./components";
 import { ShoppingCartProvider } from "./contexts/shoppingCartContext";
-import { About, Home, SignUp } from "./pages";
-import { Menu } from "./pages/Menu";
+import { About, Home, Menu, SignUp } from "./pages";
+
 function App() {
   return (
     <ShoppingCartProvider>
