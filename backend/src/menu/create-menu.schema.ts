@@ -22,9 +22,6 @@ export class CreateMenuDTO {
   @IsArray()
   readonly itemIds?: Types.ObjectId[];
 
-  @IsArray()
-  readonly addonIds?: Types.ObjectId[];
-
   @IsNotEmpty()
   readonly categoryId: Types.ObjectId;
 

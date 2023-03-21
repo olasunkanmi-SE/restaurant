@@ -1,7 +1,6 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, FilterQuery, Model, Types } from 'mongoose';
-import { Addon } from '../../../addon';
 import { GenericDocumentRepository } from '../../../infrastructure/database';
 import { Item } from '../../../item';
 import { IMenuRepository } from '../repositories/interfaces/menu-repository.interface';
@@ -40,59 +39,38 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
   }
 
   async deleteAndSetItemsAndAddons(menus: Menu[]): Promise<Menu[]> {
-    const itemsMap = new Map<
-      Types.ObjectId,
-      { items: Types.ObjectId[] | Item[]; addons?: Types.ObjectId[] | Addon[] }
-    >();
+    const itemsMap = new Map<Types.ObjectId, { items: Types.ObjectId[] | Item[] }>();
     menus.forEach((menu) => {
-      itemsMap.set(menu.id, { items: menu.items.map((item) => item.id), addons: menu.addons.map((addon) => addon.id) });
+      itemsMap.set(menu.id, { items: menu.items.map((item) => item.id) });
     });
 
     for (const [key, value] of itemsMap) {
       const items = await this.itemRepository.getItemsByIds(value.items as Types.ObjectId[]);
-      const addons = await this.addonsRepository.getAddonsByIds(value.addons as Types.ObjectId[]);
       if (items.length !== value.items.length) {
         await this.findOneAndUpdate({ _id: key }, { items: items.map((i) => i.id) });
-      }
-      if (addons.length !== value.addons.length) {
-        await this.findOneAndUpdate({ _id: key }, { addons: addons.map((i) => i.id) });
       }
       const menu = (await this.getMenuById(key)).getValue();
       if (menu) {
         menu.items = items;
-        menu.addons = addons;
       }
       if (items && items.length) itemsMap.set(key, { items });
-      if (addons && addons.length) itemsMap.set(key, { addons, items });
     }
 
     menus.forEach((menu) => {
       if (itemsMap.has(menu.id)) {
         menu.items = itemsMap.get(menu.id).items as Item[];
-        menu.addons = itemsMap.get(menu.id).addons as Addon[];
       }
     });
     return menus;
   }
 
   async getMenuById(id: Types.ObjectId): Promise<Result<Menu>> {
-    const document = await this.DocumentModel.findById(id)
-      .populate('itemDetails')
-      .populate('addonDetails')
-      .populate('category')
-      .exec();
+    const document = await this.DocumentModel.findById(id).populate('itemDetails').populate('category').exec();
     const menu: Menu = this.menuMapper.toDomain(document);
     if (!document) {
       return Result.fail('Error getting menu from database', HttpStatus.NOT_FOUND);
     }
-    const { addons, items } = menu;
-    if (addons && addons.length) {
-      const addonIds = addons.map((addon) => addon.id);
-      const menuAddons = await this.addonsRepository.getAddonsByIds(addonIds);
-      if (menuAddons && menuAddons.length) {
-        menu.addons = menuAddons;
-      }
-    }
+    const { items } = menu;
 
     if (items && items.length) {
       const itemsIds = items.map((item) => item.id);

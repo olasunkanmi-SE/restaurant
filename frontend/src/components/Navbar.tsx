@@ -19,6 +19,9 @@ export const Navigation = () => {
           <Nav.Link to="/about" as={NavLink}>
             About
           </Nav.Link>
+          <Nav.Link to="/register" as={NavLink}>
+            Sign Up
+          </Nav.Link>
         </Nav>
         <Button
           style={{ width: "3rem", height: "3rem", position: "relative" }}

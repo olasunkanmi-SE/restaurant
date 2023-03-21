@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { StoreItem } from "../components";
 
-export const Menu = () => {
+export const FoodMenu = () => {
   return (
     <Fragment>
       <StoreItem

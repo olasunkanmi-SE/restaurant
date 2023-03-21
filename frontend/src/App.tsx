@@ -1,8 +1,9 @@
 import { Col, Container } from "react-bootstrap";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { Navigation } from "./components";
 import { ShoppingCartProvider } from "./contexts/shoppingCartContext";
-import { About, Home, Menu } from "./pages";
+import { About, Home, FoodMenu, SignUp } from "./pages";
+
 function App() {
   return (
     <ShoppingCartProvider>
@@ -13,7 +14,10 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />}></Route>
               <Route path="/about" element={<About />}></Route>
-              <Route path="/menu" element={<Menu />}></Route>
+              <Route path="/menu" element={<FoodMenu />}></Route>
+              <Route path="/register" element={<SignUp />}></Route>
+              <Route path="/register" element={<SignUp />}></Route>
+              <Route path="*" element={<Navigate to=".." />}></Route>
             </Routes>
           </Col>
         </section>
