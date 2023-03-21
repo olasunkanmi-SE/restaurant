@@ -1,7 +1,6 @@
 import { ErrorMessage } from "@hookform/error-message";
 import get from "lodash.get";
 import { DeepMap, FieldError, FieldValues, Path, RegisterOptions, UseFormRegister } from "react-hook-form";
-import { capitalizeFirstLetter } from "../../utility/utils";
 import { FormErrorMessage } from "./form-error-message";
 import { Input, InputProps } from "./input";
 
