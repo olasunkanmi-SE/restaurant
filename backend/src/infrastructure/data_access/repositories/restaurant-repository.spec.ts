@@ -3,7 +3,6 @@ import { expect } from 'chai';
 import mongoose, { Connection, Types } from 'mongoose';
 import * as sinon from 'ts-sinon';
 import { Mock } from 'typemoq';
-import { AddonMapper } from '../../../addon';
 import { GenericDocumentRepository } from '../../../infrastructure';
 import { restaurantMockDocument } from '../../../restaurant/restaurant-mock-data';
 import { AuditMapper } from './../../../audit/audit.mapper';
@@ -31,10 +30,9 @@ describe('test the restaurant service', () => {
     const merchantRepositoryStub: MerchantRepository = sinon.stubInterface<MerchantRepository>();
     const locationMapperStub = new LocationMapper(auditMapperStub);
     const merchantMapperStub = new MerchantMapper(auditMapperStub);
-    const addonMapperStub = new AddonMapper();
     const itemMapperStub = new ItemMapper(auditMapperStub);
     const categoryMapperStub = new CategoryMapper();
-    const menuMapper = new MenuMapper(auditMapperStub, itemMapperStub, categoryMapperStub, addonMapperStub);
+    const menuMapper = new MenuMapper(auditMapperStub, itemMapperStub, categoryMapperStub);
     restaurantMapperStub = new RestaurantMapper(auditMapperStub, locationMapperStub, merchantMapperStub, menuMapper);
     restaurantsRepositoryMock = Mock.ofType<GenericDocumentRepository<Restaurant, RestaurantDocument>>();
     restaurantRepository = new RestaurantRepository(

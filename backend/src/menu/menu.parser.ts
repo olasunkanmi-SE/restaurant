@@ -1,4 +1,3 @@
-import { AddonParser } from './../addon/addon.parser';
 import { AuditParser } from '../audit';
 import { CategoryParser } from './../category/category.parser';
 import { ITemResponseDTO } from './../item/item-response.dto';
@@ -8,7 +7,7 @@ import { IMenuResponseDTO } from './menu-response.dto';
 
 export class MenuParser {
   static createMenuResponse(menu: Menu): IMenuResponseDTO {
-    const { id, name, description, items, audit, discount, imageUrl, basePrice, category, addons } = menu;
+    const { id, name, description, items, audit, discount, imageUrl, basePrice, category } = menu;
     let itemsResponse: ITemResponseDTO[] = [];
     if (items && items.length) {
       itemsResponse = ItemParser.createItemsresponse(items);
@@ -22,7 +21,6 @@ export class MenuParser {
       basePrice,
       category: category ? CategoryParser.createCategoryResponse(category) : undefined,
       items: itemsResponse,
-      addons: AddonParser.createAddonsResponse(addons),
       ...AuditParser.createAuditResponse(audit),
     };
   }

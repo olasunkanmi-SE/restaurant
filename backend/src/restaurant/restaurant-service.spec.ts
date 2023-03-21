@@ -4,7 +4,6 @@ import * as sinon from 'ts-sinon';
 import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import { MenuMapper } from '../menu/menu.mapper';
 import { Merchant } from '../merchant';
-import { AddonMapper } from './../addon/addon.mapper';
 import { auditMockData } from './../audit/audit-mock-data';
 import { AuditMapper } from './../audit/audit.mapper';
 import { CategoryMapper } from './../category/category.mapper';
@@ -34,7 +33,6 @@ import { RestaurantService } from './restaurant.service';
 
 describe('Test restaurant service', () => {
   let connection: Connection;
-  let moduleRefSub;
   beforeEach(async () => {
     connection = new Connection();
   });
@@ -47,10 +45,9 @@ describe('Test restaurant service', () => {
   const auditMapperStub = new AuditMapper();
   const locationMapperStub = new LocationMapper(auditMapperStub);
   const merchantMapperStub = new MerchantMapper(auditMapperStub);
-  const addonMapperStub = new AddonMapper();
   const itemMapperStub = new ItemMapper(auditMapperStub);
   const categoryMapperStub = new CategoryMapper();
-  const menuMapperStub = new MenuMapper(auditMapperStub, itemMapperStub, categoryMapperStub, addonMapperStub);
+  const menuMapperStub = new MenuMapper(auditMapperStub, itemMapperStub, categoryMapperStub);
   const restaurantMapperStub: RestaurantMapper = new RestaurantMapper(
     new AuditMapper(),
     locationMapperStub,

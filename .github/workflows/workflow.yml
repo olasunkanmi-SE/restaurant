@@ -28,7 +28,7 @@ jobs:
         run: |
           npm run format
       - name: ci for frontend
-        working-directory: ./frontend
+        working-directory: ./UI
         run: |
           npm i
           npm run build

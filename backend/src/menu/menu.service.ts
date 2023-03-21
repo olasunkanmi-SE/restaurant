@@ -20,7 +20,6 @@ import { IMenuResponseDTO } from './menu-response.dto';
 import { IMenuService } from './menu-service.interface';
 import { MenuParser } from './menu.parser';
 import { UpdateMenuDTO } from './update-menu.schema';
-import { Addon } from '../addon';
 @Injectable()
 export class MenuService implements IMenuService {
   private context: Context;
@@ -39,7 +38,7 @@ export class MenuService implements IMenuService {
 
   async createMenu(props: CreateMenuDTO): Promise<Result<IMenuResponseDTO>> {
     await this.merchantService.validateContext();
-    const { name, itemIds, categoryId, addonIds } = props;
+    const { name, itemIds, categoryId } = props;
     const existingMenu: Result<Menu> = await this.menuRepository.findOne({ name });
     if (existingMenu.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `${name}, already exists`);
@@ -48,10 +47,6 @@ export class MenuService implements IMenuService {
     if (itemIds && itemIds.length) {
       const result = await this.itemRepository.getItems({ _id: { $in: itemIds } });
       props.items = result.getValue();
-    }
-    if (addonIds && addonIds.length) {
-      const addons = await this.addonRepository.getAddonsByIds(addonIds);
-      props.addons = addons;
     }
     const categoryResponse = await this.categoryRepository.findById(categoryId);
     if (!categoryResponse.isSuccess) {
@@ -93,20 +88,15 @@ export class MenuService implements IMenuService {
     }
     const menu = result.getValue();
     let items: Item[] | [];
-    let addons: Addon[] | [];
 
     if (props.itemIds) {
       items = await this.itemRepository.getItemsByIds(props.itemIds);
-    }
-    if (props.addonIds) {
-      addons = await this.addonRepository.getAddonsByIds(props.addonIds);
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { itemIds, addonIds, ...others } = props;
     const propsWithAuditInfo = {
       ...others,
       items: props.itemIds && menu.items ? [...menu.items, ...items] : items,
-      addons: props.addonIds && menu.addons ? [...menu.addons, ...addons] : addons,
       ...Audit.updateContext(this.context.email, menu),
     };
 
