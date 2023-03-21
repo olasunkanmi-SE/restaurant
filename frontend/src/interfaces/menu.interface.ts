@@ -3,4 +3,7 @@ export interface ICreateMenu {
   description?: string;
   itemIds?: string[];
   discount?: number;
+  imageUrl: string;
+  basePrice: number;
+  categoryId: string;
 }

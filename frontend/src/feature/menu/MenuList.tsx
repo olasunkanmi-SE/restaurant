@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { getMenus } from "../../apis";
-import { IMenu } from "../../models/menu.model";
+import { IMenuData, IMenus } from "../../models/menu.model";
 import { MenuItem } from "../../components";
 import { Col, Row } from "react-bootstrap";
 
@@ -10,7 +10,7 @@ export const MenuList = () => {
     isError,
     error,
     data: menus,
-  } = useQuery<IMenu, Error>("menus", getMenus, { staleTime: 1000000, cacheTime: 1000000 });
+  } = useQuery<IMenus, Error>("menus", getMenus, { staleTime: 1000000, cacheTime: 1000000 });
   console.log(menus);
   let response;
   if (isLoading) {
@@ -18,7 +18,7 @@ export const MenuList = () => {
   } else if (isError) {
     response = <p>`${error.message}`</p>;
   } else {
-    response = menus?.data?.map((menu) => {
+    response = menus?.data?.map((menu: IMenuData) => {
       const { imageUrl, name, basePrice, description, id } = menu;
       return (
         <Col xs={6} key={menu.id}>
