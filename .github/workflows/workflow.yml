@@ -2,9 +2,9 @@ name: CI for restaurant
 
 on:
   pull_request:
-    branches: [sprint, main]
+    branches: [release, main]
   push:
-    branches: [sprint, main]
+    branches: [release, main]
 
 jobs:
   build:
@@ -28,7 +28,7 @@ jobs:
         run: |
           npm run format
       - name: ci for frontend
-        working-directory: ./UI
+        working-directory: ./frontend
         run: |
           npm i
           npm run build
