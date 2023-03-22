@@ -1,7 +1,6 @@
 import Card from "react-bootstrap/Card";
-import { Button } from "react-bootstrap";
 import { useShoppingCart } from "../contexts";
-import { formatCurrency } from "../utility/utils";
+import { CSSProperties } from "react";
 
 type menuItemProps = {
   id: string;
@@ -9,6 +8,10 @@ type menuItemProps = {
   name: string;
   basePrice: number;
   description: string;
+};
+
+const menuNameStyle: CSSProperties = {
+  fontSize: "14px",
 };
 
 export const MenuItem = ({ id, url, name, basePrice, description }: menuItemProps) => {
@@ -20,20 +23,10 @@ export const MenuItem = ({ id, url, name, basePrice, description }: menuItemProp
       </div>
       <Card.Body className="d-flex flex-column">
         <Card.Text className="d-flex justify-content-between align-items-baseline mb-4">
-          <span className="fs-6">{name}</span>
-          <span className="ms-2 text-muted">{formatCurrency(basePrice)}</span>
+          <small style={menuNameStyle} className="fs-6">
+            {name}
+          </small>
         </Card.Text>
-        <div className="mt-auto">
-          <Button onClick={() => addToCart({ id, name, basePrice, quantity })} className="w-100">
-            Add to Cart +
-          </Button>
-          <div></div>
-          {quantity ? (
-            <Button onClick={() => removeFromCart({ id, name, basePrice, quantity })} className="w-100">
-              Remove from Cart -
-            </Button>
-          ) : null}
-        </div>
         <div>{cart.map((c) => c.name)}</div>
       </Card.Body>
     </Card>

@@ -1,8 +1,9 @@
 import { Col, Container } from "react-bootstrap";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Navigation } from "./components";
+import { Checkout } from "./components/Checkout";
 import { ShoppingCartProvider } from "./contexts/shoppingCartContext";
-import { About, Home, FoodMenu, SignUp } from "./pages";
+import { About, FoodMenu, Home, SignUp } from "./pages";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
               <Route path="/register" element={<SignUp />}></Route>
               <Route path="*" element={<Navigate to=".." />}></Route>
             </Routes>
+            <Checkout />
           </Col>
         </section>
       </Container>
