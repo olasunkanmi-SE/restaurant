@@ -13,9 +13,6 @@ export const Navigation = () => {
           <Nav.Link to="/" as={NavLink}>
             Home
           </Nav.Link>
-          <Nav.Link to="/menu" as={NavLink}>
-            Menu
-          </Nav.Link>
           <Nav.Link to="/about" as={NavLink}>
             About
           </Nav.Link>
