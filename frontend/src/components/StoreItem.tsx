@@ -35,7 +35,7 @@ export const StoreItem = ({ name, description, imageUrl, basePrice, items }: sto
               <i>More Portion</i>
             </p>
           </div>
-          {/* <>
+          <>
             {items.map((item) => (
               <Card className="d-grid mb-5" key={item.id}>
                 <div className="d-flex d-grid">
@@ -61,7 +61,7 @@ export const StoreItem = ({ name, description, imageUrl, basePrice, items }: sto
                 </div>
               </Card>
             ))}
-          </> */}
+          </>
         </Col>
       </Row>
     </>
