@@ -1,16 +1,13 @@
 import Card from "react-bootstrap/Card";
-import { useShoppingCart } from "../contexts";
 
 type menuItemProps = {
-  id: string;
-  url?: string;
   name: string;
+  url: string;
   basePrice: number;
-  description?: string;
+  description: string;
 };
 
-export const MenuItem = ({ id, url, name, basePrice, description }: menuItemProps) => {
-  const { addToCart, removeFromCart, quantity, cart } = useShoppingCart();
+export const MenuItem = ({ name, url }: menuItemProps) => {
   return (
     <Card style={{ border: "none" }}>
       <div style={{ backgroundColor: "#f8f9fa" }}>
@@ -20,7 +17,6 @@ export const MenuItem = ({ id, url, name, basePrice, description }: menuItemProp
         <Card.Text className="d-flex justify-content-between align-items-baseline mb-4">
           <small className="fs-6">{name}</small>
         </Card.Text>
-        <div>{cart.map((c) => c.name)}</div>
       </Card.Body>
     </Card>
   );

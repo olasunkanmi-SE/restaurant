@@ -1,7 +1,4 @@
 import { Card, Col, Row } from "react-bootstrap";
-import { getMenuById } from "../apis";
-import { useParams } from "react-router-dom";
-import { IItem } from "../models/item.model";
 
 type storeItemProps = {
   imageUrl: string;
@@ -11,19 +8,6 @@ type storeItemProps = {
 };
 
 export const StoreItem = ({ name, description, imageUrl, basePrice }: storeItemProps) => {
-  const { id } = useParams();
-  let items: IItem[] = [];
-  if (id) {
-    const { isLoading, data: menu } = getMenuById(id);
-    let response;
-    if (isLoading) {
-      response = <p>...Loading</p>;
-    } else {
-      response = menu?.data;
-    }
-    items = menu?.data.items || [];
-  }
-
   return (
     <>
       <Row>
