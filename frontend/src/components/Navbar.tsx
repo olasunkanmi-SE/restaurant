@@ -9,8 +9,6 @@ type NavStyleFunction = ({ isActive }: { isActive: boolean }) => React.CSSProper
 export const Navigation = () => {
   const { quantity } = useShoppingCart();
   const navigate = useNavigate();
-  const navLinkStyle: React.CSSProperties = { color: "black" };
-  const navLinkActiveStyle: React.CSSProperties = { color: "red" };
 
   const previousPage = () => {
     navigate(-1);
@@ -22,18 +20,9 @@ export const Navigation = () => {
         <Container>
           <Nav className="me-auto">
             <Nav.Link to="/" as={NavLink}>
-              <Button onClick={previousPage} type="button" className="btn btn-sm btn-secondary">
+              <Button onClick={previousPage} type="button" className="btn btn-sm btn-success">
                 Back
               </Button>
-            </Nav.Link>
-            <Nav.Link to="/" as={NavLink}>
-              Home
-            </Nav.Link>
-            <Nav.Link to="/about" as={NavLink}>
-              About
-            </Nav.Link>
-            <Nav.Link to="/register" as={NavLink}>
-              Sign Up
             </Nav.Link>
           </Nav>
           <Button

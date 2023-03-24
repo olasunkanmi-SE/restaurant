@@ -23,7 +23,7 @@ export const MenuList = () => {
       return (
         <Col xs={6} key={menu.id}>
           <Link to={`/menu/${id}`}>
-            <MenuItem id={id} url={imageUrl} name={name} basePrice={basePrice} description={description} />
+            <MenuItem url={imageUrl} name={name} basePrice={basePrice} description={description} />
           </Link>
         </Col>
       );

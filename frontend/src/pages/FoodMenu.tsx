@@ -1,15 +1,21 @@
-import { Fragment } from "react";
 import { StoreItem } from "../components";
+import { useParams } from "react-router-dom";
+import { getMenuById } from "../apis";
 
 export const FoodMenu = () => {
-  return (
-    <Fragment>
-      <StoreItem
-        name="Jollof Rice and fish"
-        description="This is a tradition west african food"
-        imageUrl="https://i0.wp.com/travelandmunchies.com/wp-content/uploads/2022/11/IMG_8133-scaled.jpg?fit=2560%2C1828&ssl=1"
-        basePrice={5}
-      />
-    </Fragment>
-  );
+  const { id } = useParams();
+  let response;
+  if (id) {
+    const { isLoading, data: menu } = getMenuById(id);
+    if (isLoading) {
+      response = <p>...Loading</p>;
+    } else {
+      const { name, description, items, imageUrl, basePrice } = menu?.data!;
+      return (
+        <StoreItem items={items} name={name} description={description} imageUrl={imageUrl} basePrice={basePrice} />
+      );
+    }
+  }
+
+  return <>{response}</>;
 };
