@@ -1,9 +1,9 @@
+import { Col, Row } from "react-bootstrap";
 import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 import { getMenus } from "../apis";
 import { IMenuData, IMenus } from "../models/menu.model";
-import { MenuItem } from ".";
-import { Col, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { MenuItem } from "./MenuItem";
 
 export const MenuList = () => {
   const {
@@ -22,7 +22,7 @@ export const MenuList = () => {
       const { imageUrl, name, basePrice, description, id } = menu;
       return (
         <Col xs={6} key={menu.id}>
-          <Link to={`/menu/${name.split(" ").join("-")}`}>
+          <Link to={`/menu/${id}`}>
             <MenuItem id={id} url={imageUrl} name={name} basePrice={basePrice} description={description} />
           </Link>
         </Col>

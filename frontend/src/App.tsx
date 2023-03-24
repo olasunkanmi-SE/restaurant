@@ -11,14 +11,23 @@ function App() {
       <Container fluid="md">
         <section className="h-100 d-flex align-items-center justify-content-center">
           <Col xs={12} md={12} lg={6} className="mb-3 ">
-            <Navigation />
             <Routes>
-              <Route path="/" element={<Home />}></Route>
-              <Route path="/about" element={<About />}></Route>
-              <Route path="menu/:id" element={<FoodMenu />}></Route>
-              <Route path="/register" element={<SignUp />}></Route>
-              <Route path="/register" element={<SignUp />}></Route>
-              <Route path="*" element={<Navigate to=".." />}></Route>
+              <Route
+                path="/"
+                element={
+                  <>
+                    <Navigation />
+                    <Checkout />
+                  </>
+                }
+              >
+                <Route index element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="menu/:id" element={<FoodMenu />} />
+                <Route path="/register" element={<SignUp />} />
+                <Route path="/register" element={<SignUp />} />
+                <Route path="*" element={<Navigate to=".." />} />
+              </Route>
             </Routes>
             <Checkout />
           </Col>

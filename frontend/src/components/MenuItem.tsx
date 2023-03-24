@@ -7,7 +7,7 @@ type menuItemProps = {
   url?: string;
   name: string;
   basePrice: number;
-  description: string;
+  description?: string;
 };
 
 const menuNameStyle: CSSProperties = {
