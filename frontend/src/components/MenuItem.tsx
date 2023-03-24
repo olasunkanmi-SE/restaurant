@@ -4,7 +4,7 @@ type menuItemProps = {
   name: string;
   url: string;
   basePrice: number;
-  description: string;
+  description?: string;
 };
 
 export const MenuItem = ({ name, url }: menuItemProps) => {
