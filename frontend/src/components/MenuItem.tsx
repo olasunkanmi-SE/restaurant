@@ -18,9 +18,7 @@ export const MenuItem = ({ id, url, name, basePrice, description }: menuItemProp
       </div>
       <Card.Body className="d-flex flex-column">
         <Card.Text className="d-flex justify-content-between align-items-baseline mb-4">
-          <small style={{ fontSize: "14px" }} className="fs-6">
-            {name}
-          </small>
+          <small className="fs-6">{name}</small>
         </Card.Text>
         <div>{cart.map((c) => c.name)}</div>
       </Card.Body>
