@@ -1,4 +1,5 @@
 import { IAudit } from "./audit.model";
+import { ICategory } from "./category.model";
 import { IItem } from "./item.model";
 
 export interface IMenus extends IAudit {
@@ -15,8 +16,9 @@ export interface IMenuData {
   id: string;
   name: string;
   description: string;
-  items?: IItem[];
-  discount: number;
+  items: IItem[];
   imageUrl: string;
+  discount: number;
   basePrice: number;
+  category: ICategory;
 }
