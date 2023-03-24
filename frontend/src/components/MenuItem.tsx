@@ -1,17 +1,12 @@
 import Card from "react-bootstrap/Card";
 import { useShoppingCart } from "../contexts";
-import { CSSProperties } from "react";
 
 type menuItemProps = {
   id: string;
   url?: string;
   name: string;
   basePrice: number;
-  description: string;
-};
-
-const menuNameStyle: CSSProperties = {
-  fontSize: "14px",
+  description?: string;
 };
 
 export const MenuItem = ({ id, url, name, basePrice, description }: menuItemProps) => {
@@ -23,9 +18,7 @@ export const MenuItem = ({ id, url, name, basePrice, description }: menuItemProp
       </div>
       <Card.Body className="d-flex flex-column">
         <Card.Text className="d-flex justify-content-between align-items-baseline mb-4">
-          <small style={menuNameStyle} className="fs-6">
-            {name}
-          </small>
+          <small className="fs-6">{name}</small>
         </Card.Text>
         <div>{cart.map((c) => c.name)}</div>
       </Card.Body>
