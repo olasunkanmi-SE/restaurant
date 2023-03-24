@@ -1,9 +1,9 @@
 import { Col, Container } from "react-bootstrap";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Navigation } from "./components";
-import { Checkout } from "./components/Checkout";
 import { ShoppingCartProvider } from "./contexts/shoppingCartContext";
 import { About, FoodMenu, Home, SignUp } from "./pages";
+import { CheckOutOrAddToCart } from "./components/Conditional";
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
                 element={
                   <>
                     <Navigation />
-                    <Checkout />
+                    <CheckOutOrAddToCart />
                   </>
                 }
               >
@@ -29,7 +29,6 @@ function App() {
                 <Route path="*" element={<Navigate to=".." />} />
               </Route>
             </Routes>
-            <Checkout />
           </Col>
         </section>
       </Container>

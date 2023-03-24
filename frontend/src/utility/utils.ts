@@ -1,3 +1,6 @@
+import { Checkout } from "./../components/Checkout";
+import { useLocation } from "react-router";
+
 const currencyFormatter = new Intl.NumberFormat(undefined, {
   currency: "NGR",
   style: "currency",
