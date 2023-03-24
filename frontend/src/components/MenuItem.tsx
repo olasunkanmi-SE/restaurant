@@ -9,10 +9,6 @@ type menuItemProps = {
   description?: string;
 };
 
-const menuNameStyle: CSSProperties = {
-  fontSize: "14px",
-};
-
 export const MenuItem = ({ id, url, name, basePrice, description }: menuItemProps) => {
   const { addToCart, removeFromCart, quantity, cart } = useShoppingCart();
   return (
