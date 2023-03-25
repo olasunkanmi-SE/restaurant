@@ -1,4 +1,6 @@
-import { Button, Nav } from "react-bootstrap";
+import { faRotateLeft, faBars, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Button, Nav, Stack } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
@@ -20,14 +22,22 @@ export const Navigation = () => {
         <Container>
           <Nav className="me-auto">
             <Nav.Link to="/" as={NavLink}>
-              <Button onClick={previousPage} type="button" className="btn btn-sm btn-success">
-                Back
-              </Button>
+              <Stack direction="horizontal" gap={4}>
+                <span onClick={previousPage}>
+                  <FontAwesomeIcon icon={faBars} size="xl" />
+                </span>
+                <span onClick={previousPage}>
+                  <FontAwesomeIcon icon={faRotateLeft} size="xl" />
+                </span>
+                <span onClick={previousPage}>
+                  <FontAwesomeIcon icon={faMagnifyingGlass} size="xl" />
+                </span>
+              </Stack>
             </Nav.Link>
           </Nav>
           <Button
             style={{ width: "3rem", height: "3rem", position: "relative" }}
-            variant="outline-primary"
+            variant="outline-secondary"
             className="rounded-circle"
           >
             <svg
@@ -37,7 +47,7 @@ export const Navigation = () => {
               width="20px"
               height="20px"
               viewBox="0 0 902.86 902.86"
-              fill="currentColor"
+              // fill="currentColor"
             >
               <g>
                 <g>

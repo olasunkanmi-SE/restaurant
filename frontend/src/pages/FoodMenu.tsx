@@ -12,7 +12,9 @@ export const FoodMenu = () => {
     } else {
       const { name, description, items, imageUrl, basePrice } = menu?.data!;
       return (
-        <StoreItem items={items} name={name} description={description} imageUrl={imageUrl} basePrice={basePrice} />
+        <div>
+          <StoreItem items={items} name={name} description={description} imageUrl={imageUrl} basePrice={basePrice} />
+        </div>
       );
     }
   }
