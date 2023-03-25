@@ -36,13 +36,13 @@ export const StoreItem = ({ name, description, imageUrl, basePrice, items }: sto
               <i style={{ backgroundColor: "#f7a278", color: "#fff", padding: "4px" }}>More Portion</i>
             </p>
           </div>
-          <>
+          {/* <>
             {items.map((item) => (
               <div className="mb-5" key={item.id}>
                 <FoodItemList name={item.name} price={item.price} />
               </div>
             ))}
-          </>
+          </> */}
         </Col>
       </Row>
     </>

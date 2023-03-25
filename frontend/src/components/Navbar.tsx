@@ -6,6 +6,8 @@ import Navbar from "react-bootstrap/Navbar";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useShoppingCart } from "../contexts";
 
+type NavStyleFunction = ({ isActive }: { isActive: boolean }) => React.CSSProperties;
+
 export const Navigation = () => {
   const { quantity } = useShoppingCart();
   const navigate = useNavigate();
