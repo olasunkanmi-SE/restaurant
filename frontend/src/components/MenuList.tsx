@@ -14,7 +14,11 @@ export const MenuList = () => {
   } = useQuery<IMenus, Error>("menus", getMenus, { staleTime: 1000000, cacheTime: 1000000 });
   let response;
   if (isLoading) {
-    response = <p>...Loading</p>;
+    response = (
+      <div className="loading-skeleton">
+        <div className="rectangular-div"></div>
+      </div>
+    );
   } else if (isError) {
     response = <p>`${error.message}`</p>;
   } else {
@@ -22,7 +26,7 @@ export const MenuList = () => {
       const { imageUrl, name, basePrice, description, id } = menu;
       return (
         <Col xs={6} key={menu.id}>
-          <Link to={`/menu/${id}`}>
+          <Link style={{ textDecoration: "none", borderBottom: "none", color: "#000" }} to={`/menu/${id}`}>
             <MenuItem url={imageUrl} name={name} basePrice={basePrice} description={description} />
           </Link>
         </Col>
