@@ -5,11 +5,15 @@ const addToCartStyle: CSSProperties = {
   textAlign: "center",
 };
 
-export const AddToCartButton = () => {
+type totalAmount = {
+  amount: number;
+};
+
+export const AddToCartButton = ({ amount }: totalAmount) => {
   return (
     <div style={addToCartStyle}>
-      <Button className="w-100 btn btn-sm btn-success" variant="primary" type="submit">
-        Add to Cart
+      <Button className="w-100 btn btn-success" variant="primary" type="submit">
+        ADD TO CART RM{amount}
       </Button>
     </div>
   );
