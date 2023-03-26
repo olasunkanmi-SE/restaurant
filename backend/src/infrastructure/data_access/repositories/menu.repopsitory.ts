@@ -111,15 +111,16 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
     return menu;
   }
 
-  async deleteMenu(id: Types.ObjectId) {
+  async deleteMenu(id: Types.ObjectId): Promise<boolean> {
     const session = await this.startSession();
     try {
+      session.startTransaction();
       const response = await this.getMenuById(id);
       const menu = response.getValue();
       const itemIds = menu.items.map((item) => item.id);
-      this.deleteOne({ _id: id });
-      this.itemRepository.deleteMany({ _id: { $in: itemIds } });
+      await Promise.all([this.deleteOne({ _id: id }), this.itemRepository.deleteMany({ _id: { $in: itemIds } })]);
       session.commitTransaction();
+      return true;
     } catch (error) {
       session.abortTransaction();
     } finally {

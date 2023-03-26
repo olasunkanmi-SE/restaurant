@@ -35,7 +35,7 @@ export class MenuController {
   }
 
   @Delete('/:id')
-  async deleteMenu(@Param('id') menuId: Types.ObjectId): Promise<boolean> {
+  async deleteMenu(@Param('id') menuId: Types.ObjectId): Promise<Result<boolean>> {
     return this.menuService.deleteMenu(menuId);
   }
 }

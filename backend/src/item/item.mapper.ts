@@ -1,6 +1,4 @@
-import { MenuMapper } from './../menu/menu.mapper';
 import { Injectable } from '@nestjs/common';
-import { ModuleRef } from '@nestjs/core';
 import { AuditMapper } from '../audit/audit.mapper';
 import { IMapper } from '../domain/mapper/mapper';
 import { ItemDataModel } from '../infrastructure/data_access/repositories/schemas/item.schema';
@@ -8,7 +6,6 @@ import { Item } from './item';
 
 @Injectable()
 export class ItemMapper implements IMapper<Item, ItemDataModel> {
-  private menuMapper: MenuMapper;
   constructor(private readonly auditMapper: AuditMapper) {}
   toPersistence(entity: Item): ItemDataModel {
     const { id, name, description, price, maximumPermitted } = entity;

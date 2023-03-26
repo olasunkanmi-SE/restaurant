@@ -108,7 +108,11 @@ export class MenuService implements IMenuService {
     return response;
   }
 
-  async deleteMenu(id: Types.ObjectId): Promise<boolean> {
-    return Boolean(await this.menuRepository.deleteMenu(id));
+  async deleteMenu(id: Types.ObjectId): Promise<Result<boolean>> {
+    const response = await this.menuRepository.deleteMenu(id);
+    if (!response) {
+      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Menu code not be deleted');
+    }
+    return Result.ok(true);
   }
 }
