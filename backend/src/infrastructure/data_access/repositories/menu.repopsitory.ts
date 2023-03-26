@@ -4,13 +4,11 @@ import { Connection, FilterQuery, Model, Types } from 'mongoose';
 import { GenericDocumentRepository } from '../../../infrastructure/database';
 import { Item } from '../../../item';
 import { IMenuRepository } from '../repositories/interfaces/menu-repository.interface';
-import { AddonMapper } from './../../../addon/addon.mapper';
 import { TYPES } from './../../../application/constants/types';
 import { Result } from './../../../domain/result/result';
-import { ItemMapper } from './../../../item/item.mapper';
 import { Menu } from './../../../menu/menu';
 import { MenuMapper } from './../../../menu/menu.mapper';
-import { IAddonRepository, IItemRepository } from './interfaces';
+import { IItemRepository } from './interfaces';
 import { MenuDataModel, MenuDocument } from './schemas/menu.schema';
 
 @Injectable()
@@ -19,10 +17,7 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
   constructor(
     @InjectModel(MenuDataModel.name) menuDataModel: Model<MenuDocument>,
     @Inject(TYPES.IItemRepository) private readonly itemRepository: IItemRepository,
-    @Inject(TYPES.IAddonRepository) private readonly addonsRepository: IAddonRepository,
-    private readonly addonMapper: AddonMapper,
-    private readonly itemMapper: ItemMapper,
-    @InjectConnection() connection: Connection,
+    @InjectConnection() readonly connection: Connection,
     menuMapper: MenuMapper,
   ) {
     super(menuDataModel, connection, menuMapper);
@@ -114,5 +109,21 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
     }
     const menu = (await this.getMenuById(document.id)).getValue();
     return menu;
+  }
+
+  async deleteMenu(id: Types.ObjectId) {
+    const session = await this.startSession();
+    try {
+      const response = await this.getMenuById(id);
+      const menu = response.getValue();
+      const itemIds = menu.items.map((item) => item.id);
+      this.deleteOne({ _id: id });
+      this.itemRepository.deleteMany({ _id: { $in: itemIds } });
+      session.commitTransaction();
+    } catch (error) {
+      session.abortTransaction();
+    } finally {
+      session.endSession();
+    }
   }
 }

@@ -29,7 +29,6 @@ export class MenuService implements IMenuService {
     private readonly contextService: IContextService,
     @Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService,
     @Inject(TYPES.IItemRepository) private readonly itemRepository: IItemRepository,
-    @Inject(TYPES.IAddonRepository) private readonly addonRepository: IAddonRepository,
     private readonly categoryRepository: CategoryRepository,
     private readonly menuMapper: MenuMapper,
   ) {
@@ -107,5 +106,9 @@ export class MenuService implements IMenuService {
       ? (response = Result.ok(MenuParser.createMenuResponse(updatedMenu)))
       : throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Could not update menu');
     return response;
+  }
+
+  async deleteMenu(id: Types.ObjectId): Promise<boolean> {
+    return Boolean(await this.menuRepository.deleteMenu(id));
   }
 }

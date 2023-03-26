@@ -1,7 +1,7 @@
 import { Result } from './../domain/result/result';
 import { IMenuResponseDTO } from './menu-response.dto';
 import { CreateMenuDTO } from './create-menu.schema';
-import { Body, Controller, Get, Inject, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nestjs/common';
 import { IMenuService } from './menu-service.interface';
 import { TYPES } from '../application';
 import { Types } from 'mongoose';
@@ -32,5 +32,10 @@ export class MenuController {
     @Param('id') menuId: Types.ObjectId,
   ): Promise<Result<IMenuResponseDTO>> {
     return this.menuService.updateMenu(req, menuId);
+  }
+
+  @Delete('/:id')
+  async deleteMenu(@Param('id') menuId: Types.ObjectId): Promise<boolean> {
+    return this.menuService.deleteMenu(menuId);
   }
 }
