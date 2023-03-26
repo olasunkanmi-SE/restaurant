@@ -25,4 +25,6 @@ export interface IGenericDocument<TEntity, T> {
   insertMany(docs: any): Promise<Result<TEntity[]>>;
 
   updateOne(filter: any, query: any): Promise<Result<TEntity>>;
+
+  deleteOne(filterQuery: FilterQuery<T>): Promise<boolean>;
 }

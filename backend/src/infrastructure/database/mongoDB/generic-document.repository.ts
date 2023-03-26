@@ -17,7 +17,7 @@ import { IGenericDocument } from './generic-document.interface';
 export abstract class GenericDocumentRepository<TEntity, T extends Document> implements IGenericDocument<TEntity, T> {
   constructor(
     protected readonly DocumentModel: Model<T>,
-    private readonly connection: Connection,
+    readonly connection: Connection,
     private readonly mapper: any,
   ) {}
 
@@ -90,6 +90,11 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
   async deleteMany(filterQuery: FilterQuery<T>): Promise<boolean> {
     const result = this.DocumentModel.deleteMany(filterQuery);
     return (await result).deletedCount >= 1;
+  }
+
+  async deleteOne(filterQuery: FilterQuery<T>): Promise<boolean> {
+    const result = this.DocumentModel.deleteOne(filterQuery);
+    return (await result).deletedCount === 1;
   }
 
   async startSession(): Promise<ClientSession> {
