@@ -7,4 +7,5 @@ export interface IMenuRepository {
   getMenus(filterQuery: FilterQuery<Menu>): Promise<any | any[]>;
   getMenuById(id: Types.ObjectId): Promise<any>;
   createMenu(menuModel: MenuDataModel): Promise<Result<any>>;
+  deleteMenu(id: Types.ObjectId);
 }

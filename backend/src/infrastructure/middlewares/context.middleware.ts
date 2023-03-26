@@ -25,20 +25,25 @@ export class ContextMiddleWare implements NestMiddleware {
     for (const [key, value] of Object.entries(headers)) {
       if (key === APIResponseMessage.emailHeader) {
         const isValidEmail = Regex.isEmail(value.toString());
-        if (!isValidEmail) {
-          errors.email = APIResponseMessage.invalidEmailHeaderError;
-        }
+        if (!isValidEmail) errors.email = APIResponseMessage.invalidEmailHeaderError;
       }
+
+      if (key === APIResponseMessage.correlationIdHeader) {
+        const isValidUUID = Regex.isUUID(value);
+        if (!isValidUUID) errors.correlationId = APIResponseMessage.invalidCorrelationId;
+      }
+
+      if (Object.getOwnPropertyNames(errors).length) {
+        throwApplicationError(HttpStatus.BAD_REQUEST, errors);
+      }
+
+      const email = req.headers[APIResponseMessage.emailHeader] as string;
+      const correlationId = req.headers[APIResponseMessage.correlationIdHeader] as string;
+      const token = (req.headers[APIResponseMessage.authorizationHeader] as string) ?? '';
+      const role = (req.headers[APIResponseMessage.roleHeader] as string) ?? '';
+      const context: Context = new Context(email, correlationId, token, role);
+      this.contextService.setContext(context);
+      next();
     }
-    if (Object.getOwnPropertyNames(errors).length) {
-      throwApplicationError(HttpStatus.BAD_REQUEST, errors);
-    }
-    const email = req.headers[APIResponseMessage.emailHeader] as string;
-    const correlationId = req.headers[APIResponseMessage.correlationIdHeader] as string;
-    const token = (req.headers[APIResponseMessage.authorizationHeader] as string) ?? '';
-    const role = (req.headers[APIResponseMessage.roleHeader] as string) ?? '';
-    const context: Context = new Context(email, correlationId, token, role);
-    this.contextService.setContext(context);
-    next();
   }
 }

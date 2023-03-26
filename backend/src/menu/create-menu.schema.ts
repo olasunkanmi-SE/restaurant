@@ -18,9 +18,8 @@ export class CreateMenuDTO {
   @IsString()
   readonly imageUrl: string;
 
-  @IsOptional()
   @IsArray()
-  readonly itemIds?: Types.ObjectId[];
+  readonly itemIds: Types.ObjectId[];
 
   @IsNotEmpty()
   readonly categoryId: Types.ObjectId;

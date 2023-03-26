@@ -37,6 +37,7 @@ export class RestaurantService implements IRestaurantService {
   async createRestaurant(props: CreateRestaurantDTO): Promise<Result<IRestaurantResponseDTO>> {
     const session = await this.connection.startSession();
     try {
+      session.startTransaction();
       await this.merchantService.validateContext();
       const restaurantEntity: Result<Restaurant[]> = await this.restaurantRepository.find({});
       const restaurants = restaurantEntity.getValue();
