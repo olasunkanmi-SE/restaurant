@@ -1,0 +1,7 @@
+//Todo
+1. Remember to invalidae cache in times where the there are CUD operation
+https://tanstack.com/query/v4/docs/react/guides/query-invalidation#query-matching-with-invalidatequeries
+2. Also look at mutations 
+https://tanstack.com/query/v4/docs/react/guides/mutations
+3. Write missing unit tests
+4. Session in Nestjs to power the guest users
