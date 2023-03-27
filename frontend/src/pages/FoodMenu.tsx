@@ -13,7 +13,14 @@ export const FoodMenu = () => {
       const { name, description, items, imageUrl, basePrice } = menu?.data!;
       return (
         <div>
-          <StoreItem items={items} name={name} description={description} imageUrl={imageUrl} basePrice={basePrice} />
+          <StoreItem
+            items={items}
+            name={name}
+            description={description}
+            imageUrl={imageUrl}
+            basePrice={basePrice}
+            id={id}
+          />
         </div>
       );
     }

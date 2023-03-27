@@ -3,6 +3,7 @@ import { IItem } from "../models/item.model";
 import { FoodItemList } from "./FoodItemList";
 
 type storeItemProps = {
+  id: string;
   imageUrl: string;
   name: string;
   description?: string;

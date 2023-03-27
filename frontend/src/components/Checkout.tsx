@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { useShoppingCart } from "../contexts";
+import { useShoppingCart } from "../hooks/UseShoppingCart";
 
 const checkoutStyle: CSSProperties = {
   zIndex: 9999,

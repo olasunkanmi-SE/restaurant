@@ -1,17 +1,13 @@
-import { createContext, useContext, useMemo, useReducer } from "react";
+import { createContext, useMemo, useReducer } from "react";
 import { CartActionsType, CartItem, cartReducer, cartState, initialCartState } from "../reducers";
 
 type shoppingCartProviderProps = {
   children: React.ReactNode;
 };
 
-const shoppingCartContext = createContext({} as shoppingCartProps);
+export const shoppingCartContext = createContext({} as shoppingCartProps);
 
-export const useShoppingCart = () => {
-  return useContext(shoppingCartContext);
-};
-
-type shoppingCartProps = {
+export type shoppingCartProps = {
   totalPrice: number;
   cart: CartItem[];
   quantity: number;

@@ -1,14 +1,12 @@
 import { useLocation } from "react-router-dom";
 import { Checkout } from "./Checkout";
 import { AddToCartButton } from "./AddToCart";
+import { useShoppingCart } from "../hooks/UseShoppingCart";
 
-type totalAmount = {
-  amount: number;
-};
-
-export const CheckOutOrAddToCart = ({ amount }: totalAmount) => {
+export const CheckOutOrAddToCart = () => {
+  const { totalPrice } = useShoppingCart();
   const location = useLocation();
   const path = location.pathname.startsWith("/menu/");
 
-  return <>{path ? <AddToCartButton amount={amount} /> : <Checkout />}</>;
+  return <>{path ? <AddToCartButton amount={totalPrice} /> : <Checkout />}</>;
 };
