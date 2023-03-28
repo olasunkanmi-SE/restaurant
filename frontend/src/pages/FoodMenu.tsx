@@ -32,21 +32,23 @@ export const FoodMenu = () => {
     if (isLoading) {
       response = <p>...Loading</p>;
     } else {
-      const { name, description, imageUrl, basePrice } = menu?.data!;
-      return (
-        <div>
-          <StoreItem
-            quantity={quantity}
-            items={items}
-            name={name}
-            description={description}
-            imageUrl={imageUrl}
-            basePrice={basePrice}
-            id={id}
-          />
-          <AddToCartButton onClick={() => addToCart({ id, name, basePrice, quantity, items })} amount={basePrice} />
-        </div>
-      );
+      if (menu) {
+        const { name, description, imageUrl, basePrice } = menu.data;
+        return (
+          <div>
+            <StoreItem
+              quantity={quantity}
+              items={items}
+              name={name}
+              description={description}
+              imageUrl={imageUrl}
+              basePrice={basePrice}
+              id={id}
+            />
+            <AddToCartButton onClick={() => addToCart({ id, name, basePrice, quantity, items })} amount={basePrice} />
+          </div>
+        );
+      }
     }
   }
 
