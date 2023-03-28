@@ -7,13 +7,14 @@ const addToCartStyle: CSSProperties = {
 
 type totalAmount = {
   amount: number;
+  onClick: (event: React.MouseEvent<HTMLElement>) => void;
 };
 
-export const AddToCartButton = ({ amount }: totalAmount) => {
+export const AddToCartButton = ({ amount, onClick }: totalAmount) => {
   return (
     <div style={addToCartStyle}>
-      <Button className="w-100 btn btn-success" variant="primary" type="submit">
-        ADD TO CART RM{amount}
+      <Button onClick={onClick} className="w-100 btn btn-success" variant="primary" type="submit">
+        ADD TO CART RM {amount}
       </Button>
     </div>
   );

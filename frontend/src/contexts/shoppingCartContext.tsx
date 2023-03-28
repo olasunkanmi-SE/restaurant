@@ -1,5 +1,5 @@
 import { createContext, useMemo, useReducer } from "react";
-import { CartActionsType, CartItem, cartReducer, cartState, initialCartState } from "../reducers";
+import { CartActionsType, CartItem, Item, cartReducer, cartState, initialCartState } from "../reducers";
 
 type shoppingCartProviderProps = {
   children: React.ReactNode;
@@ -13,6 +13,7 @@ export type shoppingCartProps = {
   quantity: number;
   addToCart(cartItem: CartItem): void;
   removeFromCart(cartItem: CartItem): void;
+  addItemToMenu(menuItem: Item, cartItem: CartItem): void;
 };
 
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
@@ -31,6 +32,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       price += payload.basePrice;
       qty = state.quantity + 1;
     }
+    console.log(state);
     return [qty, price];
   };
 
@@ -46,7 +48,57 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       }
       dispatch({
         type: CartActionsType.REMOVE_FROM_CART,
-        payload: cartItem,
+        menuPayload: cartItem,
+        itemPayload: state.cart,
+      });
+    };
+
+    const addItemToMenu = (menuItem: Item, cartItem: CartItem) => {
+      const { cart } = state;
+      let items: Item[] = [];
+      if (cart.length) {
+        const itemMenuMap = new Map<string, Item[] | []>();
+        const itemMap = new Map<string, Item>();
+
+        cart.forEach((cart) => {
+          itemMenuMap.set(cart.id, cart.items ? cart.items : []);
+        });
+
+        cart.forEach((c) => {
+          if (itemMenuMap.has(c.id)) {
+            items = itemMenuMap.get(c.id)!;
+          }
+        });
+
+        if (items.length) {
+          items.forEach((item) => {
+            itemMap.set(item.id, item);
+          });
+        }
+
+        cart.forEach((c) => {
+          if (itemMenuMap.has(c.id) && itemMenuMap.get(c.id)) {
+            const items = itemMenuMap.get(c.id);
+            items?.map((item) => {
+              if (itemMap.has(item.id)) {
+                let { quantity, totalPrice } = state;
+                if (totalPrice !== 0) {
+                  totalPrice += menuItem.price;
+                  quantity = quantity ? (quantity += 1) : 1;
+                } else {
+                  totalPrice = menuItem.price;
+                  quantity = quantity ? (quantity += 1) : 1;
+                }
+              }
+            });
+          }
+        });
+        console.log(state);
+      }
+      dispatch({
+        type: CartActionsType.ADD_ITEM_TO_CART,
+        itemPayload: cart,
+        menuPayload: cartItem,
       });
     };
 
@@ -56,7 +108,8 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       state.totalPrice = price;
       dispatch({
         type: CartActionsType.ADD_TO_CART,
-        payload: cartItem,
+        menuPayload: cartItem,
+        itemPayload: state.cart,
       });
     };
 
@@ -66,6 +119,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       quantity: state.quantity,
       addToCart,
       removeFromCart,
+      addItemToMenu,
     };
     return value;
   }, [state]);

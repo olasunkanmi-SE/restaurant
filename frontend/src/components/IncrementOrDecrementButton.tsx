@@ -1,6 +1,6 @@
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CSSProperties } from "react";
+import React, { CSSProperties, Children } from "react";
 
 const plusSignContainer: CSSProperties = {
   display: "inline-block",
@@ -22,14 +22,22 @@ const plusSign: CSSProperties = {
 
 type buttonSign = {
   sign: string;
+  onClick: (event: React.MouseEvent<HTMLElement>) => void;
+  children: React.ReactNode;
+  style?: CSSProperties;
 };
 
-export const IncrementOrDecrementButton = ({ sign }: buttonSign) => {
+const ButtonDiv: React.FC<buttonSign> = ({ onClick, children }: buttonSign) => {
+  return <span onClick={onClick}>{children}</span>;
+};
+
+export const IncrementOrDecrementButton = ({ sign, onClick, children }: buttonSign) => {
   return (
     <div style={plusSignContainer}>
-      <span style={plusSign}>
+      <ButtonDiv style={plusSign} sign={sign} onClick={onClick}>
+        {children}
         {sign === "increment" ? <FontAwesomeIcon icon={faPlus} /> : <FontAwesomeIcon icon={faMinus} />}
-      </span>
+      </ButtonDiv>
     </div>
   );
 };
