@@ -1,16 +1,18 @@
-import { Button, Card, Col, Row } from "react-bootstrap";
-import { IItem } from "../models/item.model";
+import { Card, Col, Row } from "react-bootstrap";
 import { FoodItemList } from "./FoodItemList";
+import { Item } from "../reducers";
 
-type storeItemProps = {
-  imageUrl: string;
+export type storeItemProps = {
+  id: string;
+  imageUrl?: string;
   name: string;
   description?: string;
   basePrice: number;
-  items: IItem[];
+  quantity: number;
+  items: Item[];
 };
 
-export const StoreItem = ({ name, description, imageUrl, basePrice, items }: storeItemProps) => {
+export const StoreItem = ({ id, name, description, imageUrl, basePrice, items, quantity }: storeItemProps) => {
   return (
     <>
       <Row>
@@ -39,7 +41,15 @@ export const StoreItem = ({ name, description, imageUrl, basePrice, items }: sto
           <>
             {items.map((item) => (
               <div className="mb-5" key={item.id}>
-                <FoodItemList name={item.name} price={item.price} />
+                <FoodItemList
+                  quantity={quantity}
+                  items={items}
+                  id={id}
+                  itemId={item.id}
+                  name={item.name}
+                  itemPrice={item.price}
+                  basePrice={basePrice}
+                />
               </div>
             ))}
           </>

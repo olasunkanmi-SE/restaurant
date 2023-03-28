@@ -1,4 +1,3 @@
-import { IAddon } from "./addon.model";
 import { IAudit } from "./audit.model";
 
 export type portion = "sharing" | "single";
