@@ -6,9 +6,9 @@ import { storeItemProps } from "./StoreItem";
 type foodItem = storeItemProps & { itemId: string; itemPrice: number };
 
 export const FoodItemList = ({ id, name, description, basePrice, items, itemId, itemPrice, quantity }: foodItem) => {
-  const { addItemToMenu } = useShoppingCart();
+  const { addItemToCart } = useShoppingCart();
   const handleClick = () => {
-    return addItemToMenu({ id: itemId, name, price: itemPrice, quantity }, { id, name, basePrice, quantity, items });
+    return addItemToCart({ id: itemId, name, price: itemPrice });
   };
   return (
     <>

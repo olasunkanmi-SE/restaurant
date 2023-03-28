@@ -1,6 +1,6 @@
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { CSSProperties, Children } from "react";
+import React, { CSSProperties } from "react";
 
 const plusSignContainer: CSSProperties = {
   display: "inline-block",
@@ -18,6 +18,7 @@ const plusSign: CSSProperties = {
   lineHeight: 1,
   marginTop: "50%",
   transform: "translateY(-50%)",
+  cursor: "pointer",
 };
 
 type buttonSign = {
