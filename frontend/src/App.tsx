@@ -17,7 +17,7 @@ function App() {
                 element={
                   <>
                     <Navigation />
-                    <CheckOutOrAddToCart />
+                    <CheckOutOrAddToCart amount={5} />
                   </>
                 }
               >
