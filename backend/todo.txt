@@ -1,3 +1,0 @@
-1. Should be able to add new items while creating a menu
-2. Write missing unit tests
-3. Session in Nestjs to power the guest users

@@ -4,7 +4,7 @@ import { Button, Nav, Stack } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { useShoppingCart } from "../contexts";
+import { useShoppingCart } from "../hooks/UseShoppingCart";
 
 export const Navigation = () => {
   const { quantity } = useShoppingCart();
