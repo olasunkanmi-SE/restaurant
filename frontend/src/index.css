@@ -6,7 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   max-width: 100%;
-  background-color: #fdfdfd;
+  background-color: #fafafa;
 }
 
 code {
@@ -40,4 +40,8 @@ hr {
   100% {
     opacity: 1;
   }
+}
+
+.card {
+  border: 1px solid #f3f3f3;
 }

@@ -76,7 +76,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
         state.menus = updatedMenu;
 
         updatedMenu.forEach((d) => {
-          if (itemMenuMap.has(d.id) && itemMenuMap.get(d.id)) {
+          if (itemMenuMap.has(d.id)) {
             const items = itemMenuMap.get(d.id);
             items?.map((item) => {
               if (menuItem.id === item.id) {
