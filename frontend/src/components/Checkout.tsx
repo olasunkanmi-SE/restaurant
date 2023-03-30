@@ -1,5 +1,6 @@
 import { CSSProperties } from "react";
 import { useShoppingCart } from "../hooks/UseShoppingCart";
+import { Stack } from "react-bootstrap";
 
 const checkoutStyle: CSSProperties = {
   zIndex: 9999,
@@ -9,10 +10,7 @@ const checkoutStyle: CSSProperties = {
   width: "100%",
   overflow: "hidden",
   color: "#FFF",
-  height: "50px",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
+  height: "40px",
   backgroundColor: "#000000",
 };
 const cartItemsCount: CSSProperties = {
@@ -29,11 +27,20 @@ const cartItemsCount: CSSProperties = {
 };
 
 export const Checkout = () => {
-  const { quantity } = useShoppingCart();
+  const { quantity, totalPrice } = useShoppingCart();
   return (
-    <div style={checkoutStyle} className="d-flex justify-content-between">
-      <div style={{ marginLeft: "11px" }}>Checkout</div>
-      <div style={cartItemsCount}>{quantity}</div>
+    <div style={checkoutStyle}>
+      <Stack className="mt-2" direction="horizontal" gap={3}>
+        <div>Checkout</div>
+        <div className="ms-auto">RM {totalPrice}</div>
+        <div className="ms-auto" style={cartItemsCount}>
+          {quantity}
+        </div>
+      </Stack>
     </div>
+    // <div style={checkoutStyle} className="d-flex justify-content-between">
+    //   <div style={{ marginLeft: "11px" }}>Checkout</div>
+    //   <div style={cartItemsCount}>{quantity}</div>
+    // </div>
   );
 };
