@@ -18,6 +18,7 @@ const plusSign: CSSProperties = {
   lineHeight: 1,
   marginTop: "50%",
   transform: "translateY(-50%)",
+  cursor: "pointer",
 };
 
 type buttonSign = {

@@ -74,8 +74,9 @@ export const Navigation = () => {
                 bottom: 0,
                 right: 0,
                 transform: "translate(25%, 25%)",
+                backgroundColor: "#198753",
               }}
-              className="rounded-circle bg-danger d-flex justify-content-center align-items-center"
+              className="rounded-circle d-flex justify-content-center align-items-center"
             >
               {quantity}
             </div>
