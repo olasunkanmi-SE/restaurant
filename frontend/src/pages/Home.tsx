@@ -1,5 +1,11 @@
 import { MenuList } from "../components";
+import { AddonScrollBar } from "../components/AddonScrollBar";
 
 export const Home = () => {
-  return <MenuList />;
+  return (
+    <div>
+      <AddonScrollBar />
+      <MenuList />;
+    </div>
+  );
 };

@@ -1,5 +1,4 @@
 import { Stack } from "react-bootstrap";
-import { IncrementOrDecrementButton } from "./IncrementOrDecrementButton";
 import { useShoppingCart } from "../hooks/UseShoppingCart";
 import { storeItemProps } from "./StoreItem";
 import { QtyButton } from "./addItemButton";
