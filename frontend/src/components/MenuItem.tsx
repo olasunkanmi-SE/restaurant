@@ -10,7 +10,7 @@ type menuItemProps = {
 
 export const MenuItem = ({ name, url, description, basePrice }: menuItemProps) => {
   return (
-    <Card style={{ border: "none", borderRadius: "10% " }}>
+    <Card className="menuCard">
       <div>
         <Card.Img style={{ objectFit: "cover", borderRadius: "50px" }} height="200px" variant="top" src={url} />
         <MenuInfo name={name} price={basePrice} description={description} />

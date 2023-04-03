@@ -45,3 +45,16 @@ hr {
 .card {
   border: 1px solid #f3f3f3;
 }
+
+.menuCard {
+  margin: 0;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .16);
+  border-radius: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.elBg {
+  background-color: #fff;
+}
