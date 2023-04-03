@@ -25,7 +25,7 @@ export const FoodMenu = () => {
   let response;
   if (id) {
     const { isLoading, data: menu } = getMenuById(id);
-    const { addToCart, quantity } = useShoppingCart();
+    const { addToCart, quantity, totalPrice } = useShoppingCart();
 
     const items = mapItems(menu?.data?.items!);
 
@@ -45,7 +45,12 @@ export const FoodMenu = () => {
               basePrice={basePrice}
               id={id}
             />
-            <AddToCartButton onClick={() => addToCart({ id, name, basePrice, quantity, items })} amount={basePrice} />
+            <AddToCartButton
+              onAddMenuToCartClick={() => addToCart({ id, name, basePrice, quantity, items })}
+              amount={totalPrice > 0 ? totalPrice : basePrice}
+              onAddItemToCartClick={() => addToCart({ id, name, basePrice, quantity, items })}
+              onRemoveItemFromCartClick={() => addToCart({ id, name, basePrice, quantity, items })}
+            />
           </div>
         );
       }

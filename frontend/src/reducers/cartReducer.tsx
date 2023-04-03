@@ -14,12 +14,23 @@ export type Item = {
   maximumPermitted?: number;
 };
 
+export type selectedItem = {
+  id: string;
+  menuId: string;
+  name: string;
+  quantity?: number;
+  total?: number;
+  price: number;
+  menuPrice: number;
+};
+
 export type CartItem = {
   id: string;
   name: string;
   basePrice: number;
   quantity: number;
   items?: Item[];
+  selectedItems?: selectedItem[];
 };
 
 export type CartAction = {
@@ -29,7 +40,6 @@ export type CartAction = {
 export const initialCartState: cartState = {
   totalPrice: 0,
   quantity: 0,
-  itemQuantity: 0,
   menus: [],
   items: [],
 };
@@ -37,9 +47,8 @@ export const initialCartState: cartState = {
 export type cartState = {
   totalPrice: number;
   quantity: number;
-  itemQuantity: number;
-  menus: CartItem[];
-  items: Item[];
+  menus: Partial<CartItem>[];
+  items: Item[] | undefined;
 };
 
 export const cartReducer = (state = initialCartState, action: CartAction): cartState => {
