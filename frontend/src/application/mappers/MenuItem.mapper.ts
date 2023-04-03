@@ -1,4 +1,4 @@
-import { CartItem, cartState, selectedItem } from "../../reducers";
+import { CartItem, selectedItem } from "../../reducers";
 
 export const selectedItemToMenuMapper = (selectedItem: selectedItem): Partial<CartItem> => {
   const { menuId } = selectedItem;
@@ -7,7 +7,3 @@ export const selectedItemToMenuMapper = (selectedItem: selectedItem): Partial<Ca
     selectedItems: [selectedItem],
   };
 };
-
-// export const virtualStateToStateMapper = (virtualState: cartState) => {
-//   const state =
-// };

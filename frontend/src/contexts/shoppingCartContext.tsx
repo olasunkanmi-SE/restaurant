@@ -1,5 +1,5 @@
 import { createContext, useMemo, useReducer } from "react";
-import { CartActionsType, CartItem, Item, cartReducer, cartState, initialCartState, selectedItem } from "../reducers";
+import { CartActionsType, CartItem, cartReducer, cartState, initialCartState, selectedItem } from "../reducers";
 import { selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
 
 type shoppingCartProviderProps = {
@@ -81,13 +81,13 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       const selectedItemMap = new Map<string, selectedItem>();
 
       if (state.menus.length && !menu.quantity) {
-        state.menus.forEach((m) => {
-          if (menuItem.menuId === m.id) selectedItems = m.selectedItems;
+        state.menus.forEach((menu) => {
+          if (menuItem.menuId === menu.id) selectedItems = menu.selectedItems;
         });
-        selectedItems?.forEach((s) => selectedItemMap.set(s.menuId, s));
-        state.menus.forEach((m) => {
-          if (selectedItemMap.has(m.id!)) {
-            const selectedItem = selectedItemMap.get(m.id!);
+        selectedItems?.forEach((item) => selectedItemMap.set(item.menuId, item));
+        state.menus.forEach((menu) => {
+          if (selectedItemMap.has(menu.id!)) {
+            const selectedItem = selectedItemMap.get(menu.id!);
             if (selectedItem!.id === menuItem.id) {
               selectedItem!.quantity! += 1;
               selectedItem!.total = selectedItem!.total! + selectedItem!.price;
@@ -101,13 +101,12 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       }
       if (selectedItems && selectedItems.length) {
         let totalItemPrice: number = 0;
-        for (let i = 0; i < selectedItems.length; i++) {
-          let item = selectedItems[i];
+        selectedItems.forEach((item) => {
           totalItemPrice += item.quantity! * item.price;
-        }
+        });
+
         state.totalPrice = totalItemPrice + menuItem.menuPrice;
       }
-      console.log(state);
       dispatch({
         type: CartActionsType.ADD_ITEM_TO_CART,
       });
