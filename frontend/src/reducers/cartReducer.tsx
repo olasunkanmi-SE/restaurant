@@ -15,8 +15,6 @@ export type Item = {
 };
 
 export type selectedItem = {
-  push(item: selectedItem): unknown;
-  find(arg0: (i: any) => boolean): unknown;
   id: string;
   menuId: string;
   name: string;
