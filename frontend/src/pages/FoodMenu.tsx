@@ -26,7 +26,6 @@ export const FoodMenu = () => {
   if (id) {
     const { isLoading, data: menu } = getMenuById(id);
     const { addToCart, quantity, totalPrice } = useShoppingCart();
-
     const items = mapItems(menu?.data?.items!);
 
     if (isLoading) {

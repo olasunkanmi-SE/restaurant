@@ -84,6 +84,8 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
         state.menus.forEach((menu) => {
           if (menuItem.menuId === menu.id) selectedItems = menu.selectedItems;
         });
+        //Todo check if item.menuId is already selected, then increase the quantity
+        //check cartItemList for example
         selectedItems?.forEach((item) => selectedItemMap.set(item.menuId, item));
         state.menus.forEach((menu) => {
           if (selectedItemMap.has(menu.id!)) {
