@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
-import { useShoppingCart } from "../hooks/UseShoppingCart";
 import { Stack } from "react-bootstrap";
+import { useShoppingCart } from "../../hooks/UseShoppingCart";
 
 const checkoutStyle: CSSProperties = {
   zIndex: 9999,

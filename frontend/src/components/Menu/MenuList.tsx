@@ -1,8 +1,8 @@
 import { Col, Row } from "react-bootstrap";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import { getMenus } from "../apis";
-import { IMenuData, IMenus } from "../models/menu.model";
+import { IMenuData, IMenus } from "../../models/menu.model";
+import { getMenus } from "../../apis";
 import { MenuItem } from "./MenuItem";
 
 export const MenuList = () => {

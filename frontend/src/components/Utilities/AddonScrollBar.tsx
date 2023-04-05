@@ -1,4 +1,4 @@
-import React, { CSSProperties } from "react";
+import React from "react";
 import { Button, Stack } from "react-bootstrap";
 export const AddonScrollBar = () => {
   return (
