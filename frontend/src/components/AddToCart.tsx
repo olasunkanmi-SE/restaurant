@@ -4,6 +4,7 @@ import { QtyButton } from "./addItemButton";
 
 const addToCartStyle: CSSProperties = {
   textAlign: "center",
+  marginRight: "10px",
 };
 
 type addItemToCart = {

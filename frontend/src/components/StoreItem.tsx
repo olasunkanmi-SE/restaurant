@@ -1,6 +1,7 @@
 import { Card, Col, Row } from "react-bootstrap";
 import { FoodItemList } from "./FoodItemList";
 import { Item } from "../reducers";
+import { CartItemsList } from "./CartItemsList";
 
 export type storeItemProps = {
   id: string;
@@ -38,12 +39,11 @@ export const StoreItem = ({ id, name, description, imageUrl, basePrice, items, q
               <i style={{ backgroundColor: "#f7a278", color: "#fff", padding: "4px" }}>More Portion</i>
             </p>
           </div>
-          <>
+          <div className="pt-2 elBg">
             {items.map((item) => (
-              <div className="mb-5" key={item.id}>
+              <div key={item.id}>
                 <FoodItemList
                   quantity={quantity}
-                  items={items}
                   id={id}
                   itemId={item.id}
                   name={item.name}
@@ -52,7 +52,7 @@ export const StoreItem = ({ id, name, description, imageUrl, basePrice, items, q
                 />
               </div>
             ))}
-          </>
+          </div>
         </Col>
       </Row>
     </>

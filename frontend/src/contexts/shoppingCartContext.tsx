@@ -84,29 +84,34 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
         state.menus.forEach((menu) => {
           if (menuItem.menuId === menu.id) selectedItems = menu.selectedItems;
         });
-        selectedItems?.forEach((item) => selectedItemMap.set(item.menuId, item));
-        state.menus.forEach((menu) => {
-          if (selectedItemMap.has(menu.id!)) {
-            const selectedItem = selectedItemMap.get(menu.id!);
-            if (selectedItem!.id === menuItem.id) {
-              selectedItem!.quantity! += 1;
-              selectedItem!.total = selectedItem!.total! + selectedItem!.price;
-            } else {
-              menuItem.total = price;
-              menuItem.quantity = 1;
-              selectedItems?.push(menuItem);
-            }
+
+        if (selectedItems?.length) {
+          const index = selectedItems.findIndex((item) => item.id === menuItem.id);
+          if (index === -1) {
+            menuItem.total = price;
+            menuItem.quantity = 0;
+            selectedItems.push(menuItem);
           }
-        });
+        }
+
+        selectedItems?.forEach((item) => selectedItemMap.set(item.id, item));
+        for (const item of selectedItemMap.values()) {
+          if (item.id === menuItem.id) {
+            item.quantity! += 1;
+            item.total = item.total! + item.price;
+          }
+        }
       }
+
       if (selectedItems && selectedItems.length) {
         let totalItemPrice: number = 0;
         selectedItems.forEach((item) => {
           totalItemPrice += item.quantity! * item.price;
         });
-
+        console.log(state);
         state.totalPrice = totalItemPrice + menuItem.menuPrice;
       }
+
       dispatch({
         type: CartActionsType.ADD_ITEM_TO_CART,
       });

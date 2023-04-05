@@ -4,7 +4,8 @@ import { storeItemProps } from "./StoreItem";
 import { QtyButton } from "./addItemButton";
 
 type foodItem = storeItemProps & { itemId: string; itemPrice: number };
-export const FoodItemList = ({ name, itemId, itemPrice, id, basePrice }: foodItem) => {
+
+export const FoodItemList = ({ name, itemId, itemPrice, id, basePrice }: Omit<foodItem, "items">) => {
   const { addItemToCart } = useShoppingCart();
   const handleClick = () => {
     return addItemToCart({
