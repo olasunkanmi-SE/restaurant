@@ -1,6 +1,7 @@
 import { Card, Col, Row } from "react-bootstrap";
 import { FoodItemList } from "./FoodItemList";
 import { Item } from "../reducers";
+import { CartItemsList } from "./CartItemsList";
 
 export type storeItemProps = {
   id: string;
