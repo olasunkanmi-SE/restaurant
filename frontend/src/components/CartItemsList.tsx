@@ -1,5 +1,4 @@
 import { Stack } from "react-bootstrap";
-import { selectedItem } from "../reducers";
 import { ItemToSummaryMapper } from "../application/mappers/MenuItem.mapper";
 import { useShoppingCart } from "../hooks/UseShoppingCart";
 
@@ -33,8 +32,8 @@ export const CartItemsList = () => {
     <div className="">
       <Stack direction="horizontal" gap={3} className="gap-3">
         {itemSummaries.map((item) => (
-          <small key={item.id}>
-            {item.name} x{item.qty}
+          <small style={{ marginLeft: "4px", fontSize: "11px" }} key={item.id}>
+            +{item.name.toLowerCase()} x {item.qty}
           </small>
         ))}
       </Stack>
