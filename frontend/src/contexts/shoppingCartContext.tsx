@@ -15,6 +15,7 @@ export type shoppingCartProps = {
   addToCart(cartItem: CartItem): void;
   removeFromCart(cartItem: CartItem): void;
   addItemToCart(menuItem: selectedItem): void;
+  removeItemFromCart(menuItem: selectedItem): void;
 };
 
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
@@ -68,12 +69,41 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       });
     };
 
+    const removeItemFromCart = (menuItem: selectedItem) => {
+      let { menus } = state;
+      const menuItems: selectedItem[] = [];
+
+      for (const menu of menus) {
+        if (menu.id === menuItem.menuId) {
+          if (menu.selectedItems && menu.selectedItems.length) {
+            menuItems.push(...menu.selectedItems);
+          }
+        }
+      }
+
+      if (menuItems.length) {
+        for (let i = 0; i < menuItems.length; i++) {
+          const item = menuItems[i];
+          if (menuItem.id === item.id) {
+            if (item.quantity && item.quantity > 1) {
+              item.quantity -= 1;
+            } else {
+              item.quantity = 0;
+            }
+          }
+        }
+      }
+      console.log(state);
+      dispatch({
+        type: CartActionsType.REMOVE_ITEM_FROM_CART,
+      });
+    };
+
     const addItemToCart = (menuItem: selectedItem) => {
       let { menus } = state;
       let { price } = menuItem;
       const menu: Partial<CartItem> = selectedItemToMenuMapper(menuItem);
       if (!menus.length) {
-        menuItem.total = price;
         menuItem.quantity = 0;
         state.menus.push(menu);
       }
@@ -88,7 +118,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
         if (selectedItems?.length) {
           const index = selectedItems.findIndex((item) => item.id === menuItem.id);
           if (index === -1) {
-            menuItem.total = price;
             menuItem.quantity = 0;
             selectedItems.push(menuItem);
           }
@@ -98,7 +127,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
         for (const item of selectedItemMap.values()) {
           if (item.id === menuItem.id) {
             item.quantity! += 1;
-            item.total = item.total! + item.price;
           }
         }
       }
@@ -108,7 +136,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
         selectedItems.forEach((item) => {
           totalItemPrice += item.quantity! * item.price;
         });
-        console.log(state);
         state.totalPrice = totalItemPrice + menuItem.menuPrice;
       }
 
@@ -133,6 +160,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       addToCart,
       removeFromCart,
       addItemToCart,
+      removeItemFromCart,
     };
     return value;
   }, [state]);
