@@ -58,3 +58,8 @@ hr {
 .elBg {
   background-color: #fff;
 }
+
+.addToCart {
+  padding-bottom: 15px;
+  border-top: 0.1rem solid #f1f1f1;
+}
