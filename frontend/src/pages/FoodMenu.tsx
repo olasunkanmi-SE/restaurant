@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom";
 import { getMenuById } from "../apis";
-import { AddToCartButton, StoreItem } from "../components";
 import { useShoppingCart } from "../hooks/UseShoppingCart";
 import { IItem } from "../models/item.model";
 import { Item } from "../reducers";
-import { CartItemsList } from "../components/CartItemsList";
+import { CartItemsList } from "../components/Cart/CartItemsList";
+import { StoreItem } from "../components/MenuItems/StoreItem";
+import { AddToCartButton } from "../components/Cart/AddToCart";
 
 const mapItems = (items: IItem[]): Item[] => {
   const stateItem =

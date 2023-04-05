@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Card } from "react-bootstrap";
-import { FormInput } from "./form/form-input";
+import { FormInput } from "../Forms/form-input";
 
 export type RegisterFormProps = {
   email: string;

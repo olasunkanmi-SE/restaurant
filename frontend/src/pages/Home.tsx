@@ -1,5 +1,5 @@
-import { MenuList } from "../components";
-import { AddonScrollBar } from "../components/AddonScrollBar";
+import { MenuList } from "../components/Menu/MenuList";
+import { AddonScrollBar } from "../components/Utilities/AddonScrollBar";
 
 export const Home = () => {
   return (
