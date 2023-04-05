@@ -1,6 +1,6 @@
 import { Stack } from "react-bootstrap";
-import { ItemToSummaryMapper } from "../application/mappers/MenuItem.mapper";
-import { useShoppingCart } from "../hooks/UseShoppingCart";
+import { ItemToSummaryMapper } from "../../application/mappers/MenuItem.mapper";
+import { useShoppingCart } from "../../hooks/UseShoppingCart";
 
 export type ItemsSummary = {
   id: string;

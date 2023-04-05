@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Card, Form } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import { FormInput } from "./form/form-input";
+import { FormInput } from "../Forms/form-input";
 
 export type loginFormProps = {
   email: string;

@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 import { Button, Stack } from "react-bootstrap";
-import { QtyButton } from "./addItemButton";
+import { QtyButton } from "../MenuItems/addItemButton";
 
 const addToCartStyle: CSSProperties = {
   textAlign: "center",

@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { QtyButton } from "./addItemButton";
+import { QtyButton } from "../MenuItems/addItemButton";
 
 type description = {
   name: string;

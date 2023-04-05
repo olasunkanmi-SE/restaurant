@@ -1,9 +1,9 @@
 import { Col, Container } from "react-bootstrap";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { Navigation } from "./components";
 import { ShoppingCartProvider } from "./contexts/shoppingCartContext";
 import { About, FoodMenu, Home, SignUp } from "./pages";
-import { CheckOutOrAddToCart } from "./components/Conditional";
+import { CheckOutOrAddToCart } from "./components/Utilities/Conditional";
+import { Navigation } from "./components/Utilities/Navbar";
 
 function App() {
   return (

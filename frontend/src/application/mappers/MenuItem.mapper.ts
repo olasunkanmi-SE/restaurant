@@ -1,4 +1,4 @@
-import { ItemsSummary } from "../../components/CartItemsList";
+import { ItemsSummary } from "../../components/Cart/CartItemsList";
 import { CartItem, selectedItem } from "../../reducers";
 
 export const selectedItemToMenuMapper = (selectedItem: selectedItem): Partial<CartItem> => {
