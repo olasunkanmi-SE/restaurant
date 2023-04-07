@@ -146,7 +146,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           });
         }
       }
-      console.log(state);
 
       dispatch({
         type: CartActionsType.ADD_ITEM_TO_CART,
