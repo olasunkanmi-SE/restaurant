@@ -6,10 +6,19 @@ import { storeItemProps } from "./StoreItem";
 type foodItem = storeItemProps & { itemId: string; itemPrice: number };
 
 export const FoodItemList = ({ name, itemId, itemPrice, id, basePrice }: Omit<foodItem, "items">) => {
-  const { addItemToCart, menus } = useShoppingCart();
+  const { addItemToCart, menus, removeItemFromCart } = useShoppingCart();
   let itemQty: number = 0;
-  const handleClick = () => {
+  const handleAddItemToCart = () => {
     return addItemToCart({
+      id: itemId,
+      name,
+      price: itemPrice,
+      menuId: id,
+      menuPrice: basePrice,
+    });
+  };
+  const handleRemoveItemFromCart = () => {
+    return removeItemFromCart({
       id: itemId,
       name,
       price: itemPrice,
@@ -29,11 +38,11 @@ export const FoodItemList = ({ name, itemId, itemPrice, id, basePrice }: Omit<fo
   return (
     <>
       <Stack direction="horizontal" gap={3}>
-        <QtyButton sign={"increment"} onClick={handleClick} />
+        <QtyButton sign={"increment"} onClick={handleAddItemToCart} />
         <div>{name}</div>
         <div className=" ms-auto"> +RM {itemPrice}</div>
         <div>x {itemQty}</div>
-        <QtyButton sign={"decrement"} onClick={handleClick} />
+        <QtyButton sign={"decrement"} onClick={handleRemoveItemFromCart} />
       </Stack>
       <hr></hr>
     </>
