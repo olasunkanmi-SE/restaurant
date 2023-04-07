@@ -1,5 +1,5 @@
 import { createContext, useMemo, useReducer } from "react";
-import { CartActionsType, CartItem, cartReducer, cartState, initialCartState, selectedItem } from "../reducers";
+import { CartActionsType, CartItem, cartReducer, initialCartState, selectedItem } from "../reducers";
 import { selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
 
 type shoppingCartProviderProps = {
@@ -12,7 +12,7 @@ export type shoppingCartProps = {
   totalPrice: number;
   menus: Partial<CartItem>[];
   quantity: number;
-  addToCart(cartItem: CartItem): void;
+  addMenuToCart(payload: CartItem): void;
   removeFromCart(cartItem: CartItem): void;
   addItemToCart(menuItem: selectedItem): void;
   removeItemFromCart(menuItem: selectedItem): void;
@@ -21,40 +21,34 @@ export type shoppingCartProps = {
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
   const [state, dispatch] = useReducer(cartReducer, initialCartState);
 
-  const addMenuToCart = (state: cartState, payload: CartItem): [quantity: number, price: number] => {
-    let qty: number = state.quantity;
-    let price: number = state.totalPrice;
-    let menus: Partial<CartItem>[] = state.menus;
-
-    if (!state.menus.length) {
-      qty = state.quantity + 1;
-      price = payload.basePrice;
-    }
-
-    if (state.menus.length) {
-      const index = menus.findIndex((menu) => menu?.id === payload.id);
-      if (index && index === -1) {
-        state.menus = [...state.menus, payload];
-      }
-      price += payload.basePrice;
-      qty = state.quantity + 1;
-    } else {
-      state.menus = [payload];
-    }
-    if (state.menus.length && state.quantity === 0) {
-      state = {
-        ...state,
-        quantity: 1,
-        items: payload.items,
-      };
-      qty = state.quantity;
-      price = state.totalPrice;
-    }
-    console.log(state);
-    return [qty, price];
-  };
-
   const shoppingCartState = useMemo(() => {
+    const addMenuToCart = (payload: CartItem) => {
+      let menus: Partial<CartItem>[] = state.menus;
+
+      if (!state.menus.length) {
+        payload.selectedItems = [];
+        state.menus.push(payload);
+      }
+
+      if (state.menus.length) {
+        const found = menus.find((menu) => menu?.id === payload.id);
+        if (!found) {
+          state.menus = [...state.menus, payload];
+          state.totalPrice += payload.basePrice;
+          state.quantity += 1;
+          payload.quantity = 1;
+        } else {
+          state.quantity += 1;
+          found.quantity! += 1;
+          state.totalPrice += payload.basePrice;
+        }
+      }
+
+      console.log(state);
+      dispatch({
+        type: CartActionsType.ADD_TO_CART,
+      });
+    };
     const removeFromCart = (cartItem: CartItem) => {
       const cartIndex = state.menus.findIndex((c) => c.id === cartItem.id);
       if (cartIndex > -1) {
@@ -82,8 +76,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       }
 
       if (menuItems.length) {
-        for (let i = 0; i < menuItems.length; i++) {
-          const item = menuItems[i];
+        for (const item of menuItems) {
           if (menuItem.id === item.id) {
             if (item.quantity && item.quantity > 1) {
               item.quantity -= 1;
@@ -93,7 +86,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           }
         }
       }
-      console.log(state);
       dispatch({
         type: CartActionsType.REMOVE_ITEM_FROM_CART,
       });
@@ -101,18 +93,30 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
 
     const addItemToCart = (menuItem: selectedItem) => {
       let { menus } = state;
-      let { price } = menuItem;
       const menu: Partial<CartItem> = selectedItemToMenuMapper(menuItem);
       if (!menus.length) {
         menuItem.quantity = 0;
         state.menus.push(menu);
       }
+      if (menus.length) {
+        const index = menus.findIndex((menu) => menu.id === menuItem.menuId);
+        if (index === -1) {
+          menuItem.quantity = 0;
+          state.menus.push(menu);
+        }
+      }
       let selectedItems: selectedItem[] | undefined;
       const selectedItemMap = new Map<string, selectedItem>();
 
-      if (state.menus.length && !menu.quantity) {
+      if (state.menus.length) {
         state.menus.forEach((menu) => {
-          if (menuItem.menuId === menu.id) selectedItems = menu.selectedItems;
+          if (menuItem.menuId === menu.id) {
+            selectedItems = menu.selectedItems;
+            if (!selectedItems?.length) {
+              menuItem.quantity = 0;
+              selectedItems!.push(menuItem);
+            }
+          }
         });
 
         if (selectedItems?.length) {
@@ -133,10 +137,14 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
 
       if (selectedItems && selectedItems.length) {
         let totalItemPrice: number = 0;
-        selectedItems.forEach((item) => {
-          totalItemPrice += item.quantity! * item.price;
-        });
-        state.totalPrice = totalItemPrice + menuItem.menuPrice;
+        if (state.quantity > 0) {
+          state.totalPrice += menuItem.price;
+        } else {
+          selectedItems.forEach((item) => {
+            totalItemPrice += item.quantity! * item.price;
+            state.totalPrice = totalItemPrice + menuItem.menuPrice;
+          });
+        }
       }
 
       dispatch({
@@ -144,20 +152,11 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       });
     };
 
-    const addToCart = (menuItem: CartItem) => {
-      const [qty, price] = addMenuToCart(state, menuItem);
-      state.quantity = qty;
-      state.totalPrice = price;
-      dispatch({
-        type: CartActionsType.ADD_TO_CART,
-      });
-    };
-
     const value: shoppingCartProps = {
       totalPrice: state.totalPrice,
       menus: state.menus,
       quantity: state.quantity,
-      addToCart,
+      addMenuToCart,
       removeFromCart,
       addItemToCart,
       removeItemFromCart,

@@ -29,7 +29,7 @@ export type CartItem = {
   basePrice: number;
   quantity: number;
   items?: Item[];
-  selectedItems?: selectedItem[];
+  selectedItems?: selectedItem[] | [];
 };
 
 export type CartAction = {

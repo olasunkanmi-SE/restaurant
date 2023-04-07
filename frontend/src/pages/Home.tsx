@@ -5,7 +5,7 @@ export const Home = () => {
   return (
     <div>
       <AddonScrollBar />
-      <MenuList />;
+      <MenuList />
     </div>
   );
 };
