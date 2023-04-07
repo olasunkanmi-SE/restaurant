@@ -4,7 +4,7 @@ export enum CartActionsType {
   UPDATE_PRICE = "UPDATE_PRICE",
   GET_MENU_QUANTITY = "GET_MENU_QUANTITY",
   ADD_ITEM_TO_CART = "ADD_ITEM_TO_CART",
-  REMOVE_ITEM_TO_CART = "REMOVE_ITEM_TO_CART",
+  REMOVE_ITEM_FROM_CART = "REMOVE_ITEM_FROM_CART",
 }
 
 export type Item = {
@@ -19,7 +19,6 @@ export type selectedItem = {
   menuId: string;
   name: string;
   quantity?: number | 0;
-  total?: number;
   price: number;
   menuPrice: number;
 };
@@ -30,7 +29,7 @@ export type CartItem = {
   basePrice: number;
   quantity: number;
   items?: Item[];
-  selectedItems?: selectedItem[];
+  selectedItems?: selectedItem[] | [];
 };
 
 export type CartAction = {
@@ -62,13 +61,11 @@ export const cartReducer = (state = initialCartState, action: CartAction): cartS
       return {
         ...state,
       };
-    // case CartActionsType.GET_MENU_QUANTITY:
-    //   let quantity = state.menus.length ?? state.menus.filter((item) => item.id === menuPayload!.id)?.length;
-    //   return {
-    //     ...state,
-    //     quantity: quantity,
-    //   };
     case CartActionsType.ADD_ITEM_TO_CART:
+      return {
+        ...state,
+      };
+    case CartActionsType.REMOVE_ITEM_FROM_CART:
       return {
         ...state,
       };

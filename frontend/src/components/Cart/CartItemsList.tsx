@@ -31,11 +31,15 @@ export const CartItemsList = () => {
   return (
     <div className="">
       <Stack direction="horizontal" gap={3} className="gap-3">
-        {itemSummaries.map((item) => (
-          <small style={{ marginLeft: "4px", fontSize: "11px" }} key={item.id}>
-            +{item.name.toLowerCase()} x {item.qty}
-          </small>
-        ))}
+        {itemSummaries.map((item) =>
+          item.qty > 0 ? (
+            <small style={{ marginLeft: "4px", fontSize: "11px" }} key={item.id}>
+              +{item.name.toLowerCase()} x {item.qty}
+            </small>
+          ) : (
+            ""
+          )
+        )}
       </Stack>
     </div>
   );
