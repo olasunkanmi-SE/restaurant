@@ -63,3 +63,22 @@ hr {
   padding-bottom: 15px;
   border-top: 0.1rem solid #f1f1f1;
 }
+
+.root {
+  position: relative;
+  overflow: hidden;
+}
+
+.offcanvas {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.offcanvas-start {
+  left: 0;
+}
+
+.offcanvas-end {
+  right: 0;
+}
