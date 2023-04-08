@@ -16,6 +16,7 @@ export type shoppingCartProps = {
   removeFromCart(cartItem: CartItem): void;
   addItemToCart(menuItem: selectedItem): void;
   removeItemFromCart(menuItem: selectedItem): void;
+  getMenuQuantity(cartItem: Partial<CartItem>): void;
 };
 
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
@@ -46,20 +47,35 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
 
       console.log(state);
       dispatch({
-        type: CartActionsType.ADD_TO_CART,
+        type: CartActionsType.ADD_MENU_TO_CART,
       });
     };
+
     const removeFromCart = (cartItem: CartItem) => {
-      const cartIndex = state.menus.findIndex((c) => c.id === cartItem.id);
-      if (cartIndex > -1) {
-        state.menus.splice(cartIndex, 1);
-        if (state.quantity && state.totalPrice !== 0) {
-          state.quantity -= 1;
-          state.totalPrice -= cartItem.basePrice;
+      const menus = state.menus;
+      if (menus.length) {
+        const menu = state.menus.find((c) => c.id === cartItem.id);
+        let menuQty = 0;
+        if (menu) {
+          if (menu.quantity && menu.quantity > 0) {
+            menuQty = menu.quantity;
+            menuQty -= 1;
+          }
+          if (menu.quantity && menu.quantity === 1) {
+            const index = state.menus.findIndex((menu) => menu.id === cartItem.id);
+            if (index > -1) {
+              state.menus.splice(index, 1);
+            }
+          }
+          if (menuQty > 0) {
+            menu.quantity = menuQty;
+          }
+          console.log(state.menus);
         }
       }
+
       dispatch({
-        type: CartActionsType.REMOVE_FROM_CART,
+        type: CartActionsType.REMOVE_MENU_FROM_CART,
       });
     };
 
@@ -153,6 +169,15 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       });
     };
 
+    const getMenuQuantity = (cartItem: Partial<CartItem>) => {
+      const menus = state.menus;
+      menus.forEach((menu) => {
+        if (menu.id === cartItem.id) {
+          return cartItem.quantity;
+        }
+      });
+    };
+
     const value: shoppingCartProps = {
       totalPrice: state.totalPrice,
       menus: state.menus,
@@ -161,6 +186,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       removeFromCart,
       addItemToCart,
       removeItemFromCart,
+      getMenuQuantity,
     };
     return value;
   }, [state]);

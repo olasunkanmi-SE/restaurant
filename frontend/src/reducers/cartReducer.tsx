@@ -1,6 +1,6 @@
 export enum CartActionsType {
-  ADD_TO_CART = "ADD_TO_CART",
-  REMOVE_FROM_CART = "REMOVE_FROM_CART",
+  ADD_MENU_TO_CART = "ADD_MENU_TO_CART",
+  REMOVE_MENU_FROM_CART = "REMOVE_MENU_FROM_CART",
   UPDATE_PRICE = "UPDATE_PRICE",
   GET_MENU_QUANTITY = "GET_MENU_QUANTITY",
   ADD_ITEM_TO_CART = "ADD_ITEM_TO_CART",
@@ -53,11 +53,11 @@ export type cartState = {
 export const cartReducer = (state = initialCartState, action: CartAction): cartState => {
   const { type } = action;
   switch (type) {
-    case CartActionsType.ADD_TO_CART:
+    case CartActionsType.ADD_MENU_TO_CART:
       return {
         ...state,
       };
-    case CartActionsType.REMOVE_FROM_CART:
+    case CartActionsType.REMOVE_MENU_FROM_CART:
       return {
         ...state,
       };
@@ -66,6 +66,10 @@ export const cartReducer = (state = initialCartState, action: CartAction): cartS
         ...state,
       };
     case CartActionsType.REMOVE_ITEM_FROM_CART:
+      return {
+        ...state,
+      };
+    case CartActionsType.GET_MENU_QUANTITY:
       return {
         ...state,
       };
