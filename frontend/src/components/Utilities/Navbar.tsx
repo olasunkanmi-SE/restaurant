@@ -7,7 +7,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
 
 export const Navigation = () => {
-  const { quantity } = useShoppingCart();
+  const { quantity, openCart } = useShoppingCart();
   const navigate = useNavigate();
 
   const previousPage = () => {
@@ -37,6 +37,7 @@ export const Navigation = () => {
             style={{ width: "3rem", height: "3rem", position: "relative" }}
             variant="outline-secondary"
             className="rounded-circle"
+            onClick={openCart}
           >
             <svg
               version="1.1"

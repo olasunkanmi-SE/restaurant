@@ -1,6 +1,7 @@
-import { createContext, useMemo, useReducer } from "react";
+import { createContext, useMemo, useReducer, useState } from "react";
 import { CartActionsType, CartItem, cartReducer, initialCartState, selectedItem } from "../reducers";
 import { selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
+import { ShoppingCart } from "../components/Cart/shoppingCart";
 
 type shoppingCartProviderProps = {
   children: React.ReactNode;
@@ -12,6 +13,8 @@ export type shoppingCartProps = {
   totalPrice: number;
   menus: Partial<CartItem>[];
   quantity: number;
+  openCart(): void;
+  closeCart(): void;
   addMenuToCart(payload: CartItem): void;
   removeFromCart(cartItem: CartItem): void;
   addItemToCart(menuItem: selectedItem): void;
@@ -21,8 +24,16 @@ export type shoppingCartProps = {
 
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
   const [state, dispatch] = useReducer(cartReducer, initialCartState);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const shoppingCartState = useMemo(() => {
+    const openCart = () => {
+      setIsOpen(true);
+    };
+    const closeCart = () => {
+      setIsOpen(false);
+    };
+
     const addMenuToCart = (payload: CartItem) => {
       let menus: Partial<CartItem>[] = state.menus;
 
@@ -50,7 +61,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
         type: CartActionsType.ADD_MENU_TO_CART,
       });
     };
-    
+
     const removeFromCart = (cartItem: CartItem) => {
       const menus = state.menus;
       if (menus.length) {
@@ -186,9 +197,15 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       addItemToCart,
       removeItemFromCart,
       getMenuQuantity,
+      openCart,
+      closeCart,
     };
     return value;
   }, [state]);
 
-  return <shoppingCartContext.Provider value={shoppingCartState}>{children}</shoppingCartContext.Provider>;
+  return (
+    <shoppingCartContext.Provider value={shoppingCartState}>
+      {children} <ShoppingCart isOpen={isOpen} />
+    </shoppingCartContext.Provider>
+  );
 };
