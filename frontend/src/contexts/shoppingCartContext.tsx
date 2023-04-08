@@ -50,7 +50,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
         type: CartActionsType.ADD_MENU_TO_CART,
       });
     };
-
+    
     const removeFromCart = (cartItem: CartItem) => {
       const menus = state.menus;
       if (menus.length) {
