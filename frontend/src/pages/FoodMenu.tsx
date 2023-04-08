@@ -5,7 +5,7 @@ import { IItem } from "../models/item.model";
 import { Item } from "../reducers";
 import { CartItemsList } from "../components/Cart/CartItemsList";
 import { StoreItem } from "../components/MenuItems/StoreItem";
-import { AddToCartButton } from "../components/Cart/AddToCart";
+import { AddToCartButton } from "../components/Cart/AddMenuToCart";
 
 const mapItems = (items: IItem[]): Item[] => {
   const stateItem =
@@ -55,7 +55,6 @@ export const FoodMenu = () => {
                 amount={totalPrice > 0 ? totalPrice : basePrice}
                 onAddItemToCartClick={() => addMenuToCart({ id, name, basePrice, quantity, items })}
                 onRemoveItemFromCartClick={() => removeFromCart({ id, name, basePrice, quantity, items })}
-                id={id}
               />
             </div>
           </div>
