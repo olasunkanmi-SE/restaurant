@@ -8,26 +8,17 @@ export type ItemsSummary = {
   qty: number;
 };
 
-export const CartItemsList = () => {
+type MenuItem = {
+  id: string;
+};
+
+export const CartItemsList = ({ id }: MenuItem) => {
   const { menus } = useShoppingCart();
   let itemSummaries: ItemsSummary[] = [];
-  if (menus && menus.length) {
-    const itemsMap = new Map<string, ItemsSummary>();
-    const selectedItems = menus.map((menu) => menu.selectedItems || []);
-    const flattenedSelectedItems = selectedItems.flat();
-    flattenedSelectedItems.forEach((item) => {
-      const selectedItem = ItemToSummaryMapper(item);
-      if (itemsMap.has(item.id)) {
-        itemsMap.get(item.id)!.qty += 1;
-      } else {
-        itemsMap.set(item.id, selectedItem);
-      }
-    });
-    for (const item of itemsMap.values()) {
-      itemSummaries.push(item);
-    }
+  const menu = menus.find((menu) => menu.id === id);
+  if (menu?.selectedItems) {
+    itemSummaries = menu.selectedItems.map((item) => ItemToSummaryMapper(item));
   }
-
   return (
     <div className="">
       <Stack direction="horizontal" gap={3} className="gap-3">
