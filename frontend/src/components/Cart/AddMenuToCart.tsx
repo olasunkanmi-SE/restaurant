@@ -1,7 +1,6 @@
 import { CSSProperties } from "react";
 import { Button, Stack } from "react-bootstrap";
 import { QtyButton } from "../MenuItems/addItemButton";
-import { useShoppingCart } from "../../hooks/UseShoppingCart";
 
 const addToCartStyle: CSSProperties = {
   textAlign: "center",
@@ -10,30 +9,24 @@ const addToCartStyle: CSSProperties = {
 
 type addItemToCart = {
   amount: number;
-  onAddMenuToCartClick: (event: React.MouseEvent<HTMLElement>) => void;
-  onAddItemToCartClick: (event: React.MouseEvent<HTMLElement>) => void;
-  onRemoveItemFromCartClick: (event: React.MouseEvent<HTMLElement>) => void;
+  quantity: number;
+  onAddMenuToCart: (event: React.MouseEvent<HTMLElement>) => void;
+  onRemoveMenuFromCart: (event: React.MouseEvent<HTMLElement>) => void;
 };
 
-export const AddToCartButton = ({
-  amount,
-  onAddMenuToCartClick,
-  onAddItemToCartClick,
-  onRemoveItemFromCartClick,
-}: addItemToCart) => {
-  const { quantity } = useShoppingCart();
+export const AddMenuToCartButton = ({ amount, quantity, onAddMenuToCart, onRemoveMenuFromCart }: addItemToCart) => {
   return (
     <Stack direction="horizontal" gap={3}>
       <div>
-        <QtyButton sign={"increment"} onClick={onAddItemToCartClick} />
+        <QtyButton sign={"increment"} onClick={onAddMenuToCart} />
       </div>
       <div>{quantity}</div>
       <div>
-        <QtyButton sign={"decrement"} onClick={onRemoveItemFromCartClick} />
+        <QtyButton sign={"decrement"} onClick={onRemoveMenuFromCart} />
       </div>
       <div className="ms-auto">
         <div style={addToCartStyle}>
-          <Button onClick={onAddMenuToCartClick} className="w-100 btn btn-success" variant="primary" type="submit">
+          <Button onClick={onAddMenuToCart} className="w-100 btn btn-success" variant="primary" type="submit">
             ADD TO CART RM {amount}
           </Button>
         </div>
