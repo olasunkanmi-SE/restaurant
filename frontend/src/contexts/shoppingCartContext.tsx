@@ -1,7 +1,7 @@
 import { createContext, useMemo, useReducer, useState } from "react";
 import { selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
-import { ShoppingCart } from "../components/Cart/ShoppingCart";
 import { CartActionsType, CartItem, cartReducer, initialCartState, selectedItem } from "../reducers";
+import { ShoppingCart } from "../components/Cart";
 
 type shoppingCartProviderProps = {
   children: React.ReactNode;
@@ -50,9 +50,14 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           state.quantity += 1;
           payload.quantity = 1;
         } else {
-          state.quantity += 1;
-          found.quantity! += 1;
-          state.totalPrice += payload.basePrice;
+          if (!found.quantity) {
+            state.quantity += 1;
+            found.quantity = 1;
+          } else {
+            state.quantity += 1;
+            found.quantity += 1;
+            state.totalPrice += payload.basePrice;
+          }
         }
       }
 
