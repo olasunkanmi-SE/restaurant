@@ -1,7 +1,7 @@
 import { createContext, useMemo, useReducer, useState } from "react";
 import { selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
 import { CartActionsType, CartItem, cartReducer, initialCartState, selectedItem } from "../reducers";
-import { ShoppingCart } from "../components/Cart";
+import { ShoppingCart } from "../components/Cart/ShoppingCart";
 
 type shoppingCartProviderProps = {
   children: React.ReactNode;
@@ -53,6 +53,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           if (!found.quantity) {
             state.quantity += 1;
             found.quantity = 1;
+            state.totalPrice += payload.basePrice;
           } else {
             state.quantity += 1;
             found.quantity += 1;
@@ -60,22 +61,24 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           }
         }
       }
-
-      console.log(state);
       dispatch({
         type: CartActionsType.ADD_MENU_TO_CART,
       });
     };
 
     const removeMenuFromCart = (cartItem: CartItem) => {
-      const menus = state.menus;
-      if (menus.length) {
+      if (state.menus.length) {
         const menu = state.menus.find((c) => c.id === cartItem.id);
         let menuQty = 0;
         if (menu) {
           if (menu.quantity && menu.quantity > 0) {
             menuQty = menu.quantity;
             menuQty -= 1;
+            state.totalPrice -= cartItem.basePrice;
+            state.quantity -= 1;
+            if (menu.quantity === 0) {
+              menu.quantity = undefined;
+            }
           }
           if (menu.quantity && menu.quantity === 1) {
             const index = state.menus.findIndex((menu) => menu.id === cartItem.id);
@@ -83,10 +86,9 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
               state.menus.splice(index, 1);
             }
           }
-          if (menuQty > 0) {
+          if (menuQty >= 0) {
             menu.quantity = menuQty;
           }
-          console.log(state.menus);
         }
       }
 

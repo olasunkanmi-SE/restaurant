@@ -51,10 +51,9 @@ export const FoodMenu = () => {
               </div>
               <AddMenuToCartButton
                 quantity={getMenuQuantity(id)}
-                onAddMenuToCartClick={() => addMenuToCart({ id, name, basePrice, quantity, items })}
+                onAddMenuToCart={() => addMenuToCart({ id, name, basePrice, quantity, items })}
                 amount={totalPrice > 0 ? totalPrice : basePrice}
-                onAddItemToCartClick={() => addMenuToCart({ id, name, basePrice, quantity, items })}
-                onRemoveItemFromCartClick={() => removeMenuFromCart({ id, name, basePrice, quantity, items })}
+                onRemoveMenuFromCart={() => removeMenuFromCart({ id, name, basePrice, quantity, items })}
               />
             </div>
           </div>
