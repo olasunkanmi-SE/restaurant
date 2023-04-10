@@ -1,6 +1,7 @@
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { Container } from "react-bootstrap";
+import { ShoppingCartDetails } from "./ShoppinCartDetails";
 
 type shoppingCartAction = {
   isOpen: boolean;
@@ -13,11 +14,14 @@ export const ShoppingCart = ({ isOpen }: shoppingCartAction) => {
       <div>
         <Offcanvas show={isOpen} onHide={closeCart}>
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+            <Offcanvas.Title>
+              <div>
+                <div>ORDER SUMMARY</div>
+              </div>
+            </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists,
-            etc.
+            <ShoppingCartDetails />
           </Offcanvas.Body>
         </Offcanvas>
       </div>

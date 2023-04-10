@@ -1,7 +1,6 @@
 import { CSSProperties } from "react";
 import { Button, Stack } from "react-bootstrap";
 import { QtyButton } from "../MenuItems/addItemButton";
-import { useShoppingCart } from "../../hooks/UseShoppingCart";
 
 const addToCartStyle: CSSProperties = {
   textAlign: "center",
@@ -10,18 +9,19 @@ const addToCartStyle: CSSProperties = {
 
 type addItemToCart = {
   amount: number;
+  quantity: number;
   onAddMenuToCartClick: (event: React.MouseEvent<HTMLElement>) => void;
   onAddItemToCartClick: (event: React.MouseEvent<HTMLElement>) => void;
   onRemoveItemFromCartClick: (event: React.MouseEvent<HTMLElement>) => void;
 };
 
-export const AddToCartButton = ({
+export const AddMenuToCartButton = ({
   amount,
+  quantity,
   onAddMenuToCartClick,
   onAddItemToCartClick,
   onRemoveItemFromCartClick,
 }: addItemToCart) => {
-  const { quantity } = useShoppingCart();
   return (
     <Stack direction="horizontal" gap={3}>
       <div>

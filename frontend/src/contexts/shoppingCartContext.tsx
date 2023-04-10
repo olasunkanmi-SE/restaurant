@@ -1,7 +1,7 @@
 import { createContext, useMemo, useReducer, useState } from "react";
-import { CartActionsType, CartItem, cartReducer, initialCartState, selectedItem } from "../reducers";
 import { selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
-import { ShoppingCart } from "../components/Cart/shoppingCart";
+import { ShoppingCart } from "../components/Cart/ShoppingCart";
+import { CartActionsType, CartItem, cartReducer, initialCartState, selectedItem } from "../reducers";
 
 type shoppingCartProviderProps = {
   children: React.ReactNode;
@@ -16,10 +16,10 @@ export type shoppingCartProps = {
   openCart(): void;
   closeCart(): void;
   addMenuToCart(payload: CartItem): void;
-  removeFromCart(cartItem: CartItem): void;
+  removeMenuFromCart(cartItem: CartItem): void;
   addItemToCart(menuItem: selectedItem): void;
   removeItemFromCart(menuItem: selectedItem): void;
-  getMenuQuantity(cartItem: Partial<CartItem>): void;
+  getMenuQuantity(id: string): number;
 };
 
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
@@ -62,7 +62,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       });
     };
 
-    const removeFromCart = (cartItem: CartItem) => {
+    const removeMenuFromCart = (cartItem: CartItem) => {
       const menus = state.menus;
       if (menus.length) {
         const menu = state.menus.find((c) => c.id === cartItem.id);
@@ -132,16 +132,16 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           state.menus.push(menu);
         }
       }
-      let selectedItems: selectedItem[] | undefined;
+      let selectedItems: selectedItem[] | undefined = [];
       const selectedItemMap = new Map<string, selectedItem>();
 
       if (state.menus.length) {
         state.menus.forEach((menu) => {
           if (menuItem.menuId === menu.id) {
-            selectedItems = menu.selectedItems;
+            selectedItems = menu.selectedItems || [];
             if (!selectedItems?.length) {
               menuItem.quantity = 0;
-              selectedItems!.push(menuItem);
+              selectedItems.push(menuItem);
             }
           }
         });
@@ -179,13 +179,15 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       });
     };
 
-    const getMenuQuantity = (cartItem: Partial<CartItem>) => {
+    const getMenuQuantity = (id: string): number => {
       const menus = state.menus;
+      let quantity = 0;
       menus.forEach((menu) => {
-        if (menu.id === cartItem.id) {
-          return cartItem.quantity;
+        if (menu.id === id) {
+          quantity = menu.quantity ? menu.quantity : 0;
         }
       });
+      return quantity;
     };
 
     const value: shoppingCartProps = {
@@ -193,7 +195,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       menus: state.menus,
       quantity: state.quantity,
       addMenuToCart,
-      removeFromCart,
+      removeMenuFromCart,
       addItemToCart,
       removeItemFromCart,
       getMenuQuantity,
