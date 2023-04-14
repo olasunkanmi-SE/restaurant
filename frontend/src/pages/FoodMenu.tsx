@@ -50,7 +50,10 @@ export const FoodMenu = () => {
                 <CartItemsList id={id} />
               </div>
               <AddMenuToCartButton
+                basePrice={basePrice}
+                id={id}
                 quantity={getMenuQuantity(id)}
+                handleInCreaseQty={() => addMenuToCart({ id, name, basePrice, quantity, items })}
                 onAddMenuToCart={() => addMenuToCart({ id, name, basePrice, quantity, items })}
                 amount={totalPrice > 0 ? totalPrice : basePrice}
                 onRemoveMenuFromCart={() => removeMenuFromCart({ id, name, basePrice, quantity, items })}
