@@ -5,6 +5,7 @@ export const selectedItemToMenuMapper = (selectedItem: selectedItem): Partial<Ca
   const { menuId } = selectedItem;
   return {
     id: menuId,
+    menuPrice: selectedItem.menuPrice,
     selectedItems: [selectedItem],
   };
 };
