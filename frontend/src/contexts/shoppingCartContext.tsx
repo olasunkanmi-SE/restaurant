@@ -15,11 +15,14 @@ export type shoppingCartProps = {
   quantity: number;
   openCart(): void;
   closeCart(): void;
-  addMenuToCart(payload: CartItem): void;
-  removeMenuFromCart(cartItem: CartItem): void;
+  addMenuToCart(payload: Partial<CartItem>): void;
+  removeMenuFromCart(cartItem: Partial<CartItem>): void;
   addItemToCart(menuItem: selectedItem): void;
   removeItemFromCart(menuItem: selectedItem): void;
   getMenuQuantity(id: string): number;
+  calculateMenuPriceFromMenuItems(id: string): number | undefined;
+  itemPrice(): number;
+  AddMoreMenu(id: string): number | undefined;
 };
 
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
@@ -32,6 +35,15 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     };
     const closeCart = () => {
       setIsOpen(false);
+    };
+
+    const AddMoreMenu = (id: string): number | undefined => {
+      const menu = state.menus.find((menu) => menu.id === id);
+      if (menu && menu.selectedItems) {
+        const menuPrice = calculateMenuPriceFromMenuItems(id)! * menu.quantity!;
+        state.menuPrice = menuPrice;
+      }
+      return state.menuPrice;
     };
 
     const addMenuToCart = (payload: CartItem) => {
@@ -51,8 +63,8 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           payload.quantity = 1;
         } else {
           if (!found.quantity) {
-            state.quantity += 1;
-            found.quantity = 1;
+            state.quantity = state.quantity === 0 ? state.quantity + 2 : (state.quantity += 1);
+            found.quantity = 2;
             state.totalPrice += payload.basePrice;
           } else {
             state.quantity += 1;
@@ -61,6 +73,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           }
         }
       }
+      AddMoreMenu(payload.id);
       dispatch({
         type: CartActionsType.ADD_MENU_TO_CART,
       });
@@ -98,32 +111,55 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     };
 
     const removeItemFromCart = (menuItem: selectedItem) => {
-      let { menus } = state;
-      const menuItems: selectedItem[] = [];
+      if (state.menuPrice) {
+        let { menus } = state;
+        const menuItems: selectedItem[] = [];
 
-      for (const menu of menus) {
-        if (menu.id === menuItem.menuId) {
-          if (menu.selectedItems && menu.selectedItems.length) {
-            menuItems.push(...menu.selectedItems);
-          }
-        }
-      }
-
-      if (menuItems.length) {
-        for (const item of menuItems) {
-          if (menuItem.id === item.id) {
-            if (item.quantity && item.quantity >= 1) {
-              item.quantity -= 1;
-              state.totalPrice -= item.price;
-            } else {
-              item.quantity = 0;
+        for (const menu of menus) {
+          if (menu.id === menuItem.menuId) {
+            if (menu.selectedItems && menu.selectedItems.length) {
+              menuItems.push(...menu.selectedItems);
             }
           }
         }
+
+        if (menuItems.length) {
+          for (const item of menuItems) {
+            if (menuItem.id === item.id) {
+              if (item.quantity && item.quantity >= 1) {
+                item.quantity -= 1;
+                state.menuPrice -= item.price;
+              } else {
+                item.quantity = 0;
+              }
+            }
+          }
+        }
+        calculateMenuPriceFromMenuItems(menuItem.menuId);
+        dispatch({
+          type: CartActionsType.REMOVE_ITEM_FROM_CART,
+        });
       }
-      dispatch({
-        type: CartActionsType.REMOVE_ITEM_FROM_CART,
-      });
+    };
+
+    const calculateMenuPriceFromMenuItems = (id: string): number | undefined => {
+      const menu: Partial<CartItem> | undefined = state.menus.find((menu) => menu.id === id);
+      let totalPrice: number = 0;
+      if (menu) {
+        const selectedItems: selectedItem[] = menu.selectedItems || [];
+        let orderPrice: number = 0;
+        if (selectedItems?.length) {
+          selectedItems.forEach((item) => {
+            orderPrice += item.price * (item.quantity ?? 1);
+          });
+          totalPrice = menu.menuPrice! + orderPrice;
+        }
+        return (state.menuPrice = totalPrice);
+      }
+    };
+
+    const itemPrice = (): number => {
+      return state.menuPrice;
     };
 
     const addItemToCart = (menuItem: selectedItem) => {
@@ -133,55 +169,73 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
         menuItem.quantity = 0;
         state.menus.push(menu);
       }
-      if (menus.length) {
+      const itemMenu = menus.find((menu) => menu.id === menuItem.menuId);
+      if (menus.length && itemMenu && !itemMenu.quantity) {
         const index = menus.findIndex((menu) => menu.id === menuItem.menuId);
         if (index === -1) {
           menuItem.quantity = 0;
           state.menus.push(menu);
         }
-      }
-      let selectedItems: selectedItem[] | undefined = [];
-      const selectedItemMap = new Map<string, selectedItem>();
+        let selectedItems: selectedItem[] | undefined = [];
+        const selectedItemMap = new Map<string, selectedItem>();
 
-      if (state.menus.length) {
-        state.menus.forEach((menu) => {
-          if (menuItem.menuId === menu.id) {
-            selectedItems = menu.selectedItems || [];
-            if (!selectedItems?.length) {
+        if (state.menus.length) {
+          state.menus.forEach((menu) => {
+            if (menuItem.menuId === menu.id) {
+              selectedItems = menu.selectedItems || [];
+              if (!selectedItems?.length) {
+                menuItem.quantity = 0;
+                selectedItems.push(menuItem);
+              }
+            }
+          });
+
+          if (selectedItems?.length) {
+            const index = selectedItems.findIndex((item) => item.id === menuItem.id);
+            if (index === -1) {
               menuItem.quantity = 0;
               selectedItems.push(menuItem);
             }
           }
-        });
 
-        if (selectedItems?.length) {
-          const index = selectedItems.findIndex((item) => item.id === menuItem.id);
-          if (index === -1) {
-            menuItem.quantity = 0;
-            selectedItems.push(menuItem);
+          selectedItems?.forEach((item) => selectedItemMap.set(item.id, item));
+          for (const item of selectedItemMap.values()) {
+            if (item.id === menuItem.id) {
+              item.quantity! += 1;
+            }
           }
         }
 
-        selectedItems?.forEach((item) => selectedItemMap.set(item.id, item));
-        for (const item of selectedItemMap.values()) {
-          if (item.id === menuItem.id) {
-            item.quantity! += 1;
+        if (selectedItems && selectedItems.length) {
+          let totalItemPrice: number = 0;
+          if (state.quantity > 0) {
+            state.totalPrice += menuItem.price;
+          } else {
+            selectedItems.forEach((item) => {
+              totalItemPrice += item.quantity! * item.price;
+              state.totalPrice = totalItemPrice + menuItem.menuPrice;
+            });
+          }
+        }
+        calculateMenuPriceFromMenuItems(menuItem.menuId);
+      } else {
+        if (itemMenu) {
+          const selectedItems: selectedItem[] | undefined = itemMenu.selectedItems;
+          if (selectedItems) {
+            const selectedItem = selectedItems.find((i) => i.id === menuItem.id);
+            if (selectedItem) {
+              selectedItem.quantity! += 1;
+              state.menuPrice = state.menuPrice + selectedItem.price * itemMenu.quantity!;
+            }
+            if (!selectedItem && selectedItems.length) {
+              menuItem.quantity = 1;
+              let itemTotal = 0;
+              selectedItems.push(menuItem);
+              state.menuPrice = state.menuPrice + menuItem.price * itemMenu.quantity!;
+            }
           }
         }
       }
-
-      if (selectedItems && selectedItems.length) {
-        let totalItemPrice: number = 0;
-        if (state.quantity > 0) {
-          state.totalPrice += menuItem.price;
-        } else {
-          selectedItems.forEach((item) => {
-            totalItemPrice += item.quantity! * item.price;
-            state.totalPrice = totalItemPrice + menuItem.menuPrice;
-          });
-        }
-      }
-
       dispatch({
         type: CartActionsType.ADD_ITEM_TO_CART,
       });
@@ -209,6 +263,9 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       getMenuQuantity,
       openCart,
       closeCart,
+      calculateMenuPriceFromMenuItems,
+      itemPrice,
+      AddMoreMenu,
     };
     return value;
   }, [state]);

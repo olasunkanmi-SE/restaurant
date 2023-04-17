@@ -5,6 +5,7 @@ export enum CartActionsType {
   GET_MENU_QUANTITY = "GET_MENU_QUANTITY",
   ADD_ITEM_TO_CART = "ADD_ITEM_TO_CART",
   REMOVE_ITEM_FROM_CART = "REMOVE_ITEM_FROM_CART",
+  GET_MENU_PRICE = "GET_MENU_PRICE",
 }
 
 export type Item = {
@@ -29,6 +30,7 @@ export type CartItem = {
   basePrice: number;
   quantity: number;
   items?: Item[];
+  menuPrice: number;
   selectedItems?: selectedItem[] | [];
 };
 
@@ -39,6 +41,7 @@ export type CartAction = {
 export const initialCartState: cartState = {
   totalPrice: 0,
   quantity: 0,
+  menuPrice: 0,
   menus: [],
   items: [],
 };
@@ -48,6 +51,7 @@ export type cartState = {
   quantity: number;
   menus: Partial<CartItem>[];
   items: Item[] | undefined;
+  menuPrice: number;
 };
 
 export const cartReducer = (state = initialCartState, action: CartAction): cartState => {
@@ -70,6 +74,10 @@ export const cartReducer = (state = initialCartState, action: CartAction): cartS
         ...state,
       };
     case CartActionsType.GET_MENU_QUANTITY:
+      return {
+        ...state,
+      };
+    case CartActionsType.GET_MENU_PRICE:
       return {
         ...state,
       };
