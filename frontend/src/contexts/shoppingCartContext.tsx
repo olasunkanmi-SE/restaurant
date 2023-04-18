@@ -88,6 +88,8 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
             menuQty = menu.quantity;
             menuQty -= 1;
             state.totalPrice -= cartItem.basePrice;
+            const onePortion = menu.menuTotalPrice! / menu.quantity;
+            menu.menuTotalPrice! = menu.menuTotalPrice! - onePortion;
             state.quantity -= 1;
             if (menu.quantity === 0) {
               menu.quantity = undefined;
@@ -111,7 +113,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     };
 
     const removeItemFromCart = (menuItem: selectedItem) => {
-      const menu = state.menus.find((menu) => menu.id === menuItem.id);
+      const menu = state.menus.find((menu) => menu.id === menuItem.menuId);
       if (menu && menu.menuTotalPrice) {
         let { menus } = state;
         const menuItems: selectedItem[] = [];
