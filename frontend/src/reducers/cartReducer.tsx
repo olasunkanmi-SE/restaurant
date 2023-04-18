@@ -42,6 +42,7 @@ export type CartAction = {
 export const initialCartState: cartState = {
   totalPrice: 0,
   quantity: 0,
+  menuPrice: 0,
   menus: [],
   items: [],
 };
@@ -51,6 +52,7 @@ export type cartState = {
   quantity: number;
   menus: Partial<CartItem>[];
   items: Item[] | undefined;
+  menuPrice: number;
 };
 
 export const cartReducer = (state = initialCartState, action: CartAction): cartState => {
