@@ -27,7 +27,7 @@ export const FoodMenu = () => {
   let response;
   if (id) {
     const { isLoading, data: menu } = getMenuById(id);
-    const { addMenuToCart, quantity, totalPrice, removeMenuFromCart, getMenuQuantity } = useShoppingCart();
+    const { IncreaseMenuQuantity, quantity, totalPrice, removeMenuFromCart, getMenuQuantity } = useShoppingCart();
     const items = mapItems(menu?.data?.items!);
     if (isLoading) {
       response = <p>...Loading</p>;
@@ -53,8 +53,8 @@ export const FoodMenu = () => {
                 basePrice={basePrice}
                 id={id}
                 quantity={getMenuQuantity(id)}
-                handleInCreaseQty={() => addMenuToCart({ id, name, basePrice, quantity, items })}
-                onAddMenuToCart={() => addMenuToCart({ id, name, basePrice, quantity, items })}
+                handleInCreaseQty={() => IncreaseMenuQuantity({ id, name, basePrice, quantity, items })}
+                onAddMenuToCart={() => IncreaseMenuQuantity({ id, name, basePrice, quantity, items })}
                 amount={totalPrice > 0 ? totalPrice : basePrice}
                 onRemoveMenuFromCart={() => removeMenuFromCart({ id, name, basePrice, quantity, items })}
               />
