@@ -21,7 +21,7 @@ export type shoppingCartProps = {
   removeItemFromCart(menuItem: selectedItem): void;
   getMenuQuantity(id: string): number;
   calculateMenuPriceFromMenuItems(id: string): number | undefined;
-  itemPrice(): number;
+  itemPrice(id: string): number | undefined;
   AddMoreMenu(id: string): number | undefined;
 };
 
@@ -41,9 +41,9 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       const menu = state.menus.find((menu) => menu.id === id);
       if (menu && menu.selectedItems) {
         const menuPrice = calculateMenuPriceFromMenuItems(id)! * menu.quantity!;
-        state.menuPrice = menuPrice;
+        menu.menuTotalPrice = menuPrice;
       }
-      return state.menuPrice;
+      return menu!.menuTotalPrice;
     };
 
     const addMenuToCart = (payload: CartItem) => {
@@ -88,6 +88,8 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
             menuQty = menu.quantity;
             menuQty -= 1;
             state.totalPrice -= cartItem.basePrice;
+            const onePortion = menu.menuTotalPrice! / menu.quantity;
+            menu.menuTotalPrice! = menu.menuTotalPrice! - onePortion;
             state.quantity -= 1;
             if (menu.quantity === 0) {
               menu.quantity = undefined;
@@ -111,7 +113,8 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     };
 
     const removeItemFromCart = (menuItem: selectedItem) => {
-      if (state.menuPrice) {
+      const menu = state.menus.find((menu) => menu.id === menuItem.menuId);
+      if (menu && menu.menuTotalPrice) {
         let { menus } = state;
         const menuItems: selectedItem[] = [];
 
@@ -128,7 +131,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
             if (menuItem.id === item.id) {
               if (item.quantity && item.quantity >= 1) {
                 item.quantity -= 1;
-                state.menuPrice -= item.price;
+                menu.menuTotalPrice -= item.price;
               } else {
                 item.quantity = 0;
               }
@@ -154,12 +157,15 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           });
           totalPrice = menu.menuPrice! + orderPrice;
         }
-        return (state.menuPrice = totalPrice);
+        return (menu.menuTotalPrice = totalPrice);
       }
     };
 
-    const itemPrice = (): number => {
-      return state.menuPrice;
+    const itemPrice = (id: string): number | undefined => {
+      const menu = state.menus.find((menu) => menu.id === id);
+      if (menu) {
+        return menu.menuTotalPrice;
+      }
     };
 
     const addItemToCart = (menuItem: selectedItem) => {
@@ -225,13 +231,13 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
             const selectedItem = selectedItems.find((i) => i.id === menuItem.id);
             if (selectedItem) {
               selectedItem.quantity! += 1;
-              state.menuPrice = state.menuPrice + selectedItem.price * itemMenu.quantity!;
+              itemMenu.menuTotalPrice = itemMenu.menuTotalPrice! + selectedItem.price * itemMenu.quantity!;
             }
             if (!selectedItem && selectedItems.length) {
               menuItem.quantity = 1;
               let itemTotal = 0;
               selectedItems.push(menuItem);
-              state.menuPrice = state.menuPrice + menuItem.price * itemMenu.quantity!;
+              itemMenu.menuTotalPrice = itemMenu.menuTotalPrice! + menuItem.price * itemMenu.quantity!;
             }
           }
         }

@@ -32,6 +32,7 @@ export type CartItem = {
   items?: Item[];
   menuPrice: number;
   selectedItems?: selectedItem[] | [];
+  menuTotalPrice: number;
 };
 
 export type CartAction = {
