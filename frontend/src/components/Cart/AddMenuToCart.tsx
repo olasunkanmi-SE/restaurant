@@ -39,7 +39,7 @@ export const AddMenuToCartButton = ({
       <div className="ms-auto">
         <div style={addToCartStyle}>
           <Button onClick={onAddMenuToCart} className="w-100 btn btn-success" variant="primary" type="submit">
-            ADD TO CART RM {itemPrice() === 0 ? basePrice : itemPrice()}
+            ADD TO CART RM {itemPrice(id) === undefined ? basePrice : itemPrice(id)}
           </Button>
         </div>
       </div>
