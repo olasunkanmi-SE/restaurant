@@ -26,7 +26,10 @@ export const AddMenuToCartButton = ({
   basePrice,
   handleInCreaseQty,
 }: addItemToCart) => {
-  const { itemPrice } = useShoppingCart();
+  const { itemPrice, addMenuToCart } = useShoppingCart();
+  const HandleAddMenuToCart = () => {
+    return addMenuToCart();
+  };
   return (
     <Stack direction="horizontal" gap={3}>
       <div>
@@ -38,7 +41,7 @@ export const AddMenuToCartButton = ({
       </div>
       <div className="ms-auto">
         <div style={addToCartStyle}>
-          <Button onClick={onAddMenuToCart} className="w-100 btn btn-success" variant="primary" type="submit">
+          <Button onClick={HandleAddMenuToCart} className="w-100 btn btn-success" variant="primary" type="button">
             ADD TO CART RM {itemPrice(id) === undefined ? basePrice : itemPrice(id)}
           </Button>
         </div>

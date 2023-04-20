@@ -24,11 +24,13 @@ export type shoppingCartProps = {
   itemPrice(id: string): number | undefined;
   AddMoreMenu(id: string): number | undefined;
   addMenuToCart(): void;
+  GetOrderSummary(): OrderSummary[];
 };
 
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
   const [state, dispatch] = useReducer(cartReducer, initialCartState);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [qty, setqty] = useState<number>(0);
 
   const shoppingCartState = useMemo(() => {
     const openCart = () => {
@@ -68,7 +70,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           }
         }
       }
-
       state.totalPrice = AddMoreMenu(payload.id)!;
       dispatch({
         type: CartActionsType.INCREASE_MENU_QUANTITY,
@@ -257,15 +258,27 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     };
 
     const addMenuToCart = () => {
+      console.log(state);
       let { menus, quantity, orderSummary } = state;
+      let stateQty = 0;
       const orderInfo: OrderSummary = {
         menus,
         quantity,
       };
+      if (quantity === 0) {
+        orderInfo.quantity = 1;
+      }
       orderSummary.push(orderInfo);
-      state.menus[0].quantity = 1;
       state.menus = [];
-      return state;
+      state.quantity = 0;
+
+      dispatch({
+        type: CartActionsType.ADD_MENU_TO_CART,
+      });
+    };
+
+    const GetOrderSummary = (): OrderSummary[] => {
+      return state.orderSummary;
     };
 
     const value: shoppingCartProps = {
@@ -283,6 +296,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       itemPrice,
       AddMoreMenu,
       addMenuToCart,
+      GetOrderSummary,
     };
     return value;
   }, [state]);
