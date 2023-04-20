@@ -12,9 +12,9 @@ export type InputProps = {
 } & Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "size">;
 
 export const Input: any = forwardRef<HTMLInputElement, InputProps>(
-  ({ id, name, type = "text", size = "medium", className = "", placeholder, ...props }, ref) => {
+  ({ id, name, type = "text", size = "medium", className, placeholder, ...props }, ref) => {
     return (
-      <input id={id} ref={ref} name={name} type={type} placeholder={placeholder} className="form-control" {...props} />
+      <input id={id} ref={ref} name={name} type={type} placeholder={placeholder} className={className} {...props} />
     );
   }
 );

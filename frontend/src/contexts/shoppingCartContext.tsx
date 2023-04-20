@@ -1,6 +1,6 @@
 import { createContext, useMemo, useReducer, useState } from "react";
 import { selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
-import { CartActionsType, CartItem, cartReducer, initialCartState, selectedItem } from "../reducers";
+import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, selectedItem } from "../reducers";
 import { ShoppingCart } from "../components/ShoppingCart";
 
 type shoppingCartProviderProps = {
@@ -15,7 +15,7 @@ export type shoppingCartProps = {
   quantity: number;
   openCart(): void;
   closeCart(): void;
-  IncreaseMenuQuantity(payload: Partial<CartItem>): void;
+  increaseMenuQuantity(payload: Partial<CartItem>): void;
   removeMenuFromCart(cartItem: Partial<CartItem>): void;
   addItemToCart(menuItem: selectedItem): void;
   removeItemFromCart(menuItem: selectedItem): void;
@@ -23,6 +23,7 @@ export type shoppingCartProps = {
   calculateMenuTotalPriceFromMenuItems(id: string): number | undefined;
   itemPrice(id: string): number | undefined;
   AddMoreMenu(id: string): number | undefined;
+  addMenuToCart(): void;
 };
 
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
@@ -46,7 +47,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       return menu!.menuTotalPrice;
     };
 
-    const IncreaseMenuQuantity = (payload: CartItem) => {
+    const increaseMenuQuantity = (payload: CartItem) => {
       console.log(state);
       let menus: Partial<CartItem>[] = state.menus;
 
@@ -73,7 +74,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       }
       state.totalPrice = AddMoreMenu(payload.id)!;
       dispatch({
-        type: CartActionsType.ADD_MENU_TO_CART,
+        type: CartActionsType.INCREASE_MENU_QUANTITY,
       });
     };
 
@@ -86,7 +87,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
             menuQty = menu.quantity;
             menuQty -= 1;
             const onePortion = menu.menuTotalPrice! / menu.quantity;
-            menu.menuTotalPrice! = menu.menuTotalPrice! - onePortion;
+            menu.menuTotalPrice = menu.menuTotalPrice! - onePortion;
             if (menu.menuTotalPrice < menu.menuPrice! && menu.selectedItems?.length) {
               menu.selectedItems = [];
               menu.menuTotalPrice = menu.menuPrice;
@@ -123,12 +124,12 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       const menu = state.menus.find((menu) => menu.id === menuItem.menuId);
       if (menu && menu.menuTotalPrice) {
         let { menus } = state;
-        const menuItems: selectedItem[] = [];
+        let menuItems: selectedItem[] = [];
 
         for (const menu of menus) {
           if (menu.id === menuItem.menuId) {
             if (menu.selectedItems && menu.selectedItems.length) {
-              menuItems.push(...menu.selectedItems);
+              menuItems = menu.selectedItems;
             }
           }
         }
@@ -138,7 +139,11 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
             if (menuItem.id === item.id) {
               if (item.quantity && item.quantity >= 1) {
                 item.quantity -= 1;
-                menu.menuTotalPrice -= item.price * menu.quantity!;
+                if (!menu.quantity) {
+                  menu.menuTotalPrice -= item.price;
+                } else {
+                  menu.menuTotalPrice -= item.price * menu.quantity;
+                }
                 state.totalPrice = menu.menuTotalPrice;
               } else {
                 item.quantity = 0;
@@ -257,11 +262,25 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       return quantity;
     };
 
+    const addMenuToCart = () => {
+      let { menus, quantity, orderSummary } = state;
+      const orderInfo: OrderSummary = {
+        menus,
+        quantity,
+      };
+      orderSummary.push(orderInfo);
+      state.menus[0].quantity = 1;
+      state.menus = [];
+      console.log(state);
+      return state;
+    };
+    const resetMenuState = () => {};
+
     const value: shoppingCartProps = {
       totalPrice: state.totalPrice,
       menus: state.menus,
       quantity: state.quantity,
-      IncreaseMenuQuantity,
+      increaseMenuQuantity,
       removeMenuFromCart,
       addItemToCart,
       removeItemFromCart,
@@ -271,6 +290,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       calculateMenuTotalPriceFromMenuItems,
       itemPrice,
       AddMoreMenu,
+      addMenuToCart,
     };
     return value;
   }, [state]);
