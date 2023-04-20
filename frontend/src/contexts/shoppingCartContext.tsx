@@ -70,7 +70,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           }
         }
       }
-      console.log(state);
       state.totalPrice = AddMoreMenu(payload.id)!;
       dispatch({
         type: CartActionsType.INCREASE_MENU_QUANTITY,
@@ -272,7 +271,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       orderSummary.push(orderInfo);
       state.menus = [];
       state.quantity = 0;
-      console.log(state);
 
       dispatch({
         type: CartActionsType.ADD_MENU_TO_CART,
