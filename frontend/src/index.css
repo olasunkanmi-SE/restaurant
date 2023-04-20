@@ -84,17 +84,17 @@ hr {
 }
 
 .form-check-input {
-  width: 2em;
-  height: 2em;
+  width: 1.7em;
+  height: 1.7em;
   border-radius: 100% !important;
   background-color: #efefef;
   border-color: #e5e0e0
 }
 
 .form-check-input:checked {
-  width: 2em;
-  height: 2em;
+  width: 1.7em;
+  height: 1.7em;
   border-radius: 100% !important;
-  background-color: #21c579;
+  background-color: #168c55;
   border-color: #f7a2;
 }
