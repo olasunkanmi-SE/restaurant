@@ -2,6 +2,7 @@ import { createContext, useMemo, useReducer, useState } from "react";
 import { selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
 import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, selectedItem } from "../reducers";
 import { ShoppingCart } from "../components/ShoppingCart";
+import { useNavigate } from "react-router-dom";
 
 type shoppingCartProviderProps = {
   children: React.ReactNode;
@@ -28,9 +29,9 @@ export type shoppingCartProps = {
 };
 
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
+  const navigate = useNavigate();
   const [state, dispatch] = useReducer(cartReducer, initialCartState);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [qty, setqty] = useState<number>(0);
 
   const shoppingCartState = useMemo(() => {
     const openCart = () => {
@@ -270,6 +271,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       orderSummary.push(orderInfo);
       state.menus = [];
       state.quantity = 0;
+      navigate("/");
 
       dispatch({
         type: CartActionsType.ADD_MENU_TO_CART,
