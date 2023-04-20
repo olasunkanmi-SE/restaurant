@@ -83,8 +83,18 @@ hr {
   right: 0;
 }
 
+.form-check-input {
+  width: 2em;
+  height: 2em;
+  border-radius: 100% !important;
+  background-color: #efefef;
+  border-color: #e5e0e0
+}
+
 .form-check-input:checked {
   width: 2em;
   height: 2em;
-  border-radius: 100%;
+  border-radius: 100% !important;
+  background-color: #21c579;
+  border-color: #f7a2;
 }

@@ -1,7 +1,7 @@
 import { Stack } from "react-bootstrap";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
-import { QtyButton } from "./addItemButton";
 import { storeItemProps } from "./StoreItem";
+import { QtyButton } from "./addItemButton";
 
 type foodItem = storeItemProps & { itemId: string; itemPrice: number };
 
