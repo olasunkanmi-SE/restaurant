@@ -5,9 +5,10 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
+import { calculateQuantity } from "../../utility/utils";
 
 export const Navigation = () => {
-  const { quantity, openCart } = useShoppingCart();
+  const { quantity, openCart, GetOrderSummary } = useShoppingCart();
   const navigate = useNavigate();
 
   const previousPage = () => {
@@ -79,7 +80,7 @@ export const Navigation = () => {
               }}
               className="rounded-circle d-flex justify-content-center align-items-center"
             >
-              {quantity}
+              {calculateQuantity(quantity)}
             </div>
           </Button>
         </Container>
