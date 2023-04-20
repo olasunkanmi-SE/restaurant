@@ -87,7 +87,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
             menuQty = menu.quantity;
             menuQty -= 1;
             const onePortion = menu.menuTotalPrice! / menu.quantity;
-            menu.menuTotalPrice! = menu.menuTotalPrice! - onePortion;
+            menu.menuTotalPrice = menu.menuTotalPrice! - onePortion;
             if (menu.menuTotalPrice < menu.menuPrice! && menu.selectedItems?.length) {
               menu.selectedItems = [];
               menu.menuTotalPrice = menu.menuPrice;
@@ -124,12 +124,12 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       const menu = state.menus.find((menu) => menu.id === menuItem.menuId);
       if (menu && menu.menuTotalPrice) {
         let { menus } = state;
-        const menuItems: selectedItem[] = [];
+        let menuItems: selectedItem[] = [];
 
         for (const menu of menus) {
           if (menu.id === menuItem.menuId) {
             if (menu.selectedItems && menu.selectedItems.length) {
-              menuItems.push(...menu.selectedItems);
+              menuItems = menu.selectedItems;
             }
           }
         }
@@ -139,7 +139,11 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
             if (menuItem.id === item.id) {
               if (item.quantity && item.quantity >= 1) {
                 item.quantity -= 1;
-                menu.menuTotalPrice -= item.price * menu.quantity!;
+                if (!menu.quantity) {
+                  menu.menuTotalPrice -= item.price;
+                } else {
+                  menu.menuTotalPrice -= item.price * menu.quantity;
+                }
                 state.totalPrice = menu.menuTotalPrice;
               } else {
                 item.quantity = 0;
