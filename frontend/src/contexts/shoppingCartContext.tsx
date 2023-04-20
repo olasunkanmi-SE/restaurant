@@ -48,9 +48,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     };
 
     const increaseMenuQuantity = (payload: CartItem) => {
-      console.log(state);
       let menus: Partial<CartItem>[] = state.menus;
-
       if (!state.menus.length) {
         payload.selectedItems = [];
         state.menus.push(payload);
@@ -59,9 +57,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       if (state.menus.length) {
         const found = menus.find((menu) => menu?.id === payload.id);
         if (!found) {
-          state.menus = [...state.menus, payload];
           state.quantity += 1;
-          payload.quantity = 1;
         } else {
           if (!found.quantity) {
             state.quantity = state.quantity === 0 ? state.quantity + 2 : (state.quantity += 1);
@@ -72,6 +68,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           }
         }
       }
+
       state.totalPrice = AddMoreMenu(payload.id)!;
       dispatch({
         type: CartActionsType.INCREASE_MENU_QUANTITY,
@@ -114,7 +111,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           state.totalPrice = 0;
         }
       }
-      console.log(state);
       dispatch({
         type: CartActionsType.REMOVE_MENU_FROM_CART,
       });
@@ -181,7 +177,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     };
 
     const addItemToCart = (menuItem: selectedItem) => {
-      console.log(state);
       let { menus } = state;
       const menu: Partial<CartItem> = selectedItemToMenuMapper(menuItem);
       if (!menus.length) {
@@ -244,7 +239,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
             }
           }
         }
-        console.log(state);
       }
       dispatch({
         type: CartActionsType.ADD_ITEM_TO_CART,
@@ -271,10 +265,8 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       orderSummary.push(orderInfo);
       state.menus[0].quantity = 1;
       state.menus = [];
-      console.log(state);
       return state;
     };
-    const resetMenuState = () => {};
 
     const value: shoppingCartProps = {
       totalPrice: state.totalPrice,
