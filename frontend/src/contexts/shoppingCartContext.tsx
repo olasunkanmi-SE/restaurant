@@ -261,7 +261,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     const addMenuToCart = () => {
       console.log(state);
       let { menus, quantity, orderSummary } = state;
-      let stateQty = 0;
       const orderInfo: OrderSummary = {
         menus,
         quantity,
