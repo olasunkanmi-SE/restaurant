@@ -9,6 +9,11 @@ export enum CartActionsType {
   INCREASE_MENU_QUANTITY = "INCREASE_MENU_QUANTITY",
 }
 
+export type OrderSummary = {
+  menus: Partial<CartItem>[];
+  quantity: number;
+};
+
 export type Item = {
   id: string;
   name: string;
@@ -43,9 +48,7 @@ export type CartAction = {
 export const initialCartState: cartState = {
   totalPrice: 0,
   quantity: 0,
-  menuPrice: 0,
   menus: [],
-  items: [],
   orderSummary: [],
 };
 
@@ -53,9 +56,7 @@ export type cartState = {
   totalPrice: number;
   quantity: number;
   menus: Partial<CartItem>[];
-  items: Item[] | undefined;
-  orderSummary: CartItem[];
-  menuPrice: number;
+  orderSummary: OrderSummary[];
 };
 
 export const cartReducer = (state = initialCartState, action: CartAction): cartState => {

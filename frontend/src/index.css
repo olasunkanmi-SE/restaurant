@@ -82,3 +82,9 @@ hr {
 .offcanvas-end {
   right: 0;
 }
+
+.form-check-input:checked {
+  width: 2em;
+  height: 2em;
+  border-radius: 100%;
+}
