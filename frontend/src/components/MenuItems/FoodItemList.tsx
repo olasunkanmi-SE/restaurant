@@ -19,12 +19,12 @@ export const FoodItemList = ({
   handleUnCheck,
   enableAddToCartBtns,
 }: Omit<foodItem, "items" | "handleCheck" | "isChecked">) => {
-  const { addItemToCart, menus, removeItemFromCart } = useShoppingCart();
+  const { AddItemToCart, menus, removeItemFromCart } = useShoppingCart();
   let itemQty: number = 0;
   const handleAddItemToCart = () => {
     enableAddToCartBtns();
     handleUnCheck();
-    return addItemToCart({
+    return AddItemToCart({
       id: itemId,
       name,
       price: itemPrice,

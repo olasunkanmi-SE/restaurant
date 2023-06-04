@@ -1,4 +1,5 @@
 import { ItemsSummary } from "../../components/Cart/CartItemsList";
+import { IMenuData } from "../../models/menu.model";
 import { CartItem, selectedItem } from "../../reducers";
 
 export const selectedItemToMenuMapper = (selectedItem: selectedItem): Partial<CartItem> => {
@@ -16,4 +17,15 @@ export const ItemToSummaryMapper = (item: selectedItem): ItemsSummary => {
     name: item.name,
     qty: item.quantity || 0,
   };
+};
+
+export const menuToMenuStateMapper = (menu: any): Partial<CartItem>[] => {
+  const { id: menuId, basePrice } = menu;
+  return [
+    {
+      id: menuId,
+      menuPrice: basePrice,
+      selectedItems: [],
+    },
+  ];
 };

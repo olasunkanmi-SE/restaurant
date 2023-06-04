@@ -8,7 +8,7 @@ const addToCartStyle: CSSProperties = {
   marginRight: "10px",
 };
 
-type addItemToCart = {
+type AddItemToCart = {
   amount: number;
   onAddMenuToCartClick: (event: React.MouseEvent<HTMLElement>) => void;
   onAddItemToCartClick: (event: React.MouseEvent<HTMLElement>) => void;
@@ -20,7 +20,7 @@ export const AddToCartButton = ({
   onAddMenuToCartClick,
   onAddItemToCartClick,
   onRemoveItemFromCartClick,
-}: addItemToCart) => {
+}: AddItemToCart) => {
   const { quantity } = useShoppingCart();
   return (
     <Stack direction="horizontal" gap={3}>
