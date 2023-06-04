@@ -57,7 +57,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
         state.menus.push(payload);
       }
 
-      if (state.menus.length) {
+      if (menus.length) {
         const found = menus.find((menu) => menu?.id === payload.id);
         if (!found) {
           state.quantity += 1;
@@ -119,14 +119,13 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     };
 
     const removeItemFromCart = (menuItem: selectedItem) => {
-      const menu = state.menus.find((menu) => menu.id === menuItem.menuId);
-      if (menu && menu.menuTotalPrice) {
-        let { menus } = state;
+      let { menus } = state;
+      const menu = menus.find((menu) => menu.id === menuItem.menuId);
+      if (menu?.menuTotalPrice) {
         let menuItems: selectedItem[] = [];
-
         for (const menu of menus) {
           if (menu.id === menuItem.menuId) {
-            if (menu.selectedItems && menu.selectedItems.length) {
+            if (menu?.selectedItems && menu.selectedItems.length) {
               menuItems = menu.selectedItems;
             }
           }
