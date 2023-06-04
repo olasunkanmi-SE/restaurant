@@ -1,8 +1,8 @@
 import { createContext, useMemo, useReducer, useState } from "react";
-import { selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
-import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, selectedItem } from "../reducers";
-import { ShoppingCart } from "../components/ShoppingCart";
 import { useNavigate } from "react-router-dom";
+import { selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
+import { ShoppingCart } from "../components/ShoppingCart";
+import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, selectedItem } from "../reducers";
 
 type shoppingCartProviderProps = {
   children: React.ReactNode;
@@ -18,7 +18,7 @@ export type shoppingCartProps = {
   closeCart(): void;
   increaseMenuQuantity(payload: Partial<CartItem>): void;
   removeMenuFromCart(cartItem: Partial<CartItem>): void;
-  addItemToCart(menuItem: selectedItem): void;
+  AddItemToCart(menuItem?: selectedItem): void;
   removeItemFromCart(menuItem: selectedItem): void;
   getMenuQuantity(id: string): number;
   calculateMenuTotalPriceFromMenuItems(id: string): number | undefined;
@@ -34,7 +34,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(cartReducer, initialCartState);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [qty, setqty] = useState<number>(0);
 
   const shoppingCartState = useMemo(() => {
     const openCart = () => {
@@ -50,18 +49,26 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
 
     const AddMoreMenu = (id: string): number | undefined => {
       const menu = state.menus.find((menu) => menu.id === id);
-      if (menu?.selectedItems) {
-        const menuPrice = calculateMenuTotalPriceFromMenuItems(id)! * menu.quantity!;
-        menu.menuTotalPrice = menuPrice;
+      if (menu) {
+        if (menu.selectedItems?.length) {
+          const menuPrice = calculateMenuTotalPriceFromMenuItems(id)! * menu.quantity!;
+          menu.menuTotalPrice = menuPrice;
+        } else {
+          menu.menuTotalPrice = menu?.quantity! * menu?.basePrice!;
+        }
       }
+
       return menu!.menuTotalPrice;
     };
 
     const increaseMenuQuantity = (payload: CartItem) => {
       let menus: Partial<CartItem>[] = state.menus;
-      if (!state.menus.length) {
+
+      if (!menus.length) {
         payload.selectedItems = [];
+        payload.menuPrice = payload.basePrice;
         state.menus.push(payload);
+        console.log(state.menus);
       }
 
       if (menus.length) {
@@ -128,6 +135,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     const removeItemFromCart = (menuItem: selectedItem) => {
       let { menus } = state;
       const menu = menus.find((menu) => menu.id === menuItem.menuId);
+
       if (menu?.menuTotalPrice) {
         let menuItems: selectedItem[] = [];
         for (const menu of menus) {
@@ -184,71 +192,80 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       }
     };
 
-    const addItemToCart = (menuItem: selectedItem) => {
-      let { menus } = state;
-      const menu: Partial<CartItem> = selectedItemToMenuMapper(menuItem);
-      if (!menus.length) {
-        menuItem.quantity = 0;
-        state.menus.push(menu);
-      }
-      const itemMenu = menus.find((menu) => menu.id === menuItem.menuId);
-      if (menus.length && itemMenu && !itemMenu.quantity) {
-        const index = menus.findIndex((menu) => menu.id === menuItem.menuId);
-        if (index === -1) {
+    const AddItemToCart = (menuItem?: selectedItem) => {
+      if (menuItem) {
+        let { menus } = state;
+        const menu: Partial<CartItem> = selectedItemToMenuMapper(menuItem);
+        if (!menus.length) {
           menuItem.quantity = 0;
           state.menus.push(menu);
         }
-        let selectedItems: selectedItem[] | undefined = [];
-        const selectedItemMap = new Map<string, selectedItem>();
+        const itemMenu = menus.find((menu) => menu.id === menuItem.menuId);
+        if (menus.length && itemMenu && !itemMenu.quantity) {
+          const index = menus.findIndex((menu) => menu.id === menuItem.menuId);
+          if (index === -1) {
+            menuItem.quantity = 0;
+            state.menus.push(menu);
+          }
+          let selectedItems: selectedItem[] | undefined = [];
+          const selectedItemMap = new Map<string, selectedItem>();
 
-        if (state.menus.length) {
-          state.menus.forEach((menu) => {
-            if (menuItem.menuId === menu.id) {
-              selectedItems = menu.selectedItems ?? [];
-              if (!selectedItems?.length) {
+          if (state.menus.length) {
+            state.menus.forEach((menu) => {
+              if (menuItem.menuId === menu.id) {
+                selectedItems = menu.selectedItems ?? [];
+                if (!selectedItems?.length) {
+                  menuItem.quantity = 0;
+                  selectedItems.push(menuItem);
+                }
+              }
+            });
+
+            if (selectedItems?.length) {
+              const index = selectedItems.findIndex((item) => item.id === menuItem.id);
+              if (index === -1) {
                 menuItem.quantity = 0;
                 selectedItems.push(menuItem);
               }
             }
-          });
 
-          if (selectedItems?.length) {
-            const index = selectedItems.findIndex((item) => item.id === menuItem.id);
-            if (index === -1) {
-              menuItem.quantity = 0;
-              selectedItems.push(menuItem);
+            selectedItems?.forEach((item) => selectedItemMap.set(item.id, item));
+            for (const item of selectedItemMap.values()) {
+              if (item.id === menuItem.id) {
+                item.quantity! += 1;
+              }
             }
           }
-
-          selectedItems?.forEach((item) => selectedItemMap.set(item.id, item));
-          for (const item of selectedItemMap.values()) {
-            if (item.id === menuItem.id) {
-              item.quantity! += 1;
-            }
-          }
-        }
-        calculateMenuTotalPriceFromMenuItems(menuItem.menuId);
-      } else {
-        if (itemMenu) {
-          const selectedItems: selectedItem[] | undefined = itemMenu.selectedItems;
-          if (selectedItems) {
-            const selectedItem = selectedItems.find((i) => i.id === menuItem.id);
-            if (selectedItem) {
-              selectedItem.quantity! += 1;
-              itemMenu.menuTotalPrice = itemMenu.menuTotalPrice! + selectedItem.price * itemMenu.quantity!;
-              state.totalPrice = itemMenu.menuTotalPrice;
-            }
-            if (!selectedItem && selectedItems.length) {
+          calculateMenuTotalPriceFromMenuItems(menuItem.menuId);
+        } else {
+          if (itemMenu) {
+            let selectedItems: selectedItem[] | undefined = itemMenu.selectedItems;
+            if (selectedItems?.length) {
+              const selectedItem = selectedItems.find((i) => i.id === menuItem.id);
+              if (selectedItem) {
+                selectedItem.quantity! += 1;
+                itemMenu.menuTotalPrice = itemMenu.menuTotalPrice! + selectedItem.price * itemMenu.quantity!;
+                state.totalPrice = itemMenu.menuTotalPrice;
+              } else {
+                menuItem.quantity = 1;
+                selectedItems.push(menuItem);
+                itemMenu.menuTotalPrice = itemMenu.menuTotalPrice! + menuItem.price * itemMenu.quantity!;
+                state.totalPrice = itemMenu.menuTotalPrice;
+              }
+            } else {
               menuItem.quantity = 1;
-              let itemTotal = 0;
-              selectedItems.push(menuItem);
+              const currentMenu = state.menus.find((menu) => menu.id === itemMenu.id);
+              if (currentMenu) {
+                if (!currentMenu.selectedItems?.length) {
+                  currentMenu.selectedItems = [menuItem];
+                }
+              }
               itemMenu.menuTotalPrice = itemMenu.menuTotalPrice! + menuItem.price * itemMenu.quantity!;
               state.totalPrice = itemMenu.menuTotalPrice;
             }
           }
         }
       }
-      console.log(state);
       dispatch({
         type: CartActionsType.ADD_ITEM_TO_CART,
       });
@@ -267,7 +284,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
 
     const addMenuToCart = () => {
       let { menus, quantity, orderSummary } = state;
-      let stateQty = 0;
       const orderInfo: OrderSummary = {
         menus,
         quantity,
@@ -305,7 +321,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       quantity: state.quantity,
       increaseMenuQuantity,
       removeMenuFromCart,
-      addItemToCart,
+      AddItemToCart,
       removeItemFromCart,
       getMenuQuantity,
       openCart,
