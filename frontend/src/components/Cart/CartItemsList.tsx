@@ -25,7 +25,7 @@ export const CartItemsList = ({ id }: MenuItem) => {
         {itemSummaries.map((item) =>
           item.qty > 0 ? (
             <small style={{ marginLeft: "4px", fontSize: "11px" }} key={item.id}>
-              +{item.name.toLowerCase()} x {item.qty}
+              + {item.name.toLowerCase()} x {item.qty}
             </small>
           ) : (
             ""
