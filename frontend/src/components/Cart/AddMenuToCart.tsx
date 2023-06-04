@@ -8,7 +8,7 @@ const addToCartStyle: CSSProperties = {
   marginRight: "10px",
 };
 
-type addItemToCart = {
+type AddItemToCart = {
   basePrice: number;
   id: string;
   amount: number;
@@ -28,7 +28,7 @@ export const AddMenuToCartButton = ({
   handleInCreaseQty,
   disableQuatityButton,
   disableAddToCartButton,
-}: addItemToCart) => {
+}: AddItemToCart) => {
   const { itemPrice, addMenuToCart } = useShoppingCart();
   const HandleAddMenuToCart = () => {
     return addMenuToCart();

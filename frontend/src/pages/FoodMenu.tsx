@@ -39,6 +39,7 @@ export const FoodMenu = () => {
     setIsChecked(true);
     setDisableAddToCartBtns(false);
     resetCart();
+    handleUnCheck();
   };
 
   const handleSetDisableAddToCartBtns = () => {
@@ -48,6 +49,7 @@ export const FoodMenu = () => {
   const handleUnCheck = () => {
     if (isChecked) {
       setIsChecked(!isChecked);
+      setDisableAddToCartBtns(true);
     }
   };
 
