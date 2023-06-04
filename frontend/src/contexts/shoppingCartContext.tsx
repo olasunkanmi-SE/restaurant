@@ -26,6 +26,8 @@ export type shoppingCartProps = {
   AddMoreMenu(id: string): number | undefined;
   addMenuToCart(): void;
   GetOrderSummary(): OrderSummary[];
+  resetCart(): void;
+  getMenus(): Partial<CartItem>[];
 };
 
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
@@ -40,6 +42,10 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     };
     const closeCart = () => {
       setIsOpen(false);
+    };
+
+    const getMenus = () => {
+      return state.menus;
     };
 
     const AddMoreMenu = (id: string): number | undefined => {
@@ -242,6 +248,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           }
         }
       }
+      console.log(state);
       dispatch({
         type: CartActionsType.ADD_ITEM_TO_CART,
       });
@@ -259,7 +266,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     };
 
     const addMenuToCart = () => {
-      console.log(state);
       let { menus, quantity, orderSummary } = state;
       let stateQty = 0;
       const orderInfo: OrderSummary = {
@@ -283,6 +289,16 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       return state.orderSummary;
     };
 
+    const resetCart = () => {
+      state.totalPrice = 0;
+      state.quantity = 0;
+      state.menus = [];
+      state.orderSummary = [];
+      dispatch({
+        type: CartActionsType.RESET_CART,
+      });
+    };
+
     const value: shoppingCartProps = {
       totalPrice: state.totalPrice,
       menus: state.menus,
@@ -299,6 +315,8 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       AddMoreMenu,
       addMenuToCart,
       GetOrderSummary,
+      resetCart,
+      getMenus,
     };
     return value;
   }, [state]);

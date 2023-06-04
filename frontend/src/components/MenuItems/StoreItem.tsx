@@ -1,7 +1,6 @@
 import { Card, Col, Row } from "react-bootstrap";
 import { Item } from "../../reducers";
 import { FoodItemList } from "./FoodItemList";
-import { useState } from "react";
 import { NoMenuItems } from "./NoMenuItems";
 
 export type storeItemProps = {
@@ -12,19 +11,25 @@ export type storeItemProps = {
   basePrice: number;
   quantity: number;
   items: Item[];
+  handleCheck: () => void;
+  isChecked: boolean;
+  handleUnCheck: () => void;
+  enableAddToCartBtns: () => void;
 };
 
-export const StoreItem = ({ id, name, description, imageUrl, basePrice, items, quantity }: storeItemProps) => {
-  const [isChecked, setIsChecked] = useState(false);
-  const handleCheck = () => {
-    setIsChecked(true);
-  };
-  const handleUnCheck = () => {
-    if (isChecked) {
-      setIsChecked(!isChecked);
-    }
-  };
-
+export const StoreItem = ({
+  id,
+  name,
+  description,
+  imageUrl,
+  basePrice,
+  items,
+  quantity,
+  handleCheck,
+  isChecked,
+  handleUnCheck,
+  enableAddToCartBtns,
+}: storeItemProps) => {
   return (
     <>
       <Row>
@@ -51,12 +56,14 @@ export const StoreItem = ({ id, name, description, imageUrl, basePrice, items, q
             </p>
           </div>
           <div>
-            <NoMenuItems handleCheck={handleCheck} isChecked={isChecked} />
+            <NoMenuItems isChecked={isChecked} handleCheck={handleCheck} />
           </div>
-          <div onClick={handleUnCheck} className="pt-2 elBg">
+          <div className="pt-2 elBg">
             {items.map((item) => (
               <div key={item.id}>
                 <FoodItemList
+                  enableAddToCartBtns={enableAddToCartBtns}
+                  handleUnCheck={handleUnCheck}
                   quantity={quantity}
                   id={id}
                   itemId={item.id}
