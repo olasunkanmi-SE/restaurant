@@ -44,7 +44,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
 
     const AddMoreMenu = (id: string): number | undefined => {
       const menu = state.menus.find((menu) => menu.id === id);
-      if (menu && menu.selectedItems) {
+      if (menu?.selectedItems) {
         const menuPrice = calculateMenuTotalPriceFromMenuItems(id)! * menu.quantity!;
         menu.menuTotalPrice = menuPrice;
       }
@@ -159,7 +159,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       const menu: Partial<CartItem> | undefined = state.menus.find((menu) => menu.id === id);
       let totalPrice: number = 0;
       if (menu) {
-        const selectedItems: selectedItem[] = menu.selectedItems || [];
+        const selectedItems: selectedItem[] = menu.selectedItems ?? [];
         let orderPrice: number = 0;
         if (selectedItems?.length) {
           selectedItems.forEach((item) => {
@@ -198,7 +198,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
         if (state.menus.length) {
           state.menus.forEach((menu) => {
             if (menuItem.menuId === menu.id) {
-              selectedItems = menu.selectedItems || [];
+              selectedItems = menu.selectedItems ?? [];
               if (!selectedItems?.length) {
                 menuItem.quantity = 0;
                 selectedItems.push(menuItem);
