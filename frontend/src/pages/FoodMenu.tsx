@@ -3,10 +3,10 @@ import { getMenuById } from "../apis";
 import { useShoppingCart } from "../hooks/UseShoppingCart";
 import { IItem } from "../models/item.model";
 import { Item } from "../reducers";
-import { CartItemsList } from "../components/Cart/CartItemsList";
 import { StoreItem } from "../components/MenuItems/StoreItem";
 import { AddMenuToCartButton } from "../components/Cart/AddMenuToCart";
 import { useEffect, useState } from "react";
+import { CartItemsList } from "../components/Cart";
 
 const mapItems = (items: IItem[]): Item[] => {
   const stateItem = items?.map((item) => {
@@ -22,7 +22,8 @@ const mapItems = (items: IItem[]): Item[] => {
 };
 
 export const FoodMenu = () => {
-  const { increaseMenuQuantity, quantity, totalPrice, removeMenuFromCart, getMenuQuantity } = useShoppingCart();
+  const { increaseMenuQuantity, quantity, totalPrice, removeMenuFromCart, getMenuQuantity, resetCart } =
+    useShoppingCart();
   const [disableAddToCartBtns, setDisableAddToCartBtns] = useState<boolean>(false);
 
   useEffect(() => {
@@ -32,19 +33,45 @@ export const FoodMenu = () => {
     };
   }, []);
 
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheck = () => {
+    setIsChecked(true);
+    setDisableAddToCartBtns(false);
+    resetCart();
+  };
+
+  const handleSetDisableAddToCartBtns = () => {
+    setDisableAddToCartBtns(false);
+  };
+
+  const handleUnCheck = () => {
+    if (isChecked) {
+      setIsChecked(!isChecked);
+    }
+  };
+
   const { id } = useParams();
   let response;
   if (id) {
     const { isLoading, data: menu } = getMenuById(id);
     const items = mapItems(menu?.data?.items!);
     if (isLoading) {
-      response = <p>...Loading</p>;
+      return (
+        <>
+          <p>...Loading</p>
+        </>
+      );
     } else {
       if (menu) {
         const { name, description, imageUrl, basePrice } = menu.data;
         return (
           <div>
             <StoreItem
+              enableAddToCartBtns={handleSetDisableAddToCartBtns}
+              handleUnCheck={handleUnCheck}
+              isChecked={isChecked}
+              handleCheck={handleCheck}
               quantity={quantity}
               items={items}
               name={name}
@@ -74,6 +101,5 @@ export const FoodMenu = () => {
       }
     }
   }
-
   return <>{response}</>;
 };

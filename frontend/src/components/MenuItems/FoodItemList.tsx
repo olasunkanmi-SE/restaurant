@@ -3,12 +3,27 @@ import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { storeItemProps } from "./StoreItem";
 import { QtyButton } from "./addItemButton";
 
-type foodItem = storeItemProps & { itemId: string; itemPrice: number };
+type foodItem = storeItemProps & {
+  itemId: string;
+  itemPrice: number;
+  handleUnCheck: () => void;
+  enableAddToCartBtns: () => void;
+};
 
-export const FoodItemList = ({ name, itemId, itemPrice, id, basePrice }: Omit<foodItem, "items">) => {
+export const FoodItemList = ({
+  name,
+  itemId,
+  itemPrice,
+  id,
+  basePrice,
+  handleUnCheck,
+  enableAddToCartBtns,
+}: Omit<foodItem, "items" | "handleCheck" | "isChecked">) => {
   const { addItemToCart, menus, removeItemFromCart } = useShoppingCart();
   let itemQty: number = 0;
   const handleAddItemToCart = () => {
+    enableAddToCartBtns();
+    handleUnCheck();
     return addItemToCart({
       id: itemId,
       name,
@@ -26,7 +41,7 @@ export const FoodItemList = ({ name, itemId, itemPrice, id, basePrice }: Omit<fo
       menuPrice: basePrice,
     });
   };
-  if (menus && menus.length) {
+  if (menus?.length) {
     const selectedItems = menus.map((menu) => menu.selectedItems || []);
     const flattenedSelectedItems = selectedItems.flat();
     flattenedSelectedItems.forEach((item) => {
