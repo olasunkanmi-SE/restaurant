@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 import { Stack } from "react-bootstrap";
-import { useShoppingCart } from "../../hooks/UseShoppingCart";
+import { calculateTotalOrderAmount } from "../../utility/utils";
 
 const checkoutStyle: CSSProperties = {
   zIndex: 9999,
@@ -12,16 +12,16 @@ const checkoutStyle: CSSProperties = {
   color: "#FFF",
   height: "40px",
   backgroundColor: "#000000",
+  fontWeight: 700,
 };
 
 export const Checkout = () => {
-  const { quantity, totalPrice } = useShoppingCart();
   return (
     <div style={checkoutStyle}>
       <Stack className="mt-2" direction="horizontal" gap={3}>
         <div>Checkout</div>
         <div style={{ marginRight: "10px" }} className="ms-auto">
-          Total: RM {totalPrice}
+          Total: RM {calculateTotalOrderAmount()}
         </div>
       </Stack>
     </div>

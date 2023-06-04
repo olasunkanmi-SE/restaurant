@@ -6,29 +6,36 @@ import { Item } from "../reducers";
 import { CartItemsList } from "../components/Cart/CartItemsList";
 import { StoreItem } from "../components/MenuItems/StoreItem";
 import { AddMenuToCartButton } from "../components/Cart/AddMenuToCart";
+import { useEffect, useState } from "react";
 
 const mapItems = (items: IItem[]): Item[] => {
-  const stateItem =
-    items &&
-    items.map((item) => {
-      const { id, name, price, maximumPermitted } = item;
-      return {
-        id,
-        name,
-        price,
-        maximumPermitted,
-      };
-    });
+  const stateItem = items?.map((item) => {
+    const { id, name, price, maximumPermitted } = item;
+    return {
+      id,
+      name,
+      price,
+      maximumPermitted,
+    };
+  });
   return stateItem;
 };
 
 export const FoodMenu = () => {
+  const { increaseMenuQuantity, quantity, totalPrice, removeMenuFromCart, getMenuQuantity } = useShoppingCart();
+  const [disableAddToCartBtns, setDisableAddToCartBtns] = useState<boolean>(false);
+
+  useEffect(() => {
+    setDisableAddToCartBtns(true);
+    return () => {
+      setDisableAddToCartBtns(false);
+    };
+  }, []);
+
   const { id } = useParams();
   let response;
   if (id) {
     const { isLoading, data: menu } = getMenuById(id);
-    const { increaseMenuQuantity, quantity, totalPrice, removeMenuFromCart, getMenuQuantity, addMenuToCart } =
-      useShoppingCart();
     const items = mapItems(menu?.data?.items!);
     if (isLoading) {
       response = <p>...Loading</p>;
@@ -58,6 +65,8 @@ export const FoodMenu = () => {
                 onAddMenuToCart={() => increaseMenuQuantity({ id, name, basePrice, quantity, items })}
                 amount={totalPrice > 0 ? totalPrice : basePrice}
                 onRemoveMenuFromCart={() => removeMenuFromCart({ id, name, basePrice, quantity, items })}
+                disableQuatityButton={disableAddToCartBtns}
+                disableAddToCartButton={disableAddToCartBtns}
               />
             </div>
           </div>
