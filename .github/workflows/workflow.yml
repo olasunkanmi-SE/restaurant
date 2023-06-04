@@ -2,9 +2,9 @@ name: CI for restaurant
 
 on:
   pull_request:
-    branches: [release, main]
+    branches: [release, main, development]
   push:
-    branches: [release, main]
+    branches: [release, main, development]
 
 jobs:
   build:

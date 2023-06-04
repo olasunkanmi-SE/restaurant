@@ -17,11 +17,13 @@ const QtyButtonStyle: CSSProperties = {
 type QtyButtonType = {
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
   sign: string;
+  disabled?: boolean;
 };
 
-export const QtyButton = ({ onClick, sign }: QtyButtonType) => {
+export const QtyButton = ({ onClick, sign, disabled }: QtyButtonType) => {
   return (
     <input
+      disabled={disabled}
       onClick={onClick}
       style={QtyButtonStyle}
       type="button"

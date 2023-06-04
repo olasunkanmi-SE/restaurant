@@ -24,3 +24,10 @@ export const calculateQuantity = (quantity: number) => {
   }
   return orderQuantity;
 };
+
+export const calculateTotalOrderAmount = (): number => {
+  const { GetOrderSummary } = useShoppingCart();
+  const orderSummary = GetOrderSummary();
+  const total = orderSummary.reduce((acc, order) => acc + order.menus[0].menuTotalPrice!, 0);
+  return total > 0 ? total : 0;
+};

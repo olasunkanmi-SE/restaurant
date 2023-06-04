@@ -16,15 +16,18 @@ type addItemToCart = {
   onAddMenuToCart: (event: React.MouseEvent<HTMLElement>) => void;
   onRemoveMenuFromCart: (event: React.MouseEvent<HTMLElement>) => void;
   handleInCreaseQty: (event: React.MouseEvent<HTMLElement>) => void;
+  disableQuatityButton: boolean;
+  disableAddToCartButton: boolean;
 };
 
 export const AddMenuToCartButton = ({
   id,
   quantity,
-  onAddMenuToCart,
   onRemoveMenuFromCart,
   basePrice,
   handleInCreaseQty,
+  disableQuatityButton,
+  disableAddToCartButton,
 }: addItemToCart) => {
   const { itemPrice, addMenuToCart } = useShoppingCart();
   const HandleAddMenuToCart = () => {
@@ -33,15 +36,21 @@ export const AddMenuToCartButton = ({
   return (
     <Stack direction="horizontal" gap={3}>
       <div>
-        <QtyButton sign={"increment"} onClick={handleInCreaseQty} />
+        <QtyButton disabled={disableQuatityButton} sign={"increment"} onClick={handleInCreaseQty} />
       </div>
       <div>{quantity === 0 ? 1 : quantity}</div>
       <div>
-        <QtyButton sign={"decrement"} onClick={onRemoveMenuFromCart} />
+        <QtyButton disabled={disableQuatityButton} sign={"decrement"} onClick={onRemoveMenuFromCart} />
       </div>
       <div className="ms-auto">
         <div style={addToCartStyle}>
-          <Button onClick={HandleAddMenuToCart} className="w-100 btn btn-success" variant="primary" type="button">
+          <Button
+            disabled={disableAddToCartButton}
+            onClick={HandleAddMenuToCart}
+            className="w-100 btn btn-success"
+            variant="primary"
+            type="button"
+          >
             ADD TO CART RM {itemPrice(id) === undefined ? basePrice : itemPrice(id)}
           </Button>
         </div>
