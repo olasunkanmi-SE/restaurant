@@ -32,6 +32,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(cartReducer, initialCartState);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [qty, setqty] = useState<number>(0);
 
   const shoppingCartState = useMemo(() => {
     const openCart = () => {
@@ -261,6 +262,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     const addMenuToCart = () => {
       console.log(state);
       let { menus, quantity, orderSummary } = state;
+      let stateQty = 0;
       const orderInfo: OrderSummary = {
         menus,
         quantity,
