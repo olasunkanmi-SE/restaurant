@@ -25,6 +25,7 @@ export const menuToMenuStateMapper = (menu: any): Partial<CartItem>[] => {
     {
       id: menuId,
       menuPrice: basePrice,
+      menuTotalPrice: basePrice,
       selectedItems: [],
     },
   ];

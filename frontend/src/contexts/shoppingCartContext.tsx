@@ -1,8 +1,9 @@
 import { createContext, useMemo, useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
+import { menuToMenuStateMapper, selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
 import { ShoppingCart } from "../components/ShoppingCart";
 import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, selectedItem } from "../reducers";
+import { IMenuData } from "../models/menu.model";
 
 type shoppingCartProviderProps = {
   children: React.ReactNode;
@@ -24,10 +25,11 @@ export type shoppingCartProps = {
   calculateMenuTotalPriceFromMenuItems(id: string): number | undefined;
   itemPrice(id: string): number | undefined;
   AddMoreMenu(id: string): number | undefined;
-  addMenuToCart(): void;
+  addMenuToCart(menu: IMenuData): void;
   GetOrderSummary(): OrderSummary[];
   resetCart(): void;
   getMenus(): Partial<CartItem>[];
+  removeMenuFromState(id: string): void;
 };
 
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
@@ -86,6 +88,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
         }
       }
       state.totalPrice = AddMoreMenu(payload.id)!;
+      console.log(state);
       dispatch({
         type: CartActionsType.INCREASE_MENU_QUANTITY,
       });
@@ -237,6 +240,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
             }
           }
           calculateMenuTotalPriceFromMenuItems(menuItem.menuId);
+          console.log(state);
         } else {
           if (itemMenu) {
             let selectedItems: selectedItem[] | undefined = itemMenu.selectedItems;
@@ -283,7 +287,11 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       return quantity;
     };
 
-    const addMenuToCart = () => {
+    const addMenuToCart = (menu: IMenuData) => {
+      if (!state.menus.length) {
+        state.menus = menuToMenuStateMapper(menu);
+        state.quantity = 1;
+      }
       let { menus, quantity, orderSummary } = state;
       const orderInfo: OrderSummary = {
         menus,
@@ -295,6 +303,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       orderSummary.push(orderInfo);
       state.menus = [];
       state.quantity = 0;
+      console.log(state);
       navigate("/");
 
       dispatch({
@@ -316,6 +325,19 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       });
     };
 
+    const removeMenuFromState = (id: string) => {
+      const menus = state.menus;
+      const index = menus.findIndex((menu) => menu.id === id);
+      if (index > -1) {
+        menus.splice(index, 1);
+      }
+      state.quantity = 0;
+      state.totalPrice = 0;
+      dispatch({
+        type: CartActionsType.REMOVE_MENU_FROM_CART_STATE,
+      });
+    };
+
     const value: shoppingCartProps = {
       totalPrice: state.totalPrice,
       menus: state.menus,
@@ -334,6 +356,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       GetOrderSummary,
       resetCart,
       getMenus,
+      removeMenuFromState,
     };
     return value;
   }, [state]);
