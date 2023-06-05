@@ -18,6 +18,7 @@ type AddItemToCart = {
   handleInCreaseQty: (event: React.MouseEvent<HTMLElement>) => void;
   disableQuatityButton: boolean;
   disableAddToCartButton: boolean;
+  addToCart: (event: React.MouseEvent<HTMLElement>) => void;
 };
 
 export const AddMenuToCartButton = ({
@@ -28,11 +29,9 @@ export const AddMenuToCartButton = ({
   handleInCreaseQty,
   disableQuatityButton,
   disableAddToCartButton,
+  addToCart,
 }: AddItemToCart) => {
   const { itemPrice, addMenuToCart } = useShoppingCart();
-  const HandleAddMenuToCart = () => {
-    return addMenuToCart();
-  };
   return (
     <Stack direction="horizontal" gap={3}>
       <div>
@@ -46,7 +45,7 @@ export const AddMenuToCartButton = ({
         <div style={addToCartStyle}>
           <Button
             disabled={disableAddToCartButton}
-            onClick={HandleAddMenuToCart}
+            onClick={addToCart}
             className="w-100 btn btn-success"
             variant="primary"
             type="button"
