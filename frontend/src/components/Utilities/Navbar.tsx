@@ -8,7 +8,7 @@ import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { calculateQuantity } from "../../utility/utils";
 
 export const Navigation = () => {
-  const { quantity, openCart, GetOrderSummary } = useShoppingCart();
+  const { openCart } = useShoppingCart();
   const navigate = useNavigate();
 
   const previousPage = () => {
@@ -80,7 +80,7 @@ export const Navigation = () => {
               }}
               className="rounded-circle d-flex justify-content-center align-items-center"
             >
-              {calculateQuantity(quantity)}
+              {calculateQuantity()}
             </div>
           </Button>
         </Container>
