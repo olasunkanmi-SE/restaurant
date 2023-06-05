@@ -223,7 +223,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
                 }
               }
             });
-
             if (selectedItems?.length) {
               const index = selectedItems.findIndex((item) => item.id === menuItem.id);
               if (index === -1) {
