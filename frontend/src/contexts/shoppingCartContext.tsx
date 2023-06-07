@@ -30,6 +30,7 @@ export type shoppingCartProps = {
   resetCart(): void;
   getMenus(): Partial<CartItem>[];
   removeMenuFromState(id: string): void;
+  GetTotalPrice: () => number;
 };
 
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
@@ -287,6 +288,10 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       return quantity;
     };
 
+    const GetTotalPrice = () => {
+      return state.totalPrice;
+    };
+
     const addMenuToCart = (menu: IMenuData) => {
       if (!state.menus.length) {
         state.menus = menuToMenuStateMapper(menu);
@@ -357,6 +362,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       resetCart,
       getMenus,
       removeMenuFromState,
+      GetTotalPrice,
     };
     return value;
   }, [state]);

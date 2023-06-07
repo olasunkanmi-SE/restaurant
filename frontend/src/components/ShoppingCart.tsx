@@ -11,16 +11,18 @@ export const ShoppingCart = ({ isOpen }: shoppingCartAction) => {
   const { closeCart } = useShoppingCart();
   return (
     <Container>
-      <div>
-        <Offcanvas show={isOpen} onHide={closeCart}>
+      <div style={{ maxHeight: "100%" }}>
+        <Offcanvas show={isOpen} onHide={closeCart} placement="top">
           <Offcanvas.Header closeButton>
             <Offcanvas.Title>
               <div>
-                <div>ORDER SUMMARY</div>
+                <div style={{ color: "#198753" }}>
+                  <p>ORDER SUMMARY</p>
+                </div>
               </div>
             </Offcanvas.Title>
           </Offcanvas.Header>
-          <Offcanvas.Body>
+          <Offcanvas.Body style={{ backgroundColor: "#fafafa" }}>
             <ShoppingCartDetails />
           </Offcanvas.Body>
         </Offcanvas>
