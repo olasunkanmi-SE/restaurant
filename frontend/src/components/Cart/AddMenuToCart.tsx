@@ -31,7 +31,7 @@ export const AddMenuToCartButton = ({
   disableAddToCartButton,
   addToCart,
 }: AddItemToCart) => {
-  const { itemPrice, addMenuToCart } = useShoppingCart();
+  const { itemPrice } = useShoppingCart();
   return (
     <Stack direction="horizontal" gap={3}>
       <div>

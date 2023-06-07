@@ -8,12 +8,14 @@ type foodItem = storeItemProps & {
   itemPrice: number;
   handleUnCheck: () => void;
   enableAddToCartBtns: () => void;
+  menuName: string;
 };
 
 export const FoodItemList = ({
   name,
   itemId,
   itemPrice,
+  menuName,
   id,
   basePrice,
   handleUnCheck,
@@ -26,6 +28,7 @@ export const FoodItemList = ({
     handleUnCheck();
     return AddItemToCart({
       id: itemId,
+      menuName: menuName,
       name,
       price: itemPrice,
       menuId: id,

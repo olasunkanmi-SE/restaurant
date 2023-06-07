@@ -68,6 +68,7 @@ export const StoreItem = ({
                   id={id}
                   itemId={item.id}
                   name={item.name}
+                  menuName={name}
                   itemPrice={item.price}
                   basePrice={basePrice}
                 />

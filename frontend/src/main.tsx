@@ -6,6 +6,8 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
+import { ErrorFallBackComponent } from "./components/Error/ErrorFallBackComponent";
+import { ErrorBoundary } from "./components/Error/Errorboundary";
 
 const queryClient = new QueryClient();
 
@@ -14,7 +16,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <BrowserRouter>
       <React.StrictMode>
         <QueryClientProvider client={queryClient}>
-          <App />
+          <ErrorBoundary fallBackComponent={ErrorFallBackComponent()}>
+            <App />
+          </ErrorBoundary>
           <ReactQueryDevtools initialIsOpen />
         </QueryClientProvider>
       </React.StrictMode>
