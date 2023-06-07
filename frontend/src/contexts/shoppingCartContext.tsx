@@ -224,7 +224,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
                 }
               }
             });
-
             if (selectedItems?.length) {
               const index = selectedItems.findIndex((item) => item.id === menuItem.id);
               if (index === -1) {
@@ -287,11 +286,11 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       });
       return quantity;
     };
-
+    
     const GetTotalPrice = () => {
       return state.totalPrice;
     };
-
+      
     const addMenuToCart = (menu: IMenuData) => {
       if (!state.menus.length) {
         state.menus = menuToMenuStateMapper(menu);
