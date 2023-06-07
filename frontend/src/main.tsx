@@ -5,9 +5,9 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import { ErrorBoundary } from "./components/Error/errorboundary";
 import "./index.css";
 import { ErrorFallBackComponent } from "./components/Error/ErrorFallBackComponent";
+import { ErrorBoundary } from "./components/Error/Errorboundary";
 
 const queryClient = new QueryClient();
 
