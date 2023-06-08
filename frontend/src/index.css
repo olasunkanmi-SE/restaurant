@@ -98,3 +98,44 @@ hr {
   background-color: #168c55;
   border-color: #f7a2;
 }
+
+.btn-sm {
+  padding-top: 0.05rem;
+  padding-bottom: 0.05rem;
+}
+
+.offcanvas-body {
+  overflow-y: visible
+}
+
+.offcanvas,
+.offcanvas-lg,
+.offcanvas-md,
+.offcanvas-sm,
+.offcanvas-xl,
+.offcanvas-xxl {
+  --bs-offcanvas-height: 50%
+}
+
+.small,
+small {
+  font-size: .75em
+}
+
+.qtyButtonStyle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 50%;
+  margin-right: 0.25rem;
+  margin-left: 0.25rem;
+  border: 1px solid #dee2e6;
+  width: 2rem;
+  height: 2rem;
+}
+
+.btn-success {
+  --bs-btn-bg: #407c54;
+}

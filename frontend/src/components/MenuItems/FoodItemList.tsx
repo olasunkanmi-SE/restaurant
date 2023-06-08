@@ -8,12 +8,14 @@ type foodItem = storeItemProps & {
   itemPrice: number;
   handleUnCheck: () => void;
   enableAddToCartBtns: () => void;
+  menuName: string;
 };
 
 export const FoodItemList = ({
   name,
   itemId,
   itemPrice,
+  menuName,
   id,
   basePrice,
   handleUnCheck,
@@ -26,6 +28,7 @@ export const FoodItemList = ({
     handleUnCheck();
     return AddItemToCart({
       id: itemId,
+      menuName: menuName,
       name,
       price: itemPrice,
       menuId: id,
@@ -53,11 +56,11 @@ export const FoodItemList = ({
   return (
     <>
       <Stack direction="horizontal" gap={3}>
-        <QtyButton sign={"increment"} onClick={handleAddItemToCart} />
+        <QtyButton sign={"decrement"} onClick={handleRemoveItemFromCart} />
         <div>{name}</div>
         <div className=" ms-auto"> +RM {itemPrice}</div>
         <div>x {itemQty}</div>
-        <QtyButton sign={"decrement"} onClick={handleRemoveItemFromCart} />
+        <QtyButton sign={"increment"} onClick={handleAddItemToCart} />
       </Stack>
       <hr></hr>
     </>

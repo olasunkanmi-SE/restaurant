@@ -43,7 +43,7 @@ export const MenuInfo = ({ name, description, price }: description) => {
         <div style={{ marginTop: "5px", marginBottom: "20px" }} className="hstack gap-2">
           <div style={{ margin: "auto", fontWeight: 600 }}>RM {price}</div>
           <div style={{ margin: "auto" }} className="ms-auto">
-            <QtyButton sign="increment" onClick={handleClick} />
+            <QtyButton sign="home" onClick={handleClick} />
           </div>
         </div>
       </div>

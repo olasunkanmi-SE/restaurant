@@ -1,11 +1,11 @@
 import { ItemsSummary } from "../../components/Cart/CartItemsList";
-import { IMenuData } from "../../models/menu.model";
 import { CartItem, selectedItem } from "../../reducers";
 
-export const selectedItemToMenuMapper = (selectedItem: selectedItem): Partial<CartItem> => {
+export const selectedItemToMenuMapper = (selectedItem: selectedItem): Partial<CartItem> & { menuName: string } => {
   const { menuId } = selectedItem;
   return {
     id: menuId,
+    menuName: selectedItem.menuName ?? "",
     menuPrice: selectedItem.menuPrice,
     selectedItems: [selectedItem],
   };
@@ -19,11 +19,12 @@ export const ItemToSummaryMapper = (item: selectedItem): ItemsSummary => {
   };
 };
 
-export const menuToMenuStateMapper = (menu: any): Partial<CartItem>[] => {
-  const { id: menuId, basePrice } = menu;
+export const menuToMenuStateMapper = (menu: any): Partial<CartItem & { menuName?: string }>[] => {
+  const { id: menuId, basePrice, name } = menu;
   return [
     {
       id: menuId,
+      menuName: name,
       menuPrice: basePrice,
       menuTotalPrice: basePrice,
       selectedItems: [],

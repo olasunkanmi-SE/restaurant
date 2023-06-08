@@ -31,15 +31,15 @@ export const AddMenuToCartButton = ({
   disableAddToCartButton,
   addToCart,
 }: AddItemToCart) => {
-  const { itemPrice, addMenuToCart } = useShoppingCart();
+  const { itemPrice } = useShoppingCart();
   return (
     <Stack direction="horizontal" gap={3}>
       <div>
-        <QtyButton disabled={disableQuatityButton} sign={"increment"} onClick={handleInCreaseQty} />
+        <QtyButton disabled={disableQuatityButton} sign={"decrement"} onClick={onRemoveMenuFromCart} />
       </div>
       <div>{quantity === 0 ? 1 : quantity}</div>
       <div>
-        <QtyButton disabled={disableQuatityButton} sign={"decrement"} onClick={onRemoveMenuFromCart} />
+        <QtyButton disabled={disableQuatityButton} sign={"increment"} onClick={handleInCreaseQty} />
       </div>
       <div className="ms-auto">
         <div style={addToCartStyle}>
