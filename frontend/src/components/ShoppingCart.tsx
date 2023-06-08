@@ -12,7 +12,7 @@ export const ShoppingCart = ({ isOpen }: shoppingCartAction) => {
   return (
     <Container>
       <div style={{ maxHeight: "100%" }}>
-        <Offcanvas fullscreen={true} show={isOpen} onHide={closeCart} placement="top">
+        <Offcanvas show={isOpen} onHide={closeCart} placement="top">
           <Offcanvas.Header closeButton>
             <Offcanvas.Title>
               <div>

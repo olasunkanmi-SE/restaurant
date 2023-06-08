@@ -4,6 +4,7 @@ import { menuToMenuStateMapper, selectedItemToMenuMapper } from "../application/
 import { ShoppingCart } from "../components/ShoppingCart";
 import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, selectedItem } from "../reducers";
 import { IMenuData } from "../models/menu.model";
+import { v4 as uuidv4 } from "uuid";
 
 type shoppingCartProviderProps = {
   children: React.ReactNode;
@@ -292,16 +293,13 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     };
 
     const addMenuToCart = (menu: IMenuData) => {
-      const id = crypto.randomBytes(16).toString("hex");
-
-      console.log(id);
       if (!state.menus.length) {
         state.menus = menuToMenuStateMapper(menu);
         state.quantity = 1;
       }
       let { menus, quantity, orderSummary } = state;
       const orderInfo: OrderSummary = {
-        id: (Math.floor(Math.random() * 100000) + 1).toString(),
+        id: uuidv4(),
         menus,
         quantity,
       };
