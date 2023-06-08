@@ -13,6 +13,7 @@ export enum CartActionsType {
 }
 
 export type OrderSummary = {
+  id: string;
   menus: Partial<CartItem & { menuName?: string }>[];
   quantity: number;
 };
