@@ -292,6 +292,9 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     };
 
     const addMenuToCart = (menu: IMenuData) => {
+      const id = crypto.randomBytes(16).toString("hex");
+
+      console.log(id);
       if (!state.menus.length) {
         state.menus = menuToMenuStateMapper(menu);
         state.quantity = 1;
