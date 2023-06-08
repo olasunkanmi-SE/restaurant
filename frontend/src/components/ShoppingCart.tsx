@@ -16,7 +16,7 @@ export const ShoppingCart = ({ isOpen }: shoppingCartAction) => {
           <Offcanvas.Header closeButton>
             <Offcanvas.Title>
               <div>
-                <div style={{ color: "#198753" }}>
+                <div style={{ color: "#407c54" }}>
                   <p>ORDER SUMMARY</p>
                 </div>
               </div>

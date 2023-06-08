@@ -4,6 +4,7 @@ import { menuToMenuStateMapper, selectedItemToMenuMapper } from "../application/
 import { ShoppingCart } from "../components/ShoppingCart";
 import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, selectedItem } from "../reducers";
 import { IMenuData } from "../models/menu.model";
+import crypto from "crypto";
 
 type shoppingCartProviderProps = {
   children: React.ReactNode;
@@ -26,7 +27,7 @@ export type shoppingCartProps = {
   itemPrice(id: string): number | undefined;
   AddMoreMenu(id: string): number | undefined;
   addMenuToCart(menu: IMenuData): void;
-  GetOrderSummary(): OrderSummary[];
+  GetOrderSummary(): OrderSummary[] | undefined;
   resetCart(): void;
   getMenus(): Partial<CartItem>[];
   removeMenuFromState(id: string): void;
@@ -286,12 +287,15 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       });
       return quantity;
     };
-    
+
     const GetTotalPrice = () => {
       return state.totalPrice;
     };
-      
+
     const addMenuToCart = (menu: IMenuData) => {
+      const id = crypto.randomBytes(16).toString("hex");
+
+      console.log(id);
       if (!state.menus.length) {
         state.menus = menuToMenuStateMapper(menu);
         state.quantity = 1;
@@ -315,8 +319,10 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       });
     };
 
-    const GetOrderSummary = (): OrderSummary[] => {
-      return state.orderSummary;
+    const GetOrderSummary = (): OrderSummary[] | undefined => {
+      if (state.orderSummary) {
+        return state.orderSummary;
+      }
     };
 
     const resetCart = () => {

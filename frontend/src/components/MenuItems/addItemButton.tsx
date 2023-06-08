@@ -14,6 +14,13 @@ const QtyButtonStyle: CSSProperties = {
   height: "2rem",
 };
 
+const positiveQtyBtn: CSSProperties = {
+  ...QtyButtonStyle,
+  backgroundColor: "#407c54",
+  color: "#fff",
+  border: "0.0px solid rgb(222, 226, 230)",
+};
+
 type QtyButtonType = {
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
   sign: string;
@@ -25,9 +32,9 @@ export const QtyButton = ({ onClick, sign, disabled }: QtyButtonType) => {
     <input
       disabled={disabled}
       onClick={onClick}
-      style={QtyButtonStyle}
+      style={sign === "decrement" || sign === "home" ? QtyButtonStyle : positiveQtyBtn}
       type="button"
-      value={sign === "increment" ? "+" : "-"}
+      value={sign === "increment" || sign === "home" ? "+" : "-"}
       data-field="quantity"
     ></input>
   );
