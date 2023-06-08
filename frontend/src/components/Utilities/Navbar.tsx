@@ -76,7 +76,7 @@ export const Navigation = () => {
                 bottom: 0,
                 right: 0,
                 transform: "translate(25%, 25%)",
-                backgroundColor: "#198753",
+                backgroundColor: "#407c54",
               }}
               className="rounded-circle d-flex justify-content-center align-items-center"
             >

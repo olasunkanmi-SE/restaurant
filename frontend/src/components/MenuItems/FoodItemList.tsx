@@ -56,11 +56,11 @@ export const FoodItemList = ({
   return (
     <>
       <Stack direction="horizontal" gap={3}>
-        <QtyButton sign={"increment"} onClick={handleAddItemToCart} />
+        <QtyButton sign={"decrement"} onClick={handleRemoveItemFromCart} />
         <div>{name}</div>
         <div className=" ms-auto"> +RM {itemPrice}</div>
         <div>x {itemQty}</div>
-        <QtyButton sign={"decrement"} onClick={handleRemoveItemFromCart} />
+        <QtyButton sign={"increment"} onClick={handleAddItemToCart} />
       </Stack>
       <hr></hr>
     </>
