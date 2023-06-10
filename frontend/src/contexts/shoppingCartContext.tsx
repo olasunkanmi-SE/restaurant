@@ -32,6 +32,8 @@ export type shoppingCartProps = {
   getMenus(): Partial<CartItem>[];
   removeMenuFromState(id: string): void;
   GetTotalPrice: () => number;
+  IncreaseSelectedItemsInTheCart: (menuId: string) => void;
+  DecreaseOrRemoveSelectedItemsInTheCart: (menuId: string, orderSummaryId: string) => void;
 };
 
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
@@ -346,6 +348,40 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       });
     };
 
+    const IncreaseSelectedItemsInTheCart = (menuId: string) => {
+      const orderSummary = GetOrderSummary();
+      if (orderSummary?.length) {
+        const orderMenus = orderSummary.map((menu) => menu.menus).flat();
+        const menu = orderMenus.find((menu) => menu.id === menuId);
+        if (menu) {
+          menu.quantity = menu.quantity ? (menu.quantity += 1) : menu.quantity;
+        }
+      }
+      dispatch({
+        type: CartActionsType.INCREASE_SELECTED_ITEMS_IN_CART,
+      });
+    };
+
+    const DecreaseOrRemoveSelectedItemsInTheCart = (menuId: string, orderSummaryId: string) => {
+      const orderSummary = GetOrderSummary();
+      if (orderSummary?.length) {
+        const orderMenus = orderSummary.map((menu) => menu.menus).flat();
+        const menu = orderMenus.find((menu) => menu.id === menuId);
+        if (menu) {
+          menu.quantity = menu.quantity ? (menu.quantity -= 1) : menu.quantity;
+          if (menu.quantity === 0) {
+            const index = orderSummary.findIndex((order) => order.id === orderSummaryId);
+            if (index > -1) {
+              orderSummary.splice(index, 1);
+            }
+          }
+        }
+      }
+      dispatch({
+        type: CartActionsType.DECRESE_OR_REMOVE_SELECTED_ITEMS_FROM_CART,
+      });
+    };
+
     const value: shoppingCartProps = {
       totalPrice: state.totalPrice,
       menus: state.menus,
@@ -366,6 +402,8 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       getMenus,
       removeMenuFromState,
       GetTotalPrice,
+      IncreaseSelectedItemsInTheCart,
+      DecreaseOrRemoveSelectedItemsInTheCart,
     };
     return value;
   }, [state]);

@@ -32,6 +32,10 @@ export const ShoppingCartDetails = () => {
     setIsEdit(true);
   };
 
+  const handleOrderConfirmation = () => {
+    setIsEdit(false);
+  };
+
   const displayModal = () => {
     handleShowModal();
   };
@@ -65,7 +69,7 @@ export const ShoppingCartDetails = () => {
                 </Button>
               </span>
               <span>
-                <Button size="sm" variant="success">
+                <Button onClick={handleOrderConfirmation} size="sm" variant="success">
                   <small>CONFIRM</small>
                 </Button>
               </span>
@@ -80,57 +84,64 @@ export const ShoppingCartDetails = () => {
       {orderSummary ? (
         orderSummary.map((summary, i) => (
           <div key={i} style={{ marginTop: "10px" }}>
-            {new Array(summary.quantity).fill(null).map((_, i) => (
-              <div key={i}>
-                <Stack direction="horizontal" gap={3}>
-                  <span>
-                    <p>{summary.menus[0].menuName}</p>
+            <div key={i}>
+              <Stack direction="horizontal" gap={3}>
+                <span>
+                  <p>
+                    <small>x{summary.quantity} </small>
+                    {summary.menus[0].menuName}
+                  </p>
+                </span>
+                {isEdit ? (
+                  <span style={{ marginTop: "-18px" }}>
+                    <Button size="sm" variant="outline-success">
+                      <small>EDIT</small>
+                    </Button>
                   </span>
-                  <span className="ms-auto">
-                    <p>RM {summary.menus[0].menuTotalPrice! / summary.quantity}</p>
-                  </span>
-                </Stack>
-                <div style={{ marginTop: "-15px" }}>
-                  {summary.menus[0].selectedItems ? (
-                    summary.menus[0].selectedItems.map((addon, i) => (
-                      <div key={i}>
-                        <div>
-                          <small
-                            style={{
-                              fontSize: "12.8px",
-                              lineHeight: "19.2px",
-                            }}
-                          >
-                            x{addon.quantity} {addon.name}
-                          </small>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <></>
-                  )}
-                  {isEdit === true ? (
-                    <Stack direction="horizontal" gap={3} style={{ marginLeft: "-6px", marginTop: "5px" }}>
-                      <div>
-                        <QtyButton sign={"decrement"} onClick={handleDecreaseQty} />
-                      </div>
-                      <div> {itemQty} </div>
-                      <div>
-                        <QtyButton sign={"increment"} onClick={handleIncreaseQty} />
-                      </div>
-                      <div>
-                        <Button style={{ borderRadius: "30px" }} size="sm" variant="outline-success">
-                          <small>EDIT</small>
-                        </Button>
-                      </div>
+                ) : (
+                  <></>
+                )}
+                <span className="ms-auto">
+                  <p>RM {summary.menus[0].menuTotalPrice!}</p>
+                </span>
+              </Stack>
+              <div style={{ marginTop: "-15px" }}>
+                {summary.menus[0].selectedItems ? (
+                  summary.menus[0].selectedItems.map((addon, i) => (
+                    <Stack
+                      key={addon.id}
+                      direction="horizontal"
+                      gap={3}
+                      style={{ marginBottom: "10px", marginTop: "10px" }}
+                    >
+                      <span>
+                        <small>
+                          x{addon.quantity} {addon.name}
+                        </small>
+                      </span>
+                      {isEdit ? (
+                        <span className="ms-auto">
+                          <Stack direction="horizontal" gap={3}>
+                            <div>
+                              <QtyButton sign={"decrement"} onClick={handleDecreaseQty} />
+                            </div>
+                            <div> {addon.quantity} </div>
+                            <div>
+                              <QtyButton sign={"increment"} onClick={handleIncreaseQty} />
+                            </div>
+                          </Stack>
+                        </span>
+                      ) : (
+                        <></>
+                      )}
                     </Stack>
-                  ) : (
-                    <></>
-                  )}
-                  <hr />
-                </div>
+                  ))
+                ) : (
+                  <></>
+                )}
+                <hr />
               </div>
-            ))}
+            </div>
           </div>
         ))
       ) : (
@@ -155,6 +166,7 @@ export const ShoppingCartDetails = () => {
         header=""
         body="Are you sure you want to clear the cart ?"
         action="OK"
+        showCancelButton={true}
       />
     </div>
   );
