@@ -4,7 +4,6 @@ import { menuToMenuStateMapper, selectedItemToMenuMapper } from "../application/
 import { ShoppingCart } from "../components/ShoppingCart";
 import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, selectedItem } from "../reducers";
 import { IMenuData } from "../models/menu.model";
-import { v4 as uuidv4 } from "uuid";
 
 type shoppingCartProviderProps = {
   children: React.ReactNode;
