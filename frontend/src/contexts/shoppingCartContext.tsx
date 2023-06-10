@@ -301,7 +301,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       }
       let { menus, quantity, orderSummary } = state;
       const orderInfo: OrderSummary = {
-        id: uuidv4(),
+        id: (Math.floor(Math.random() * 1000000) + 1).toString(),
         menus,
         quantity,
       };
@@ -354,7 +354,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
         const orderMenus = orderSummary.map((menu) => menu.menus).flat();
         const menu = orderMenus.find((menu) => menu.id === menuId);
         if (menu) {
-          menu.quantity = menu.quantity ? (menu.quantity += 1) : menu.quantity;
+          menu.quantity = menu.quantity ? (menu.quantity = menu.quantity + 1) : menu.quantity;
         }
       }
       dispatch({
@@ -368,7 +368,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
         const orderMenus = orderSummary.map((menu) => menu.menus).flat();
         const menu = orderMenus.find((menu) => menu.id === menuId);
         if (menu) {
-          menu.quantity = menu.quantity ? (menu.quantity -= 1) : menu.quantity;
+          menu.quantity = menu.quantity ? (menu.quantity = menu.quantity - 1) : menu.quantity;
           if (menu.quantity === 0) {
             const index = orderSummary.findIndex((order) => order.id === orderSummaryId);
             if (index > -1) {
