@@ -4,13 +4,22 @@ import Modal from "react-bootstrap/Modal";
 export type ModalProps = {
   handleClose(): void;
   show: boolean;
-  header: string;
+  header?: string;
   body: string;
   action: string;
-  handleAction: any;
+  handleAction?: any;
+  showCancelButton: boolean;
 };
 
-export const CallToAction = ({ handleClose, show, header, body, action, handleAction }: ModalProps) => {
+export const CallToAction = ({
+  handleClose,
+  show,
+  header,
+  body,
+  action,
+  handleAction,
+  showCancelButton,
+}: ModalProps) => {
   return (
     <>
       <Modal show={show} onHide={handleClose}>
@@ -19,9 +28,13 @@ export const CallToAction = ({ handleClose, show, header, body, action, handleAc
         </Modal.Header>
         <Modal.Body>{body}</Modal.Body>
         <Modal.Footer>
-          <Button variant="inline-secondary" onClick={handleClose}>
-            Cancel
-          </Button>
+          {showCancelButton ? (
+            <Button variant="inline-secondary" onClick={handleClose}>
+              Cancel
+            </Button>
+          ) : (
+            <></>
+          )}
           <Button variant="success" onClick={handleAction}>
             {action}
           </Button>

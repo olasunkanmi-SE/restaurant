@@ -10,6 +10,8 @@ export enum CartActionsType {
   GET_ORDER_SUMMARY = "GET_ORDER_SUMMARY",
   RESET_CART = "RESET_CART",
   REMOVE_MENU_FROM_CART_STATE = "REMOVE_MENU_FROM_CART_STATE",
+  INCREASE_SELECTED_ITEMS_IN_CART = "INCREASE_SELECTED_ITEMS_IN_CART",
+  DECRESE_OR_REMOVE_SELECTED_ITEMS_FROM_CART = "DECRESE_OR_REMOVE_SELECTED_ITEMS_FROM_CART",
 }
 
 export type OrderSummary = {
@@ -26,6 +28,7 @@ export type Item = {
 };
 
 export type selectedItem = {
+  selectedItemId: string;
   menuName?: string;
   id: string;
   menuId: string;
@@ -104,6 +107,14 @@ export const cartReducer = (state = initialCartState, action: CartAction): cartS
         ...state,
       };
     case CartActionsType.REMOVE_MENU_FROM_CART_STATE:
+      return {
+        ...state,
+      };
+    case CartActionsType.INCREASE_SELECTED_ITEMS_IN_CART:
+      return {
+        ...state,
+      };
+    case CartActionsType.DECRESE_OR_REMOVE_SELECTED_ITEMS_FROM_CART:
       return {
         ...state,
       };

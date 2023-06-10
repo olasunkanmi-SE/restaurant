@@ -139,3 +139,24 @@ small {
 .btn-success {
   --bs-btn-bg: #407c54;
 }
+
+
+@media (max-width: 992px) {
+  .offcanvas {
+    margin: 75% auto;
+    overflow: auto;
+    min-height: 96vh;
+  }
+
+}
+
+
+@media (min-width: 992px) {
+  .offcanvas {
+
+    max-width: 50%;
+    margin: 12% auto;
+    overflow: auto;
+    min-height: 96vh;
+  }
+}

@@ -2,6 +2,7 @@ import { Stack } from "react-bootstrap";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { storeItemProps } from "./StoreItem";
 import { QtyButton } from "./addItemButton";
+import { v4 as uuidv4 } from "uuid";
 
 type foodItem = storeItemProps & {
   itemId: string;
@@ -27,6 +28,7 @@ export const FoodItemList = ({
     enableAddToCartBtns();
     handleUnCheck();
     return AddItemToCart({
+      selectedItemId: uuidv4(),
       id: itemId,
       menuName: menuName,
       name,
@@ -37,6 +39,7 @@ export const FoodItemList = ({
   };
   const handleRemoveItemFromCart = () => {
     return removeItemFromCart({
+      selectedItemId: uuidv4(),
       id: itemId,
       name,
       price: itemPrice,
