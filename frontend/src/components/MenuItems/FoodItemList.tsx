@@ -27,7 +27,6 @@ export const FoodItemList = ({
     enableAddToCartBtns();
     handleUnCheck();
     return AddItemToCart({
-      selectedItemId: (Math.floor(Math.random() * 1000000) + 1).toString(),
       id: itemId,
       menuName: menuName,
       name,
@@ -38,7 +37,6 @@ export const FoodItemList = ({
   };
   const handleRemoveItemFromCart = () => {
     return removeItemFromCart({
-      selectedItemId: (Math.floor(Math.random() * 1000000) + 1).toString(),
       id: itemId,
       name,
       price: itemPrice,
