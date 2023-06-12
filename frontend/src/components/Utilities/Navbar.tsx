@@ -6,10 +6,19 @@ import Navbar from "react-bootstrap/Navbar";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { calculateQuantity } from "../../utility/utils";
+import { CallToAction } from "./modal";
+import { useState } from "react";
 
 export const Navigation = () => {
-  const { openCart } = useShoppingCart();
+  const { openCart, GetOrderSummary } = useShoppingCart();
+  const [showModal, setShowModal] = useState(false);
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
   const navigate = useNavigate();
+
+  const displayModal = () => {
+    handleShowModal();
+  };
 
   const previousPage = () => {
     navigate(-1);
@@ -38,7 +47,7 @@ export const Navigation = () => {
             style={{ width: "3rem", height: "3rem", position: "relative" }}
             variant="outline-secondary"
             className="rounded-circle"
-            onClick={openCart}
+            onClick={!GetOrderSummary()?.length ? displayModal : openCart}
           >
             <svg
               version="1.1"
@@ -85,6 +94,14 @@ export const Navigation = () => {
           </Button>
         </Container>
       </Navbar>
+      <CallToAction
+        handleAction={handleCloseModal}
+        handleClose={handleCloseModal}
+        show={showModal}
+        body="Place Order First"
+        action="OK"
+        showCancelButton={false}
+      />
       <Outlet />
     </>
   );

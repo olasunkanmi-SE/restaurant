@@ -1,10 +1,10 @@
-import { createContext, useMemo, useReducer, useState } from "react";
+import { createContext, useEffect, useMemo, useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { menuToMenuStateMapper, selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
 import { ShoppingCart } from "../components/ShoppingCart";
 import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, selectedItem } from "../reducers";
 import { IMenuData } from "../models/menu.model";
-import crypto from "crypto";
+import { getLocalStorageData, setLocalStorageData } from "../utility/utils";
 
 type shoppingCartProviderProps = {
   children: React.ReactNode;
@@ -39,6 +39,13 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
   const [state, dispatch] = useReducer(cartReducer, initialCartState);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  useEffect(() => {
+    const storedCart = getLocalStorageData("cart", true);
+    if (storedCart) {
+      dispatch({ type: CartActionsType.LOAD_CART, payload: JSON.parse(storedCart) });
+    }
+  }, []);
+
   const shoppingCartState = useMemo(() => {
     const openCart = () => {
       setIsOpen(true);
@@ -61,7 +68,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           menu.menuTotalPrice = menu?.quantity! * menu?.basePrice!;
         }
       }
-
+      setLocalStorageData("cart", JSON.stringify(state), true);
       return menu!.menuTotalPrice;
     };
 
@@ -90,7 +97,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
         }
       }
       state.totalPrice = AddMoreMenu(payload.id)!;
-      console.log(state);
+      setLocalStorageData("cart", JSON.stringify(state), true);
       dispatch({
         type: CartActionsType.INCREASE_MENU_QUANTITY,
       });
@@ -132,6 +139,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           state.totalPrice = 0;
         }
       }
+      setLocalStorageData("cart", JSON.stringify(state), true);
       dispatch({
         type: CartActionsType.REMOVE_MENU_FROM_CART,
       });
@@ -168,6 +176,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
             }
           }
         }
+        setLocalStorageData("cart", JSON.stringify(state), true);
         dispatch({
           type: CartActionsType.REMOVE_ITEM_FROM_CART,
         });
@@ -186,6 +195,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           });
           totalPrice = menu.menuPrice! + orderPrice;
         }
+        setLocalStorageData("cart", JSON.stringify(state), true);
         return (menu.menuTotalPrice = totalPrice);
       }
     };
@@ -271,7 +281,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           }
         }
       }
-      console.log(state);
+      setLocalStorageData("cart", JSON.stringify(state), true);
       dispatch({
         type: CartActionsType.ADD_ITEM_TO_CART,
       });
@@ -293,9 +303,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     };
 
     const addMenuToCart = (menu: IMenuData) => {
-      const id = crypto.randomBytes(16).toString("hex");
-
-      console.log(id);
       if (!state.menus.length) {
         state.menus = menuToMenuStateMapper(menu);
         state.quantity = 1;
@@ -313,7 +320,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       state.quantity = 0;
       console.log(state);
       navigate("/");
-
+      setLocalStorageData("cart", JSON.stringify(state), true);
       dispatch({
         type: CartActionsType.ADD_MENU_TO_CART,
       });
@@ -330,6 +337,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       state.quantity = 0;
       state.menus = [];
       state.orderSummary = [];
+      setLocalStorageData("cart", JSON.stringify(state), true);
       dispatch({
         type: CartActionsType.RESET_CART,
       });
@@ -343,6 +351,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       }
       state.quantity = 0;
       state.totalPrice = 0;
+      setLocalStorageData("cart", JSON.stringify(state), true);
       dispatch({
         type: CartActionsType.REMOVE_MENU_FROM_CART_STATE,
       });
