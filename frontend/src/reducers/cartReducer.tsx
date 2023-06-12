@@ -12,10 +12,10 @@ export enum CartActionsType {
   REMOVE_MENU_FROM_CART_STATE = "REMOVE_MENU_FROM_CART_STATE",
   INCREASE_SELECTED_ITEMS_IN_CART = "INCREASE_SELECTED_ITEMS_IN_CART",
   DECRESE_OR_REMOVE_SELECTED_ITEMS_FROM_CART = "DECRESE_OR_REMOVE_SELECTED_ITEMS_FROM_CART",
+  LOAD_CART = "LOAD_CART",
 }
 
 export type OrderSummary = {
-  id: string;
   menus: Partial<CartItem & { menuName?: string }>[];
   quantity: number;
 };
@@ -28,7 +28,6 @@ export type Item = {
 };
 
 export type selectedItem = {
-  selectedItemId: string;
   menuName?: string;
   id: string;
   menuId: string;
@@ -51,6 +50,7 @@ export type CartItem = {
 
 export type CartAction = {
   type: CartActionsType;
+  payload?: cartState;
 };
 
 export const initialCartState: cartState = {
@@ -118,6 +118,8 @@ export const cartReducer = (state = initialCartState, action: CartAction): cartS
       return {
         ...state,
       };
+    case CartActionsType.LOAD_CART:
+      return { ...state, ...action.payload };
     default:
       throw new Error(`No case for type ${type} found in shopReducer.`);
   }

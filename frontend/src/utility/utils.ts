@@ -1,4 +1,5 @@
 import { useShoppingCart } from "../hooks/UseShoppingCart";
+import cryptoJs from "crypto-js";
 
 const currencyFormatter = new Intl.NumberFormat(undefined, {
   currency: "NGR",
@@ -16,7 +17,7 @@ export const capitalizeFirstLetter = (word: string) => {
 export const calculateQuantity = () => {
   const { GetOrderSummary } = useShoppingCart();
   const orderSummary = GetOrderSummary();
-  let orderQty = orderSummary ? orderSummary.reduce((acc, order) => acc + order.quantity, 0) : 0;
+  let orderQty = orderSummary?.length ? orderSummary.reduce((acc, order) => acc + order.quantity, 0) : 0;
   let orderQuantity = orderQty || 0;
   return orderQuantity;
 };
@@ -24,6 +25,38 @@ export const calculateQuantity = () => {
 export const calculateTotalOrderAmount = (): number => {
   const { GetOrderSummary } = useShoppingCart();
   const orderSummary = GetOrderSummary();
-  const total = orderSummary ? orderSummary.reduce((acc, order) => acc + order.menus[0].menuTotalPrice!, 0) : 0;
+  const total = orderSummary?.length ? orderSummary.reduce((acc, order) => acc + order.menus[0].menuTotalPrice!, 0) : 0;
   return total > 0 ? total : 0;
+};
+
+export const setLocalStorageData = (key: string, value: string, encrypt: boolean) => {
+  if (encrypt) {
+    try {
+      const encryptedText = cryptoJs.AES.encrypt(value, import.meta.env.VITE_SECRET);
+      if (encryptedText) {
+        localStorage.setItem(key, encryptedText.toString());
+      }
+    } catch (error) {
+      console.log("Error while saving user Data", error);
+    }
+  } else {
+    localStorage.setItem(key, value);
+  }
+};
+
+export const getLocalStorageData = (key: string, decrypt: boolean) => {
+  let value = localStorage.getItem(key);
+  if (value && decrypt) {
+    try {
+      const decryptedText = cryptoJs.AES.decrypt(value, import.meta.env.VITE_SECRET);
+      return decryptedText.toString(cryptoJs.enc.Utf8);
+    } catch (error) {
+      console.log("Error while getting user data", error);
+    }
+  }
+  return value;
+};
+
+export const clearStorage = () => {
+  localStorage.clear();
 };
