@@ -34,6 +34,7 @@ export type shoppingCartProps = {
   removeMenuFromState(id: string): void;
   GetTotalPrice: () => number;
   IncreaseShoppingCartSelectedItem: (selectedItem: selectedItem, increase: boolean) => void;
+  updateCartItems: (orderSummary: OrderSummary[]) => void;
 };
 
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
@@ -391,6 +392,10 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
 
     const updateCartItems = (orderSummary: OrderSummary[]) => {
       state.orderSummary = orderSummary;
+      setLocalStorageData("cart", JSON.stringify(state), true);
+      dispatch({
+        type: CartActionsType.UPDATE_CART_ITEMS,
+      });
     };
 
     const value: shoppingCartProps = {
@@ -414,6 +419,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       removeMenuFromState,
       GetTotalPrice,
       IncreaseShoppingCartSelectedItem,
+      updateCartItems,
     };
     return value;
   }, [state]);
