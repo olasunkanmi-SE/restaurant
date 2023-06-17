@@ -5,6 +5,7 @@ import { ShoppingCart } from "../components/ShoppingCart";
 import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, selectedItem } from "../reducers";
 import { IMenuData } from "../models/menu.model";
 import { getLocalStorageData, setLocalStorageData } from "../utility/utils";
+import { nanoid } from "nanoid";
 
 type shoppingCartProviderProps = {
   children: React.ReactNode;
@@ -32,6 +33,7 @@ export type shoppingCartProps = {
   getMenus(): Partial<CartItem>[];
   removeMenuFromState(id: string): void;
   GetTotalPrice: () => number;
+  IncreaseShoppingCartSelectedItem: (selectedItem: selectedItem, increase: boolean) => void;
 };
 
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
@@ -207,6 +209,35 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       }
     };
 
+    const IncreaseShoppingCartSelectedItem = (item: selectedItem, increase: boolean) => {
+      const orderSummary = GetOrderSummary();
+      if (orderSummary) {
+        const selectedMenu: OrderSummary | undefined = orderSummary.find((order) => order.menus[0].id === item.menuId);
+        const currentMenu = selectedMenu?.menus[0];
+        if (currentMenu) {
+          if (currentMenu.selectedItems?.length) {
+            const selectedItems = currentMenu.selectedItems;
+            const selecteditem = selectedItems.find((currentItem) => currentItem.id === item.id);
+            if (selecteditem) {
+              if (increase) {
+                selecteditem.quantity! += 1;
+              } else {
+                selecteditem.quantity! -= 1;
+                if (selecteditem.quantity! < 1) {
+                  const index = selectedItems.findIndex((currentItem) => currentItem.id === item.id);
+                  if (index > -1) {
+                    selectedItems.splice(index, 1);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      setLocalStorageData("cart", JSON.stringify(state), true);
+      console.log(state.orderSummary);
+    };
+
     const AddItemToCart = (menuItem?: selectedItem) => {
       if (menuItem) {
         let { menus } = state;
@@ -309,6 +340,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       }
       let { menus, quantity, orderSummary } = state;
       const orderInfo: OrderSummary = {
+        id: nanoid(),
         menus,
         quantity,
       };
@@ -357,6 +389,10 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       });
     };
 
+    const updateCartItems = (orderSummary: OrderSummary[]) => {
+      state.orderSummary = orderSummary;
+    };
+
     const value: shoppingCartProps = {
       totalPrice: state.totalPrice,
       menus: state.menus,
@@ -377,6 +413,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       getMenus,
       removeMenuFromState,
       GetTotalPrice,
+      IncreaseShoppingCartSelectedItem,
     };
     return value;
   }, [state]);
