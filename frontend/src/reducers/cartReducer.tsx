@@ -13,6 +13,7 @@ export enum CartActionsType {
   INCREASE_SELECTED_ITEMS_IN_CART = "INCREASE_SELECTED_ITEMS_IN_CART",
   DECRESE_OR_REMOVE_SELECTED_ITEMS_FROM_CART = "DECRESE_OR_REMOVE_SELECTED_ITEMS_FROM_CART",
   LOAD_CART = "LOAD_CART",
+  UPDATE_CART_ITEMS = "UPDATE_CART_ITEMS",
 }
 
 export type OrderSummary = {
@@ -116,6 +117,10 @@ export const cartReducer = (state = initialCartState, action: CartAction): cartS
         ...state,
       };
     case CartActionsType.DECRESE_OR_REMOVE_SELECTED_ITEMS_FROM_CART:
+      return {
+        ...state,
+      };
+    case CartActionsType.UPDATE_CART_ITEMS:
       return {
         ...state,
       };
