@@ -12,7 +12,7 @@ import { nanoid } from "nanoid";
 export const ShoppingCartDetails = () => {
   const navigate = useNavigate();
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const { GetOrderSummary, resetCart, closeCart } = useShoppingCart();
+  const { GetOrderSummary, resetCart, closeCart, updateCartItems } = useShoppingCart();
   const [showModal, setShowModal] = useState(false);
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
@@ -23,15 +23,22 @@ export const ShoppingCartDetails = () => {
     if (index > -1) {
       let updatedCartItems = [{ ...summary, id: nanoid() }, ...cartItems];
       setCartItems(updatedCartItems);
-      console.log(updatedCartItems);
+      updateCartItems(updatedCartItems);
     }
   };
 
   const handleRemoveCartItem = (summary: OrderSummary) => {
     const index = cartItems.findIndex((item) => item.id === summary.id);
     if (index > -1) {
-      const updatedCartItem = cartItems.filter((item) => item.id !== summary.id);
-      setCartItems(updatedCartItem);
+      const updatedCartItems = cartItems.filter((item) => item.id !== summary.id);
+      setCartItems(updatedCartItems);
+      updateCartItems(updatedCartItems);
+      if (updatedCartItems.length < 1) {
+        setTimeout(() => {
+          closeCart();
+          navigate("/");
+        }, 300);
+      }
     }
   };
 
