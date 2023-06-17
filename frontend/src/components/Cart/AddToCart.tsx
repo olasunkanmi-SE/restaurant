@@ -10,30 +10,25 @@ const addToCartStyle: CSSProperties = {
 
 type AddItemToCart = {
   amount: number;
-  onAddMenuToCartClick: (event: React.MouseEvent<HTMLElement>) => void;
-  onAddItemToCartClick: (event: React.MouseEvent<HTMLElement>) => void;
-  onRemoveItemFromCartClick: (event: React.MouseEvent<HTMLElement>) => void;
+  onAddMenuToCart: (event: React.MouseEvent<HTMLElement>) => void;
+  onAddItemToCart: (event: React.MouseEvent<HTMLElement>) => void;
+  onRemoveItemFromCart: (event: React.MouseEvent<HTMLElement>) => void;
 };
 
-export const AddToCartButton = ({
-  amount,
-  onAddMenuToCartClick,
-  onAddItemToCartClick,
-  onRemoveItemFromCartClick,
-}: AddItemToCart) => {
+export const AddToCartButton = ({ amount, onAddMenuToCart, onAddItemToCart, onRemoveItemFromCart }: AddItemToCart) => {
   const { quantity } = useShoppingCart();
   return (
     <Stack direction="horizontal" gap={3}>
       <div>
-        <QtyButton sign={"increment"} onClick={onAddItemToCartClick} />
+        <QtyButton sign={"increment"} onClick={onAddItemToCart} />
       </div>
       <div>{quantity}</div>
       <div>
-        <QtyButton sign={"decrement"} onClick={onRemoveItemFromCartClick} />
+        <QtyButton sign={"decrement"} onClick={onRemoveItemFromCart} />
       </div>
       <div className="ms-auto">
         <div style={addToCartStyle}>
-          <Button onClick={onAddMenuToCartClick} className="w-100 btn btn-success" variant="primary" type="submit">
+          <Button onClick={onAddMenuToCart} className="w-100 btn btn-success" variant="primary" type="submit">
             ADD TO CART RM {amount}
           </Button>
         </div>

@@ -21,4 +21,5 @@ export interface IMenuData {
   discount: number;
   basePrice: number;
   category: ICategory;
+  cartItemId?: string;
 }

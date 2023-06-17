@@ -2,26 +2,37 @@ import { useState } from "react";
 import { Button, Stack } from "react-bootstrap";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { calculateTotalOrderAmount } from "../../utility/utils";
-import { QtyButton } from "../MenuItems/addItemButton";
 import { useNavigate } from "react-router-dom";
 import { CallToAction } from "../Utilities/modal";
+import { ShoppingCartSelectedItem } from "./shoppingCartSelectedItem";
+import { QtyButton } from "../MenuItems/addItemButton";
+import { OrderSummary } from "../../reducers";
+import { nanoid } from "nanoid";
 
 export const ShoppingCartDetails = () => {
   const navigate = useNavigate();
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [itemQty, setItemQty] = useState<number>(1);
   const { GetOrderSummary, resetCart, closeCart } = useShoppingCart();
   const [showModal, setShowModal] = useState(false);
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
-  const orderSummary = GetOrderSummary();
+  const [cartItems, setCartItems] = useState<OrderSummary[]>(GetOrderSummary() ?? []);
 
-  const handleIncreaseQty = () => {
-    setItemQty(itemQty + 1);
+  const handleIncreaseCartItem = (summary: OrderSummary) => {
+    const index = cartItems.findIndex((item) => item.menus[0].id === summary.menus[0].id);
+    if (index > -1) {
+      let updatedCartItems = [{ ...summary, id: nanoid() }, ...cartItems];
+      setCartItems(updatedCartItems);
+      console.log(updatedCartItems);
+    }
   };
 
-  const handleDecreaseQty = () => {
-    itemQty === 1 ? setItemQty(1) : setItemQty(itemQty - 1);
+  const handleRemoveCartItem = (summary: OrderSummary) => {
+    const index = cartItems.findIndex((item) => item.id === summary.id);
+    if (index > -1) {
+      const updatedCartItem = cartItems.filter((item) => item.id !== summary.id);
+      setCartItems(updatedCartItem);
+    }
   };
 
   const handleCalculateTotalOrder = () => {
@@ -81,67 +92,55 @@ export const ShoppingCartDetails = () => {
         <hr />
       </div>
 
-      {orderSummary ? (
-        orderSummary.map((summary, i) => (
+      {cartItems ? (
+        cartItems.map((summary, i) => (
           <div key={i} style={{ marginTop: "10px" }}>
-            <div key={i}>
-              <Stack direction="horizontal" gap={3}>
-                <span>
-                  <p>
-                    <small>x{summary.quantity} </small>
-                    {summary.menus[0].menuName}
-                  </p>
-                </span>
-                {isEdit ? (
-                  <span style={{ marginTop: "-18px" }}>
-                    <Button size="sm" variant="outline-success">
-                      <small>EDIT</small>
-                    </Button>
-                  </span>
-                ) : (
-                  <></>
-                )}
-                <span className="ms-auto">
-                  <p>RM {summary.menus[0].menuTotalPrice!}</p>
-                </span>
-              </Stack>
-              <div style={{ marginTop: "-15px" }}>
-                {summary.menus[0].selectedItems ? (
-                  summary.menus[0].selectedItems.map((addon, i) => (
-                    <Stack
-                      key={addon.id}
-                      direction="horizontal"
-                      gap={3}
-                      style={{ marginBottom: "10px", marginTop: "10px" }}
-                    >
-                      <span>
-                        <small>
-                          x{addon.quantity} {addon.name}
-                        </small>
-                      </span>
-                      {isEdit ? (
-                        <span className="ms-auto">
-                          <Stack direction="horizontal" gap={3}>
-                            <div>
-                              <QtyButton sign={"decrement"} onClick={handleDecreaseQty} />
-                            </div>
-                            <div> {addon.quantity} </div>
-                            <div>
-                              <QtyButton sign={"increment"} onClick={handleIncreaseQty} />
-                            </div>
-                          </Stack>
-                        </span>
-                      ) : (
-                        <></>
-                      )}
-                    </Stack>
-                  ))
-                ) : (
-                  <></>
-                )}
-                <hr />
-              </div>
+            <Stack direction="horizontal" gap={3}>
+              <span>
+                <p>
+                  <small>x{summary.quantity} </small>
+                  {summary.menus[0].menuName}
+                </p>
+              </span>
+
+              <span className="ms-auto">
+                <p>RM {summary.menus[0].menuTotalPrice!}</p>
+              </span>
+            </Stack>
+            <div style={{ marginTop: "-15px" }}>
+              {summary.menus[0].selectedItems ? (
+                summary.menus[0].selectedItems.map((addon, i) => (
+                  <div key={addon.id}>
+                    <ShoppingCartSelectedItem isEdit={isEdit} selectedItem={addon} />
+                  </div>
+                ))
+              ) : (
+                <></>
+              )}
             </div>
+            <div style={{ marginLeft: "-8px" }}>
+              {isEdit ? (
+                <span>
+                  <Stack direction="horizontal" gap={3}>
+                    <span>
+                      <QtyButton sign={"decrement"} onClick={() => handleRemoveCartItem(summary)} />
+                    </span>
+                    <span>{1}</span>
+                    <span>
+                      <QtyButton sign={"increment"} onClick={() => handleIncreaseCartItem(summary)} />
+                    </span>
+                    <span>
+                      <Button style={{ borderRadius: "10px" }} size="sm" variant="outline-success">
+                        <small>EDIT</small>
+                      </Button>
+                    </span>
+                  </Stack>
+                </span>
+              ) : (
+                <></>
+              )}
+            </div>
+            <hr />
           </div>
         ))
       ) : (
