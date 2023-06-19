@@ -370,6 +370,17 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       });
     };
 
+    const RecreateStateFromMenu = (orderMenus: Partial<CartItem>[]) => {
+      let { menus, orderSummary } = state;
+      menus = orderMenus;
+      orderSummary = GetOrderSummary() ?? [];
+      const payload = { menus, orderSummary, quantity: 0, totalPrice: 0 };
+      dispatch({ type: CartActionsType.LOAD_CART, payload });
+      setLocalStorageData("cart", JSON.stringify(payload), true);
+      closeCart();
+      navigate(`/menu/${orderMenus[0].id}`);
+    };
+
     const updateCartItems = (orderSummary: OrderSummary[]) => {
       state.orderSummary = orderSummary;
       setLocalStorageData("cart", JSON.stringify(state), true);
@@ -400,6 +411,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       GetTotalPrice,
       IncreaseShoppingCartSelectedItem,
       updateCartItems,
+      RecreateStateFromMenu,
     };
     return value;
   }, [state]);

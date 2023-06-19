@@ -12,7 +12,7 @@ import { nanoid } from "nanoid";
 export const ShoppingCartDetails = () => {
   const navigate = useNavigate();
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const { GetOrderSummary, resetCart, closeCart, updateCartItems } = useShoppingCart();
+  const { GetOrderSummary, resetCart, closeCart, updateCartItems, RecreateStateFromMenu } = useShoppingCart();
   const [showModal, setShowModal] = useState(false);
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
@@ -63,6 +63,16 @@ export const ShoppingCartDetails = () => {
     resetCart();
     closeCart();
     navigate("/");
+  };
+
+  const handleEditCartItem = (summary: OrderSummary) => {
+    const index = cartItems.findIndex((item) => item.menus[0].id === summary.menus[0].id);
+    if (index > -1) {
+      const orderSummary = cartItems[index];
+      const menus = orderSummary.menus;
+      cartItems.splice(index, 1);
+      RecreateStateFromMenu(menus);
+    }
   };
 
   return (
@@ -137,7 +147,12 @@ export const ShoppingCartDetails = () => {
                       <QtyButton sign={"increment"} onClick={() => handleIncreaseCartItem(summary)} />
                     </span>
                     <span>
-                      <Button style={{ borderRadius: "10px" }} size="sm" variant="outline-success">
+                      <Button
+                        style={{ borderRadius: "10px" }}
+                        size="sm"
+                        variant="outline-success"
+                        onClick={() => handleEditCartItem(summary)}
+                      >
                         <small>EDIT</small>
                       </Button>
                     </span>

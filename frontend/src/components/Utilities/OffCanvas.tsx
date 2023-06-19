@@ -1,16 +1,18 @@
 import { Offcanvas } from "react-bootstrap";
+import { OffcanvasPlacement } from "react-bootstrap/esm/Offcanvas";
 
-type offCanvas = {
+type offCanvasProps = {
   show: boolean;
-  onHide: boolean;
+  onHide: any;
   children: React.ReactNode;
   header: string;
+  placement: OffcanvasPlacement;
 };
 
-export const OffCanvas = ({ show, onHide, children, header }: offCanvas) => {
+export const OffCanvas = ({ show, onHide, children, header, placement }: offCanvasProps) => {
   return (
     <div>
-      <Offcanvas show={show} onHide={onHide} placement="bottom">
+      <Offcanvas show={show} onHide={onHide} placement={placement}>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>
             <div>
