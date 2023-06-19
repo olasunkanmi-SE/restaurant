@@ -1,7 +1,7 @@
-import Offcanvas from "react-bootstrap/Offcanvas";
-import { useShoppingCart } from "../hooks/UseShoppingCart";
 import { Container } from "react-bootstrap";
+import { useShoppingCart } from "../hooks/UseShoppingCart";
 import { ShoppingCartDetails } from "./Cart/ShoppinCartDetails";
+import { OffCanvas } from "./Utilities/OffCanvas";
 
 type shoppingCartAction = {
   isOpen: boolean;
@@ -9,23 +9,13 @@ type shoppingCartAction = {
 
 export const ShoppingCart = ({ isOpen }: shoppingCartAction) => {
   const { closeCart } = useShoppingCart();
+  const header = "ORDER SUMMARY";
   return (
     <Container>
       <div style={{ maxHeight: "100%" }}>
-        <Offcanvas show={isOpen} onHide={closeCart} placement="bottom">
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title>
-              <div>
-                <div style={{ color: "#407c54" }}>
-                  <p>ORDER SUMMARY</p>
-                </div>
-              </div>
-            </Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body style={{ backgroundColor: "#fafafa" }}>
-            <ShoppingCartDetails />
-          </Offcanvas.Body>
-        </Offcanvas>
+        <OffCanvas show={isOpen} onHide={closeCart} placement="bottom" header={header}>
+          <ShoppingCartDetails />
+        </OffCanvas>
       </div>
     </Container>
   );
