@@ -1,41 +1,22 @@
+import { nanoid } from "nanoid";
 import { createContext, useEffect, useMemo, useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { menuToMenuStateMapper, selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
 import { ShoppingCart } from "../components/ShoppingCart";
-import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, selectedItem } from "../reducers";
 import { IMenuData } from "../models/menu.model";
+import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, selectedItem } from "../reducers";
 import { getLocalStorageData, setLocalStorageData } from "../utility/utils";
-import { nanoid } from "nanoid";
-
-type shoppingCartProviderProps = {
-  children: React.ReactNode;
-};
+import { shoppingCartProps, shoppingCartProviderProps } from "./shoppingCartTypes";
 
 export const shoppingCartContext = createContext({} as shoppingCartProps);
 
-export type shoppingCartProps = {
-  totalPrice: number;
-  menus: Partial<CartItem>[];
-  quantity: number;
-  openCart(): void;
-  closeCart(): void;
-  increaseMenuQuantity(payload: Partial<CartItem>): void;
-  removeMenuFromCart(cartItem: Partial<CartItem>): void;
-  AddItemToCart(menuItem?: selectedItem): void;
-  removeItemFromCart(menuItem: selectedItem): void;
-  getMenuQuantity(id: string): number;
-  calculateMenuTotalPriceFromMenuItems(id: string): number | undefined;
-  itemPrice(id: string): number | undefined;
-  AddMoreMenu(id: string): number | undefined;
-  addMenuToCart(menu: IMenuData): void;
-  GetOrderSummary(): OrderSummary[] | undefined;
-  resetCart(): void;
-  getMenus(): Partial<CartItem>[];
-  removeMenuFromState(id: string): void;
-  GetTotalPrice: () => number;
-  IncreaseShoppingCartSelectedItem: (selectedItem: selectedItem, increase: boolean) => void;
-  updateCartItems: (orderSummary: OrderSummary[]) => void;
-};
+/**
+ *Shopping cart provider
+ *
+ * @exports
+ * @function ShoppingCartProvider
+ * @implements {shoppingCartProviderProps}
+ */
 
 export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) => {
   const navigate = useNavigate();
@@ -215,20 +196,18 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       if (orderSummary) {
         const selectedMenu: OrderSummary | undefined = orderSummary.find((order) => order.menus[0].id === item.menuId);
         const currentMenu = selectedMenu?.menus[0];
-        if (currentMenu) {
-          if (currentMenu.selectedItems?.length) {
-            const selectedItems = currentMenu.selectedItems;
-            const selecteditem = selectedItems.find((currentItem) => currentItem.id === item.id);
-            if (selecteditem) {
-              if (increase) {
-                selecteditem.quantity! += 1;
-              } else {
-                selecteditem.quantity! -= 1;
-                if (selecteditem.quantity! < 1) {
-                  const index = selectedItems.findIndex((currentItem) => currentItem.id === item.id);
-                  if (index > -1) {
-                    selectedItems.splice(index, 1);
-                  }
+        if (currentMenu?.selectedItems?.length) {
+          const selectedItems = currentMenu.selectedItems;
+          const selecteditem = selectedItems.find((currentItem) => currentItem.id === item.id);
+          if (selecteditem) {
+            if (increase) {
+              selecteditem.quantity! += 1;
+            } else {
+              selecteditem.quantity! -= 1;
+              if (selecteditem.quantity! < 1) {
+                const index = selectedItems.findIndex((currentItem) => currentItem.id === item.id);
+                if (index > -1) {
+                  selectedItems.splice(index, 1);
                 }
               }
             }
@@ -267,6 +246,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
                 }
               }
             });
+
             if (selectedItems?.length) {
               const index = selectedItems.findIndex((item) => item.id === menuItem.id);
               if (index === -1) {
