@@ -74,7 +74,7 @@ export const ShoppingCartDetails = () => {
     closeCart();
     navigate("/");
   };
-
+  
   // const handleEditCartItem = (summary: OrderSummary) => {
   //   const index = cartItems.findIndex((item) => item.menus[0].id === summary.menus[0].id);
   //   if (index > -1) {
