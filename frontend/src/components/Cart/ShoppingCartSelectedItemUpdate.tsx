@@ -62,8 +62,8 @@ export const UpgradeShoppingCartItem = () => {
       const { updatedOrder, selectedItems, menuPrice } = getSelectedItems()!;
       if (selectedItems?.length) {
         const currentItem = selectedItems.find((item) => item.id === itemId);
-        if (currentItem?.quantity) {
-          currentItem.quantity += 1;
+        if (currentItem) {
+          currentItem.quantity! += 1;
           updatedOrder.menus[0].menuTotalPrice = calculateUpgradeOrderPrice(
             updatedOrder.quantity,
             menuPrice!,
