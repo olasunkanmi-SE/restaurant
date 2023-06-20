@@ -5,6 +5,8 @@ export type shoppingCartProviderProps = {
   children: React.ReactNode;
 };
 
+export type upgradeOrder = "Increase" | "Decrease";
+
 export type shoppingCartProps = {
   totalPrice: number;
   menus: Partial<CartItem>[];
@@ -28,4 +30,14 @@ export type shoppingCartProps = {
   IncreaseShoppingCartSelectedItem: (selectedItem: selectedItem, increase: boolean) => void;
   updateCartItems: (orderSummary: OrderSummary[]) => void;
   RecreateStateFromMenu: (orderMenus: Partial<CartItem>[]) => void;
+  UpdateMenuImageURL: (
+    menus: Partial<
+      CartItem & {
+        menuName: string | undefined;
+      }
+    >[],
+    menu: IMenuData
+  ) => void;
+  upgradeOrderItem: (itemId: string, type: upgradeOrder, order?: OrderSummary) => void;
+  calculateUpgradeOrderPrice: (menuQuantity: number, menuBasePrice: number, selectedItems: selectedItem[]) => number;
 };

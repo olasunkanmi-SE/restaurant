@@ -1,7 +1,7 @@
 import { Container } from "react-bootstrap";
-import { useShoppingCart } from "../hooks/UseShoppingCart";
-import { ShoppingCartDetails } from "./Cart/ShoppinCartDetails";
-import { OffCanvas } from "./Utilities/OffCanvas";
+import { useShoppingCart } from "../../hooks/UseShoppingCart";
+import { ShoppingCartDetails } from "./ShoppinCartDetails";
+import { OffCanvas } from "../Utilities/OffCanvas";
 
 type shoppingCartAction = {
   isOpen: boolean;

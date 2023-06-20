@@ -1,3 +1,4 @@
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
@@ -5,28 +6,32 @@ export type ModalProps = {
   handleClose(): void;
   show: boolean;
   header?: string;
-  body: string;
-  action: string;
+  children: React.ReactNode;
+  action?: string;
   handleAction?: any;
-  showCancelButton: boolean;
+  showCancelButton?: boolean;
 };
 
 export const CallToAction = ({
   handleClose,
   show,
   header,
-  body,
+  children,
   action,
   handleAction,
   showCancelButton,
 }: ModalProps) => {
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>{header}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{body}</Modal.Body>
+      <Modal show={show} onHide={handleClose} centered>
+        {header ? (
+          <Modal.Header closeButton>
+            <Modal.Title>{header}</Modal.Title>
+          </Modal.Header>
+        ) : (
+          <></>
+        )}
+        <Modal.Body>{children}</Modal.Body>
         <Modal.Footer>
           {showCancelButton ? (
             <Button variant="inline-secondary" onClick={handleClose}>
@@ -35,9 +40,13 @@ export const CallToAction = ({
           ) : (
             <></>
           )}
-          <Button variant="success" onClick={handleAction}>
-            {action}
-          </Button>
+          {action ? (
+            <Button variant="success" onClick={handleAction}>
+              {action}
+            </Button>
+          ) : (
+            <></>
+          )}
         </Modal.Footer>
       </Modal>
     </>

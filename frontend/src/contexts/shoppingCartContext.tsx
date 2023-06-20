@@ -2,11 +2,12 @@ import { nanoid } from "nanoid";
 import { createContext, useEffect, useMemo, useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { menuToMenuStateMapper, selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
-import { ShoppingCart } from "../components/ShoppingCart";
+import { ShoppingCart } from "../components/Cart/ShoppingCart";
 import { IMenuData } from "../models/menu.model";
 import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, selectedItem } from "../reducers";
 import { getLocalStorageData, setLocalStorageData } from "../utility/utils";
-import { shoppingCartProps, shoppingCartProviderProps } from "./shoppingCartTypes";
+import { shoppingCartProps, shoppingCartProviderProps, upgradeOrder } from "./shoppingCartTypes";
+import { CONSTANTS } from "../constants/constant";
 
 export const shoppingCartContext = createContext({} as shoppingCartProps);
 
@@ -314,12 +315,28 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       return state.totalPrice;
     };
 
+    const UpdateMenuImageURL = (
+      menus: Partial<
+        CartItem & {
+          menuName: string | undefined;
+        }
+      >[],
+      menu: IMenuData
+    ) => {
+      for (const stateMenu of menus) {
+        if (stateMenu.id === menu.id) {
+          stateMenu.imageUrl = menu.imageUrl;
+        }
+      }
+    };
+
     const addMenuToCart = (menu: IMenuData) => {
       if (!state.menus.length) {
         state.menus = menuToMenuStateMapper(menu);
         state.quantity = 1;
       }
       let { menus, quantity, orderSummary } = state;
+      UpdateMenuImageURL(menus, menu);
       const orderInfo: OrderSummary = {
         id: nanoid(),
         menus,
@@ -389,6 +406,36 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       });
     };
 
+    const calculateUpgradeOrderPrice = (
+      menuQuantity: number,
+      menuBasePrice: number,
+      selectedItems: selectedItem[]
+    ): number => {
+      const totalItemsPrice = selectedItems.reduce((acc, item) => acc + item.price * item.quantity!, 0);
+      const totalPrice = menuQuantity * (menuBasePrice + totalItemsPrice);
+      return totalPrice;
+    };
+
+    const upgradeOrderItem = (itemId: string, type: upgradeOrder, order?: OrderSummary) => {
+      if (order) {
+        const menu = order.menus[0];
+        const { quantity, menuPrice, selectedItems } = menu;
+        if (selectedItems?.length) {
+          const item = selectedItems.find((item) => item.id === itemId);
+          if (type === CONSTANTS.increaseCartItem) {
+            if (item?.quantity) {
+              item.quantity += 1;
+              menu.menuTotalPrice = calculateUpgradeOrderPrice(quantity!, menuPrice!, selectedItems);
+            }
+          } else {
+            if (item?.quantity) {
+              item.quantity -= 1;
+            }
+          }
+        }
+      }
+    };
+
     const value: shoppingCartProps = {
       totalPrice: state.totalPrice,
       menus: state.menus,
@@ -412,6 +459,9 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       IncreaseShoppingCartSelectedItem,
       updateCartItems,
       RecreateStateFromMenu,
+      UpdateMenuImageURL,
+      calculateUpgradeOrderPrice,
+      upgradeOrderItem,
     };
     return value;
   }, [state]);

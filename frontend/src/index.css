@@ -160,3 +160,7 @@ small {
     min-height: 96vh;
   }
 }
+
+.modal-footer {
+  justify-content: center;
+}
