@@ -460,8 +460,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       updateCartItems,
       RecreateStateFromMenu,
       UpdateMenuImageURL,
-      calculateUpgradeOrderPrice,
-      upgradeOrderItem,
     };
     return value;
   }, [state]);

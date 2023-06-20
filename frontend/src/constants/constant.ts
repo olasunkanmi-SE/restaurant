@@ -3,4 +3,6 @@ export const CONSTANTS = {
   emptyCart: "Place an order first",
   increaseCartItem: "Increase",
   decreaseCartItem: "Decrease",
+  increaseCartMenu: "Increase",
+  decreaseCartMenu: "Decrease",
 };

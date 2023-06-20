@@ -38,6 +38,4 @@ export type shoppingCartProps = {
     >[],
     menu: IMenuData
   ) => void;
-  upgradeOrderItem: (itemId: string, type: upgradeOrder, order?: OrderSummary) => void;
-  calculateUpgradeOrderPrice: (menuQuantity: number, menuBasePrice: number, selectedItems: selectedItem[]) => number;
 };
