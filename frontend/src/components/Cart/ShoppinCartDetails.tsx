@@ -1,21 +1,26 @@
 import { useState } from "react";
 import { Button, Stack } from "react-bootstrap";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
-import { calculateTotalOrderAmount } from "../../utility/utils";
+import { calculateTotalOrderAmount, setLocalStorageData } from "../../utility/utils";
 import { useNavigate } from "react-router-dom";
 import { CallToAction } from "../Utilities/modal";
-import { ShoppingCartSelectedItem } from "./shoppingCartSelectedItem";
 import { QtyButton } from "../MenuItems/addItemButton";
 import { OrderSummary } from "../../reducers";
 import { nanoid } from "nanoid";
+import { CONSTANTS } from "../../constants/constant";
+import { UpgradeShoppingCartItem } from "./ShoppingCartSelectedItemUpdate";
+import { ShoppingCartSelectedItem } from "./ShoppingCartSelectedItem";
 
 export const ShoppingCartDetails = () => {
   const navigate = useNavigate();
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const { GetOrderSummary, resetCart, closeCart, updateCartItems, RecreateStateFromMenu } = useShoppingCart();
-  const [showModal, setShowModal] = useState(false);
-  const handleCloseModal = () => setShowModal(false);
-  const handleShowModal = () => setShowModal(true);
+  const [showClearCartModal, setShowClearCartModal] = useState(false);
+  const handleCloseClearCartModal = () => setShowClearCartModal(false);
+  const handleShowClearCartModal = () => setShowClearCartModal(true);
+  const [showCartItemUpdateModal, setShowCartItemUpdateModal] = useState(false);
+  const handleCloseShowCartItemUpdateModal = () => setShowCartItemUpdateModal(false);
+  const handleShowCartItemUpdateShowModal = () => setShowCartItemUpdateModal(true);
   const [cartItems, setCartItems] = useState<OrderSummary[]>(GetOrderSummary() ?? []);
 
   const handleIncreaseCartItem = (summary: OrderSummary) => {
@@ -54,26 +59,31 @@ export const ShoppingCartDetails = () => {
     setIsEdit(false);
   };
 
-  const displayModal = () => {
-    handleShowModal();
+  const displayClearItemModal = () => {
+    handleShowClearCartModal();
+  };
+
+  const displayCartItemUpdateModal = (summary: OrderSummary) => {
+    setLocalStorageData("orderSummary", JSON.stringify(summary), true);
+    handleShowCartItemUpdateShowModal();
   };
 
   const clearOrderSummary = () => {
-    handleCloseModal();
+    handleCloseClearCartModal();
     resetCart();
     closeCart();
     navigate("/");
   };
 
-  const handleEditCartItem = (summary: OrderSummary) => {
-    const index = cartItems.findIndex((item) => item.menus[0].id === summary.menus[0].id);
-    if (index > -1) {
-      const orderSummary = cartItems[index];
-      const menus = orderSummary.menus;
-      cartItems.splice(index, 1);
-      RecreateStateFromMenu(menus);
-    }
-  };
+  // const handleEditCartItem = (summary: OrderSummary) => {
+  //   const index = cartItems.findIndex((item) => item.menus[0].id === summary.menus[0].id);
+  //   if (index > -1) {
+  //     const orderSummary = cartItems[index];
+  //     const menus = orderSummary.menus;
+  //     cartItems.splice(index, 1);
+  //     RecreateStateFromMenu(menus);
+  //   }
+  // };
 
   return (
     <div>
@@ -92,7 +102,7 @@ export const ShoppingCartDetails = () => {
           ) : (
             <>
               <span className="ms-auto">
-                <Button onClick={displayModal} size="sm" variant="outline-success">
+                <Button onClick={displayClearItemModal} size="sm" variant="outline-success">
                   <small>CLEAR ALL</small>
                 </Button>
               </span>
@@ -111,7 +121,7 @@ export const ShoppingCartDetails = () => {
 
       {cartItems ? (
         cartItems.map((summary, i) => (
-          <div key={i} style={{ marginTop: "10px" }}>
+          <div key={summary.id} style={{ marginTop: "10px" }}>
             <Stack direction="horizontal" gap={3}>
               <span>
                 <p>
@@ -151,7 +161,7 @@ export const ShoppingCartDetails = () => {
                         style={{ borderRadius: "10px" }}
                         size="sm"
                         variant="outline-success"
-                        onClick={() => handleEditCartItem(summary)}
+                        onClick={() => displayCartItemUpdateModal(summary)}
                       >
                         <small>EDIT</small>
                       </Button>
@@ -180,15 +190,30 @@ export const ShoppingCartDetails = () => {
           PLACE ORDER RM{handleCalculateTotalOrder()}
         </Button>
       </div>
-      <CallToAction
-        handleAction={clearOrderSummary}
-        handleClose={handleCloseModal}
-        show={showModal}
-        header=""
-        body="Are you sure you want to clear the cart ?"
-        action="OK"
-        showCancelButton={true}
-      />
+      <div>
+        {showClearCartModal && (
+          <CallToAction
+            handleAction={clearOrderSummary}
+            handleClose={handleCloseClearCartModal}
+            show={showClearCartModal}
+            header=""
+            action="YES"
+            showCancelButton={true}
+          >
+            {CONSTANTS.clearCart}
+          </CallToAction>
+        )}
+        {showCartItemUpdateModal && (
+          <CallToAction
+            handleAction={clearOrderSummary}
+            handleClose={handleCloseShowCartItemUpdateModal}
+            show={showCartItemUpdateModal}
+            header="UPGRADE SET MEAL"
+          >
+            <UpgradeShoppingCartItem />
+          </CallToAction>
+        )}
+      </div>
     </div>
   );
 };

@@ -48,6 +48,7 @@ export type CartItem = {
   menuPrice: number;
   selectedItems?: selectedItem[] | [];
   menuTotalPrice: number;
+  imageUrl?: string;
 };
 
 export type CartAction = {

@@ -28,4 +28,12 @@ export type shoppingCartProps = {
   IncreaseShoppingCartSelectedItem: (selectedItem: selectedItem, increase: boolean) => void;
   updateCartItems: (orderSummary: OrderSummary[]) => void;
   RecreateStateFromMenu: (orderMenus: Partial<CartItem>[]) => void;
+  UpdateMenuImageURL: (
+    menus: Partial<
+      CartItem & {
+        menuName?: string | undefined;
+      }
+    >[],
+    menu: IMenuData
+  ) => void;
 };

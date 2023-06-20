@@ -8,6 +8,7 @@ import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { calculateQuantity } from "../../utility/utils";
 import { CallToAction } from "./modal";
 import { useState } from "react";
+import { CONSTANTS } from "../../constants/constant";
 
 export const Navigation = () => {
   const { openCart, GetOrderSummary } = useShoppingCart();
@@ -98,10 +99,11 @@ export const Navigation = () => {
         handleAction={handleCloseModal}
         handleClose={handleCloseModal}
         show={showModal}
-        body="Place Order First"
         action="OK"
         showCancelButton={false}
-      />
+      >
+        {CONSTANTS.emptyCart}
+      </CallToAction>
       <Outlet />
     </>
   );

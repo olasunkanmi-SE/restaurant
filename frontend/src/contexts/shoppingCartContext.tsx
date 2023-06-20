@@ -314,12 +314,28 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       return state.totalPrice;
     };
 
+    const UpdateMenuImageURL = (
+      menus: Partial<
+        CartItem & {
+          menuName?: string | undefined;
+        }
+      >[],
+      menu: IMenuData
+    ) => {
+      for (const stateMenu of menus) {
+        if (stateMenu.id === menu.id) {
+          stateMenu.imageUrl = menu.imageUrl;
+        }
+      }
+    };
+
     const addMenuToCart = (menu: IMenuData) => {
       if (!state.menus.length) {
         state.menus = menuToMenuStateMapper(menu);
         state.quantity = 1;
       }
       let { menus, quantity, orderSummary } = state;
+      UpdateMenuImageURL(menus, menu);
       const orderInfo: OrderSummary = {
         id: nanoid(),
         menus,
@@ -412,6 +428,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       IncreaseShoppingCartSelectedItem,
       updateCartItems,
       RecreateStateFromMenu,
+      UpdateMenuImageURL,
     };
     return value;
   }, [state]);
