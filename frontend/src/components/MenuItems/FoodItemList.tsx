@@ -45,7 +45,7 @@ export const FoodItemList = ({
     });
   };
   if (menus?.length) {
-    const selectedItems = menus.map((menu) => menu.selectedItems || []);
+    const selectedItems = menus.map((menu) => menu.selectedItems ?? []);
     const flattenedSelectedItems = selectedItems.flat();
     flattenedSelectedItems.forEach((item) => {
       if (item.id === itemId) {

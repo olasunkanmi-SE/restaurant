@@ -15,7 +15,7 @@ export const ItemToSummaryMapper = (item: selectedItem): ItemsSummary => {
   return {
     id: item.id,
     name: item.name,
-    qty: item.quantity || 0,
+    qty: item.quantity ?? 0,
   };
 };
 

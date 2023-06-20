@@ -33,7 +33,7 @@ export type shoppingCartProps = {
   UpdateMenuImageURL: (
     menus: Partial<
       CartItem & {
-        menuName?: string | undefined;
+        menuName: string | undefined;
       }
     >[],
     menu: IMenuData

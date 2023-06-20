@@ -1,20 +1,20 @@
+import { nanoid } from "nanoid";
 import { useState } from "react";
 import { Button, Stack } from "react-bootstrap";
-import { useShoppingCart } from "../../hooks/UseShoppingCart";
-import { calculateTotalOrderAmount, setLocalStorageData } from "../../utility/utils";
 import { useNavigate } from "react-router-dom";
-import { CallToAction } from "../Utilities/modal";
-import { QtyButton } from "../MenuItems/addItemButton";
-import { OrderSummary } from "../../reducers";
-import { nanoid } from "nanoid";
 import { CONSTANTS } from "../../constants/constant";
-import { UpgradeShoppingCartItem } from "./ShoppingCartSelectedItemUpdate";
+import { useShoppingCart } from "../../hooks/UseShoppingCart";
+import { OrderSummary } from "../../reducers";
+import { calculateTotalOrderAmount, setLocalStorageData } from "../../utility/utils";
+import { QtyButton } from "../MenuItems/addItemButton";
+import { CallToAction } from "../Utilities/modal";
 import { CartSelectedItems } from "./CartSelectedItems";
+import { UpgradeShoppingCartItem } from "./ShoppingCartSelectedItemUpdate";
 
 export const ShoppingCartDetails = () => {
   const navigate = useNavigate();
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const { GetOrderSummary, resetCart, closeCart, updateCartItems, RecreateStateFromMenu } = useShoppingCart();
+  const { GetOrderSummary, resetCart, closeCart, updateCartItems } = useShoppingCart();
   const [showClearCartModal, setShowClearCartModal] = useState(false);
   const handleCloseClearCartModal = () => setShowClearCartModal(false);
   const handleShowClearCartModal = () => setShowClearCartModal(true);
@@ -74,16 +74,6 @@ export const ShoppingCartDetails = () => {
     closeCart();
     navigate("/");
   };
-
-  // const handleEditCartItem = (summary: OrderSummary) => {
-  //   const index = cartItems.findIndex((item) => item.menus[0].id === summary.menus[0].id);
-  //   if (index > -1) {
-  //     const orderSummary = cartItems[index];
-  //     const menus = orderSummary.menus;
-  //     cartItems.splice(index, 1);
-  //     RecreateStateFromMenu(menus);
-  //   }
-  // };
 
   return (
     <div>

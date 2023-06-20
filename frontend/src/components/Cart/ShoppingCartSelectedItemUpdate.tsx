@@ -85,8 +85,8 @@ export const UpgradeShoppingCartItem = () => {
     <div>
       <div>
         <Stack direction="horizontal" gap={3}>
-          <span>
-            <p style={{ backgroundColor: "#f7a278", color: "#fff", padding: "4px" }}>Selected Items</p>
+          <span className="mb-1">
+            <small style={{ backgroundColor: "#f7a278", color: "#fff", padding: "1px" }}>Selected Items</small>
           </span>
         </Stack>
         <div>

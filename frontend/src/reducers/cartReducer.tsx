@@ -34,7 +34,7 @@ export type selectedItem = {
   id: string;
   menuId: string;
   name: string;
-  quantity?: number | 0;
+  quantity?: number;
   price: number;
   menuPrice: number;
 };
