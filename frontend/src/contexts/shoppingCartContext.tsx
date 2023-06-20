@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 import { createContext, useEffect, useMemo, useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { menuToMenuStateMapper, selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
-import { ShoppingCart } from "../components/ShoppingCart";
+import { ShoppingCart } from "../components/Cart/ShoppingCart";
 import { IMenuData } from "../models/menu.model";
 import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, selectedItem } from "../reducers";
 import { getLocalStorageData, setLocalStorageData } from "../utility/utils";

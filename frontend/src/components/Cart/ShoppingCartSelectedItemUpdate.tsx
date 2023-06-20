@@ -1,5 +1,5 @@
 import { Button, Stack } from "react-bootstrap";
-import { CartItem, OrderSummary } from "../../reducers";
+import { OrderSummary } from "../../reducers";
 import { QtyButton } from "../MenuItems/addItemButton";
 import { CSSProperties } from "react";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
