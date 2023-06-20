@@ -15,12 +15,12 @@ export const ItemToSummaryMapper = (item: selectedItem): ItemsSummary => {
   return {
     id: item.id,
     name: item.name,
-    qty: item.quantity || 0,
+    qty: item.quantity ?? 0,
   };
 };
 
 export const menuToMenuStateMapper = (menu: any): Partial<CartItem & { menuName?: string }>[] => {
-  const { id: menuId, basePrice, name } = menu;
+  const { id: menuId, basePrice, name, imageUrl } = menu;
   return [
     {
       id: menuId,
@@ -28,6 +28,7 @@ export const menuToMenuStateMapper = (menu: any): Partial<CartItem & { menuName?
       menuPrice: basePrice,
       menuTotalPrice: basePrice,
       selectedItems: [],
+      imageUrl,
     },
   ];
 };

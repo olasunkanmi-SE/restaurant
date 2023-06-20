@@ -34,7 +34,7 @@ export type selectedItem = {
   id: string;
   menuId: string;
   name: string;
-  quantity?: number | 0;
+  quantity?: number;
   price: number;
   menuPrice: number;
 };
@@ -48,6 +48,7 @@ export type CartItem = {
   menuPrice: number;
   selectedItems?: selectedItem[] | [];
   menuTotalPrice: number;
+  imageUrl?: string;
 };
 
 export type CartAction = {
