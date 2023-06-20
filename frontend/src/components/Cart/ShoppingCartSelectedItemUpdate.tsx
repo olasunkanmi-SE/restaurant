@@ -4,6 +4,8 @@ import { QtyButton } from "../MenuItems/addItemButton";
 import { CSSProperties, useState } from "react";
 import { getLocalStorageData } from "../../utility/utils";
 import { CONSTANTS } from "../../constants/constant";
+import { useShoppingCart } from "../../hooks/UseShoppingCart";
+import { useNavigate } from "react-router-dom";
 
 const addToCartStyle: CSSProperties = {
   textAlign: "center",
@@ -12,8 +14,20 @@ const addToCartStyle: CSSProperties = {
 
 type MenuActionType = "Increase" | "Decrease";
 
+/**
+ *Upgrade Shopping CartItem Component.
+ This component is responsible for updating the shopping cart items
+ while on the cart screen.
+ *
+ * @exports
+ * @function UpgradeShoppingCartItem
+ *
+ */
+
 export const UpgradeShoppingCartItem = () => {
+  const navigate = useNavigate();
   const orderSummary = getLocalStorageData("orderSummary", true);
+  const { GetOrderSummary, updateCartItems } = useShoppingCart();
 
   const [order, setOrder] = useState<OrderSummary | undefined>(() => {
     if (orderSummary) {
@@ -117,7 +131,18 @@ export const UpgradeShoppingCartItem = () => {
 
   let { selectedItems, menuTotalPrice } = order?.menus[0] as any;
 
-  const addToCart = () => {};
+  const handleAddToCart = () => {
+    if (order) {
+      const orderSummary = GetOrderSummary();
+      if (orderSummary) {
+        const orderIndex = orderSummary.findIndex((summary) => summary.id === order.id);
+        if (orderIndex > -1) {
+          orderSummary.splice(orderIndex, 1, order);
+          updateCartItems(orderSummary);
+        }
+      }
+    }
+  };
 
   return (
     <div>
@@ -170,7 +195,7 @@ export const UpgradeShoppingCartItem = () => {
             </div>
             <div className="ms-auto">
               <div style={addToCartStyle}>
-                <Button onClick={addToCart} className="w-100 btn btn-success" variant="primary" type="button">
+                <Button onClick={handleAddToCart} className="w-100 btn btn-success" variant="primary" type="button">
                   <small>ADD TO CART</small> RM {menuTotalPrice}
                 </Button>
               </div>
