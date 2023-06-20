@@ -3,11 +3,14 @@ import { OrderSummary, selectedItem } from "../../reducers";
 import { QtyButton } from "../MenuItems/addItemButton";
 import { CSSProperties, useState } from "react";
 import { getLocalStorageData } from "../../utility/utils";
+import { CONSTANTS } from "../../constants/constant";
 
 const addToCartStyle: CSSProperties = {
   textAlign: "center",
   marginRight: "10px",
 };
+
+type MenuActionType = "Increase" | "Decrease";
 
 export const UpgradeShoppingCartItem = () => {
   const orderSummary = getLocalStorageData("orderSummary", true);
@@ -75,20 +78,59 @@ export const UpgradeShoppingCartItem = () => {
     }
   };
 
-  const { selectedItems, quantity, menuTotalPrice } = order?.menus[0] as any;
+  const handleUpdateMenuQty = (type: MenuActionType, order?: OrderSummary) => {
+    if (order) {
+      const updatedOrder: OrderSummary = { ...order };
+      const selectedItems = order.menus[0].selectedItems ?? [];
+      const menuPrice = order.menus[0].menuPrice;
 
-  const onRemoveMenuFromCart = () => {};
-  const handleInCreaseQty = () => {};
+      if (menuPrice) {
+        const selectedItemTotal = selectedItems.reduce((sum, item) => sum + item.quantity! * item.price, 0);
+        if (type === CONSTANTS.increaseCartMenu) {
+          updatedOrder.quantity += 1;
+        } else {
+          updatedOrder.quantity -= 1;
+        }
+
+        if (updatedOrder.quantity > 0) {
+          updatedOrder.menus[0].menuTotalPrice =
+            updatedOrder.quantity * menuPrice + selectedItemTotal * updatedOrder.quantity;
+
+          if (updatedOrder.menus[0].menuTotalPrice < 0) {
+            updatedOrder.menus[0].menuTotalPrice =
+              updatedOrder.quantity * menuPrice + selectedItemTotal * updatedOrder.quantity;
+          }
+        }
+        setOrder(updatedOrder);
+      }
+    }
+  };
+
+  const handleOrderQty = () => {
+    if (order?.quantity && order.quantity < 1) {
+      order.quantity = 1;
+    } else if (!order?.quantity) {
+      order!.quantity = 1;
+    }
+    return order!.quantity;
+  };
+
+  let { selectedItems, menuTotalPrice } = order?.menus[0] as any;
+
   const addToCart = () => {};
 
   return (
     <div>
       <div>
-        <Stack direction="horizontal" gap={3}>
-          <span className="mb-1">
-            <small style={{ backgroundColor: "#f7a278", color: "#fff", padding: "1px" }}>Selected Items</small>
-          </span>
-        </Stack>
+        <div>
+          <p> {order?.menus[0].menuName}</p>
+          <p style={{ color: "#205532", fontWeight: "600" }}> RM {order?.menus[0].menuPrice}</p>
+        </div>
+
+        <hr></hr>
+        <div className="mb-1">
+          <small style={{ backgroundColor: "#f7a278", color: "#fff", padding: "1px" }}>Selected Items</small>
+        </div>
         <div>
           {order?.menus.length ? (
             selectedItems?.map((item: any) => (
@@ -120,11 +162,11 @@ export const UpgradeShoppingCartItem = () => {
         <div>
           <Stack direction="horizontal" gap={3}>
             <div>
-              <QtyButton sign={"decrement"} onClick={onRemoveMenuFromCart} />
+              <QtyButton sign={"decrement"} onClick={() => handleUpdateMenuQty("Decrease", order)} />
             </div>
-            <div>{quantity ?? 1}</div>
+            <div>{handleOrderQty()}</div>
             <div>
-              <QtyButton sign={"increment"} onClick={handleInCreaseQty} />
+              <QtyButton sign={"increment"} onClick={() => handleUpdateMenuQty("Increase", order)} />
             </div>
             <div className="ms-auto">
               <div style={addToCartStyle}>
