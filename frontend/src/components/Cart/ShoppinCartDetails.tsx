@@ -9,7 +9,7 @@ import { OrderSummary } from "../../reducers";
 import { nanoid } from "nanoid";
 import { CONSTANTS } from "../../constants/constant";
 import { UpgradeShoppingCartItem } from "./ShoppingCartSelectedItemUpdate";
-import { ShoppingCartSelectedItem } from "./ShoppingCartSelectedItem";
+import { ShoppingCartSelectedItems } from "./ShoppingCartSelectedItem";
 
 export const ShoppingCartDetails = () => {
   const navigate = useNavigate();
@@ -74,7 +74,7 @@ export const ShoppingCartDetails = () => {
     closeCart();
     navigate("/");
   };
-  
+
   // const handleEditCartItem = (summary: OrderSummary) => {
   //   const index = cartItems.findIndex((item) => item.menus[0].id === summary.menus[0].id);
   //   if (index > -1) {
@@ -138,7 +138,7 @@ export const ShoppingCartDetails = () => {
               {summary.menus[0].selectedItems ? (
                 summary.menus[0].selectedItems.map((addon, i) => (
                   <div key={addon.id}>
-                    <ShoppingCartSelectedItem isEdit={isEdit} selectedItem={addon} />
+                    <ShoppingCartSelectedItems isEdit={isEdit} selectedItem={addon} />
                   </div>
                 ))
               ) : (

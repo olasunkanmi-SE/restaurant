@@ -6,7 +6,7 @@ export type cartSelectedItem = {
   isEdit: boolean;
 };
 
-export const ShoppingCartSelectedItem = ({ selectedItem, isEdit }: cartSelectedItem) => {
+export const ShoppingCartSelectedItems = ({ selectedItem, isEdit }: cartSelectedItem) => {
   return (
     <div>
       <Stack key={selectedItem.id} direction="horizontal" gap={3} style={{ marginBottom: "10px", marginTop: "10px" }}>
