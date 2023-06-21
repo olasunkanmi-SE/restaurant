@@ -89,19 +89,6 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
     return Result.ok(result);
   }
 
-  //use this as a sample to populate nested models
-  private populateItems() {
-    return {
-      path: 'items',
-      populate: {
-        path: 'addons',
-        populate: {
-          path: 'category',
-        },
-      },
-    };
-  }
-
   async updateMenu(filter: any, query: any): Promise<Menu | Result<Menu>> {
     const document = await this.DocumentModel.findOneAndUpdate(filter, query);
     if (!document) {
@@ -126,5 +113,17 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
     } finally {
       session.endSession();
     }
+  }
+
+  async getMenuByRestaurantId(restaurantId: string): Promise<Result<Menu[]>> {
+    const documents = await this.DocumentModel.find({ restaurantId }).populate('items').exec();
+    if (!documents) {
+      return Result.fail(
+        `An Error occured, unable to retrieve ${restaurantId} menus from db`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    const menus = documents.map((doc) => this.menuMapper.toDomain(doc));
+    return Result.ok(menus);
   }
 }

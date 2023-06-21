@@ -67,3 +67,11 @@ export class RestaurantData extends BaseDocument implements IRestaurantdata {
 }
 
 export const RestaurantSchema = SchemaFactory.createForClass(RestaurantData);
+
+RestaurantSchema.virtual('restaurantMenus', {
+  ref: MenuDataModel.name,
+  localField: 'menus',
+  foreignField: '_id',
+  justOne: false,
+  autopopulate: true,
+});

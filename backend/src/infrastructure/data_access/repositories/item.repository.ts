@@ -19,7 +19,7 @@ export class ITemRepository extends GenericDocumentRepository<Item, ItemDocument
     super(itemModel, connection, itemMapper);
     this.itemMapper = itemMapper;
   }
-  
+
   async getItemById(id: Types.ObjectId): Promise<Result<Item>> {
     const itemDoc: Result<Item> = await this.findById(id);
     if (!itemDoc) {
@@ -50,8 +50,7 @@ export class ITemRepository extends GenericDocumentRepository<Item, ItemDocument
     if (!itemDocs) {
       return Result.fail('Error getting document from database', HttpStatus.NOT_FOUND);
     }
-    const items: Item[] =
-      itemDocs && itemDocs.length ? itemDocs.map((document) => this.itemMapper.toDomain(document)) : [];
+    const items: Item[] = itemDocs?.length ? itemDocs.map((document) => this.itemMapper.toDomain(document)) : [];
     return Result.ok(items);
   }
 
@@ -60,7 +59,7 @@ export class ITemRepository extends GenericDocumentRepository<Item, ItemDocument
       _id: { $in: itemIds },
     }).exec();
     let items: Item[] = [];
-    if (itemDocs && itemDocs.length) {
+    if (itemDocs?.length) {
       items = itemDocs.map((doc) => this.itemMapper.toDomain(doc));
     }
     return items;

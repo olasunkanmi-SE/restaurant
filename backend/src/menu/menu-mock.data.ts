@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { Category } from '../category/category';
 import { Audit } from '../domain';
 import { auditMockData } from './../audit/audit-mock-data';
@@ -15,4 +16,5 @@ export const menuMockData: IMenu = {
   basePrice: 8,
   imageUrl: 'http://',
   category: Category.create(categoryMockData).getValue(),
+  restaurantId: new Types.ObjectId(),
 };

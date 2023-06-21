@@ -38,4 +38,9 @@ export class MenuController {
   async deleteMenu(@Param('id') menuId: Types.ObjectId): Promise<Result<boolean>> {
     return this.menuService.deleteMenu(menuId);
   }
+
+  @Get('/merchant/:restaurantId')
+  async getMenusByRestaurantId(@Param('restaurantId') restaurantId: string): Promise<Result<IMenuResponseDTO[]>> {
+    return this.menuService.getMenuByRestaurantId(restaurantId);
+  }
 }

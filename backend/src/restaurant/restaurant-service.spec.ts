@@ -92,7 +92,7 @@ describe('Test restaurant service', () => {
       return contextPromise;
     };
 
-    merchantServiceStub.validateContext = async (): Promise<any | undefined> => {
+    merchantServiceStub.validateContext = async (): Promise<any> => {
       return merchantMockData;
     };
     restaurantRepositoryStub.find = async (): Promise<Result<Restaurant[]>> => {
@@ -124,7 +124,7 @@ describe('Test restaurant service', () => {
       contextServiceStub.getContext = (): Context => {
         return contextPromise;
       };
-      validateUserStub.getUser = async (): Promise<any | undefined> => {
+      validateUserStub.getUser = async (): Promise<any> => {
         return restaurantMockDocument;
       };
       restaurantRepositoryStub.find = async (): Promise<Result<Restaurant[]>> => {
@@ -145,7 +145,7 @@ describe('Test restaurant service', () => {
     contextServiceStub.getContext = (): Context => {
       return contextPromise;
     };
-    validateUserStub.getUser = async (): Promise<any | undefined> => {
+    validateUserStub.getUser = async (): Promise<any> => {
       return restaurantMockDocument;
     };
     restaurantRepositoryStub.getRestaurants = async (): Promise<Restaurant[]> => {
