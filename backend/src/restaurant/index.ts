@@ -6,7 +6,6 @@ export * from './restaurant.mapper';
 export * from './restaurant.service';
 export * from './restaurant-mock-data';
 export * from './restaurant-service.interface';
-export * from './restaurant-service.spec';
 export * from './restaurant.controller';
 export * from './restaurant.parser';
 export * from './restaurant-response.dto';

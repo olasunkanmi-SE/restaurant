@@ -1,5 +1,6 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { IRestaurantRepository } from 'src/infrastructure/data_access/repositories/interfaces';
 import { Context } from '../infrastructure/context';
 import { Item } from '../item';
 import { MenuMapper } from '../menu/menu.mapper';
@@ -28,6 +29,7 @@ export class MenuService implements IMenuService {
     private readonly contextService: IContextService,
     @Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService,
     @Inject(TYPES.IItemRepository) private readonly itemRepository: IItemRepository,
+    @Inject(TYPES.IRestaurantRepository) private readonly restaurantRepository: IRestaurantRepository,
     private readonly categoryRepository: CategoryRepository,
     private readonly menuMapper: MenuMapper,
   ) {
@@ -36,10 +38,14 @@ export class MenuService implements IMenuService {
 
   async createMenu(props: CreateMenuDTO): Promise<Result<IMenuResponseDTO>> {
     await this.merchantService.validateContext();
-    const { name, itemIds, categoryId } = props;
+    const { name, itemIds, categoryId, restaurantId } = props;
     const existingMenu: Result<Menu> = await this.menuRepository.findOne({ name });
     if (existingMenu.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `${name}, already exists`);
+    }
+    const restaurant = await this.restaurantRepository.getRestaurant(restaurantId);
+    if (!restaurant) {
+      throwApplicationError(HttpStatus.NOT_FOUND, `restaurant does not exist`);
     }
     const audit: Audit = Audit.createInsertContext(this.context);
     if (itemIds?.length) {
@@ -110,7 +116,7 @@ export class MenuService implements IMenuService {
   async deleteMenu(id: Types.ObjectId): Promise<Result<boolean>> {
     const response = await this.menuRepository.deleteMenu(id);
     if (!response) {
-      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Menu code not be deleted');
+      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Menu could not be deleted');
     }
     return Result.ok(true);
   }

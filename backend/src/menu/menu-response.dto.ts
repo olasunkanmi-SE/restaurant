@@ -9,6 +9,7 @@ export interface IMenuResponseDTO extends IAudit {
   discount: number;
   imageUrl: string;
   basePrice: number;
+  restaurantId: Types.ObjectId;
   category: ICategoryResponseDTO;
   items?: ITemResponseDTO[];
 }

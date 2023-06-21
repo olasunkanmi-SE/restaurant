@@ -40,4 +40,7 @@ export class CreateMenuDTO {
   @IsOptional()
   @IsArray()
   addons: Addon[];
+
+  @IsNotEmpty()
+  readonly restaurantId: Types.ObjectId;
 }

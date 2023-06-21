@@ -1,10 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Type } from 'class-transformer';
-import mongoose, { Document } from 'mongoose';
+import mongoose, { Document, Types } from 'mongoose';
 import { BaseDocument } from '../../../../infrastructure/database';
 import { IMenuDataModel } from '../models/menu-model.interface';
 import { CategoryDataModel } from './category.schema';
 import { ItemDataModel } from './item.schema';
+import { RestaurantData } from './restaurant.schema';
 
 export type MenuDocument = MenuDataModel & Document;
 @Schema({ versionKey: 'false' })
@@ -31,6 +32,10 @@ export class MenuDataModel extends BaseDocument implements IMenuDataModel {
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: ItemDataModel.name }] })
   @Type(() => ItemDataModel)
   items: ItemDataModel[];
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId })
+  @Type(() => RestaurantData)
+  restaurantId: Types.ObjectId;
 }
 
 export const MenuSchema = SchemaFactory.createForClass(MenuDataModel);
