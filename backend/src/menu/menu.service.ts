@@ -120,4 +120,13 @@ export class MenuService implements IMenuService {
     }
     return Result.ok(true);
   }
+
+  async getMenuByRestaurantId(restaurantId: string): Promise<Result<IMenuResponseDTO[]>> {
+    const result = await this.menuRepository.getMenuByRestaurantId(restaurantId);
+    let menus: Menu[] | undefined;
+    if (result.getValue()) {
+      menus = result.getValue();
+    }
+    return Result.ok(MenuParser.createMenusResponse(menus));
+  }
 }
