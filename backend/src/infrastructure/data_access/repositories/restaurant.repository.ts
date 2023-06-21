@@ -26,15 +26,13 @@ export class RestaurantRepository
   }
 
   async getRestaurant(restaurantId: Types.ObjectId): Promise<Restaurant> {
-    const restaurantDoc = await this.DocumentModel.findById(restaurantId)
-      .populate('merchant')
-      .populate(this.populateDataModel());
+    const restaurantDoc = await this.DocumentModel.findById(restaurantId).populate('merchant').exec();
     const restaurant: Restaurant = this.restaurantMapper.toDomain(restaurantDoc);
     return restaurant;
   }
 
   async getRestaurants(): Promise<Restaurant[]> {
-    const restaurantDoc = await this.DocumentModel.find().populate('merchant').populate(this.populateDataModel());
+    const restaurantDoc = await this.DocumentModel.find().populate('merchant').exec();
     const restaurants: Restaurant[] = restaurantDoc.map((doc) => this.restaurantMapper.toDomain(doc));
     return restaurants;
   }
@@ -44,20 +42,5 @@ export class RestaurantRepository
     const merchantData = merchant.getValue();
     restaurant.merchant = merchantData;
     return restaurant;
-  }
-
-  private populateDataModel() {
-    return {
-      path: 'menus',
-      populate: {
-        path: 'items',
-        populate: {
-          path: 'addons',
-          populate: {
-            path: 'category',
-          },
-        },
-      },
-    };
   }
 }

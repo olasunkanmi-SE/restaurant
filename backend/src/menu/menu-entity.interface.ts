@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { Category } from './../category/category';
 import { Audit } from './../domain/audit/audit';
 import { Item } from './../item/item';
@@ -10,4 +11,5 @@ export interface IMenu {
   discount: number;
   basePrice: number;
   category: Category;
+  restaurantId: Types.ObjectId;
 }

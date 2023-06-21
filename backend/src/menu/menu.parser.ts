@@ -7,9 +7,9 @@ import { IMenuResponseDTO } from './menu-response.dto';
 
 export class MenuParser {
   static createMenuResponse(menu: Menu): IMenuResponseDTO {
-    const { id, name, description, items, audit, discount, imageUrl, basePrice, category } = menu;
+    const { id, name, description, items, audit, discount, imageUrl, basePrice, category, restaurantId } = menu;
     let itemsResponse: ITemResponseDTO[] = [];
-    if (items && items.length) {
+    if (items?.length) {
       itemsResponse = ItemParser.createItemsresponse(items);
     }
     return {
@@ -19,6 +19,7 @@ export class MenuParser {
       discount,
       imageUrl,
       basePrice,
+      restaurantId,
       category: category ? CategoryParser.createCategoryResponse(category) : undefined,
       items: itemsResponse,
       ...AuditParser.createAuditResponse(audit),

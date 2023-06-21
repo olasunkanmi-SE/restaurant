@@ -215,7 +215,7 @@ export class MerchantService extends AuthService implements IMerchantService {
    * private method to validate user context
    *
    * @param {GenericDocumentRepository<any>} model
-   * @returns {void}
+   * @returns {void}`
    * @memberof AuthService
    */
   async validateContext(): Promise<boolean> {

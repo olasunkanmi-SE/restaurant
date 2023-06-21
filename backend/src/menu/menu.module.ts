@@ -1,8 +1,7 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
-import { MerchantRepository } from '../infrastructure';
-import { ContextMiddleWare } from '../infrastructure/middlewares';
+import { MerchantRepository, RestaurantData, RestaurantRepository, RestaurantSchema } from '../infrastructure';
 import { MenuMapper } from '../menu/menu.mapper';
 import { AddonMapper } from './../addon/addon.mapper';
 import { AddonDataModel, AddonSchema } from './../addon/addon.schema';
@@ -31,6 +30,9 @@ import { MerchantService } from './../merchant/merchant.service';
 import { ValidateUser } from './../utils/context-validation';
 import { MenuController } from './menu.controller';
 import { MenuService } from './menu.service';
+import { RestaurantMapper } from 'src/restaurant';
+import { LocationMapper } from 'src/location';
+import { ContextMiddleWare } from 'src/infrastructure/middlewares';
 
 @Module({
   imports: [
@@ -40,6 +42,7 @@ import { MenuService } from './menu.service';
       { name: MerchantDataModel.name, schema: MerchantSchema },
       { name: CategoryDataModel.name, schema: CategorySchema },
       { name: AddonDataModel.name, schema: AddonSchema },
+      { name: RestaurantData.name, schema: RestaurantSchema },
     ]),
   ],
   controllers: [MenuController],
@@ -54,6 +57,8 @@ import { MenuService } from './menu.service';
     AddonMapper,
     CategoryMapper,
     CategoryRepository,
+    RestaurantMapper,
+    LocationMapper,
     { provide: TYPES.IItemRepository, useClass: ITemRepository },
     { provide: TYPES.IAddonRepository, useClass: AddonRepository },
     { provide: TYPES.IContextService, useClass: ContextService },
@@ -61,10 +66,14 @@ import { MenuService } from './menu.service';
     { provide: TYPES.IAuthService, useClass: AuthService },
     { provide: TYPES.IValidateUser, useClass: ValidateUser },
     { provide: TYPES.IMenuService, useClass: MenuService },
+    { provide: TYPES.IRestaurantRepository, useClass: RestaurantRepository },
   ],
 })
 export class MenuModule {
-  // configure(consumer: MiddlewareConsumer) {
-  //   consumer.apply(ContextMiddleWare).exclude().forRoutes(MenuController);
-  // }
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(ContextMiddleWare)
+      .exclude({ path: 'api/menus', method: RequestMethod.GET }, { path: 'api/menus/:id', method: RequestMethod.GET })
+      .forRoutes(MenuController);
+  }
 }

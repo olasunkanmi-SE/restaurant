@@ -24,7 +24,7 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
     this.menuMapper = menuMapper;
   }
 
-  async getMenus(filterQuery: FilterQuery<Menu>): Promise<any | any[]> {
+  async getMenus(filterQuery: FilterQuery<Menu>): Promise<Menu[] | Result<unknown>> {
     const documents = await this.DocumentModel.find(filterQuery).populate('category').exec();
     if (!documents) {
       return Result.fail('Error getting Menus from database', HttpStatus.NOT_FOUND);
@@ -48,7 +48,7 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
       if (menu) {
         menu.items = items;
       }
-      if (items && items.length) itemsMap.set(key, { items });
+      if (items?.length) itemsMap.set(key, { items });
     }
 
     menus.forEach((menu) => {
@@ -67,10 +67,10 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
     }
     const { items } = menu;
 
-    if (items && items.length) {
+    if (items?.length) {
       const itemsIds = items.map((item) => item.id);
       const menuItems = await this.itemRepository.getItemsByIds(itemsIds);
-      if (menuItems && menuItems.length) {
+      if (menuItems?.length) {
         menu.items = menuItems;
       }
     }
@@ -87,19 +87,6 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
       return Result.fail('An Error occured, unable to save document in the db', HttpStatus.INTERNAL_SERVER_ERROR);
     }
     return Result.ok(result);
-  }
-
-  //use this as a sample to populate nested models
-  private populateItems() {
-    return {
-      path: 'items',
-      populate: {
-        path: 'addons',
-        populate: {
-          path: 'category',
-        },
-      },
-    };
   }
 
   async updateMenu(filter: any, query: any): Promise<Menu | Result<Menu>> {
@@ -126,5 +113,17 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
     } finally {
       session.endSession();
     }
+  }
+
+  async getMenuByRestaurantId(restaurantId: string): Promise<Result<Menu[]>> {
+    const documents = await this.DocumentModel.find({ restaurantId }).populate('items').exec();
+    if (!documents) {
+      return Result.fail(
+        `An Error occured, unable to retrieve ${restaurantId} menus from db`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    const menus = documents.map((doc) => this.menuMapper.toDomain(doc));
+    return Result.ok(menus);
   }
 }
