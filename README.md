@@ -1,6 +1,6 @@
 # Restaurant
 
-This application aims to solve the problem of food ordering in restaurants, where users have to scan through menus usually in paper form, place orders, and make payments at the point of sales. This application ensures orders can be placed from the phone after scanning a your table barcode. Payment can be made right after the order has been placed or pay at the POS.
+This application aims to solve the problem of food ordering in restaurants, where users have to scan through menus usually in paper form, place orders, and make payments at the point of sale. This application ensures orders can be placed from the phone after scanning a table barcode. This application will feature online payment and POS.
 
 ## Getting Started
 
