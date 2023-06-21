@@ -37,6 +37,7 @@ export class ApplicationExceptionsFilter implements ExceptionFilter {
     const errorLog: string = this.constructErrorMessage(responseBody, request, exception);
     this.writeErrorLogToFile(errorLog);
     response.status(statusCode).json(responseBody);
+    return exception;
   }
 
   private getException(exception: any): IRequestException {

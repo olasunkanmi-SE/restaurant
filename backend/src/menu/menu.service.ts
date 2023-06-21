@@ -1,6 +1,5 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
-import { IAddonRepository } from '../infrastructure';
 import { Context } from '../infrastructure/context';
 import { Item } from '../item';
 import { MenuMapper } from '../menu/menu.mapper';
@@ -43,7 +42,7 @@ export class MenuService implements IMenuService {
       throwApplicationError(HttpStatus.BAD_REQUEST, `${name}, already exists`);
     }
     const audit: Audit = Audit.createInsertContext(this.context);
-    if (itemIds && itemIds.length) {
+    if (itemIds?.length) {
       const result = await this.itemRepository.getItems({ _id: { $in: itemIds } });
       props.items = result.getValue();
     }
@@ -66,7 +65,7 @@ export class MenuService implements IMenuService {
 
   async getMenus(): Promise<Result<IMenuResponseDTO[]>> {
     // await this.merchantService.validateContext();
-    const menus = await this.menuRepository.getMenus({});
+    const menus = (await this.menuRepository.getMenus({})) as Menu[];
     return Result.ok(MenuParser.createMenusResponse(menus));
   }
 
