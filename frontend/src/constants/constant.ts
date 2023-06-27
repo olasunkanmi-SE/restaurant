@@ -5,4 +5,5 @@ export const CONSTANTS = {
   decreaseCartItem: "Decrease",
   increaseCartMenu: "Increase",
   decreaseCartMenu: "Decrease",
+  guestUser: "guest@application.com",
 };

@@ -9,7 +9,7 @@ type description = {
 
 const nameStyle: CSSProperties = {
   maxHeight: "3.6em",
-  textAlign: "center",
+
   display: "flex",
   justifyContent: "flex-start",
   flexDirection: "column",

@@ -1,5 +1,6 @@
 import { useShoppingCart } from "../hooks/UseShoppingCart";
 import cryptoJs from "crypto-js";
+import _ from "lodash";
 
 const currencyFormatter = new Intl.NumberFormat(undefined, {
   currency: "NGR",
@@ -59,4 +60,11 @@ export const getLocalStorageData = (key: string, decrypt: boolean) => {
 
 export const clearStorage = () => {
   localStorage.clear();
+};
+
+export const wordWrap = (text: string, wordLimit: number) => {
+  return _.truncate(text, {
+    length: wordLimit,
+    omission: "...",
+  });
 };
