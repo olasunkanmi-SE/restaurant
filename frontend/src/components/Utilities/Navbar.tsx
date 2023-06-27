@@ -1,14 +1,14 @@
-import { faRotateLeft, faBars, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
 import { Button, Nav, Stack } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { CONSTANTS } from "../../constants/constant";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { calculateQuantity } from "../../utility/utils";
 import { CallToAction } from "./modal";
-import { useState } from "react";
-import { CONSTANTS } from "../../constants/constant";
 
 export const Navigation = () => {
   const { openCart, GetOrderSummary } = useShoppingCart();
@@ -32,14 +32,8 @@ export const Navigation = () => {
           <Nav className="me-auto">
             <Nav.Link to="/" as={NavLink}>
               <Stack direction="horizontal" gap={4}>
-                <span onClick={previousPage}>
-                  <FontAwesomeIcon icon={faBars} size="xl" />
-                </span>
-                <span onClick={previousPage}>
-                  <FontAwesomeIcon icon={faRotateLeft} size="xl" />
-                </span>
-                <span onClick={previousPage}>
-                  <FontAwesomeIcon icon={faMagnifyingGlass} size="xl" />
+                <span style={{ fontWeight: 600 }} onClick={previousPage}>
+                  <FontAwesomeIcon icon={faArrowLeftLong} size="xl" /> Back
                 </span>
               </Stack>
             </Nav.Link>

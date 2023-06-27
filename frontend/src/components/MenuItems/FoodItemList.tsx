@@ -2,6 +2,7 @@ import { Stack } from "react-bootstrap";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { storeItemProps } from "./StoreItem";
 import { QtyButton } from "./addItemButton";
+import { wordWrap } from "../../utility/utils";
 
 type foodItem = storeItemProps & {
   itemId: string;
@@ -57,8 +58,8 @@ export const FoodItemList = ({
     <>
       <Stack direction="horizontal" gap={3}>
         <QtyButton sign={"decrement"} onClick={handleRemoveItemFromCart} />
-        <div>{name}</div>
-        <div className=" ms-auto"> +RM {itemPrice}</div>
+        <div>{wordWrap(name, 20)}</div>
+        <div className=" ms-auto"> RM{itemPrice}</div>
         <div>x {itemQty}</div>
         <QtyButton sign={"increment"} onClick={handleAddItemToCart} />
       </Stack>

@@ -1,5 +1,6 @@
 import Card from "react-bootstrap/Card";
 import { MenuInfo } from "./MenuInfo";
+import { wordWrap } from "../../utility/utils";
 
 type menuItemProps = {
   name: string;
@@ -13,7 +14,11 @@ export const MenuItem = ({ name, url, description, basePrice }: menuItemProps) =
     <Card className="menuCard">
       <div>
         <Card.Img style={{ objectFit: "cover", borderRadius: "50px" }} height="200px" variant="top" src={url} />
-        <MenuInfo name={name} price={basePrice} description={description} />
+        <MenuInfo
+          name={wordWrap(name ? name : "", 20)}
+          price={basePrice}
+          description={wordWrap(description ? description : "", 50)}
+        />
       </div>
     </Card>
   );

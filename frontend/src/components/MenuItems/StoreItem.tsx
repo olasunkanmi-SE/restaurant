@@ -2,6 +2,7 @@ import { Card, Col, Row } from "react-bootstrap";
 import { Item } from "../../reducers";
 import { FoodItemList } from "./FoodItemList";
 import { NoMenuItems } from "./NoMenuItems";
+import { wordWrap } from "../../utility/utils";
 
 export type storeItemProps = {
   id: string;
@@ -39,7 +40,7 @@ export const StoreItem = ({
               <Card.Img style={{ objectFit: "cover" }} height="100px" variant="left" src={imageUrl} />
               <Card.Body style={{ overflow: "hidden" }} className="d-flex flex-column">
                 <Card.Title>{name}</Card.Title>
-                <Card.Text>{description}</Card.Text>
+                <Card.Text>{wordWrap(description ?? "", 90)}</Card.Text>
                 <Card.Text className="mt-auto">
                   <small className="text-muted">RM {basePrice}</small>
                 </Card.Text>
