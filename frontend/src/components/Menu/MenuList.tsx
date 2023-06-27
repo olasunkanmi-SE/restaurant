@@ -1,11 +1,18 @@
 import { Col, Row } from "react-bootstrap";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { IMenuData, IMenus } from "../../models/menu.model";
-import { getMenus } from "../../apis";
 import { MenuItem } from "./MenuItem";
 
 export const MenuList = () => {
+  const axiosPrivate = useAxiosPrivate();
+
+  const getMenus = async (): Promise<IMenus> => {
+    const response = await axiosPrivate.get("/menus/merchant/63d792433b857e1697fe7017");
+    return response.data;
+  };
+
   const {
     isLoading,
     isError,

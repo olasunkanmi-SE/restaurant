@@ -16,7 +16,7 @@ export class ContextMiddleWare implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     const headers = req.headers;
     const errors = new Object() as any;
-    if (!Object.hasOwnProperty.call(headers, APIResponseMessage.emailHeader)) {
+    if (Object.hasOwnProperty.call(headers, APIResponseMessage.emailHeader) ?? 'guest@application.com') {
       errors.email = APIResponseMessage.emailHeaderError;
     }
     if (!Object.hasOwnProperty.call(headers, APIResponseMessage.correlationIdHeader)) {
@@ -29,8 +29,7 @@ export class ContextMiddleWare implements NestMiddleware {
       }
 
       if (key === APIResponseMessage.correlationIdHeader) {
-        const isValidUUID = Regex.isUUID(value);
-        if (!isValidUUID) errors.correlationId = APIResponseMessage.invalidCorrelationId;
+        if (typeof value !== 'string') errors.correlationId = APIResponseMessage.invalidCorrelationId;
       }
 
       if (Object.getOwnPropertyNames(errors).length) {
