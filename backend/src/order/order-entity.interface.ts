@@ -1,15 +1,23 @@
-import { Merchant } from './../merchant/merchant';
+import { Types } from 'mongoose';
 
 export type currentStatus = 'CREATED' | 'ACCEPTED' | 'DENIED' | 'FINISHED' | 'CANCELLED';
 export type dinningType = 'PICK_UP' | 'DINE_IN' | 'DELIVERY';
 
+export enum orderStatus {
+  'CREATED',
+  'ACCEPTED',
+  'DENIED',
+  'FINISHED',
+  'CANCELLED',
+}
+
 export interface IOrder {
   state: currentStatus;
   type: dinningType;
-  merchant: Merchant;
-  customerId?: string;
+  merchantId: Types.ObjectId;
+  customerId?: Types.ObjectId;
   total: number;
+  quantity: number;
   discount?: number;
-  orderManagerId: string;
-  cartId: string;
+  orderManagerId?: Types.ObjectId;
 }

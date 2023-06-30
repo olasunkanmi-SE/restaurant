@@ -20,17 +20,17 @@ export class OrderManagerDataModel extends BaseDocument implements IOrderManager
   email: string;
 
   @Prop({ type: String })
-  readonly phoneNumber: string;
+  phoneNumber: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: MerchantDataModel.name })
   @Type(() => MerchantDataModel)
   merchant: MerchantDataModel;
 
   @Prop({ type: String, required: true, default: RoleEnum.ADMIN })
-  readonly role: number;
+  role: number;
 
   @Prop({ type: String, required: true })
-  readonly password: string;
+  password: string;
 }
 
 export const OrderManagerSchema = SchemaFactory.createForClass(OrderManagerDataModel);
