@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Type } from 'class-transformer';
-import mongoose, { Types } from 'mongoose';
+import mongoose, { Document, Types } from 'mongoose';
 import { BaseDocument } from 'src/infrastructure/database';
 import { IOrderDataModel } from '../models/order-model.interface';
 import { currentStatus, dinningType } from './../../../../order/order-entity.interface';
