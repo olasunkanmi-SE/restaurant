@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+import { Audit } from 'src/domain';
 
 export type currentStatus = 'CREATED' | 'ACCEPTED' | 'DENIED' | 'FINISHED' | 'CANCELLED';
 export type dinningType = 'PICK_UP' | 'DINE_IN' | 'DELIVERY';
@@ -20,4 +21,5 @@ export interface IOrder {
   quantity: number;
   discount?: number;
   orderManagerId?: Types.ObjectId;
+  audit: Audit;
 }

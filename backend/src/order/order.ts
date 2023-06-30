@@ -1,3 +1,4 @@
+import { Audit } from './../domain/audit/audit';
 import { Entity, Result } from 'src/domain';
 import { IOrder, currentStatus, dinningType } from './order-entity.interface';
 import { Types } from 'mongoose';
@@ -11,6 +12,7 @@ export class Order extends Entity<IOrder> implements IOrder {
   _quantity: number;
   _discount?: number;
   _orderManagerId: Types.ObjectId;
+  _audit: Audit;
 
   constructor(
     id: Types.ObjectId,
@@ -89,6 +91,14 @@ export class Order extends Entity<IOrder> implements IOrder {
 
   set orderManagerId(managerId: Types.ObjectId) {
     this._orderManagerId = managerId;
+  }
+
+  get audit(): Audit {
+    return this._audit;
+  }
+
+  set audit(audit: Audit) {
+    this._audit = audit;
   }
 
   static create(props: IOrder, id?: Types.ObjectId) {
