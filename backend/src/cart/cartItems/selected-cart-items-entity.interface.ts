@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 
-export interface iCartItem {
+export interface SelectedCartItem {
   id: Types.ObjectId;
   menuId: Types.ObjectId;
   itemId: Types.ObjectId;

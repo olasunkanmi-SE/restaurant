@@ -1,8 +1,10 @@
 import { Types } from 'mongoose';
+import { SelectedCartItem } from './cartItems/selected-cart-items-entity.interface';
 
-export interface ICart {
+export interface ICartItem {
   id: Types.ObjectId;
   menuId: Types.ObjectId;
+  orderId: Types.ObjectId;
   total: number;
-  items: any[];
+  SelectedItem: SelectedCartItem[];
 }
