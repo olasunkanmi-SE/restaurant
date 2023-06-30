@@ -5,9 +5,10 @@ import { GenericDocumentRepository } from 'src/infrastructure/database';
 import { Order } from 'src/order/order';
 import { OrderMapper } from './../../../order/order.mapper';
 import { OrderDataModel, OrderDocument } from './schemas/order.schema';
+import { IOrderRepository } from './interfaces/order-repository.interface';
 
 @Injectable()
-export class OrderRepository extends GenericDocumentRepository<Order, OrderDocument> {
+export class OrderRepository extends GenericDocumentRepository<Order, OrderDocument> implements IOrderRepository {
   orderMapper: OrderMapper;
   orderDataModel: Model<OrderDocument>;
   constructor(
