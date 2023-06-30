@@ -70,7 +70,6 @@ export class MenuService implements IMenuService {
   }
 
   async getMenus(): Promise<Result<IMenuResponseDTO[]>> {
-    // await this.merchantService.validateContext();
     const menus = (await this.menuRepository.getMenus({})) as Menu[];
     return Result.ok(MenuParser.createMenusResponse(menus));
   }
