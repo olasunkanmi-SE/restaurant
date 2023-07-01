@@ -1,9 +1,11 @@
 import { Types } from 'mongoose';
-import { ISelectedCartItem } from './cartItems/selected-cart-items-entity.interface';
+import { Audit } from 'src/domain';
+import { SelectedCartItem } from './selectedItems/selectedCartItem';
 
 export interface ICartItem {
   menuId: Types.ObjectId;
   orderId: Types.ObjectId;
   total: number;
-  selectedItems: ISelectedCartItem[];
+  selectedItems: SelectedCartItem[];
+  audit: Audit;
 }
