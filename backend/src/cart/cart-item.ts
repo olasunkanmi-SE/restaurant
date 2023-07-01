@@ -1,13 +1,14 @@
-import { Entity, Result } from 'src/domain';
-import { ICartItem } from './cart-entity.interface';
 import { Types } from 'mongoose';
-import { ISelectedCartItem } from './cartItems/selected-cart-items-entity.interface';
+import { Audit, Entity, Result } from 'src/domain';
+import { ICartItem } from './cart-entity.interface';
+import { SelectedCartItem } from './selectedItems/selectedCartItem';
 
 export class CartItem extends Entity<ICartItem> implements ICartItem {
   _menuId: Types.ObjectId;
   _orderId: Types.ObjectId;
   _total: number;
-  _selectedItems: ISelectedCartItem[];
+  _selectedItems: SelectedCartItem[];
+  _audit: Audit;
 
   constructor(id: Types.ObjectId, props: ICartItem) {
     super(id);
@@ -41,12 +42,20 @@ export class CartItem extends Entity<ICartItem> implements ICartItem {
     this._total = total;
   }
 
-  get selectedItems(): ISelectedCartItem[] {
+  get selectedItems(): SelectedCartItem[] {
     return this._selectedItems;
   }
 
-  set setSelectedItems(selectedItems: ISelectedCartItem[]) {
+  set setSelectedItems(selectedItems: SelectedCartItem[]) {
     this._selectedItems = selectedItems;
+  }
+
+  get audit(): Audit {
+    return this._audit;
+  }
+
+  set audit(audit: Audit) {
+    this._audit = audit;
   }
 
   static create(props: ICartItem, id?: Types.ObjectId) {

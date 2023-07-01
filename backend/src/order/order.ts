@@ -16,7 +16,7 @@ export class Order extends Entity<IOrder> implements IOrder {
 
   constructor(
     id: Types.ObjectId,
-    { state, type, merchantId, customerId, total, quantity, discount, orderManagerId }: IOrder,
+    { state, type, merchantId, customerId, total, quantity, discount, orderManagerId, audit }: IOrder,
   ) {
     super(id);
     this._state = state;
@@ -27,6 +27,7 @@ export class Order extends Entity<IOrder> implements IOrder {
     this._quantity = quantity;
     this._discount = discount;
     this._orderManagerId = orderManagerId;
+    this._audit = audit;
   }
 
   get state(): currentStatus {

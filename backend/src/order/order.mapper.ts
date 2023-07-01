@@ -8,7 +8,7 @@ import { AuditMapper } from 'src/audit';
 export class OrderMapper implements IMapper<Order, OrderDataModel> {
   constructor(private readonly auditMapper: AuditMapper) {}
   toPersistence(entity: Order): OrderDataModel {
-    const { state, type, merchantId, total, quantity, discount, orderManagerId, audit } = entity;
+    const { id, state, type, merchantId, total, quantity, discount, orderManagerId, audit } = entity;
     const {
       auditCreatedBy,
       auditCreatedDateTime,
@@ -18,7 +18,7 @@ export class OrderMapper implements IMapper<Order, OrderDataModel> {
       auditDeletedDateTime,
     } = audit;
     const orderDocument: OrderDataModel = {
-      _id: entity.id,
+      _id: id,
       state,
       type,
       merchantId,
