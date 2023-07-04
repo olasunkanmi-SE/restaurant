@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { menuToMenuStateMapper, selectedItemToMenuMapper } from "../application/mappers/MenuItem.mapper";
 import { ShoppingCart } from "../components/Cart/ShoppingCart";
 import { IMenuData } from "../models/menu.model";
-import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, selectedItem } from "../reducers";
+import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, SelectedItem } from "../reducers";
 import { getLocalStorageData, setLocalStorageData } from "../utility/utils";
 import { shoppingCartProps, shoppingCartProviderProps, upgradeOrder } from "./shoppingCartTypes";
 import { CONSTANTS } from "../constants/constant";
@@ -130,12 +130,12 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       });
     };
 
-    const removeItemFromCart = (menuItem: selectedItem) => {
+    const removeItemFromCart = (menuItem: SelectedItem) => {
       let { menus } = state;
       const menu = menus.find((menu) => menu.id === menuItem.menuId);
 
       if (menu?.menuTotalPrice) {
-        let menuItems: selectedItem[] = [];
+        let menuItems: SelectedItem[] = [];
         for (const menu of menus) {
           if (menu.id === menuItem.menuId) {
             if (menu?.selectedItems && menu.selectedItems.length) {
@@ -172,7 +172,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       const menu: Partial<CartItem> | undefined = state.menus.find((menu) => menu.id === id);
       let totalPrice: number = 0;
       if (menu) {
-        const selectedItems: selectedItem[] = menu.selectedItems ?? [];
+        const selectedItems: SelectedItem[] = menu.selectedItems ?? [];
         let orderPrice: number = 0;
         if (selectedItems?.length) {
           selectedItems.forEach((item) => {
@@ -192,7 +192,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       }
     };
 
-    const IncreaseShoppingCartSelectedItem = (item: selectedItem, increase: boolean) => {
+    const IncreaseShoppingCartSelectedItem = (item: SelectedItem, increase: boolean) => {
       const orderSummary = GetOrderSummary();
       if (orderSummary) {
         const selectedMenu: OrderSummary | undefined = orderSummary.find((order) => order.menus[0].id === item.menuId);
@@ -219,7 +219,29 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       console.log(state.orderSummary);
     };
 
-    const AddItemToCart = (menuItem?: selectedItem) => {
+    const addSelectedItemsNotes = (menuItem: SelectedItem, post: string) => {
+      const { menus } = state;
+      if (menus.length) {
+        const selectedItemMenu = menus.find((menu) => menu.id === menuItem.menuId);
+        if (selectedItemMenu) {
+          const selectedItems = selectedItemMenu.selectedItems;
+          if (selectedItems?.length) {
+            const selectedItem = selectedItems.find((item) => item.id === menuItem.id);
+            if (selectedItem) {
+              let notes = selectedItem.notes;
+              if (notes?.length) {
+                notes.unshift(post);
+              } else {
+                notes = [];
+                notes?.push(post);
+              }
+            }
+          }
+        }
+      }
+    };
+
+    const AddItemToCart = (menuItem?: SelectedItem) => {
       if (menuItem) {
         let { menus } = state;
         const menu: Partial<CartItem> = selectedItemToMenuMapper(menuItem);
@@ -234,8 +256,8 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
             menuItem.quantity = 0;
             state.menus.push(menu);
           }
-          let selectedItems: selectedItem[] | undefined = [];
-          const selectedItemMap = new Map<string, selectedItem>();
+          let selectedItems: SelectedItem[] | undefined = [];
+          const selectedItemMap = new Map<string, SelectedItem>();
 
           if (state.menus.length) {
             state.menus.forEach((menu) => {
@@ -267,7 +289,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           console.log(state);
         } else {
           if (itemMenu) {
-            let selectedItems: selectedItem[] | undefined = itemMenu.selectedItems;
+            let selectedItems: SelectedItem[] | undefined = itemMenu.selectedItems;
             if (selectedItems?.length) {
               const selectedItem = selectedItems.find((i) => i.id === menuItem.id);
               if (selectedItem) {
@@ -409,7 +431,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     const calculateUpgradeOrderPrice = (
       menuQuantity: number,
       menuBasePrice: number,
-      selectedItems: selectedItem[]
+      selectedItems: SelectedItem[]
     ): number => {
       const totalItemsPrice = selectedItems.reduce((acc, item) => acc + item.price * item.quantity!, 0);
       const totalPrice = menuQuantity * (menuBasePrice + totalItemsPrice);
@@ -460,6 +482,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       updateCartItems,
       RecreateStateFromMenu,
       UpdateMenuImageURL,
+      addSelectedItemsNotes,
     };
     return value;
   }, [state]);

@@ -1,5 +1,5 @@
 import { Button, Stack } from "react-bootstrap";
-import { OrderSummary, selectedItem } from "../../reducers";
+import { OrderSummary, SelectedItem } from "../../reducers";
 import { QtyButton } from "../MenuItems/addItemButton";
 import { CSSProperties, useState } from "react";
 import { getLocalStorageData } from "../../utility/utils";
@@ -39,7 +39,7 @@ export const UpgradeShoppingCartItem = () => {
   const calculateUpgradeOrderPrice = (
     menuQuantity: number,
     menuBasePrice: number,
-    selectedItems: selectedItem[]
+    selectedItems: SelectedItem[]
   ): number => {
     const totalItemsPrice = selectedItems.reduce((acc, item) => acc + item.price * item.quantity!, 0);
     const totalPrice = menuQuantity * (menuBasePrice + totalItemsPrice);
@@ -47,7 +47,7 @@ export const UpgradeShoppingCartItem = () => {
   };
 
   const getSelectedItems = ():
-    | { updatedOrder: OrderSummary; selectedItems: selectedItem[] | [] | undefined; menuPrice: number | undefined }
+    | { updatedOrder: OrderSummary; selectedItems: SelectedItem[] | [] | undefined; menuPrice: number | undefined }
     | undefined => {
     if (order) {
       const updatedOrder: OrderSummary = { ...order };
