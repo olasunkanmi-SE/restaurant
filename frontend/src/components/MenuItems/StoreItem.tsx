@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { Item } from "../../reducers";
+import { wordWrap } from "../../utility/utils";
 import { FoodItemList } from "./FoodItemList";
 import { NoMenuItems } from "./NoMenuItems";
-import { wordWrap } from "../../utility/utils";
 
 export type storeItemProps = {
   id: string;
@@ -52,9 +53,11 @@ export const StoreItem = ({
       <Row>
         <Col>
           <div>
-            <p>
-              <i style={{ backgroundColor: "#f7a278", color: "#fff", padding: "4px" }}>More Portion</i>
-            </p>
+            <span>
+              <p>
+                <i style={{ backgroundColor: "#f7a278", color: "#fff", padding: "4px" }}>More Portion</i>
+              </p>
+            </span>
           </div>
           <div>
             <NoMenuItems isChecked={isChecked} handleCheck={handleCheck} />

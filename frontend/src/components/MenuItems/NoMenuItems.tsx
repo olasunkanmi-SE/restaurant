@@ -12,7 +12,7 @@ export const NoMenuItems = ({ handleCheck, isChecked }: NoItems) => {
         <div style={{ marginLeft: "6px" }}>
           <Form.Check onClick={handleCheck} className="mr-2" type="checkbox" checked={isChecked} readOnly />
         </div>
-        <div style={{ marginLeft: "10px", marginTop: "5px" }}>None</div>
+        <div style={{ marginLeft: "10px", marginTop: "5px", fontSize: "10px" }}>None</div>
       </Stack>
       <hr></hr>
     </div>
