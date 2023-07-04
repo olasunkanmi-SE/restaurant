@@ -1,5 +1,5 @@
 import { IMenuData } from "../models/menu.model";
-import { CartItem, OrderSummary, selectedItem } from "../reducers";
+import { CartItem, OrderSummary, SelectedItem } from "../reducers";
 
 export type shoppingCartProviderProps = {
   children: React.ReactNode;
@@ -15,8 +15,8 @@ export type shoppingCartProps = {
   closeCart(): void;
   increaseMenuQuantity(payload: Partial<CartItem>): void;
   removeMenuFromCart(cartItem: Partial<CartItem>): void;
-  AddItemToCart(menuItem?: selectedItem): void;
-  removeItemFromCart(menuItem: selectedItem): void;
+  AddItemToCart(menuItem?: SelectedItem): void;
+  removeItemFromCart(menuItem: SelectedItem): void;
   getMenuQuantity(id: string): number;
   calculateMenuTotalPriceFromMenuItems(id: string): number | undefined;
   itemPrice(id: string): number | undefined;
@@ -27,7 +27,7 @@ export type shoppingCartProps = {
   getMenus(): Partial<CartItem>[];
   removeMenuFromState(id: string): void;
   GetTotalPrice: () => number;
-  IncreaseShoppingCartSelectedItem: (selectedItem: selectedItem, increase: boolean) => void;
+  IncreaseShoppingCartSelectedItem: (selectedItem: SelectedItem, increase: boolean) => void;
   updateCartItems: (orderSummary: OrderSummary[]) => void;
   RecreateStateFromMenu: (orderMenus: Partial<CartItem>[]) => void;
   UpdateMenuImageURL: (
@@ -38,4 +38,5 @@ export type shoppingCartProps = {
     >[],
     menu: IMenuData
   ) => void;
+  addSelectedItemsNotes: (menuItem: SelectedItem, post: string) => void;
 };

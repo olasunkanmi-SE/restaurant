@@ -1,8 +1,8 @@
 import { Stack } from "react-bootstrap";
-import { selectedItem } from "../../reducers";
+import { SelectedItem } from "../../reducers";
 
 export type cartSelectedItem = {
-  selectedItem: selectedItem;
+  selectedItem: SelectedItem;
   isEdit: boolean;
 };
 
