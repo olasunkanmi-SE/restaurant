@@ -164,3 +164,16 @@ small {
 .modal-footer {
   justify-content: center;
 }
+
+.small,
+small {
+  font-size: .6em;
+}
+
+.btn-light {
+  --bs-btn-bg: none;
+  --bs-btn-border-color: none;
+  --bs-btn-hover-bg: none;
+  --bs-btn-hover-border-color: none;
+
+}
