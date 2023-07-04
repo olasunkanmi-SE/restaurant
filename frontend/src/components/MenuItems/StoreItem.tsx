@@ -1,9 +1,9 @@
-import { Card, Col, Row, Stack } from "react-bootstrap";
+import { useState } from "react";
+import { Card, Col, Row } from "react-bootstrap";
 import { Item } from "../../reducers";
+import { wordWrap } from "../../utility/utils";
 import { FoodItemList } from "./FoodItemList";
 import { NoMenuItems } from "./NoMenuItems";
-import { wordWrap } from "../../utility/utils";
-import { useState } from "react";
 
 export type storeItemProps = {
   id: string;
@@ -32,9 +32,6 @@ export const StoreItem = ({
   handleUnCheck,
   enableAddToCartBtns,
 }: storeItemProps) => {
-  const [showModal, setShowModal] = useState(false);
-  const handleCloseModal = () => setShowModal(false);
-  const handleShowModal = () => setShowModal(true);
   return (
     <>
       <Row>
