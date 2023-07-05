@@ -29,7 +29,7 @@ export type Item = {
   maximumPermitted?: number;
 };
 
-export type selectedItem = {
+export type SelectedItem = {
   menuName?: string;
   id: string;
   menuId: string;
@@ -37,6 +37,7 @@ export type selectedItem = {
   quantity?: number;
   price: number;
   menuPrice: number;
+  notes?: string[];
 };
 
 export type CartItem = {
@@ -46,7 +47,7 @@ export type CartItem = {
   quantity: number;
   items?: Item[];
   menuPrice: number;
-  selectedItems?: selectedItem[] | [];
+  selectedItems?: SelectedItem[] | [];
   menuTotalPrice: number;
   imageUrl?: string;
 };

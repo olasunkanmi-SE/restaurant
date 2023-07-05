@@ -1,7 +1,7 @@
 import { ItemsSummary } from "../../components/Cart/CartItemsList";
-import { CartItem, selectedItem } from "../../reducers";
+import { CartItem, SelectedItem } from "../../reducers";
 
-export const selectedItemToMenuMapper = (selectedItem: selectedItem): Partial<CartItem> & { menuName: string } => {
+export const selectedItemToMenuMapper = (selectedItem: SelectedItem): Partial<CartItem> & { menuName: string } => {
   const { menuId } = selectedItem;
   return {
     id: menuId,
@@ -11,7 +11,7 @@ export const selectedItemToMenuMapper = (selectedItem: selectedItem): Partial<Ca
   };
 };
 
-export const ItemToSummaryMapper = (item: selectedItem): ItemsSummary => {
+export const ItemToSummaryMapper = (item: SelectedItem): ItemsSummary => {
   return {
     id: item.id,
     name: item.name,
