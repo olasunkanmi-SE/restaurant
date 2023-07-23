@@ -116,7 +116,7 @@ export const ShoppingCartDetails = () => {
               <span>
                 <p>
                   <small>x{summary.quantity} </small>
-                  {summary.menus[0].menuName}
+                  {summary.menus[0].menuName ?? summary.menus[0].name}
                 </p>
               </span>
 
