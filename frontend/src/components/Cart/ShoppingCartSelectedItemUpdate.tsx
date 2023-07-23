@@ -27,7 +27,7 @@ type MenuActionType = "Increase" | "Decrease";
 export const UpgradeShoppingCartItem = () => {
   const navigate = useNavigate();
   const orderSummary = getLocalStorageData("orderSummary", true);
-  const { GetOrderSummary, updateCartItems } = useShoppingCart();
+  const { GetOrderSummary, updateCartItems, closeCart } = useShoppingCart();
 
   const [order, setOrder] = useState<OrderSummary | undefined>(() => {
     if (orderSummary) {
@@ -142,6 +142,7 @@ export const UpgradeShoppingCartItem = () => {
         }
       }
     }
+    closeCart();
   };
 
   return (
