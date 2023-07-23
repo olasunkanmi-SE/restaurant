@@ -6,15 +6,17 @@ export type cartSelectedItem = {
   isEdit: boolean;
 };
 
-export const CartSelectedItems = ({ selectedItem, isEdit }: cartSelectedItem) => {
+const DisplaySelectedItems = (selectedItem: SelectedItem) => {
+  if (selectedItem.quantity && selectedItem.quantity > 0) {
+    return <small>{`x${selectedItem.quantity} ${selectedItem.name}`}</small>;
+  }
+};
+
+export const CartSelectedItems = ({ selectedItem }: cartSelectedItem) => {
   return (
     <div>
       <Stack key={selectedItem.id} direction="horizontal" gap={3} style={{ marginBottom: "10px", marginTop: "10px" }}>
-        <span>
-          <small>
-            x{selectedItem.quantity} {selectedItem.name}
-          </small>
-        </span>
+        <span>{DisplaySelectedItems(selectedItem)}</span>
       </Stack>
     </div>
   );
