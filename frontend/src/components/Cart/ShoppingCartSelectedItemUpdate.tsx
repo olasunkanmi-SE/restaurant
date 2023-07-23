@@ -149,7 +149,7 @@ export const UpgradeShoppingCartItem = () => {
     <div>
       <div>
         <div>
-          <p> {order?.menus[0].menuName}</p>
+          <p> {order?.menus[0].menuName ?? order?.menus[0].name}</p>
           <p style={{ color: "#205532", fontWeight: "600" }}> RM {order?.menus[0].menuPrice}</p>
         </div>
 
