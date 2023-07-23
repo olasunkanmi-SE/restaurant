@@ -6,8 +6,7 @@ import { ShoppingCart } from "../components/Cart/ShoppingCart";
 import { IMenuData } from "../models/menu.model";
 import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, SelectedItem } from "../reducers";
 import { getLocalStorageData, setLocalStorageData } from "../utility/utils";
-import { shoppingCartProps, shoppingCartProviderProps, upgradeOrder } from "./shoppingCartTypes";
-import { CONSTANTS } from "../constants/constant";
+import { shoppingCartProps, shoppingCartProviderProps } from "./shoppingCartTypes";
 
 export const shoppingCartContext = createContext({} as shoppingCartProps);
 
@@ -286,34 +285,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
             }
           }
           calculateMenuTotalPriceFromMenuItems(menuItem.menuId);
-          console.log(state);
-        } else {
-          if (itemMenu) {
-            let selectedItems: SelectedItem[] | undefined = itemMenu.selectedItems;
-            if (selectedItems?.length) {
-              const selectedItem = selectedItems.find((i) => i.id === menuItem.id);
-              if (selectedItem) {
-                selectedItem.quantity! += 1;
-                itemMenu.menuTotalPrice = itemMenu.menuTotalPrice! + selectedItem.price * itemMenu.quantity!;
-                state.totalPrice = itemMenu.menuTotalPrice;
-              } else {
-                menuItem.quantity = 1;
-                selectedItems.push(menuItem);
-                itemMenu.menuTotalPrice = itemMenu.menuTotalPrice! + menuItem.price * itemMenu.quantity!;
-                state.totalPrice = itemMenu.menuTotalPrice;
-              }
-            } else {
-              menuItem.quantity = 1;
-              const currentMenu = state.menus.find((menu) => menu.id === itemMenu.id);
-              if (currentMenu) {
-                if (!currentMenu.selectedItems?.length) {
-                  currentMenu.selectedItems = [menuItem];
-                }
-              }
-              itemMenu.menuTotalPrice = itemMenu.menuTotalPrice! + menuItem.price * itemMenu.quantity!;
-              state.totalPrice = itemMenu.menuTotalPrice;
-            }
-          }
         }
       }
       setLocalStorageData("cart", JSON.stringify(state), true);
@@ -426,36 +397,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       dispatch({
         type: CartActionsType.UPDATE_CART_ITEMS,
       });
-    };
-
-    const calculateUpgradeOrderPrice = (
-      menuQuantity: number,
-      menuBasePrice: number,
-      selectedItems: SelectedItem[]
-    ): number => {
-      const totalItemsPrice = selectedItems.reduce((acc, item) => acc + item.price * item.quantity!, 0);
-      const totalPrice = menuQuantity * (menuBasePrice + totalItemsPrice);
-      return totalPrice;
-    };
-
-    const upgradeOrderItem = (itemId: string, type: upgradeOrder, order?: OrderSummary) => {
-      if (order) {
-        const menu = order.menus[0];
-        const { quantity, menuPrice, selectedItems } = menu;
-        if (selectedItems?.length) {
-          const item = selectedItems.find((item) => item.id === itemId);
-          if (type === CONSTANTS.increaseCartItem) {
-            if (item?.quantity) {
-              item.quantity += 1;
-              menu.menuTotalPrice = calculateUpgradeOrderPrice(quantity!, menuPrice!, selectedItems);
-            }
-          } else {
-            if (item?.quantity) {
-              item.quantity -= 1;
-            }
-          }
-        }
-      }
     };
 
     const value: shoppingCartProps = {
