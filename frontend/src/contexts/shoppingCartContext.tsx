@@ -218,22 +218,16 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       console.log(state.orderSummary);
     };
 
-    const addSelectedItemsNotes = (menuItem: SelectedItem, post: string) => {
+    const addSelectedItemInstruction = (selectedItem: SelectedItem, instruction: string) => {
       const { menus } = state;
       if (menus.length) {
-        const selectedItemMenu = menus.find((menu) => menu.id === menuItem.menuId);
+        const selectedItemMenu = menus.find((menu) => menu.id === selectedItem.menuId);
         if (selectedItemMenu) {
           const selectedItems = selectedItemMenu.selectedItems;
           if (selectedItems?.length) {
-            const selectedItem = selectedItems.find((item) => item.id === menuItem.id);
-            if (selectedItem) {
-              let notes = selectedItem.notes;
-              if (notes?.length) {
-                notes.unshift(post);
-              } else {
-                notes = [];
-                notes?.push(post);
-              }
+            const item = selectedItems.find((item) => item.id === selectedItem.id);
+            if (item) {
+              item.note = instruction;
             }
           }
         }
@@ -423,7 +417,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       updateCartItems,
       RecreateStateFromMenu,
       UpdateMenuImageURL,
-      addSelectedItemsNotes,
+      addSelectedItemInstruction,
     };
     return value;
   }, [state]);
