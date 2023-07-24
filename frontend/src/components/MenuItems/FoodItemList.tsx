@@ -6,6 +6,7 @@ import { wordWrap } from "../../utility/utils";
 import { CallToAction } from "../Utilities/modal";
 import { Note } from "../Forms/text-area";
 import { useState } from "react";
+import { shoppingCartProps } from "../../contexts/shoppingCartTypes";
 
 type foodItem = storeItemProps & {
   itemId: string;
@@ -25,12 +26,18 @@ export const FoodItemList = ({
   handleUnCheck,
   enableAddToCartBtns,
 }: Omit<foodItem, "items" | "handleCheck" | "isChecked">) => {
+  const [note, setNote] = useState<string>("");
   const [showModal, setShowModal] = useState(false);
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
-  const { AddItemToCart, menus, removeItemFromCart } = useShoppingCart();
+  const { AddItemToCart, menus, removeItemFromCart }: shoppingCartProps = useShoppingCart();
   let itemQty: number = 0;
-  const handleAddItemToCart = () => {
+
+  const handleNote = (note: string) => {
+    setNote(note);
+  };
+
+  const handleAddItemToCart = (): void => {
     enableAddToCartBtns();
     handleUnCheck();
     return AddItemToCart({
@@ -60,6 +67,7 @@ export const FoodItemList = ({
       }
     });
   }
+
   return (
     <div style={{ fontSize: "10px" }}>
       <Stack direction="horizontal" gap={3}>
@@ -77,8 +85,8 @@ export const FoodItemList = ({
         ) : (
           <></>
         )}
+        <div>{note}</div>
         <div style={{ fontWeight: "bold" }} className=" ms-auto">
-          {" "}
           RM{itemPrice}
         </div>
         <div>x {itemQty}</div>
@@ -92,7 +100,7 @@ export const FoodItemList = ({
         show={showModal}
         showCancelButton={true}
       >
-        <Note row={3} label="Special Instructions"></Note>
+        <Note noteFromChild={handleNote} row={3} label="Special Instructions" />
       </CallToAction>
     </div>
   );

@@ -37,7 +37,7 @@ export type SelectedItem = {
   quantity?: number;
   price: number;
   menuPrice: number;
-  notes?: string[];
+  note?: string;
 };
 
 export type CartItem = {

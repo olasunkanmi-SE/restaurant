@@ -38,5 +38,5 @@ export type shoppingCartProps = {
     >[],
     menu: IMenuData
   ) => void;
-  addSelectedItemsNotes: (menuItem: SelectedItem, post: string) => void;
+  addSelectedItemInstruction: (selectedItem: SelectedItem, instruction: string) => void;
 };
