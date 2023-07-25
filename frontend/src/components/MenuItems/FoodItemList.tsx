@@ -1,4 +1,4 @@
-import { Button, Stack } from "react-bootstrap";
+import { Stack } from "react-bootstrap";
 import { shoppingCartProps } from "../../contexts/shoppingCartTypes";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { wordWrap } from "../../utility/utils";

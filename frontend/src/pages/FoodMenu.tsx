@@ -140,7 +140,13 @@ export const FoodMenu = () => {
                 show={showModal}
                 showCancelButton={true}
               >
-                <Note instructions={handleInstructions} menuId={id} row={3} label="Special Instructions" />
+                <Note
+                  closeModal={handleCloseModal}
+                  instructions={handleInstructions}
+                  menuId={id}
+                  row={3}
+                  label="Special Instructions"
+                />
               </CallToAction>
             </div>
           </div>
