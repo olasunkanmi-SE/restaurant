@@ -1,11 +1,10 @@
-import { Button, Stack } from "react-bootstrap";
-import { OrderSummary, SelectedItem } from "../../reducers";
-import { QtyButton } from "../MenuItems/addItemButton";
 import { CSSProperties, useState } from "react";
-import { getLocalStorageData } from "../../utility/utils";
+import { Button, Stack } from "react-bootstrap";
 import { CONSTANTS } from "../../constants/constant";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
-import { useNavigate } from "react-router-dom";
+import { OrderSummary, SelectedItem } from "../../reducers";
+import { getLocalStorageData } from "../../utility/utils";
+import { QtyButton } from "../MenuItems/addItemButton";
 
 const addToCartStyle: CSSProperties = {
   textAlign: "center",
