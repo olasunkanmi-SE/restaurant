@@ -278,6 +278,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
               }
             }
           }
+          console.log(menuItem);
           calculateMenuTotalPriceFromMenuItems(menuItem.menuId);
         }
       }
@@ -317,12 +318,15 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       }
     };
 
-    const addMenuToCart = (menu: IMenuData) => {
+    const addMenuToCart = (menu: IMenuData, instructions?: string) => {
       if (!state.menus.length) {
         state.menus = menuToMenuStateMapper(menu);
         state.quantity = 1;
       }
       let { menus, quantity, orderSummary } = state;
+      if (instructions) {
+        menus[0].note = instructions;
+      }
       UpdateMenuImageURL(menus, menu);
       const orderInfo: OrderSummary = {
         id: nanoid(),

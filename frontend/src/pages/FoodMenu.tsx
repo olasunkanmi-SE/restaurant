@@ -8,6 +8,9 @@ import { AddMenuToCartButton } from "../components/Cart/AddMenuToCart";
 import { useEffect, useState } from "react";
 import { CartItemsList } from "../components/Cart";
 import { IMenuData } from "../models/menu.model";
+import { CallToAction } from "../components/Utilities/modal";
+import { Note } from "../components/Forms/text-area";
+import { Button } from "react-bootstrap";
 
 const mapItems = (items: IItem[]): Item[] => {
   const stateItem = items?.map((item) => {
@@ -33,6 +36,15 @@ export const FoodMenu = () => {
     addMenuToCart,
   } = useShoppingCart();
   const [disableAddToCartBtns, setDisableAddToCartBtns] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState(false);
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
+
+  const [instructions, setInstructions] = useState("");
+
+  const handleInstructions = (text: string) => {
+    setInstructions(text);
+  };
 
   useEffect(() => {
     setDisableAddToCartBtns(true);
@@ -54,7 +66,7 @@ export const FoodMenu = () => {
 
   const handleAddToCart = () => {
     if (response) {
-      addMenuToCart(response);
+      addMenuToCart(response, instructions);
     }
   };
 
@@ -99,6 +111,11 @@ export const FoodMenu = () => {
               basePrice={basePrice}
               id={id}
             />
+            <div style={{ marginTop: "-15px", backgroundColor: "#fff" }}>
+              <Button variant="light" onClick={handleShowModal}>
+                <small>Special Instructions for Restaurant (Add your instructions)</small>
+              </Button>
+            </div>
             <div className="elBg addToCart">
               <div className=" pt-2 pb-2">
                 <CartItemsList id={id} />
@@ -115,6 +132,16 @@ export const FoodMenu = () => {
                 disableAddToCartButton={disableAddToCartBtns}
                 addToCart={handleAddToCart}
               />
+            </div>
+            <div>
+              <CallToAction
+                handleAction={handleCloseModal}
+                handleClose={handleCloseModal}
+                show={showModal}
+                showCancelButton={true}
+              >
+                <Note instructions={handleInstructions} menuId={id} row={3} label="Special Instructions" />
+              </CallToAction>
             </div>
           </div>
         );
