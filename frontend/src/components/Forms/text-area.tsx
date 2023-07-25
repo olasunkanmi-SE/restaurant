@@ -8,11 +8,12 @@ type textBox = {
   label: string;
   menuId: string;
   instructions: (text: string) => void;
+  closeModal: () => void;
 };
 type formInputs = {
   text: string;
 };
-export const Note = ({ row, label, instructions }: textBox) => {
+export const Note = ({ row, label, instructions, closeModal }: textBox) => {
   const [note, setNote] = useState<string>("");
 
   const { register, handleSubmit } = useForm<formInputs>();
@@ -21,6 +22,7 @@ export const Note = ({ row, label, instructions }: textBox) => {
     const { text } = data;
     setNote(text);
     instructions(text);
+    closeModal();
   };
   return (
     <div>
