@@ -25,7 +25,6 @@ type MenuActionType = "Increase" | "Decrease";
  */
 
 export const UpgradeShoppingCartItem = () => {
-  const navigate = useNavigate();
   const orderSummary = getLocalStorageData("orderSummary", true);
   const { GetOrderSummary, updateCartItems, closeCart } = useShoppingCart();
 
