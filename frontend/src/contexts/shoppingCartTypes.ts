@@ -39,4 +39,5 @@ export type shoppingCartProps = {
     menu: IMenuData
   ) => void;
   addSelectedItemInstruction: (selectedItem: SelectedItem, instruction: string) => void;
+  resetMenu: () => void;
 };

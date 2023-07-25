@@ -11,7 +11,7 @@ import { calculateQuantity } from "../../utility/utils";
 import { CallToAction } from "./modal";
 
 export const Navigation = () => {
-  const { openCart, GetOrderSummary } = useShoppingCart();
+  let { openCart, GetOrderSummary, resetMenu } = useShoppingCart();
   const [showModal, setShowModal] = useState(false);
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
@@ -23,6 +23,7 @@ export const Navigation = () => {
 
   const previousPage = () => {
     navigate(-1);
+    resetMenu();
   };
 
   return (
