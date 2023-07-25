@@ -36,6 +36,9 @@ npm run start
 
 <img width="359" alt="Screenshot 2023-06-22 at 10 55 07 AM" src="https://github.com/olasunkanmi-SE/restaurant/assets/60177090/f8a4c014-3cec-4c77-9f73-e878b532b6e0">
 
+<img width="362" alt="Screenshot 2023-07-25 at 9 21 50 PM" src="https://github.com/olasunkanmi-SE/restaurant/assets/60177090/2905a9c3-9a85-4156-851e-d7df753d3c3b">
+
+
 
 
 
