@@ -21,7 +21,7 @@ export type shoppingCartProps = {
   calculateMenuTotalPriceFromMenuItems(id: string): number | undefined;
   itemPrice(id: string): number | undefined;
   AddMoreMenu(id: string): number | undefined;
-  addMenuToCart(menu: IMenuData): void;
+  addMenuToCart(menu: IMenuData, instructions?: string): void;
   GetOrderSummary(): OrderSummary[] | undefined;
   resetCart(): void;
   getMenus(): Partial<CartItem>[];
@@ -38,5 +38,5 @@ export type shoppingCartProps = {
     >[],
     menu: IMenuData
   ) => void;
-  addSelectedItemsNotes: (menuItem: SelectedItem, post: string) => void;
+  addSelectedItemInstruction: (selectedItem: SelectedItem, instruction: string) => void;
 };

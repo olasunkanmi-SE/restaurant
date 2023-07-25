@@ -50,7 +50,7 @@ export const AddMenuToCartButton = ({
             variant="primary"
             type="button"
           >
-            ADD TO CART RM {itemPrice(id) === undefined ? basePrice : itemPrice(id)}
+            ADD TO CART RM {itemPrice(id) ?? basePrice}
           </Button>
         </div>
       </div>

@@ -218,22 +218,16 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       console.log(state.orderSummary);
     };
 
-    const addSelectedItemsNotes = (menuItem: SelectedItem, post: string) => {
+    const addSelectedItemInstruction = (selectedItem: SelectedItem, instruction: string) => {
       const { menus } = state;
       if (menus.length) {
-        const selectedItemMenu = menus.find((menu) => menu.id === menuItem.menuId);
+        const selectedItemMenu = menus.find((menu) => menu.id === selectedItem.menuId);
         if (selectedItemMenu) {
           const selectedItems = selectedItemMenu.selectedItems;
           if (selectedItems?.length) {
-            const selectedItem = selectedItems.find((item) => item.id === menuItem.id);
-            if (selectedItem) {
-              let notes = selectedItem.notes;
-              if (notes?.length) {
-                notes.unshift(post);
-              } else {
-                notes = [];
-                notes?.push(post);
-              }
+            const item = selectedItems.find((item) => item.id === selectedItem.id);
+            if (item) {
+              item.note = instruction;
             }
           }
         }
@@ -284,6 +278,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
               }
             }
           }
+          console.log(menuItem);
           calculateMenuTotalPriceFromMenuItems(menuItem.menuId);
         }
       }
@@ -323,12 +318,15 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       }
     };
 
-    const addMenuToCart = (menu: IMenuData) => {
+    const addMenuToCart = (menu: IMenuData, instructions?: string) => {
       if (!state.menus.length) {
         state.menus = menuToMenuStateMapper(menu);
         state.quantity = 1;
       }
       let { menus, quantity, orderSummary } = state;
+      if (instructions) {
+        menus[0].note = instructions;
+      }
       UpdateMenuImageURL(menus, menu);
       const orderInfo: OrderSummary = {
         id: nanoid(),
@@ -423,7 +421,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       updateCartItems,
       RecreateStateFromMenu,
       UpdateMenuImageURL,
-      addSelectedItemsNotes,
+      addSelectedItemInstruction,
     };
     return value;
   }, [state]);

@@ -37,7 +37,7 @@ export type SelectedItem = {
   quantity?: number;
   price: number;
   menuPrice: number;
-  notes?: string[];
+  note?: string;
 };
 
 export type CartItem = {
@@ -50,6 +50,7 @@ export type CartItem = {
   selectedItems?: SelectedItem[] | [];
   menuTotalPrice: number;
   imageUrl?: string;
+  note?: string;
 };
 
 export type CartAction = {
