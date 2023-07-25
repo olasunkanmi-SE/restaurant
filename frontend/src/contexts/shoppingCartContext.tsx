@@ -324,7 +324,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
         state.quantity = 1;
       }
       let { menus, quantity, orderSummary } = state;
-      if (instructions) {
+      if (instructions?.length) {
         menus[0].note = instructions;
       }
       UpdateMenuImageURL(menus, menu);
@@ -361,6 +361,14 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       setLocalStorageData("cart", JSON.stringify(state), true);
       dispatch({
         type: CartActionsType.RESET_CART,
+      });
+    };
+
+    const resetMenu = () => {
+      state.menus = [];
+      setLocalStorageData("cart", JSON.stringify(state), true);
+      dispatch({
+        type: CartActionsType.RESET_MENU,
       });
     };
 
@@ -422,6 +430,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       RecreateStateFromMenu,
       UpdateMenuImageURL,
       addSelectedItemInstruction,
+      resetMenu,
     };
     return value;
   }, [state]);

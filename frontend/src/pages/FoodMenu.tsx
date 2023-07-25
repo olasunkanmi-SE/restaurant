@@ -146,6 +146,7 @@ export const FoodMenu = () => {
                   menuId={id}
                   row={3}
                   label="Special Instructions"
+                  placeholder="Add your request (subject to availability)"
                 />
               </CallToAction>
             </div>
