@@ -50,6 +50,7 @@ export type CartItem = {
   selectedItems?: SelectedItem[] | [];
   menuTotalPrice: number;
   imageUrl?: string;
+  note?: string;
 };
 
 export type CartAction = {

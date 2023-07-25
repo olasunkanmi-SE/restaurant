@@ -6,12 +6,13 @@ import { useForm } from "react-hook-form";
 type textBox = {
   row: number;
   label: string;
-  noteFromChild: (note: string) => void;
+  menuId: string;
+  instructions: (text: string) => void;
 };
 type formInputs = {
   text: string;
 };
-export const Note = ({ row, label, noteFromChild }: textBox) => {
+export const Note = ({ row, label, instructions }: textBox) => {
   const [note, setNote] = useState<string>("");
 
   const { register, handleSubmit } = useForm<formInputs>();
@@ -19,7 +20,7 @@ export const Note = ({ row, label, noteFromChild }: textBox) => {
   const onSubmit = (data: formInputs) => {
     const { text } = data;
     setNote(text);
-    noteFromChild(text);
+    instructions(text);
   };
   return (
     <div>
