@@ -151,6 +151,14 @@ export const UpgradeShoppingCartItem = () => {
     closeCart();
   };
 
+  const DisplayMenuInstructions = (order: OrderSummary) => {
+    if (instructions) {
+      return <>{instructions}</>;
+    } else {
+      return <>{order?.menus[0].note}</>;
+    }
+  };
+
   return (
     <div>
       <div>
@@ -213,7 +221,7 @@ export const UpgradeShoppingCartItem = () => {
         </div>
         <div style={{ marginTop: "15px", backgroundColor: "#fff" }}>
           <Button variant="light" onClick={handleShowModal}>
-            <small>Special Instructions for Restaurant (Add your instructions)</small>
+            <small>Note: {DisplayMenuInstructions(order!)}</small>
           </Button>
         </div>
       </div>
