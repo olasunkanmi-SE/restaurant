@@ -16,6 +16,15 @@ type textBox = {
 type formInputs = {
   text: string;
 };
+
+/**
+ *Note Component.
+ This component is responsible for rendering the menu note modal.
+ *
+ * @exports
+ * @function Note
+ *
+ */
 export const Note = ({ row, label, instructions, closeModal, placeholder, value, onChange, newValue }: textBox) => {
   const { register, handleSubmit, setValue } = useForm<formInputs>();
 
