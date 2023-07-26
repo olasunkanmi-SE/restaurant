@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { Item } from "../../reducers";
 import { wordWrap } from "../../utility/utils";
