@@ -221,7 +221,7 @@ export const UpgradeShoppingCartItem = () => {
         </div>
         <div style={{ marginTop: "15px", backgroundColor: "#fff" }}>
           <Button variant="light" onClick={handleShowModal}>
-            <small>Note: {DisplayMenuInstructions(order!)}</small>
+            <small>Update Note: {DisplayMenuInstructions(order!)}</small>
           </Button>
         </div>
       </div>

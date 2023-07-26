@@ -135,7 +135,7 @@ export const ShoppingCartDetails = () => {
                 <></>
               )}
             </div>
-            {summary.menus[0].note?.length ? <small>Note: {summary.menus[0].note}</small> : <></>}
+            <div>{summary.menus[0].note?.length ? <small>Note: {summary.menus[0].note}</small> : <></>}</div>
             <div style={{ marginLeft: "-8px" }}>
               {isEdit ? (
                 <span>
