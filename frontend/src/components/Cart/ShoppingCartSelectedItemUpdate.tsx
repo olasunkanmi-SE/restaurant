@@ -5,7 +5,7 @@ import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { CartItem, OrderSummary, SelectedItem } from "../../reducers";
 import { getLocalStorageData } from "../../utility/utils";
 import { QtyButton } from "../MenuItems/addItemButton";
-import { Note } from "../Forms/text-area";
+import { Note } from "../Forms/menu-notes";
 import { CallToAction } from "../Utilities/modal";
 
 const addToCartStyle: CSSProperties = {
@@ -151,6 +151,14 @@ export const UpgradeShoppingCartItem = () => {
     closeCart();
   };
 
+  const DisplayMenuInstructions = (order: OrderSummary) => {
+    if (instructions) {
+      return <>{instructions}</>;
+    } else {
+      return <>{order?.menus[0].note}</>;
+    }
+  };
+
   return (
     <div>
       <div>
@@ -213,7 +221,7 @@ export const UpgradeShoppingCartItem = () => {
         </div>
         <div style={{ marginTop: "15px", backgroundColor: "#fff" }}>
           <Button variant="light" onClick={handleShowModal}>
-            <small>Special Instructions for Restaurant (Add your instructions)</small>
+            <small>Update Note: {DisplayMenuInstructions(order!)}</small>
           </Button>
         </div>
       </div>
