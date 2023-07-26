@@ -1,10 +1,12 @@
-import { CSSProperties, useState } from "react";
+import { CSSProperties, ChangeEvent, useState } from "react";
 import { Button, Stack } from "react-bootstrap";
 import { CONSTANTS } from "../../constants/constant";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
-import { OrderSummary, SelectedItem } from "../../reducers";
+import { CartItem, OrderSummary, SelectedItem } from "../../reducers";
 import { getLocalStorageData } from "../../utility/utils";
 import { QtyButton } from "../MenuItems/addItemButton";
+import { Note } from "../Forms/text-area";
+import { CallToAction } from "../Utilities/modal";
 
 const addToCartStyle: CSSProperties = {
   textAlign: "center",
@@ -26,6 +28,14 @@ type MenuActionType = "Increase" | "Decrease";
 export const UpgradeShoppingCartItem = () => {
   const orderSummary = getLocalStorageData("orderSummary", true);
   const { GetOrderSummary, updateCartItems, closeCart } = useShoppingCart();
+  const [showModal, setShowModal] = useState(false);
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
+
+  const [instructions, setInstructions] = useState("");
+  const handleInstructions = (event: ChangeEvent<HTMLInputElement>) => {
+    setInstructions(event.target.value);
+  };
 
   const [order, setOrder] = useState<OrderSummary | undefined>(() => {
     if (orderSummary) {
@@ -98,12 +108,7 @@ export const UpgradeShoppingCartItem = () => {
 
       if (menuPrice) {
         const selectedItemTotal = selectedItems.reduce((sum, item) => sum + item.quantity! * item.price, 0);
-        if (type === CONSTANTS.increaseCartMenu) {
-          updatedOrder.quantity += 1;
-        } else {
-          updatedOrder.quantity -= 1;
-        }
-
+        type === CONSTANTS.increaseCartMenu ? (updatedOrder.quantity += 1) : (updatedOrder.quantity -= 1);
         if (updatedOrder.quantity > 0) {
           updatedOrder.menus[0].menuTotalPrice =
             updatedOrder.quantity * menuPrice + selectedItemTotal * updatedOrder.quantity;
@@ -127,7 +132,7 @@ export const UpgradeShoppingCartItem = () => {
     return order!.quantity;
   };
 
-  let { selectedItems, menuTotalPrice } = order?.menus[0] as any;
+  let { selectedItems, menuTotalPrice, note } = order?.menus[0] as Partial<CartItem & { menuName?: string }>;
 
   const handleAddToCart = () => {
     if (order) {
@@ -136,6 +141,9 @@ export const UpgradeShoppingCartItem = () => {
         const orderIndex = orderSummary.findIndex((summary) => summary.id === order.id);
         if (orderIndex > -1) {
           orderSummary.splice(orderIndex, 1, order);
+          if (instructions.length) {
+            order.menus[0].note = instructions;
+          }
           updateCartItems(orderSummary);
         }
       }
@@ -166,7 +174,9 @@ export const UpgradeShoppingCartItem = () => {
                       handleDecreaseItem(item.id);
                     }}
                   />
-                  <div>{item.name}</div>
+                  <div>
+                    <small>{item.name}</small>
+                  </div>
                   <div className=" ms-auto"> +RM {item.price}</div>
                   <div>x {item.quantity}</div>
                   <QtyButton
@@ -195,12 +205,35 @@ export const UpgradeShoppingCartItem = () => {
             <div className="ms-auto">
               <div style={addToCartStyle}>
                 <Button onClick={handleAddToCart} className="w-100 btn btn-success" variant="primary" type="button">
-                  <small>ADD TO CART</small> RM {menuTotalPrice}
+                  <small>UPDATE CART</small> RM {menuTotalPrice}
                 </Button>
               </div>
             </div>
           </Stack>
         </div>
+        <div style={{ marginTop: "15px", backgroundColor: "#fff" }}>
+          <Button variant="light" onClick={handleShowModal}>
+            <small>Special Instructions for Restaurant (Add your instructions)</small>
+          </Button>
+        </div>
+      </div>
+      <div>
+        <CallToAction
+          handleAction={handleCloseModal}
+          handleClose={handleCloseModal}
+          show={showModal}
+          showCancelButton={true}
+        >
+          <Note
+            closeModal={handleCloseModal}
+            onChange={handleInstructions}
+            row={2}
+            value={note}
+            label="Special Instructions"
+            placeholder="Add your request (subject to availability)"
+            newValue={instructions}
+          />
+        </CallToAction>
       </div>
     </div>
   );
