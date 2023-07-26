@@ -10,7 +10,7 @@ export const ShoppingCart = ({ isOpen }: shoppingCartAction) => {
   const { closeCart } = useShoppingCart();
   const header = "ORDER SUMMARY";
   return (
-    <OffCanvas show={isOpen} onHide={closeCart} placement="start" header={header}>
+    <OffCanvas show={isOpen} onHide={closeCart} placement="bottom" header={header}>
       <ShoppingCartDetails />
     </OffCanvas>
   );

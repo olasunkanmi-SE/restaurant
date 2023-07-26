@@ -3,16 +3,6 @@ import { ICreateMenu } from "../interfaces/menu.interface";
 import { QueryObserverResult, useQuery } from "react-query";
 import { menuApi } from "./axios";
 
-export const getMenus = async (): Promise<IMenus> => {
-  const response = await menuApi.get("/menus/merchant/63d792433b857e1697fe7017", {
-    headers: {
-      "Content-Type": "application/json",
-      "x-correlation-id": "55a30d65-f523-45b2-9ecb-de4290cf432a",
-    },
-  });
-  return response.data;
-};
-
 export const addMenu = async (menu: ICreateMenu): Promise<IMenu> => {
   const response = await menuApi.post("/menus", menu);
   return response.data;
