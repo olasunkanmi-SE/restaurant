@@ -5,7 +5,7 @@ import { IItem } from "../models/item.model";
 import { Item } from "../reducers";
 import { StoreItem } from "../components/MenuItems/StoreItem";
 import { AddMenuToCartButton } from "../components/Cart/AddMenuToCart";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { CartItemsList } from "../components/Cart";
 import { IMenuData } from "../models/menu.model";
 import { CallToAction } from "../components/Utilities/modal";
@@ -42,8 +42,8 @@ export const FoodMenu = () => {
 
   const [instructions, setInstructions] = useState("");
 
-  const handleInstructions = (text: string) => {
-    setInstructions(text);
+  const handleInstructions = (event: ChangeEvent<HTMLInputElement>) => {
+    setInstructions(event.target.value);
   };
 
   useEffect(() => {
@@ -113,7 +113,11 @@ export const FoodMenu = () => {
             />
             <div style={{ marginTop: "-15px", backgroundColor: "#fff" }}>
               <Button variant="light" onClick={handleShowModal}>
-                <small>Special Instructions for Restaurant (Add your instructions)</small>
+                {instructions.length ? (
+                  <small>{instructions}</small>
+                ) : (
+                  <small>Special Instructions for Restaurant (Add your instructions)</small>
+                )}
               </Button>
             </div>
             <div className="elBg addToCart">
@@ -142,9 +146,10 @@ export const FoodMenu = () => {
               >
                 <Note
                   closeModal={handleCloseModal}
-                  instructions={handleInstructions}
-                  menuId={id}
-                  row={3}
+                  onChange={handleInstructions}
+                  value={instructions}
+                  newValue={instructions}
+                  row={2}
                   label="Special Instructions"
                   placeholder="Add your request (subject to availability)"
                 />
