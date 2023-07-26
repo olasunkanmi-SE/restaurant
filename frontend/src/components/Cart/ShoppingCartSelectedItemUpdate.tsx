@@ -5,7 +5,7 @@ import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { CartItem, OrderSummary, SelectedItem } from "../../reducers";
 import { getLocalStorageData } from "../../utility/utils";
 import { QtyButton } from "../MenuItems/addItemButton";
-import { Note } from "../Forms/text-area";
+import { Note } from "../Forms/menu-notes";
 import { CallToAction } from "../Utilities/modal";
 
 const addToCartStyle: CSSProperties = {

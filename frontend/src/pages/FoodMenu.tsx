@@ -9,7 +9,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { CartItemsList } from "../components/Cart";
 import { IMenuData } from "../models/menu.model";
 import { CallToAction } from "../components/Utilities/modal";
-import { Note } from "../components/Forms/text-area";
+import { Note } from "../components/Forms/menu-notes";
 import { Button } from "react-bootstrap";
 
 const mapItems = (items: IItem[]): Item[] => {
@@ -24,6 +24,15 @@ const mapItems = (items: IItem[]): Item[] => {
   });
   return stateItem;
 };
+
+/**
+ *FoodMenu Component.
+ This component is responsible for rendering the menu page.
+ *
+ * @exports
+ * @function FoodMenu
+ *
+ */
 
 export const FoodMenu = () => {
   const {
