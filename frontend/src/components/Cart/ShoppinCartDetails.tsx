@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { CONSTANTS } from "../../constants/constant";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { OrderSummary } from "../../reducers";
-import { calculateTotalOrderAmount, setLocalStorageData } from "../../utility/utils";
+import { calculateTotalOrderAmount, setLocalStorageData, wordWrap } from "../../utility/utils";
 import { QtyButton } from "../MenuItems/addItemButton";
 import { CallToAction } from "../Utilities/modal";
 import { CartSelectedItems } from "./CartSelectedItems";
@@ -116,7 +116,7 @@ export const ShoppingCartDetails = () => {
               <span>
                 <p>
                   <small>x{summary.quantity} </small>
-                  {summary.menus[0].menuName ?? summary.menus[0].name}
+                  {wordWrap(summary.menus[0].menuName ?? "", 30) ?? wordWrap(summary.menus[0].name ?? "", 30)}
                 </p>
               </span>
 
