@@ -2,6 +2,7 @@ import { Audit } from './../domain/audit/audit';
 import { Entity, Result } from 'src/domain';
 import { IOrder, currentStatus, dinningType } from './order-entity.interface';
 import { Types } from 'mongoose';
+import { CartItem } from 'src/cart/cart-item';
 
 export class Order extends Entity<IOrder> implements IOrder {
   _state: currentStatus;
@@ -13,10 +14,11 @@ export class Order extends Entity<IOrder> implements IOrder {
   _discount?: number;
   _orderManagerId: Types.ObjectId;
   _audit: Audit;
+  _cartItems: CartItem[];
 
   constructor(
     id: Types.ObjectId,
-    { state, type, merchantId, customerId, total, quantity, discount, orderManagerId, audit }: IOrder,
+    { state, type, merchantId, customerId, total, quantity, discount, orderManagerId, audit, cartItems }: IOrder,
   ) {
     super(id);
     this._state = state;
@@ -28,6 +30,7 @@ export class Order extends Entity<IOrder> implements IOrder {
     this._discount = discount;
     this._orderManagerId = orderManagerId;
     this._audit = audit;
+    this._cartItems = cartItems;
   }
 
   get state(): currentStatus {
@@ -100,6 +103,14 @@ export class Order extends Entity<IOrder> implements IOrder {
 
   set audit(audit: Audit) {
     this._audit = audit;
+  }
+
+  get cartItems() {
+    return this._cartItems;
+  }
+
+  set cartItems(cartItems: CartItem[]) {
+    this._cartItems = cartItems;
   }
 
   static create(props: IOrder, id?: Types.ObjectId) {

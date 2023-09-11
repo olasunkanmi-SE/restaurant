@@ -184,7 +184,7 @@ export const ShoppingCartDetails = () => {
           </div>
         </Stack>
         <Button className="w-100" variant="success" type="submit">
-          PLACE ORDER RM{handleCalculateTotalOrder()}
+          PLACE ORDER RM{handleCalculateTotalOrder() + calculateServiceCharge(calculateTotalOrderAmount())}
         </Button>
       </div>
       <div>
