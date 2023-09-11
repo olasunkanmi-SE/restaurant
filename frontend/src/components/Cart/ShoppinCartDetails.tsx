@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { CONSTANTS } from "../../constants/constant";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { OrderSummary } from "../../reducers";
-import { calculateTotalOrderAmount, setLocalStorageData, wordWrap } from "../../utility/utils";
+import { calculateServiceCharge, calculateTotalOrderAmount, setLocalStorageData, wordWrap } from "../../utility/utils";
 import { QtyButton } from "../MenuItems/addItemButton";
 import { CallToAction } from "../Utilities/modal";
 import { CartSelectedItems } from "./CartSelectedItems";
@@ -121,7 +121,7 @@ export const ShoppingCartDetails = () => {
               </span>
 
               <span className="ms-auto">
-                <p>RM {summary.menus[0].menuTotalPrice!}</p>
+                <p> {summary.menus[0].menuTotalPrice!}</p>
               </span>
             </Stack>
             <div style={{ marginTop: "-15px" }}>
@@ -171,10 +171,16 @@ export const ShoppingCartDetails = () => {
       )}
 
       <div>
-        <Stack direction="horizontal" gap={3}>
-          <div>Total</div>
-          <div style={{ fontWeight: 600 }} className="ms-auto">
-            <p>RM {handleCalculateTotalOrder()}</p>
+        <Stack direction="horizontal" gap={2} className="justify-content-end">
+          <small>Subtotal</small>
+          <div style={{ fontWeight: 400, fontSize: "12px" }} className="ms-auto">
+            <p> {handleCalculateTotalOrder()}</p>
+          </div>
+        </Stack>
+        <Stack direction="horizontal" gap={2} className="justify-content-end">
+          <small>Service Charge</small>
+          <div style={{ fontWeight: 400, fontSize: "12px" }} className="ms-auto">
+            <p> {calculateServiceCharge(calculateTotalOrderAmount())}</p>
           </div>
         </Stack>
         <Button className="w-100" variant="success" type="submit">

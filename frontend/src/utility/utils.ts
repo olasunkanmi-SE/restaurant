@@ -68,3 +68,7 @@ export const wordWrap = (text: string, wordLimit: number) => {
     omission: "...",
   });
 };
+
+export const calculateServiceCharge = (amount: number) => {
+  return Math.floor(Math.round(amount / 10));
+};

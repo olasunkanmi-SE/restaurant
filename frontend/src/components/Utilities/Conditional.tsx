@@ -4,7 +4,7 @@ import { Fragment } from "react";
 
 export const CheckOutOrAddToCart = () => {
   const location = useLocation();
-  const path = location.pathname.startsWith("/menu/");
+  const path = location.pathname.startsWith("");
 
   return <>{path ? <Fragment /> : <Checkout />}</>;
 };
