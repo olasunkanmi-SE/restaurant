@@ -4,6 +4,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Types } from 'mongoose';
 import { Type } from 'class-transformer';
 import { MenuDataModel } from './menu.schema';
+import { CartItemDataModel } from './cartItem.schema';
 
 export type SelectedCartItemDocument = SelectedCartItemDataModel & Document;
 
@@ -14,7 +15,7 @@ export class SelectedCartItemDataModel extends BaseDocument implements ISelected
   menuId: Types.ObjectId;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId })
-  @Type(() => MenuDataModel)
+  @Type(() => CartItemDataModel)
   itemId: Types.ObjectId;
 
   @Prop({ type: Number, required: true })
