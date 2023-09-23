@@ -20,4 +20,5 @@ export const TYPES = {
   IMenuRepository: Symbol('IMenuRepository'),
   IItemRepository: Symbol('IItemRepository'),
   IAddonRepository: Symbol('IAddonRepository'),
+  IOrderRepository: Symbol('IOrderRepository'),
 };

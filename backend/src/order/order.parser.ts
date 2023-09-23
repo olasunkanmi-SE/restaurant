@@ -4,7 +4,7 @@ import { IOrderResponseDTO } from './order-response.dto';
 
 export class OrderParser {
   static createOrderResponse(order: Order): IOrderResponseDTO {
-    const { id, state, type, merchantId, customerId, total, quantity, discount, orderManagerId, audit } = order;
+    const { id, state, type, merchantId, customerId, total, discount, orderManagerId, audit } = order;
     return {
       id,
       state,
@@ -12,7 +12,6 @@ export class OrderParser {
       merchantId,
       customerId,
       total,
-      quantity,
       discount,
       orderManagerId,
       ...AuditParser.createAuditResponse(audit),

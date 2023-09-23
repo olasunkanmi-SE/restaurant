@@ -6,19 +6,21 @@ import { HttpStatus, Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { Context } from '../context/context';
 import { throwApplicationError } from '../utilities/exception-instance';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ContextMiddleWare implements NestMiddleware {
   constructor(
     @Inject(TYPES.IContextService)
     private readonly contextService: IContextService,
+    private readonly configService: ConfigService,
   ) {}
   use(req: Request, res: Response, next: NextFunction) {
     const headers = req.headers;
     const errors = new Object() as any;
-    if (Object.hasOwnProperty.call(headers, APIResponseMessage.emailHeader) ?? 'guest@application.com') {
-      errors.email = APIResponseMessage.emailHeaderError;
-    }
+    // if (Object.hasOwnProperty.call(headers, APIResponseMessage.emailHeader)) {
+    //   errors.email = APIResponseMessage.emailHeaderError;
+    // }
     if (!Object.hasOwnProperty.call(headers, APIResponseMessage.correlationIdHeader)) {
       errors.correlationId = APIResponseMessage.correlationIdHeaderError;
     }
@@ -36,7 +38,8 @@ export class ContextMiddleWare implements NestMiddleware {
         throwApplicationError(HttpStatus.BAD_REQUEST, errors);
       }
     }
-    const email = req.headers[APIResponseMessage.emailHeader] as string;
+    const email =
+      (req.headers[APIResponseMessage.emailHeader] as string) ?? this.configService.get<string>('GUEST_EMAIL');
     const correlationId = req.headers[APIResponseMessage.correlationIdHeader] as string;
     const token = (req.headers[APIResponseMessage.authorizationHeader] as string) ?? '';
     const role = (req.headers[APIResponseMessage.roleHeader] as string) ?? '';

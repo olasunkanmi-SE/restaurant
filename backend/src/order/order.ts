@@ -10,7 +10,6 @@ export class Order extends Entity<IOrder> implements IOrder {
   _merchantId: Types.ObjectId;
   _customerId?: Types.ObjectId;
   _total: number;
-  _quantity: number;
   _discount?: number;
   _orderManagerId: Types.ObjectId;
   _audit: Audit;
@@ -18,7 +17,7 @@ export class Order extends Entity<IOrder> implements IOrder {
 
   constructor(
     id: Types.ObjectId,
-    { state, type, merchantId, customerId, total, quantity, discount, orderManagerId, audit, cartItems }: IOrder,
+    { state, type, merchantId, customerId, total, discount, orderManagerId, audit, cartItems }: IOrder,
   ) {
     super(id);
     this._state = state;
@@ -26,7 +25,6 @@ export class Order extends Entity<IOrder> implements IOrder {
     this._merchantId = merchantId;
     this._customerId = customerId;
     this._total = total;
-    this._quantity = quantity;
     this._discount = discount;
     this._orderManagerId = orderManagerId;
     this._audit = audit;
@@ -71,14 +69,6 @@ export class Order extends Entity<IOrder> implements IOrder {
 
   set total(total: number) {
     this._total = total;
-  }
-
-  get quantity(): number {
-    return this._quantity;
-  }
-
-  set quantity(quantity: number) {
-    this._quantity = quantity;
   }
 
   get discount(): number {
