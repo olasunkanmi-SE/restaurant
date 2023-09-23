@@ -11,7 +11,6 @@ export interface IOrder {
   merchantId: Types.ObjectId;
   customerId?: Types.ObjectId;
   total: number;
-  quantity: number;
   discount?: number;
   orderManagerId?: Types.ObjectId;
   audit: Audit;

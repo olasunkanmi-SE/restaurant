@@ -8,7 +8,6 @@ export interface IOrderDataModel {
   readonly merchantId: Types.ObjectId;
   readonly customerId?: Types.ObjectId;
   readonly total: number;
-  readonly quantity: number;
   readonly discount?: number;
   readonly orderManagerId?: Types.ObjectId;
   readonly cartItems: CartItemDataModel[];
