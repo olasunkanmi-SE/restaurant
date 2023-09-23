@@ -122,10 +122,10 @@ export class MenuService implements IMenuService {
 
   async getMenuByRestaurantId(restaurantId: string): Promise<Result<IMenuResponseDTO[]>> {
     const result = await this.menuRepository.getMenuByRestaurantId(restaurantId);
-    let menus: Menu[] | undefined;
+    let menus: Menu[] | [];
     if (result.getValue()) {
       menus = result.getValue();
     }
-    return Result.ok(MenuParser.createMenusResponse(menus));
+    return Result.ok(menus && menus.length ? MenuParser.createMenusResponse(menus) : []);
   }
 }

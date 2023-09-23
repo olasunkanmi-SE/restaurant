@@ -31,10 +31,7 @@ export class OrderDataModel extends BaseDocument implements IOrderDataModel {
 
   @Prop({ type: Number, required: true })
   total: number;
-
-  @Prop({ type: Number, required: true })
-  quantity: number;
-
+  
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: CartItemDataModel }] })
   @Type(() => CartItemDataModel)
   cartItems: CartItemDataModel[];

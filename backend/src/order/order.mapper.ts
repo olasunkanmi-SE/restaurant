@@ -9,7 +9,7 @@ import { AuditMapper } from 'src/audit';
 export class OrderMapper implements IMapper<Order, OrderDataModel> {
   constructor(private readonly auditMapper: AuditMapper, private readonly cartItemMapper: CartItemMapper) {}
   toPersistence(entity: Order): OrderDataModel {
-    const { id, state, type, merchantId, total, quantity, discount, orderManagerId, audit, cartItems } = entity;
+    const { id, state, type, merchantId, total, discount, orderManagerId, audit, cartItems } = entity;
     const {
       auditCreatedBy,
       auditCreatedDateTime,
@@ -24,7 +24,6 @@ export class OrderMapper implements IMapper<Order, OrderDataModel> {
       type,
       merchantId,
       total,
-      quantity,
       discount,
       cartItems: cartItems.map((cartItem) => this.cartItemMapper.toPersistence(cartItem)),
       orderManagerId,
@@ -39,14 +38,13 @@ export class OrderMapper implements IMapper<Order, OrderDataModel> {
   }
 
   toDomain(model: OrderDataModel): Order {
-    const { state, type, merchantId, total, quantity, discount, orderManagerId, _id, cartItems } = model;
+    const { state, type, merchantId, total, discount, orderManagerId, _id, cartItems } = model;
     const entity: Order = Order.create(
       {
         state,
         type,
         merchantId,
         total,
-        quantity,
         discount,
         orderManagerId,
         audit: this.auditMapper.toDomain(model),
