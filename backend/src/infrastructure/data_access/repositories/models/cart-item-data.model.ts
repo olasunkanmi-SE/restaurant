@@ -5,5 +5,5 @@ export interface ICartItemModel {
   readonly menuId: Types.ObjectId;
   readonly orderId: Types.ObjectId;
   readonly total: number;
-  readonly selectedItems: SelectedCartItemDataModel[];
+  readonly selectedItems?: SelectedCartItemDataModel[];
 }

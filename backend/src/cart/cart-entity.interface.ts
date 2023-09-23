@@ -6,6 +6,6 @@ export interface ICartItem {
   menuId: Types.ObjectId;
   orderId: Types.ObjectId;
   total: number;
-  selectedItems: SelectedCartItem[];
+  selectedItems?: SelectedCartItem[];
   audit: Audit;
 }
