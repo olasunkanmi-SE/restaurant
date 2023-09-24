@@ -39,7 +39,7 @@ export class OrderService implements IOrderService {
     this.context = this.contextService.getContext();
   }
 
-  async createOrder(orderSummary: CreateOrderDTO): Promise<IOrderResponseDTO> {
+  async createOrder(orderSummary: CreateOrderDTO): Promise<Result<IOrderResponseDTO>> {
     await this.merchantService.validateContext();
     const { state, type, merchantId, total, cartItems } = orderSummary;
     const validateMerchant: Result<Merchant> = await this.merchantRepository.findOne({ _id: merchantId });
@@ -92,7 +92,7 @@ export class OrderService implements IOrderService {
         }
         await session.commitTransaction();
         const response = OrderParser.createOrderResponse(savedOrder);
-        return response;
+        return Result.ok(response);
       }
     } catch (error) {
       session.abortTransaction();
