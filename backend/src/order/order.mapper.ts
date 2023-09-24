@@ -51,7 +51,7 @@ export class OrderMapper implements IMapper<Order, OrderDataModel> {
         cartItems: cartItems.map((cartItem) => this.cartItemMapper.toDomain(cartItem)),
       },
       _id,
-    ).getValue();
+    );
     return entity;
   }
 }

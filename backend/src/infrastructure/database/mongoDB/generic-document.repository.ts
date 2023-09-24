@@ -50,10 +50,7 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
   }
 
   async create(document: any, options?: SaveOptions): Promise<Result<TEntity>> {
-    const doc = new this.DocumentModel({
-      ...document,
-      _id: new Types.ObjectId(),
-    });
+    const doc = this.createDocument(document);
     const result = (await (await doc.save(options)).toJSON()) as T;
     if (!result) {
       return Result.fail('An Error occured, unable to save document in the db', HttpStatus.INTERNAL_SERVER_ERROR);
@@ -73,7 +70,7 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
     return Result.ok(entity);
   }
 
-  async upsert(filterQuery: FilterQuery<T>, document: Partial<T>): Promise<TEntity | unknown> {
+  async upsert(filterQuery: FilterQuery<T>, document: Partial<T>): Promise<unknown> {
     const result = await this.DocumentModel.findOneAndUpdate(filterQuery, document, {
       lean: true,
       upsert: true,
@@ -102,14 +99,22 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
   }
 
   async insertMany(docs: any): Promise<Result<TEntity[]>> {
-    const documents = await this.DocumentModel.insertMany(docs);
+    const documentsToSave = docs.map((doc) => this.createDocument(doc));
+    const documents = await this.DocumentModel.insertMany(documentsToSave);
     const entities: TEntity[] = documents.map((doc) => this.mapper.toDomain(doc));
     return Result.ok(entities);
   }
 
   async updateOne(filter: any, query: any): Promise<Result<TEntity>> {
     const document = await this.DocumentModel.updateOne(filter, { $set: query });
-    const entity: TEntity = this.mapper.toDomain(document);
+    const entity: TEntity = this.mapper.toDomain(document as any);
     return Result.ok(entity);
+  }
+
+  createDocument(document: any) {
+    return new this.DocumentModel({
+      ...document,
+      _id: new Types.ObjectId(),
+    });
   }
 }
