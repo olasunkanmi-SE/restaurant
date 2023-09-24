@@ -7,7 +7,7 @@ export class CartItem extends Entity<ICartItem> implements ICartItem {
   _menuId: Types.ObjectId;
   _orderId: Types.ObjectId;
   _total: number;
-  _selectedItems: SelectedCartItem[];
+  _selectedItems: SelectedCartItem[] | undefined;
   _audit: Audit;
 
   constructor(id: Types.ObjectId, props: ICartItem) {
@@ -42,11 +42,11 @@ export class CartItem extends Entity<ICartItem> implements ICartItem {
     this._total = total;
   }
 
-  get selectedItems(): SelectedCartItem[] {
+  get selectedItems(): SelectedCartItem[] | undefined {
     return this._selectedItems;
   }
 
-  set setSelectedItems(selectedItems: SelectedCartItem[]) {
+  set setSelectedItems(selectedItems: SelectedCartItem[] | undefined) {
     this._selectedItems = selectedItems;
   }
 
