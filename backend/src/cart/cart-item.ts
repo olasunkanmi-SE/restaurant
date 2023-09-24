@@ -59,6 +59,6 @@ export class CartItem extends Entity<ICartItem> implements ICartItem {
   }
 
   static create(props: ICartItem, id?: Types.ObjectId) {
-    return Result.ok(new CartItem(id, props));
+    return Result.ok(new CartItem(id, props)).getValue();
   }
 }

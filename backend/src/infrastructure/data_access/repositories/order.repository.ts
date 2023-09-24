@@ -10,7 +10,6 @@ import { IOrderRepository } from './interfaces/order-repository.interface';
 @Injectable()
 export class OrderRepository extends GenericDocumentRepository<Order, OrderDocument> implements IOrderRepository {
   orderMapper: OrderMapper;
-  orderDataModel: Model<OrderDocument>;
   constructor(
     @InjectModel(OrderDataModel.name) orderDataModel: Model<OrderDocument>,
     @InjectConnection() readonly connection: Connection,
@@ -18,20 +17,13 @@ export class OrderRepository extends GenericDocumentRepository<Order, OrderDocum
   ) {
     super(orderDataModel, connection, orderMapper);
     this.orderMapper = orderMapper;
-    this.orderDataModel = orderDataModel;
   }
 
   async getOrders(): Promise<Order[]> {
-    const documents = await this.orderDataModel.find({});
-    return documents.length ? documents.map((doc) => this.orderMapper.toDomain(doc)) : [];
+    return (await this.find({})).getValue();
   }
 
-  async createOrder(order: OrderDataModel): Promise<any> {
-    const doc = new this.DocumentModel({
-      ...order,
-      _id: new Types.ObjectId(),
-    });
-    const result = (await doc.save()).toJSON();
-    return result;
+  async createOrder(order: OrderDataModel): Promise<Order> {
+    return (await this.create(order)).getValue();
   }
 }

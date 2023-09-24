@@ -52,7 +52,7 @@ export class CartItemMapper implements IMapper<CartItem, CartItemDataModel> {
     const entity: CartItem = CartItem.create(
       { menuId, orderId, total, selectedItems: selectedItemsToDomain, audit: this.auditMapper.toDomain(model) },
       _id,
-    ).getValue();
+    );
     return entity;
   }
 }

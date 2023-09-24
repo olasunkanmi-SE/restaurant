@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Type } from 'class-transformer';
-import mongoose, { Types } from 'mongoose';
+import mongoose, { Document, Types } from 'mongoose';
 import { BaseDocument } from 'src/infrastructure/database';
 import { ICartItemModel } from '../models/cart-item-data.model';
 import { MenuDataModel } from './menu.schema';
@@ -21,7 +21,7 @@ export class CartItemDataModel extends BaseDocument implements ICartItemModel {
   @Prop({ type: String, required: true })
   total: number;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: SelectedCartItemDataModel }] })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: SelectedCartItemDataModel.name }] })
   @Type(() => SelectedCartItemDataModel)
   selectedItems?: SelectedCartItemDataModel[];
 }

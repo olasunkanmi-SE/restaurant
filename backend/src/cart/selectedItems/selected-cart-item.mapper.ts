@@ -6,7 +6,7 @@ import { SelectedCartItem } from './selectedCartItem';
 export class SelectedCartItemMapper implements IMapper<SelectedCartItem, SelectedCartItemDataModel> {
   constructor(private readonly auditMapper: AuditMapper) {}
   toPersistence(entity: SelectedCartItem): SelectedCartItemDataModel {
-    const { id, cartItemId, itemId, price, quantity, audit } = entity;
+    const { id, cartItemId, itemId, price, quantity, menuId, audit } = entity;
     const {
       auditCreatedBy,
       auditCreatedDateTime,
@@ -19,6 +19,7 @@ export class SelectedCartItemMapper implements IMapper<SelectedCartItem, Selecte
       _id: id,
       cartItemId,
       itemId,
+      menuId,
       price,
       quantity,
       auditCreatedBy,
@@ -32,17 +33,18 @@ export class SelectedCartItemMapper implements IMapper<SelectedCartItem, Selecte
   }
 
   toDomain(model: SelectedCartItemDataModel): SelectedCartItem {
-    const { _id, cartItemId, itemId, price, quantity } = model;
+    const { _id, cartItemId, itemId, price, quantity, menuId } = model;
     const entity: SelectedCartItem = SelectedCartItem.create(
       {
         cartItemId,
         itemId,
+        menuId,
         price,
         quantity,
         audit: this.auditMapper.toDomain(model),
       },
       _id,
-    ).getValue();
+    );
     return entity;
   }
 }
