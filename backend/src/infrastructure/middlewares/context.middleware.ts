@@ -18,10 +18,10 @@ export class ContextMiddleWare implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     const headers = req.headers;
     const errors = new Object() as any;
-    // if (Object.hasOwnProperty.call(headers, APIResponseMessage.emailHeader)) {
-    //   errors.email = APIResponseMessage.emailHeaderError;
-    // }
-    if (!Object.hasOwnProperty.call(headers, APIResponseMessage.correlationIdHeader)) {
+    if (!Object.hasOwn(headers, APIResponseMessage.emailHeader)) {
+      errors.email = APIResponseMessage.emailHeaderError;
+    }
+    if (!Object.hasOwn(headers, APIResponseMessage.correlationIdHeader)) {
       errors.correlationId = APIResponseMessage.correlationIdHeaderError;
     }
     for (const [key, value] of Object.entries(headers)) {

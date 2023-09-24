@@ -104,6 +104,6 @@ export class Order extends Entity<IOrder> implements IOrder {
   }
 
   static create(props: IOrder, id?: Types.ObjectId) {
-    return Result.ok(new Order(id, props));
+    return Result.ok(new Order(id, props)).getValue();
   }
 }

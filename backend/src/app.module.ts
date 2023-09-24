@@ -18,6 +18,7 @@ import { ItemModule } from './item/item.module';
 import { MerchantModule } from './merchant/merchant.module';
 import { ApplicationExceptionsFilter, ApplicationLogger } from './infrastructure';
 import { LocationModule } from './location';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { LocationModule } from './location';
     MenuModule,
     AddonModule,
     CategoryModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [

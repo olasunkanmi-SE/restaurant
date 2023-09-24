@@ -1,10 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Type } from 'class-transformer';
-import mongoose, { Types } from 'mongoose';
+import mongoose, { Document, Types } from 'mongoose';
 import { BaseDocument } from 'src/infrastructure/database';
 import { ISelectedCartItemDataModel } from '../models/selected-item-model.interface';
 import { CartItemDataModel } from './cartItem.schema';
 import { ItemDataModel } from './item.schema';
+import { MenuDataModel } from './menu.schema';
 
 export type SelectedCartItemDocument = SelectedCartItemDataModel & Document;
 
@@ -13,6 +14,10 @@ export class SelectedCartItemDataModel extends BaseDocument implements ISelected
   @Prop({ type: mongoose.Schema.Types.ObjectId })
   @Type(() => ItemDataModel)
   itemId: Types.ObjectId;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId })
+  @Type(() => MenuDataModel)
+  menuId: Types.ObjectId;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId })
   @Type(() => CartItemDataModel)
