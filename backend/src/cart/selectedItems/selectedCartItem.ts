@@ -3,7 +3,7 @@ import { ISelectedCartItem } from './selected-cart-items-entity.interface';
 import { Types } from 'mongoose';
 
 export class SelectedCartItem extends Entity<ISelectedCartItem> implements ISelectedCartItem {
-  _menuId: Types.ObjectId;
+  _cartItemId: Types.ObjectId;
   _itemId: Types.ObjectId;
   _price: number;
   _quantity: number;
@@ -11,19 +11,19 @@ export class SelectedCartItem extends Entity<ISelectedCartItem> implements ISele
 
   constructor(id: Types.ObjectId, props: ISelectedCartItem) {
     super(id);
-    this._menuId = props.menuId;
+    this._cartItemId = props.cartItemId;
     this._price = props.price;
     this._quantity = props.quantity;
     this._itemId = props.itemId;
     this._audit = props.audit;
   }
 
-  get menuId(): Types.ObjectId {
-    return this._menuId;
+  get cartItemId(): Types.ObjectId {
+    return this._cartItemId;
   }
 
-  set menuId(id: Types.ObjectId) {
-    this._menuId = id;
+  set cartItemId(id: Types.ObjectId) {
+    this._cartItemId = id;
   }
 
   get itemId(): Types.ObjectId {

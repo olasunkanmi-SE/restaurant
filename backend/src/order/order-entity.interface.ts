@@ -14,5 +14,5 @@ export interface IOrder {
   discount?: number;
   orderManagerId?: Types.ObjectId;
   audit: Audit;
-  cartItems: CartItem[];
+  cartItems?: CartItem[];
 }

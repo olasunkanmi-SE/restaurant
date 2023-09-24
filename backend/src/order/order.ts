@@ -13,7 +13,7 @@ export class Order extends Entity<IOrder> implements IOrder {
   _discount?: number;
   _orderManagerId: Types.ObjectId;
   _audit: Audit;
-  _cartItems: CartItem[];
+  _cartItems: CartItem[] | undefined;
 
   constructor(
     id: Types.ObjectId,
@@ -95,11 +95,11 @@ export class Order extends Entity<IOrder> implements IOrder {
     this._audit = audit;
   }
 
-  get cartItems() {
+  get cartItems(): CartItem[] | undefined {
     return this._cartItems;
   }
 
-  set cartItems(cartItems: CartItem[]) {
+  set cartItems(cartItems: CartItem[] | undefined) {
     this._cartItems = cartItems;
   }
 

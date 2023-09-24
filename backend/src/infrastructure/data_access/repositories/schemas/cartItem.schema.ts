@@ -23,7 +23,7 @@ export class CartItemDataModel extends BaseDocument implements ICartItemModel {
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: SelectedCartItemDataModel }] })
   @Type(() => SelectedCartItemDataModel)
-  selectedItems: SelectedCartItemDataModel[];
+  selectedItems?: SelectedCartItemDataModel[];
 }
 
 export const CartItemSchema = SchemaFactory.createForClass(CartItemDataModel);
