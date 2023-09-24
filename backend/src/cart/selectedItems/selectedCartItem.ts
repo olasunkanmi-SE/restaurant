@@ -32,8 +32,8 @@ export class SelectedCartItem extends Entity<ISelectedCartItem> implements ISele
     return this._menuId;
   }
 
-  set menuId(id: Types.ObjectId) {
-    this._menuId = id;
+  set cartItemId(id: Types.ObjectId) {
+    this._cartItemId = id;
   }
 
   get itemId(): Types.ObjectId {
