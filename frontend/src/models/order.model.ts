@@ -1,4 +1,4 @@
-interface IOrder {
+export interface IOrder {
   state: string;
   type: string;
   merchantId: string;
@@ -6,14 +6,14 @@ interface IOrder {
   cartItems: IcartItems[];
 }
 
-interface IcartItems {
+export interface IcartItems {
   menuId: string;
   total: number;
   quantity: number;
   selectedItems: IselectedItems[];
 }
 
-interface IselectedItems {
+export interface IselectedItems {
   itemId: string;
   menuId: string;
   price: number;
