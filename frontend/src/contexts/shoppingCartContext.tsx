@@ -399,6 +399,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
 
     const updateCartItems = (orderSummary: OrderSummary[]) => {
       state.orderSummary = orderSummary;
+      console.log(state.orderSummary);
       setLocalStorageData("cart", JSON.stringify(state), true);
       dispatch({
         type: CartActionsType.UPDATE_CART_ITEMS,

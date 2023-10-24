@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Connection, Model, Types } from 'mongoose';
+import { Connection, Model } from 'mongoose';
 import { GenericDocumentRepository } from 'src/infrastructure/database';
 import { Order } from 'src/order/order';
 import { OrderMapper } from './../../../order/order.mapper';
-import { OrderDataModel, OrderDocument } from './schemas/order.schema';
 import { IOrderRepository } from './interfaces/order-repository.interface';
+import { OrderDataModel, OrderDocument } from './schemas/order.schema';
 
 @Injectable()
 export class OrderRepository extends GenericDocumentRepository<Order, OrderDocument> implements IOrderRepository {
