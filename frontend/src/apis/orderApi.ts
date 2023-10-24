@@ -18,7 +18,9 @@ const reduceSelectedItems = () => {
           if (menu.selectedItems) {
             menu.selectedItems.forEach((selectedItem) => {
               const itemId = selectedItem.id;
-              const existingItem = result.find((item: any) => item.id === itemId);
+              const existingItem = result.find(
+                (item: any) => item.id === itemId
+              );
               if (existingItem) {
                 existingItem.price += selectedItem.price;
                 existingItem.quantity! += selectedItem.quantity!;
@@ -35,13 +37,13 @@ const reduceSelectedItems = () => {
   return selectedItems;
 };
 
-const getCartItems = () => {
-  const orderSummary = getOrderSummary();
-  if (orderSummary?.length) {
-    const selectedItemsMap = new Map<string, SelectedItem>();
-    reduceSelectedItems.forEach((item) => {});
-    orderSummary.map((summary) => {
-      const cartItem = summary.menus;
-    });
-  }
-};
+// const getCartItems = () => {
+//   const orderSummary = getOrderSummary();
+//   if (orderSummary?.length) {
+//     const selectedItemsMap = new Map<string, SelectedItem>();
+//     reduceSelectedItems.forEach((item) => {});
+//     orderSummary.map((summary) => {
+//       const cartItem = summary.menus;
+//     });
+//   }
+// };
