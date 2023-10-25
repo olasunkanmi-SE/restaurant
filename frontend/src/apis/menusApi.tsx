@@ -1,4 +1,4 @@
-import { IMenu, IMenus } from "../models/menu.model";
+import { IMenu } from "../models/menu.model";
 import { ICreateMenu } from "../interfaces/menu.interface";
 import { QueryObserverResult, useQuery } from "react-query";
 import { menuApi } from "./axios";
