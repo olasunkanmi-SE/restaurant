@@ -13,6 +13,7 @@ import {
 } from 'mongoose';
 import { Result } from './../../../domain/result/result';
 import { IGenericDocument } from './generic-document.interface';
+import { throwApplicationError } from 'src/infrastructure/utilities/exception-instance';
 
 export abstract class GenericDocumentRepository<TEntity, T extends Document> implements IGenericDocument<TEntity, T> {
   constructor(
@@ -20,6 +21,28 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
     readonly connection: Connection,
     private readonly mapper: any,
   ) {}
+
+  public static createObjectId() {
+    return new Types.ObjectId();
+  }
+
+  protected convertObjectIdToString(objectId: Types.ObjectId) {
+    return objectId.toString();
+  }
+
+  protected convertStringToObjectId(prop: string) {
+    return new Types.ObjectId(prop);
+  }
+
+  async count(query: FilterQuery<T>, limit?: number): Promise<number> {
+    return this.DocumentModel.countDocuments(query, { limit });
+  }
+  async aggregate(
+    query: any[],
+    options: { readPeference?: 'secondaryPreferred' | 'primaryPreferred' } = {},
+  ): Promise<any> {
+    return await this.DocumentModel.aggregate(query).read(options.readPeference || 'primary');
+  }
 
   async findOne(filterQuery: FilterQuery<T>, projection?: ProjectionType<T | null>): Promise<Result<TEntity | null>> {
     const document = await this.DocumentModel.findOne(filterQuery, projection);
@@ -40,13 +63,28 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
   }
 
   async find(
-    filterQuery: FilterQuery<T>,
-    projection?: ProjectionType<T | null>,
+    query: FilterQuery<T>,
+    select?: ProjectionType<T | null>,
     options?: QueryOptions<T>,
-  ): Promise<Result<TEntity[] | null>> {
-    const documents = await this.DocumentModel.find(filterQuery, projection, options);
+  ): Promise<Result<TEntity[] | []>> {
+    const documents = await this.DocumentModel.find(query, select, options)
+      .skip(options.skip)
+      .limit(options.limit)
+      .lean()
+      .exec();
     const entities = documents?.length ? documents.map((document) => this.mapper.toDomain(document)) : [];
     return Result.ok(entities);
+  }
+
+  async pagination(query: FilterQuery<T>, select: ProjectionType<T | null>, options: QueryOptions<T>) {
+    const pageSize = 500;
+    const page = options.page || 1;
+    const skip = (page - 1) * pageSize;
+    const limit = options.limit || pageSize;
+    const documents = this.DocumentModel.find(query, select, { ...options, skip, limit })
+      .batchSize(pageSize)
+      .cursor();
+    return documents.map((doc) => this.mapper.toDomain(doc));
   }
 
   async create(document: any, options?: SaveOptions): Promise<Result<TEntity>> {
@@ -99,10 +137,14 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
   }
 
   async insertMany(docs: any): Promise<Result<TEntity[]>> {
-    const documentsToSave = docs.map((doc) => this.createDocument(doc));
-    const documents = await this.DocumentModel.insertMany(documentsToSave);
-    const entities: TEntity[] = documents.map((doc) => this.mapper.toDomain(doc));
-    return Result.ok(entities);
+    try {
+      const documentsToSave = docs.map((doc) => this.createDocument(doc));
+      const documents = await this.DocumentModel.insertMany(documentsToSave);
+      const entities: TEntity[] = documents.map((doc) => this.mapper.toDomain(doc));
+      return Result.ok(entities);
+    } catch (error) {
+      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Unable to insert documents into the database');
+    }
   }
 
   async updateOne(filter: any, query: any): Promise<Result<TEntity>> {
@@ -114,7 +156,7 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
   createDocument(document: any) {
     return new this.DocumentModel({
       ...document,
-      _id: new Types.ObjectId(),
+      _id: GenericDocumentRepository.createObjectId(),
     });
   }
 }
