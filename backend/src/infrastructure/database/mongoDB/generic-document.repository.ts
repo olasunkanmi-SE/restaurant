@@ -26,11 +26,19 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
     return new Types.ObjectId();
   }
 
-  protected convertObjectIdToString(objectId: Types.ObjectId) {
+  private convertObjectIdToString(objectId: Types.ObjectId) {
     return objectId.toString();
   }
 
-  protected convertStringToObjectId(prop: string) {
+  public objectIdToString(objectId: Types.ObjectId): string {
+    return this.convertObjectIdToString(objectId);
+  }
+
+  public stringToObjectId(prop: string): Types.ObjectId {
+    return this.convertStringToObjectId(prop);
+  }
+
+  private convertStringToObjectId(prop: string) {
     return new Types.ObjectId(prop);
   }
 
