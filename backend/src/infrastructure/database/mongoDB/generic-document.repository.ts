@@ -12,8 +12,8 @@ import {
   UpdateQuery,
 } from 'mongoose';
 import { Result } from './../../../domain/result/result';
+import { throwApplicationError } from './../../utilities/exception-instance';
 import { IGenericDocument } from './generic-document.interface';
-import { throwApplicationError } from 'src/infrastructure/utilities/exception-instance';
 
 export abstract class GenericDocumentRepository<TEntity, T extends Document> implements IGenericDocument<TEntity, T> {
   constructor(
