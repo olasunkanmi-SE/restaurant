@@ -5,13 +5,16 @@ import { TYPES } from '../../application/constants';
 import { IContextAwareLogger } from '../logger';
 import { APIResponseMessage } from './../../application/constants/constants';
 import { IExceptionResponse, IRequestException } from './exception-response.interface';
+import { BaseExceptionFilter } from '@nestjs/core';
 
 @Catch()
-export class ApplicationExceptionsFilter implements ExceptionFilter {
+export class ApplicationExceptionsFilter extends BaseExceptionFilter {
   constructor(
     @Inject(TYPES.IApplicationLogger)
     private readonly logger: IContextAwareLogger,
-  ) {}
+  ) {
+    super();
+  }
   catch(exception: any, host: ArgumentsHost) {
     const context = host.switchToHttp();
     const response = context.getResponse();
@@ -36,6 +39,10 @@ export class ApplicationExceptionsFilter implements ExceptionFilter {
     this.logErrorMessage(request, JSON.stringify(responseBody), statusCode, exception);
     const errorLog: string = this.constructErrorMessage(responseBody, request, exception);
     this.writeErrorLogToFile(errorLog);
+    //consider using sentry
+    //https://docs.sentry.io/platforms/node/
+    //https://dev.to/marcelozapatta/how-to-integrate-sentry-in-nestjs-3ema
+    super.catch(exception, host);
     response.status(statusCode).json(responseBody);
     return exception;
   }
