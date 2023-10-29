@@ -110,6 +110,7 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
       return true;
     } catch (error) {
       session.abortTransaction();
+      console.error(error);
     } finally {
       session.endSession();
     }

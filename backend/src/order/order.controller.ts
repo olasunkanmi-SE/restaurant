@@ -9,7 +9,7 @@ import { Result } from 'src/domain';
 export class OrderController {
   constructor(@Inject(TYPES.IOrderService) private readonly orderService: IOrderService) {}
 
-  @Post()
+  @Post('create')
   async create(@Body() request: CreateOrderDTO): Promise<Result<IOrderResponseDTO>> {
     return this.orderService.createOrder(request);
   }

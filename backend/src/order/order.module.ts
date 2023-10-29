@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TYPES } from 'src/application';
@@ -26,6 +26,8 @@ import { MerchantMapper, MerchantService } from 'src/merchant';
 import { ValidateUser } from 'src/utils';
 import { OrderMapper } from './order.mapper';
 import { OrderService } from './order.service';
+import { OrderController } from './order.controller';
+import { ContextMiddleWare } from 'src/infrastructure/middlewares';
 
 @Module({
   imports: [
@@ -37,7 +39,7 @@ import { OrderService } from './order.service';
       { name: SelectedCartItemDataModel.name, schema: SelectedCartItemSchema },
     ]),
   ],
-  controllers: [],
+  controllers: [OrderController],
   providers: [
     { provide: TYPES.IOrderService, useClass: OrderService },
     { provide: TYPES.IOrderRepository, useClass: OrderRepository },
@@ -55,4 +57,8 @@ import { OrderService } from './order.service';
     AuditMapper,
   ],
 })
-export class OrderModule {}
+export class OrderModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ContextMiddleWare).exclude().forRoutes(OrderController);
+  }
+}

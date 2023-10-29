@@ -25,7 +25,7 @@ export class OrderMapper implements IMapper<Order, OrderDataModel> {
       merchantId,
       total,
       discount,
-      cartItems: cartItems.map((cartItem) => this.cartItemMapper.toPersistence(cartItem)),
+      cartItems: cartItems?.length ? cartItems.map((cartItem) => this.cartItemMapper.toPersistence(cartItem)) : [],
       orderManagerId,
       auditCreatedBy,
       auditCreatedDateTime,
@@ -48,7 +48,7 @@ export class OrderMapper implements IMapper<Order, OrderDataModel> {
         discount,
         orderManagerId,
         audit: this.auditMapper.toDomain(model),
-        cartItems: cartItems.map((cartItem) => this.cartItemMapper.toDomain(cartItem)),
+        cartItems: cartItems?.length ? cartItems.map((cartItem) => this.cartItemMapper.toDomain(cartItem)) : [],
       },
       _id,
     );

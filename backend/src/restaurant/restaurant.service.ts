@@ -85,6 +85,7 @@ export class RestaurantService implements IRestaurantService {
       return Result.ok(RestaurantParser.createRestaurantResponse(response));
     } catch (error) {
       await session.abortTransaction();
+      console.error(error);
     } finally {
       session.endSession();
     }

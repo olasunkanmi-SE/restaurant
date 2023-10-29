@@ -16,6 +16,7 @@ export class CartItem extends Entity<ICartItem> implements ICartItem {
     this._orderId = props.orderId;
     this._total = props.total;
     this._selectedItems = props.selectedItems;
+    this._audit = props.audit;
   }
 
   get menuId(): Types.ObjectId {

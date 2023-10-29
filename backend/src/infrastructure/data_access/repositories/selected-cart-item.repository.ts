@@ -13,5 +13,6 @@ export class SelectedCartItemRepository extends GenericDocumentRepository<Select
     selectedCartItemMapper: SelectedCartItemMapper,
   ) {
     super(selectedCartItemDataModel, connection, selectedCartItemMapper);
+    this.selectedCartItemMapper = selectedCartItemMapper;
   }
 }
