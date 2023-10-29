@@ -5,13 +5,16 @@ import { TYPES } from '../../application/constants';
 import { IContextAwareLogger } from '../logger';
 import { APIResponseMessage } from './../../application/constants/constants';
 import { IExceptionResponse, IRequestException } from './exception-response.interface';
+import { BaseExceptionFilter } from '@nestjs/core';
 
 @Catch()
-export class ApplicationExceptionsFilter implements ExceptionFilter {
+export class ApplicationExceptionsFilter extends BaseExceptionFilter {
   constructor(
     @Inject(TYPES.IApplicationLogger)
     private readonly logger: IContextAwareLogger,
-  ) {}
+  ) {
+    super();
+  }
   catch(exception: any, host: ArgumentsHost) {
     const context = host.switchToHttp();
     const response = context.getResponse();
