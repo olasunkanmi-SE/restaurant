@@ -75,13 +75,20 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
     select?: ProjectionType<T | null>,
     options?: QueryOptions<T>,
   ): Promise<Result<TEntity[] | []>> {
-    const documents = await this.DocumentModel.find(query, select, options)
-      .skip(options ? options.skip : null)
-      .limit(options ? options.limit : null)
-      .lean()
-      .exec();
-    const entities = documents?.length ? documents.map((document) => this.mapper.toDomain(document)) : [];
-    return Result.ok(entities);
+    try {
+      const documents = await this.DocumentModel.find(query, select, options)
+        .skip(options ? options.skip : null)
+        .limit(options ? options.limit : null)
+        .lean()
+        .exec();
+      if (!documents?.length) {
+        throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'documents does not exist');
+      }
+      const entities = documents?.length ? documents.map((document) => this.mapper.toDomain(document)) : [];
+      return Result.ok(entities);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async pagination(query: FilterQuery<T>, select: ProjectionType<T | null>, options: QueryOptions<T>) {
@@ -116,7 +123,7 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
     return Result.ok(entity);
   }
 
-  async upsert(filterQuery: FilterQuery<T>, document: Partial<T>): Promise<unknown> {
+  async upsert(filterQuery: FilterQuery<T>, document: Partial<T>): Promise<Result<TEntity | null>> {
     const result = await this.DocumentModel.findOneAndUpdate(filterQuery, document, {
       lean: true,
       upsert: true,
@@ -127,7 +134,7 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
       return Result.fail('Unable to update the database', HttpStatus.INTERNAL_SERVER_ERROR);
     }
     const entity = this.mapper.toDomain(result);
-    return entity;
+    return Result.ok(entity);
   }
 
   async deleteMany(filterQuery: FilterQuery<T>): Promise<boolean> {
@@ -159,9 +166,32 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
   }
 
   async updateOne(filter: any, query: any): Promise<Result<TEntity>> {
-    const document = await this.DocumentModel.updateOne(filter, { $set: query });
-    const entity: TEntity = this.mapper.toDomain(document as any);
-    return Result.ok(entity);
+    try {
+      const document = await this.DocumentModel.updateOne(filter, { $set: query });
+      if (!document) {
+        throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Unable to update document in the database');
+      }
+      const entity: TEntity = this.mapper.toDomain(document as any);
+      return Result.ok(entity);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async updateMany(query: FilterQuery<T>, updateBody: UpdateQuery<T>): Promise<Result<TEntity[]>> {
+    try {
+      const saved = await this.DocumentModel.updateMany(query, updateBody, {
+        multi: true,
+      });
+      if (saved.matchedCount < 1) {
+        throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Unable to update documents into the database');
+      }
+      const updatedDocuments = await this.DocumentModel.find(query);
+      const entities: TEntity[] = updatedDocuments.map((doc) => this.mapper.toDomain(doc));
+      return Result.ok(entities);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   createDocument(document: any) {

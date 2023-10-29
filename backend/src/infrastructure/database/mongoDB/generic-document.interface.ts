@@ -16,7 +16,7 @@ export interface IGenericDocument<TEntity, T> {
 
   findOneAndUpdate(filterQuery: FilterQuery<T>, update: UpdateQuery<T>): Promise<Result<TEntity | null>>;
 
-  upsert(filterQuery: FilterQuery<T>, document: Partial<T>): Promise<TEntity | unknown>;
+  upsert(filterQuery: FilterQuery<T>, document: Partial<T>): Promise<Result<TEntity | null>>;
 
   deleteMany(filterQuery: FilterQuery<T>): Promise<boolean>;
 
