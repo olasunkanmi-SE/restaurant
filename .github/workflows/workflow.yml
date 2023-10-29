@@ -37,3 +37,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: ChatGPT comment
+        uses: kxxt/chatgpt-action@v0.3
+        id: chatgpr
+        with:
+          number: ${{ github.event.pull_request.number }}
+          sessionToken: ${{ secrets.CHATGPT_SESSION_TOKEN }}
+          split: "yolo"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

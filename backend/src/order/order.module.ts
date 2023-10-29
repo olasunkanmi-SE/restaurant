@@ -42,6 +42,7 @@ import { ContextMiddleWare } from 'src/infrastructure/middlewares';
   controllers: [OrderController],
   providers: [
     { provide: TYPES.IOrderService, useClass: OrderService },
+    { provide: TYPES.ICartItemRepository, useClass: CartItemRepository },
     { provide: TYPES.IOrderRepository, useClass: OrderRepository },
     { provide: TYPES.IMerchantService, useClass: MerchantService },
     { provide: TYPES.IContextService, useClass: ContextService },

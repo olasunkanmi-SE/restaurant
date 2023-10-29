@@ -47,7 +47,7 @@ export class CartItem extends Entity<ICartItem> implements ICartItem {
     return this._selectedItems;
   }
 
-  set setSelectedItems(selectedItems: SelectedCartItem[] | undefined) {
+  set selectedItems(selectedItems: SelectedCartItem[] | undefined) {
     this._selectedItems = selectedItems;
   }
 
