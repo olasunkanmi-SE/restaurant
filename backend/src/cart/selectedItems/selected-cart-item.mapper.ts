@@ -4,7 +4,6 @@ import { SelectedCartItemDataModel } from 'src/infrastructure/data_access/reposi
 import { SelectedCartItem } from './selectedCartItem';
 
 export class SelectedCartItemMapper implements IMapper<SelectedCartItem, SelectedCartItemDataModel> {
-  constructor(private readonly auditMapper: AuditMapper) {}
   toPersistence(entity: SelectedCartItem): SelectedCartItemDataModel {
     const { id, cartItemId, itemId, price, quantity, menuId, audit } = entity;
     const {
@@ -41,7 +40,7 @@ export class SelectedCartItemMapper implements IMapper<SelectedCartItem, Selecte
         menuId,
         price,
         quantity,
-        audit: this.auditMapper.toDomain(model),
+        audit: new AuditMapper().toDomain(model),
       },
       _id,
     );

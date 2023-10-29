@@ -83,6 +83,7 @@ export class MerchantService extends AuthService implements IMerchantService {
     }
     return Result.ok(MerchantParser.createMerchantResponse(merchant));
   }
+  ß;
 
   async getMerchants(): Promise<Result<IMerchantResponseDTO[]>> {
     const isValidUser = await this.validateContext();

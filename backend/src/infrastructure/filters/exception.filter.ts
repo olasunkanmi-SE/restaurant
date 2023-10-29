@@ -42,7 +42,6 @@ export class ApplicationExceptionsFilter extends BaseExceptionFilter {
     //consider using sentry
     //https://docs.sentry.io/platforms/node/
     //https://dev.to/marcelozapatta/how-to-integrate-sentry-in-nestjs-3ema
-    super.catch(exception, host);
     response.status(statusCode).json(responseBody);
     return exception;
   }

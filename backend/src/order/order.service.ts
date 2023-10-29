@@ -55,7 +55,7 @@ export class OrderService implements IOrderService {
       const orderToSave: Result<Order> = await this.orderRepository.createOrder(orderModel);
       const savedOrder = orderToSave.getValue();
       const orderId = savedOrder.id;
-      if (cartItems) {
+      if (cartItems?.length) {
         const items = cartItems.map((item) => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { selectedItems, ...otherItemProperties } = item;
@@ -65,26 +65,39 @@ export class OrderService implements IOrderService {
         const savedCartItems: Result<CartItem[]> = await this.cartItemRepository.insertMany(cartItemDataModels);
         const savedItems = savedCartItems.getValue();
 
-        const cartItemMap = new Map<Types.ObjectId, Types.ObjectId>();
-        savedItems.forEach((item) => cartItemMap.set(item.menuId, item.id));
+        const cartItemMap = savedItems.reduce((map, item) => {
+          map.set(this.orderRepository.objectIdToString(item.menuId), this.orderRepository.objectIdToString(item.id));
+          return map;
+        }, new Map<string, string>());
 
         const cartSelectedItems = cartItems.map((item) => item.selectedItems);
         const flattenedSelectedItems = cartSelectedItems.flat();
         flattenedSelectedItems.forEach((item) => {
-          if (cartItemMap.has(item.menuId)) {
-            item.cartItemId = cartItemMap.get(item.menuId);
+          console.log(item.menuId);
+          if (cartItemMap.has(this.orderRepository.objectIdToString(item.menuId))) {
+            item.cartItemId = this.orderRepository.stringToObjectId(
+              cartItemMap.get(this.orderRepository.objectIdToString(item.menuId)),
+            );
           }
         });
         const selectedItems = flattenedSelectedItems.map((item) => SelectedCartItem.create({ ...item, audit }));
         const selectedCartItemsDataModel = selectedItems.map((item) => this.selectedItemMapper.toPersistence(item));
-        await this.selectedCartItemRepository.insertMany(selectedCartItemsDataModel);
-        await session.commitTransaction();
-        const response = OrderParser.createOrderResponse(savedOrder);
+        const insertedItems: Result<SelectedCartItem[]> = await this.selectedCartItemRepository.insertMany(
+          selectedCartItemsDataModel,
+        );
+        let response: IOrderResponseDTO | undefined;
+        if (insertedItems.isSuccess) {
+          response = OrderParser.createOrderResponse(savedOrder);
+        } else {
+          throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Could not create an order`);
+        }
         return Result.ok(response);
       }
     } catch (error) {
       session.abortTransaction();
-      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, JSON.stringify(error));
+    } finally {
+      await session.commitTransaction();
+      await session.endSession();
     }
   }
 }
