@@ -1,26 +1,25 @@
-import { CartItemMapper } from './../cart/cart-item.mapper';
-import { CartItemDataModel } from 'src/infrastructure/data_access/repositories/schemas/cartItem.schema';
-import { SelectedCartItemMapper } from './../cart/selectedItems/selected-cart-item.mapper';
-import { ConvertId } from './../utils/mongoose-id-conversion';
 import { HttpStatus, Inject } from '@nestjs/common';
-import { TYPES } from 'src/application';
-import { IOrderRepository } from 'src/infrastructure/data_access/repositories/interfaces/order-repository.interface';
-import { CreateOrderDTO } from './dto/create-order.dto';
-import { IMerchantService, Merchant } from 'src/merchant';
-import { Context, IContextService, MerchantRepository } from 'src/infrastructure';
-import { Audit, Result } from 'src/domain';
-import { throwApplicationError } from 'src/infrastructure/utilities/exception-instance';
-import { Order } from './order';
-import { OrderDataModel } from 'src/infrastructure/data_access/repositories/schemas/order.schema';
-import { OrderMapper } from './order.mapper';
-import { CartItem } from 'src/cart/cart-item';
-import { CartItemRepository } from 'src/infrastructure/data_access/repositories/cart-item.repository';
 import { Types } from 'mongoose';
+import { TYPES } from 'src/application';
+import { CartItem } from 'src/cart/cart-item';
 import { SelectedCartItem } from 'src/cart/selectedItems/selectedCartItem';
+import { Audit, Result } from 'src/domain';
+import { Context, IContextService, MerchantRepository } from 'src/infrastructure';
+import { CartItemRepository } from 'src/infrastructure/data_access/repositories/cart-item.repository';
+import { IOrderRepository } from 'src/infrastructure/data_access/repositories/interfaces/order-repository.interface';
+import { CartItemDataModel } from 'src/infrastructure/data_access/repositories/schemas/cartItem.schema';
+import { OrderDataModel } from 'src/infrastructure/data_access/repositories/schemas/order.schema';
 import { SelectedCartItemRepository } from 'src/infrastructure/data_access/repositories/selected-cart-item.repository';
-import { OrderParser } from './order.parser';
-import { IOrderResponseDTO } from './order-response.dto';
+import { throwApplicationError } from 'src/infrastructure/utilities/exception-instance';
+import { IMerchantService, Merchant } from 'src/merchant';
+import { CartItemMapper } from './../cart/cart-item.mapper';
+import { SelectedCartItemMapper } from './../cart/selectedItems/selected-cart-item.mapper';
+import { CreateOrderDTO } from './dto/create-order.dto';
 import { IOrderService } from './interface/order-service.interface';
+import { Order } from './order';
+import { IOrderResponseDTO } from './order-response.dto';
+import { OrderMapper } from './order.mapper';
+import { OrderParser } from './order.parser';
 
 export class OrderService implements IOrderService {
   private context: Context;
@@ -50,13 +49,10 @@ export class OrderService implements IOrderService {
     session.startTransaction();
     try {
       const audit: Audit = Audit.createInsertContext(this.context);
-      const merchantObjId = ConvertId.convertStringToObjectId(merchantId);
+      const merchantObjId = this.orderRepository.stringToObjectId(merchantId);
       const order: Order = Order.create({ state, type, total, merchantId: merchantObjId, audit });
       const orderModel: OrderDataModel = this.orderMapper.toPersistence(order);
       const orderToSave: Result<Order> = await this.orderRepository.createOrder(orderModel);
-      if (!orderToSave.isSuccess) {
-        throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Error while creating order');
-      }
       const savedOrder = orderToSave.getValue();
       const orderId = savedOrder.id;
       if (cartItems) {
@@ -67,9 +63,6 @@ export class OrderService implements IOrderService {
         });
         const cartItemDataModels: CartItemDataModel[] = items.map((item) => this.cartItemMapper.toPersistence(item));
         const savedCartItems: Result<CartItem[]> = await this.cartItemRepository.insertMany(cartItemDataModels);
-        if (!savedCartItems.isSuccess) {
-          throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Error while creating order');
-        }
         const savedItems = savedCartItems.getValue();
 
         const cartItemMap = new Map<Types.ObjectId, Types.ObjectId>();
@@ -84,12 +77,7 @@ export class OrderService implements IOrderService {
         });
         const selectedItems = flattenedSelectedItems.map((item) => SelectedCartItem.create({ ...item, audit }));
         const selectedCartItemsDataModel = selectedItems.map((item) => this.selectedItemMapper.toPersistence(item));
-        const savedSelectedCartItems: Result<SelectedCartItem[]> = await this.selectedCartItemRepository.insertMany(
-          selectedCartItemsDataModel,
-        );
-        if (!savedSelectedCartItems.isSuccess) {
-          throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Error while creating order');
-        }
+        await this.selectedCartItemRepository.insertMany(selectedCartItemsDataModel);
         await session.commitTransaction();
         const response = OrderParser.createOrderResponse(savedOrder);
         return Result.ok(response);
