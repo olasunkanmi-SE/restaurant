@@ -76,8 +76,8 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
     options?: QueryOptions<T>,
   ): Promise<Result<TEntity[] | []>> {
     const documents = await this.DocumentModel.find(query, select, options)
-      .skip(options.skip)
-      .limit(options.limit)
+      .skip(options ? options.skip : null)
+      .limit(options ? options.limit : null)
       .lean()
       .exec();
     const entities = documents?.length ? documents.map((document) => this.mapper.toDomain(document)) : [];
@@ -148,10 +148,13 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
     try {
       const documentsToSave = docs.map((doc) => this.createDocument(doc));
       const documents = await this.DocumentModel.insertMany(documentsToSave);
+      if (!documents?.length) {
+        throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Unable to insert documents into the database');
+      }
       const entities: TEntity[] = documents.map((doc) => this.mapper.toDomain(doc));
       return Result.ok(entities);
     } catch (error) {
-      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'Unable to insert documents into the database');
+      console.error(error);
     }
   }
 

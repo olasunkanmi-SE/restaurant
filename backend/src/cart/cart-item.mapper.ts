@@ -14,39 +14,41 @@ export class CartItemMapper implements IMapper<CartItem, CartItemDataModel> {
     private readonly selectedCartItemMapper: SelectedCartItemMapper,
   ) {}
   toPersistence(entity: CartItem): CartItemDataModel {
-    const { id, menuId, orderId, total, selectedItems, audit } = entity;
-    const {
-      auditCreatedBy,
-      auditCreatedDateTime,
-      auditModifiedBy,
-      auditModifiedDateTime,
-      auditDeletedBy,
-      auditDeletedDateTime,
-    } = audit;
-    let selectedItemsToPersistence: SelectedCartItemDataModel[] = [];
-    if (selectedItems.length) {
-      selectedItemsToPersistence = selectedItems.map((item) => this.selectedCartItemMapper.toPersistence(item));
+    try {
+      const { id, menuId, orderId, total, selectedItems, audit } = entity;
+      const {
+        auditCreatedBy,
+        auditCreatedDateTime,
+        auditModifiedBy,
+        auditModifiedDateTime,
+        auditDeletedBy,
+        auditDeletedDateTime,
+      } = audit;
+      const cartItemDocument: CartItemDataModel = {
+        _id: id,
+        menuId,
+        orderId,
+        total,
+        selectedItems: selectedItems?.length
+          ? selectedItems.map((item) => this.selectedCartItemMapper.toPersistence(item))
+          : [],
+        auditCreatedBy,
+        auditCreatedDateTime,
+        auditModifiedBy,
+        auditModifiedDateTime,
+        auditDeletedBy,
+        auditDeletedDateTime,
+      };
+      return cartItemDocument;
+    } catch (error) {
+      console.log(error);
     }
-    const cartItemDocument: CartItemDataModel = {
-      _id: id,
-      menuId,
-      orderId,
-      total,
-      selectedItems: selectedItemsToPersistence,
-      auditCreatedBy,
-      auditCreatedDateTime,
-      auditModifiedBy,
-      auditModifiedDateTime,
-      auditDeletedBy,
-      auditDeletedDateTime,
-    };
-    return cartItemDocument;
   }
 
   toDomain(model: CartItemDataModel): CartItem {
     const { _id, menuId, orderId, total, selectedItems } = model;
     let selectedItemsToDomain: SelectedCartItem[] = [];
-    if (selectedItems.length) {
+    if (selectedItems?.length) {
       selectedItemsToDomain = selectedItems.map((item) => this.selectedCartItemMapper.toDomain(item));
     }
     const entity: CartItem = CartItem.create(
