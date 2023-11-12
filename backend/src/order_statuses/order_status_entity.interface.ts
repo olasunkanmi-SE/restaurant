@@ -1,5 +1,4 @@
 import { Audit } from 'src/domain';
-
 export interface IOrderStatuses {
   isActive: boolean;
   name: string;

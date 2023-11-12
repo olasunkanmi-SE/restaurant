@@ -1,4 +1,4 @@
-import { Entity, Result } from 'src/domain';
+import { Audit, Entity, Result } from 'src/domain';
 import { IOrderStatuses } from './order_status_entity.interface';
 import { Types } from 'mongoose';
 
@@ -7,12 +7,14 @@ export class OrderStatus extends Entity<IOrderStatuses> implements IOrderStatuse
   _name: string;
   _code: string;
   _description?: string;
+  _audit: Audit;
   constructor(id: Types.ObjectId, props: IOrderStatuses) {
     super(id);
     this._isActive = props.isActive;
     this._name = props.name;
     this._code = props.code;
     this._description = props.description;
+    this._audit = props.audit;
   }
 
   get isActive(): boolean {
@@ -45,6 +47,14 @@ export class OrderStatus extends Entity<IOrderStatuses> implements IOrderStatuse
 
   set description(description: string) {
     this._description = description;
+  }
+
+  get audit(): Audit {
+    return this._audit;
+  }
+
+  set audit(audit: Audit) {
+    this._audit = audit;
   }
 
   static create(props: IOrderStatuses, id?: Types.ObjectId) {
