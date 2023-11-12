@@ -19,6 +19,7 @@ import { MerchantModule } from './merchant/merchant.module';
 import { ApplicationExceptionsFilter, ApplicationLogger } from './infrastructure';
 import { LocationModule } from './location';
 import { OrderModule } from './order/order.module';
+import { OrderStatusesModule } from './order_statuses/order_statuses.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { OrderModule } from './order/order.module';
     AddonModule,
     CategoryModule,
     OrderModule,
+    OrderStatusesModule,
   ],
   controllers: [AppController],
   providers: [
