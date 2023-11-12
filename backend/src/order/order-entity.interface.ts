@@ -16,3 +16,6 @@ export interface IOrder {
   audit: Audit;
   cartItems?: CartItem[];
 }
+
+//tableNumber
+//status comment if any
