@@ -4,7 +4,9 @@ import { Prop } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { OrderDataModel } from './order.schema';
 import { Type } from 'class-transformer';
+import { Document } from 'mongoose';
 
+export type OrderStatusDocument = OrderStatusModel & Document;
 export class OrderStatusModel extends BaseDocument implements IOrderStatusModel {
   @Prop({ type: Boolean, required: true, default: true })
   isActive: boolean;
