@@ -19,6 +19,7 @@ import { Order } from './order';
 import { IOrderResponseDTO } from './order-response.dto';
 import { OrderMapper } from './order.mapper';
 import { OrderParser } from './order.parser';
+import { ICartItemRepository } from 'src/infrastructure/data_access/repositories/interfaces/cart-item-repository.interface';
 
 export class OrderService implements IOrderService {
   private context: Context;
@@ -101,7 +102,6 @@ export class OrderService implements IOrderService {
         } else {
           throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Could not create an order`);
         }
-
         const savedSelectedItems = insertedItems.getValue();
         const savedItemsMap = savedSelectedItems.reduce((map, item) => {
           const cartItemIdToString = this.cartItemRepository.objectIdToString(item.cartItemId);
