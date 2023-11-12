@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { AuditMapper } from 'src/audit';
 import { IMapper } from 'src/domain';
 import { CartItemDataModel } from 'src/infrastructure/data_access/repositories/schemas/cartItem.schema';
@@ -6,6 +6,7 @@ import { SelectedCartItemDataModel } from 'src/infrastructure/data_access/reposi
 import { CartItem } from './cart-item';
 import { SelectedCartItemMapper } from './selectedItems/selected-cart-item.mapper';
 import { SelectedCartItem } from './selectedItems/selectedCartItem';
+import { throwApplicationError } from 'src/infrastructure/utilities/exception-instance';
 
 @Injectable()
 export class CartItemMapper implements IMapper<CartItem, CartItemDataModel> {
@@ -40,8 +41,8 @@ export class CartItemMapper implements IMapper<CartItem, CartItemDataModel> {
         auditDeletedDateTime,
       };
       return cartItemDocument;
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      throwApplicationError(HttpStatus.BAD_REQUEST, error.message);
     }
   }
 

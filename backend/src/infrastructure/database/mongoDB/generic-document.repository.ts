@@ -81,9 +81,6 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
         .limit(options ? options.limit : null)
         .lean()
         .exec();
-      if (!documents?.length) {
-        throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, 'documents does not exist');
-      }
       const entities = documents?.length ? documents.map((document) => this.mapper.toDomain(document)) : [];
       return Result.ok(entities);
     } catch (error) {

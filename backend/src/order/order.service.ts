@@ -1,11 +1,10 @@
 import { HttpStatus, Inject } from '@nestjs/common';
-import { Types } from 'mongoose';
 import { TYPES } from 'src/application';
 import { CartItem } from 'src/cart/cart-item';
 import { SelectedCartItem } from 'src/cart/selectedItems/selectedCartItem';
 import { Audit, Result } from 'src/domain';
 import { Context, IContextService, MerchantRepository } from 'src/infrastructure';
-import { CartItemRepository } from 'src/infrastructure/data_access/repositories/cart-item.repository';
+import { ICartItemRepository } from 'src/infrastructure/data_access/repositories/interfaces/cart-item-repository.interface';
 import { IOrderRepository } from 'src/infrastructure/data_access/repositories/interfaces/order-repository.interface';
 import { CartItemDataModel } from 'src/infrastructure/data_access/repositories/schemas/cartItem.schema';
 import { OrderDataModel } from 'src/infrastructure/data_access/repositories/schemas/order.schema';
@@ -20,7 +19,6 @@ import { Order } from './order';
 import { IOrderResponseDTO } from './order-response.dto';
 import { OrderMapper } from './order.mapper';
 import { OrderParser } from './order.parser';
-import { ICartItemRepository } from 'src/infrastructure/data_access/repositories/interfaces/cart-item-repository.interface';
 
 export class OrderService implements IOrderService {
   private context: Context;
@@ -42,6 +40,10 @@ export class OrderService implements IOrderService {
   async createOrder(orderSummary: CreateOrderDTO): Promise<Result<IOrderResponseDTO>> {
     await this.merchantService.validateContext();
     const { state, type, merchantId, total, cartItems } = orderSummary;
+    const orderDuplicate = await this.orderRepository.getDuplicateOrder(type, merchantId, cartItems);
+    if (orderDuplicate) {
+      throwApplicationError(HttpStatus.NOT_FOUND, 'Duplicate order detected. Please confirm.');
+    }
     const validateMerchant: Result<Merchant> = await this.merchantRepository.findOne({ _id: merchantId });
     if (!validateMerchant.isSuccess) {
       throwApplicationError(HttpStatus.NOT_FOUND, `Merchant does not exist`);
@@ -99,7 +101,6 @@ export class OrderService implements IOrderService {
         } else {
           throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Could not create an order`);
         }
-        
         const savedSelectedItems = insertedItems.getValue();
         const savedItemsMap = savedSelectedItems.reduce((map, item) => {
           const cartItemIdToString = this.cartItemRepository.objectIdToString(item.cartItemId);
@@ -116,6 +117,7 @@ export class OrderService implements IOrderService {
         return Result.ok(response);
       }
     } catch (error) {
+      console.error(error);
       session.abortTransaction();
     } finally {
       await session.endSession();

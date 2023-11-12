@@ -7,6 +7,7 @@ import { OrderMapper } from './../../../order/order.mapper';
 import { IOrderRepository } from './interfaces/order-repository.interface';
 import { OrderDataModel, OrderDocument } from './schemas/order.schema';
 import { Result } from 'src/domain';
+import { CartItemDataModel } from './schemas/cartItem.schema';
 
 @Injectable()
 export class OrderRepository extends GenericDocumentRepository<Order, OrderDocument> implements IOrderRepository {
@@ -20,12 +21,22 @@ export class OrderRepository extends GenericDocumentRepository<Order, OrderDocum
     this.orderMapper = orderMapper;
   }
 
-  async getOrders(): Promise<Order[]> {
-    return (await this.find({})).getValue();
-  }
-
   async createOrder(order: OrderDataModel): Promise<Result<Order>> {
     const response = (await this.create(order)).getValue();
     return response ? Result.ok(response) : Result.fail('Could not create order', HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  async getDuplicateOrder(type: string, merchantId: string, cartItems: CartItemDataModel[]): Promise<boolean> {
+    const currentTime: Date = new Date();
+    const duplicateTimeFrameInMinutes = 60 * 1000;
+    const selectedItemIds = cartItems.map((item) => item._id);
+    const result: Result<Order[]> = await this.find({
+      type,
+      merchantId,
+      cartItems: { $elemMatch: { $in: selectedItemIds } },
+      auditCreatedDateTime: { $gte: new Date(currentTime.getMilliseconds() - duplicateTimeFrameInMinutes) },
+    });
+    const potentialDuplicateOrder = result.getValue();
+    return potentialDuplicateOrder.length > 0;
   }
 }
