@@ -18,10 +18,6 @@ export class OrderStatusModel extends BaseDocument implements IOrderStatusModel 
 
   @Prop({ type: String, required: true, isRequired: false })
   description?: string;
-
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: OrderDataModel }] })
-  @Type(() => OrderDataModel)
-  orders?: OrderDataModel[];
 }
 
 export const OrderStatusSchema = SchemaFactory.createForClass(OrderStatusModel);

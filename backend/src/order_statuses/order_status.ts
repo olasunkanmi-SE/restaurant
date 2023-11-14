@@ -57,7 +57,7 @@ export class OrderStatus extends Entity<IOrderStatuses> implements IOrderStatuse
     this._audit = audit;
   }
 
-  static create(props: IOrderStatuses, id?: Types.ObjectId) {
+  static create(props: IOrderStatuses, id?: Types.ObjectId): OrderStatus {
     return Result.ok(new OrderStatus(id, props)).getValue();
   }
 }
