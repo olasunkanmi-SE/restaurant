@@ -1,9 +1,7 @@
+import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 import { BaseDocument } from 'src/infrastructure/database';
 import { IOrderStatusModel } from '../models/order-status-model.interface';
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document } from 'mongoose';
-import { OrderDataModel } from './order.schema';
-import { Type } from 'class-transformer';
 
 export type OrderStatusDocument = OrderStatusModel & Document;
 export class OrderStatusModel extends BaseDocument implements IOrderStatusModel {
