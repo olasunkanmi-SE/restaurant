@@ -5,7 +5,7 @@ import { OrderStatusModel } from 'src/infrastructure/data_access/repositories/sc
 import { AuditMapper } from 'src/audit';
 
 @Injectable()
-export class orderStatusMapper implements IMapper<OrderStatus, OrderStatusModel> {
+export class OrderStatusMapper implements IMapper<OrderStatus, OrderStatusModel> {
   constructor(private readonly auditMapper: AuditMapper) {}
   toPersistence(entity: OrderStatus): OrderStatusModel {
     const { id, isActive, name, code, description, audit } = entity;
