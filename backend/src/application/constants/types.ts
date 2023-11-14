@@ -24,4 +24,5 @@ export const TYPES = {
   IOrderService: Symbol('IOrderService'),
   ICartItemRepository: Symbol('ICartItemRepository'),
   IOrderStatusRepository: Symbol('IOrderStatusRepository'),
+  IOrderStatusService: Symbol('IOrderStatusService'),
 };
