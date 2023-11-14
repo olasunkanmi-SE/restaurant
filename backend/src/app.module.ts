@@ -20,6 +20,7 @@ import { ApplicationExceptionsFilter, ApplicationLogger } from './infrastructure
 import { LocationModule } from './location';
 import { OrderModule } from './order/order.module';
 import { OrderStatusesModule } from './order_statuses/order_statuses.module';
+import { OrderNotesModule } from './order_notes/order_notes.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { OrderStatusesModule } from './order_statuses/order_statuses.module';
     CategoryModule,
     OrderModule,
     OrderStatusesModule,
+    OrderNotesModule,
   ],
   controllers: [AppController],
   providers: [
