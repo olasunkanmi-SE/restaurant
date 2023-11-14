@@ -1,6 +1,6 @@
 import { BaseDocument } from 'src/infrastructure/database';
 import { IOrderStatusModel } from '../models/order-status-model.interface';
-import { Prop } from '@nestjs/mongoose';
+import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
 import { OrderDataModel } from './order.schema';
 import { Type } from 'class-transformer';
@@ -23,3 +23,5 @@ export class OrderStatusModel extends BaseDocument implements IOrderStatusModel 
   @Type(() => OrderDataModel)
   orders?: OrderDataModel[];
 }
+
+export const OrderStatusSchema = SchemaFactory.createForClass(OrderStatusModel);

@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import { TYPES } from 'src/application';
 import { CreateOrderStatusDto } from './dto/create-order_status.dto';
-import { OrderStatusesService } from './order_statuses.service';
+import { IOrderStatusService } from './interface/order-status-service.interface';
 
 @Controller('order-statuses')
 export class OrderStatusesController {
-  constructor(private readonly orderStatusesService: OrderStatusesService) {}
+  constructor(@Inject(TYPES.IOrderStatusService) private readonly orderStatusesService: IOrderStatusService) {}
 
   @Post()
   create(@Body() createOrderStatusDto: CreateOrderStatusDto) {

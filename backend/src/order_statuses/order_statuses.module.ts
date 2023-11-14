@@ -1,9 +1,26 @@
 import { Module } from '@nestjs/common';
-import { OrderStatusesService } from './order_statuses.service';
+import { OrderStatusService } from './order_statuses.service';
 import { OrderStatusesController } from './order_statuses.controller';
+import { TYPES } from 'src/application';
+import { OrderStatusRepository } from 'src/infrastructure/data_access/repositories/order-status.repository';
+import { ContextService } from 'src/infrastructure';
+import { MongooseModule } from '@nestjs/mongoose';
+import {
+  OrderStatusModel,
+  OrderStatusSchema,
+} from 'src/infrastructure/data_access/repositories/schemas/order-status.schema';
+import { OrderStatusMapper } from './order_status.mapper';
+import { AuditMapper } from 'src/audit';
 
 @Module({
+  imports: [MongooseModule.forFeature([{ name: OrderStatusModel.name, schema: OrderStatusSchema }])],
   controllers: [OrderStatusesController],
-  providers: [OrderStatusesService]
+  providers: [
+    { provide: TYPES.IOrderStatusService, useClass: OrderStatusService },
+    { provide: TYPES.IOrderStatusRepository, useClass: OrderStatusRepository },
+    { provide: TYPES.IContextService, useClass: ContextService },
+    OrderStatusMapper,
+    AuditMapper,
+  ],
 })
 export class OrderStatusesModule {}

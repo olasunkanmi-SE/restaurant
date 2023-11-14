@@ -10,7 +10,7 @@ import { OrderStatus } from './order_status';
 import { OrderStatusParser } from './order_status_parser';
 
 @Injectable()
-export class OrderStatusesService implements IOrderStatusService {
+export class OrderStatusService implements IOrderStatusService {
   private context: Context;
   constructor(
     @Inject(TYPES.IOrderStatusRepository) private readonly orderStatusRepository: IOrderStatusRespository,
