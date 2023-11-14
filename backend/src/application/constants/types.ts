@@ -27,4 +27,6 @@ export const TYPES = {
   IOrderStatusService: Symbol('IOrderStatusService'),
   IOrderNoteRepository: Symbol('IOrderNoteRepository'),
   IOrderNoteService: Symbol('IOrderNoteService'),
+  IOrderProcessingQueueRepository: Symbol('IOrderProcessingQueueRepository'),
+  IOrderProcessingQueueService: Symbol('IOrderProcessingQueueService'),
 };
