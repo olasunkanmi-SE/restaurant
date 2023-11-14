@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { IMapper } from 'src/domain';
-import { OrderNote } from './order_note';
-import { OrderNoteModel } from 'src/infrastructure/data_access/repositories/schemas/order-Note.schema';
 import { AuditMapper } from 'src/audit';
+import { IMapper } from 'src/domain';
+import { OrderNoteModel } from './../infrastructure/data_access/repositories/schemas/order-note.schema';
+import { OrderNote } from './order_note';
 
 @Injectable()
 export class OrderNoteMapper implements IMapper<OrderNote, OrderNoteModel> {
