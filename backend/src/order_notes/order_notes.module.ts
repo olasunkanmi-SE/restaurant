@@ -20,4 +20,4 @@ import { OrderNoteService } from './order_note.service';
     AuditMapper,
   ],
 })
-export class OrderNoteesModule {}
+export class OrderNotesModule {}
