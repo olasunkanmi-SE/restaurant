@@ -7,7 +7,7 @@ import { throwApplicationError } from 'src/infrastructure/utilities/exception-in
 import { OrderNote } from 'src/order_notes/order_note';
 import { OrderNoteMapper } from 'src/order_notes/order_note.mapper';
 import { IOrderNoteRespository } from './interfaces/order-note.repository';
-import { OrderNoteDocument, OrderNoteModel } from './schemas/order-Note.schema';
+import { OrderNoteDocument, OrderNoteModel } from './schemas/order-note.schema';
 
 @Injectable()
 export class OrderNoteRepository
