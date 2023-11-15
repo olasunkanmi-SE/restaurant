@@ -123,4 +123,8 @@ export class OrderService implements IOrderService {
       await session.endSession();
     }
   }
+
+  getOrders() {
+    return this.orderRepository.find({});
+  }
 }
