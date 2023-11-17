@@ -123,4 +123,8 @@ export class OrderService implements IOrderService {
       await session.endSession();
     }
   }
+
+  async getOrders(): Promise<Result<Order[]>> {
+    return await this.orderRepository.find({});
+  }
 }
