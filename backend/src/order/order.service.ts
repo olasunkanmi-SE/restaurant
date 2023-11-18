@@ -124,7 +124,7 @@ export class OrderService implements IOrderService {
     }
   }
 
-  getOrders() {
-    return this.orderRepository.find({});
+  async getOrders(): Promise<Result<Order[]>> {
+    return await this.orderRepository.find({});
   }
 }
