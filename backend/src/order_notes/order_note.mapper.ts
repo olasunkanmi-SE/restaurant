@@ -8,7 +8,7 @@ import { OrderNote } from './order_note';
 export class OrderNoteMapper implements IMapper<OrderNote, OrderNoteModel> {
   constructor(private readonly auditMapper: AuditMapper) {}
   toPersistence(entity: OrderNote): OrderNoteModel {
-    const { id, orderId, note, audit } = entity;
+    const { id, orderId, note, menuId, audit } = entity;
     const {
       auditCreatedBy,
       auditCreatedDateTime,
@@ -20,6 +20,7 @@ export class OrderNoteMapper implements IMapper<OrderNote, OrderNoteModel> {
     const orderNoteDocument: OrderNoteModel = {
       _id: id,
       orderId,
+      menuId,
       note,
       auditCreatedBy,
       auditCreatedDateTime,
@@ -32,11 +33,12 @@ export class OrderNoteMapper implements IMapper<OrderNote, OrderNoteModel> {
   }
 
   toDomain(model: OrderNoteModel): OrderNote {
-    const { _id, orderId, note } = model;
+    const { _id, orderId, note, menuId } = model;
     const entity: OrderNote = OrderNote.create(
       {
         orderId,
         note,
+        menuId,
         audit: this.auditMapper.toDomain(model),
       },
       _id,
