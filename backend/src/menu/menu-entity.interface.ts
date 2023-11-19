@@ -4,7 +4,6 @@ import { Audit } from './../domain/audit/audit';
 import { Item } from './../item/item';
 export interface IMenu {
   name: string;
-  note?: string;
   description?: string;
   items?: Item[];
   audit: Audit;

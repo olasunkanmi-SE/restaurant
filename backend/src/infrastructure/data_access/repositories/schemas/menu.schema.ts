@@ -17,7 +17,7 @@ export class MenuDataModel extends BaseDocument implements IMenuDataModel {
   description: string;
 
   @Prop({ type: String, required: false })
-  note: string;
+  note?: string;
 
   @Prop({ type: String })
   imageUrl: string;

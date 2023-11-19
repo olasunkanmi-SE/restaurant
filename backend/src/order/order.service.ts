@@ -118,7 +118,7 @@ export class OrderService implements IOrderService {
       }
     } catch (error) {
       console.error(error);
-      session.abortTransaction();
+      await session.abortTransaction();
     } finally {
       await session.endSession();
     }
