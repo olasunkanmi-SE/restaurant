@@ -17,7 +17,6 @@ export class Menu extends Entity<IMenu> implements IMenu {
   _basePrice: number;
   _category: Category;
   _restaurantId: Types.ObjectId;
-  _note: string;
   constructor(id: Types.ObjectId, props: IMenu) {
     super(id);
     this._name = props.name;
