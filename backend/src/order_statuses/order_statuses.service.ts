@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { TYPES } from 'src/application';
 import { Audit, Result } from 'src/domain';
 import { Context, IContextService } from 'src/infrastructure';
@@ -8,6 +8,7 @@ import { IOrderStatusResponseDTO } from './dto/order-status-response';
 import { IOrderStatusService } from './interface/order-status-service.interface';
 import { OrderStatus } from './order_status';
 import { OrderStatusParser } from './order_status_parser';
+import { throwApplicationError } from 'src/infrastructure/utilities/exception-instance';
 
 @Injectable()
 export class OrderStatusService implements IOrderStatusService {
@@ -20,6 +21,10 @@ export class OrderStatusService implements IOrderStatusService {
     this.context = this.contextService.getContext();
   }
   async createOrderStatus(props: CreateOrderStatusDto): Promise<Result<IOrderStatusResponseDTO>> {
+    const statusExists = await this.getOrderStatus(props.code);
+    if (statusExists.isSuccess) {
+      throwApplicationError(HttpStatus.BAD_REQUEST, 'order status already exists');
+    }
     const audit: Audit = Audit.createInsertContext(this.context);
     const orderStatusEntity = OrderStatus.create({ ...props, audit });
     const result = await this.orderStatusRepository.createOrderStatus(orderStatusEntity);
@@ -30,5 +35,9 @@ export class OrderStatusService implements IOrderStatusService {
 
   getOrderStatuses(): Promise<Result<OrderStatus[]>> {
     return this.orderStatusRepository.find({});
+  }
+
+  getOrderStatus(prop: string): Promise<Result<OrderStatus>> {
+    return this.orderStatusRepository.findOne({ code: prop.toUpperCase() });
   }
 }
