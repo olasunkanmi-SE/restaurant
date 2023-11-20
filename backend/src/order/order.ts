@@ -1,11 +1,12 @@
-import { Audit } from './../domain/audit/audit';
-import { Entity, Result } from 'src/domain';
-import { IOrder, currentStatus, dinningType } from './order-entity.interface';
 import { Types } from 'mongoose';
 import { CartItem } from 'src/cart/cart-item';
+import { Entity, Result } from 'src/domain';
+import { OrderStatus } from 'src/order_statuses/order_status';
+import { Audit } from './../domain/audit/audit';
+import { IOrder, currentStatus, dinningType } from './order-entity.interface';
 
 export class Order extends Entity<IOrder> implements IOrder {
-  _state: currentStatus;
+  _state: OrderStatus;
   _type: dinningType;
   _merchantId: Types.ObjectId;
   _customerId?: Types.ObjectId;
@@ -31,11 +32,11 @@ export class Order extends Entity<IOrder> implements IOrder {
     this._cartItems = cartItems;
   }
 
-  get state(): currentStatus {
+  get state(): OrderStatus {
     return this._state;
   }
 
-  set state(state: currentStatus) {
+  set state(state: OrderStatus) {
     this._state = state;
   }
 

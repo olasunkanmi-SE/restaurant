@@ -7,14 +7,12 @@ import { currentStatus, dinningType } from './../../../../order/order-entity.int
 import { MerchantDataModel } from './merchant.schema';
 import { OrderManagerDataModel } from './order-manger.schema';
 import { CartItemDataModel } from './cartItem.schema';
+import { OrderStatusModel } from './order-status.schema';
 
 export type OrderDocument = OrderDataModel & Document;
 
 @Schema({ versionKey: 'false' })
 export class OrderDataModel extends BaseDocument implements IOrderDataModel {
-  @Prop({ type: String, required: true, default: 'CREATED' })
-  state: currentStatus;
-
   @Prop({ type: String, required: true })
   type: dinningType;
 
@@ -32,9 +30,13 @@ export class OrderDataModel extends BaseDocument implements IOrderDataModel {
   @Prop({ type: Number, required: true })
   total: number;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: CartItemDataModel }] })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: () => CartItemDataModel }] })
   @Type(() => CartItemDataModel)
   cartItems?: CartItemDataModel[];
+
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: () => OrderStatusModel }] })
+  @Type(() => OrderStatusModel)
+  state: OrderStatusModel;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(OrderDataModel);
