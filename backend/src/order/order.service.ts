@@ -1,4 +1,3 @@
-import { OrderNoteMapper } from 'src/order_notes/order_note.mapper';
 import { HttpStatus, Inject } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { TYPES } from 'src/application';
@@ -17,6 +16,7 @@ import { throwApplicationError } from 'src/infrastructure/utilities/exception-in
 import { IMerchantService, Merchant } from 'src/merchant';
 import { IOrderNoteService } from 'src/order_notes/interface/order-note-service.interface';
 import { OrderNote } from 'src/order_notes/order_note';
+import { OrderNoteMapper } from 'src/order_notes/order_note.mapper';
 import { CartItemMapper } from './../cart/cart-item.mapper';
 import { SelectedCartItemMapper } from './../cart/selectedItems/selected-cart-item.mapper';
 import { CreateCartItemsDTO, CreateOrderDTO } from './dto/create-order.dto';
@@ -25,6 +25,7 @@ import { Order } from './order';
 import { IOrderResponseDTO } from './order-response.dto';
 import { OrderMapper } from './order.mapper';
 import { OrderParser } from './order.parser';
+import { IOrderProcessingQueueService } from 'src/order_processing_queue/interface/order-processing-queue-service.interface';
 
 export class OrderService implements IOrderService {
   private context: Context;
@@ -43,6 +44,8 @@ export class OrderService implements IOrderService {
     @Inject(TYPES.IOrderStatusRepository) private readonly orderStatusRespository: IOrderStatusRespository,
     @Inject(TYPES.IOrderNoteRepository) private readonly orderNoteRepository: IOrderNoteRespository,
     @Inject(TYPES.IOrderNoteService) private readonly orderNoteService: IOrderNoteService,
+    @Inject(TYPES.IOrderProcessingQueueService)
+    private readonly OrderProcessingQueueService: IOrderProcessingQueueService,
   ) {
     this.context = this.contextService.getContext();
   }
@@ -133,6 +136,7 @@ export class OrderService implements IOrderService {
           }
         });
         await this.cartItemRepository.updateCartItemSelectedItems(savedItems);
+        await this.createOrderStatusQueue(orderStatus.id, orderId);
         await session.commitTransaction();
         return Result.ok(response);
       }
@@ -149,14 +153,18 @@ export class OrderService implements IOrderService {
   }
 
   async createOrderNotes(cartItems: CreateCartItemsDTO[], orderId: Types.ObjectId): Promise<OrderNote[]> {
-    const orderNotes = cartItems.map((item) => {
+    const orderNotes = cartItems.map(({ menuId, note }: CreateCartItemsDTO) => {
       return {
-        menuId: item.menuId,
-        note: item.note ? item.note : '',
+        menuId,
+        note: note || '',
         orderId: orderId,
       };
     });
     const notes = this.orderNoteService.createNotes(orderNotes);
     return notes;
+  }
+
+  async createOrderStatusQueue(orderStatusId: Types.ObjectId, orderId: Types.ObjectId) {
+    return this.OrderProcessingQueueService.createQueue({ orderStatusId, orderId });
   }
 }
