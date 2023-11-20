@@ -1,4 +1,3 @@
-import { OrderParser } from './order.parser';
 import { HttpStatus, Inject } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { TYPES } from 'src/application';
@@ -25,6 +24,7 @@ import { IOrderService } from './interface/order-service.interface';
 import { Order } from './order';
 import { IOrderResponseDTO } from './order-response.dto';
 import { OrderMapper } from './order.mapper';
+import { OrderParser } from './order.parser';
 
 export class OrderService implements IOrderService {
   private context: Context;
