@@ -7,7 +7,7 @@ export class OrderNoteParser {
     return { id, note, orderId, ...AuditParser.createAuditResponse(audit) };
   }
 
-  static createOrderStatusResponses(orderNote: OrderNote[]): IOrderNoteResponseDTO[] {
+  static createOrderNotesResponse(orderNote: OrderNote[]): IOrderNoteResponseDTO[] {
     return orderNote.map((note) => {
       return this.createResponse(note);
     });
