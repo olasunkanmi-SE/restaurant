@@ -19,7 +19,7 @@ export class OrderProcessingQueueService implements IOrderProcessingQueueService
   ) {
     this.context = this.contextService.getContext();
   }
-  async createOrderProcessingQueue(props: CreateOrderProcessingQueueDTO): Promise<OrderProcessingQueue> {
+  async createQueue(props: CreateOrderProcessingQueueDTO): Promise<OrderProcessingQueue> {
     const audit: Audit = Audit.createInsertContext(this.context);
     const orderProcessingQueueEntity = OrderProcessingQueue.create({ ...props, audit });
     const result = await this.orderProcessingQueueRepository.createOrderProcessingQueue(orderProcessingQueueEntity);
@@ -30,7 +30,7 @@ export class OrderProcessingQueueService implements IOrderProcessingQueueService
   }
 
   async createOrderProcessingQueues(props: CreateOrderProcessingQueueDTO[]): Promise<OrderProcessingQueue[]> {
-    const statusQueues = props.map((queue) => this.createOrderProcessingQueue(queue));
+    const statusQueues = props.map((queue) => this.createQueue(queue));
     const result = await Promise.all(statusQueues);
     if (!result) {
       throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Could not create order status queue`);
@@ -38,7 +38,7 @@ export class OrderProcessingQueueService implements IOrderProcessingQueueService
     return result;
   }
 
-  getOrderProcessingQueues(): Promise<Result<OrderProcessingQueue[]>> {
+  getOrderStatusQueues(): Promise<Result<OrderProcessingQueue[]>> {
     return this.orderProcessingQueueRepository.find({});
   }
 }

@@ -23,7 +23,7 @@ export class OrderNoteService implements IOrderNoteService {
     const orderNoteEntity = OrderNote.create({ ...props, audit });
     const result = await this.orderNoteRepository.createOrderNote(orderNoteEntity);
     if (!result) {
-      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Could not create order note`);
+      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Error creating order note`);
     }
     const orderNote = result.getValue();
     return orderNote;
@@ -33,7 +33,7 @@ export class OrderNoteService implements IOrderNoteService {
     const notes = props.map((note) => this.createOrderNote(note));
     const result = await Promise.all(notes);
     if (!result) {
-      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Could not create order notes`);
+      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Error creating order notes`);
     }
     return result;
   }
