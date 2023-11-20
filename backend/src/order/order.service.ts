@@ -17,7 +17,6 @@ import { throwApplicationError } from 'src/infrastructure/utilities/exception-in
 import { IMerchantService, Merchant } from 'src/merchant';
 import { IOrderNoteService } from 'src/order_notes/interface/order-note-service.interface';
 import { OrderNote } from 'src/order_notes/order_note';
-import { OrderNoteMapper } from 'src/order_notes/order_note.mapper';
 import { CartItemMapper } from './../cart/cart-item.mapper';
 import { SelectedCartItemMapper } from './../cart/selectedItems/selected-cart-item.mapper';
 import { CreateCartItemsDTO, CreateOrderDTO } from './dto/create-order.dto';
