@@ -6,7 +6,6 @@ import { GenericDocumentRepository } from 'src/infrastructure/database';
 import { CartItemMapper } from './../../../cart/cart-item.mapper';
 import { ICartItemRepository } from './interfaces/cart-item-repository.interface';
 import { CartItemDataModel, CartItemDocument } from './schemas/cartItem.schema';
-import { Result } from 'src/domain';
 
 @Injectable()
 export class CartItemRepository
