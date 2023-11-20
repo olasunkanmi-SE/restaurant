@@ -4,10 +4,15 @@ import { IMapper } from 'src/domain';
 import { OrderDataModel } from 'src/infrastructure/data_access/repositories/schemas/order.schema';
 import { Order } from './order';
 import { AuditMapper } from 'src/audit';
+import { OrderStatusMapper } from 'src/order_statuses/order_status.mapper';
 
 @Injectable()
 export class OrderMapper implements IMapper<Order, OrderDataModel> {
-  constructor(private readonly auditMapper: AuditMapper, private readonly cartItemMapper: CartItemMapper) {}
+  constructor(
+    private readonly auditMapper: AuditMapper,
+    private readonly cartItemMapper: CartItemMapper,
+    private readonly orderStatusMapper: OrderStatusMapper,
+  ) {}
   toPersistence(entity: Order): OrderDataModel {
     const { id, state, type, merchantId, total, discount, orderManagerId, audit, cartItems } = entity;
     const {
@@ -20,7 +25,7 @@ export class OrderMapper implements IMapper<Order, OrderDataModel> {
     } = audit;
     const orderDocument: OrderDataModel = {
       _id: id,
-      state,
+      state: this.orderStatusMapper.toPersistence(state),
       type,
       merchantId,
       total,
@@ -41,7 +46,7 @@ export class OrderMapper implements IMapper<Order, OrderDataModel> {
     const { state, type, merchantId, total, discount, orderManagerId, _id, cartItems } = model;
     const entity: Order = Order.create(
       {
-        state,
+        state: this.orderStatusMapper.toDomain(state),
         type,
         merchantId,
         total,
