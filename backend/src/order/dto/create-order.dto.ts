@@ -24,7 +24,7 @@ export class CreateOrderDTO {
   cartItems: CreateCartItemsDTO[];
 }
 
-class CreateCartItemsDTO {
+export class CreateCartItemsDTO {
   @IsString()
   @IsNotEmpty()
   menuId: Types.ObjectId;
@@ -42,12 +42,13 @@ class CreateCartItemsDTO {
 
   @IsNotEmpty()
   @IsArray()
-  cartItems: CreateSelectedItemsDTO[];
+  selectedItems: CreateSelectedItemsDTO[];
 }
 
 class CreateSelectedItemsDTO {
   @IsNotEmpty()
-  cartItemId: Types.ObjectId;
+  @IsString()
+  cartItemId: string;
 
   @IsString()
   @IsNotEmpty()

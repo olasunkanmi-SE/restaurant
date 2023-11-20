@@ -40,10 +40,10 @@ export class OrderService implements IOrderService {
   async createOrder(orderSummary: CreateOrderDTO): Promise<Result<IOrderResponseDTO>> {
     await this.merchantService.validateContext();
     const { state, type, merchantId, total, cartItems } = orderSummary;
-    // const orderDuplicate = await this.orderRepository.getDuplicateOrder(type, merchantId, cartItems);
-    // if (orderDuplicate) {
-    //   throwApplicationError(HttpStatus.NOT_FOUND, 'Duplicate order detected. Please confirm.');
-    // }
+    const orderDuplicate = await this.orderRepository.getDuplicateOrder(type, merchantId, cartItems);
+    if (orderDuplicate) {
+      throwApplicationError(HttpStatus.NOT_FOUND, 'Duplicate order detected. Please confirm.');
+    }
     const validateMerchant: Result<Merchant> = await this.merchantRepository.findOne({ _id: merchantId });
     if (!validateMerchant.isSuccess) {
       throwApplicationError(HttpStatus.NOT_FOUND, `Merchant does not exist`);
@@ -84,13 +84,20 @@ export class OrderService implements IOrderService {
         const cartSelectedItems = cartItems.map((item) => item.selectedItems);
         const flattenedSelectedItems = cartSelectedItems.flat();
         flattenedSelectedItems.forEach((item) => {
-          if (cartItemMap.has(this.orderRepository.objectIdToString(item.menuId))) {
-            const cartItemId = cartItemMap.get(this.orderRepository.objectIdToString(item.menuId));
-            item.cartItemId = this.orderRepository.stringToObjectId(cartItemId);
+          if (cartItemMap.has(item.menuId)) {
+            const cartItemId = cartItemMap.get(item.menuId);
+            item.cartItemId = cartItemId;
           }
         });
-
-        const selectedItems = flattenedSelectedItems.map((item) => SelectedCartItem.create({ ...item, audit }));
+        const selectedItems = flattenedSelectedItems.map((item) =>
+          SelectedCartItem.create({
+            ...item,
+            cartItemId: this.orderRepository.stringToObjectId(item.cartItemId),
+            itemId: this.orderRepository.stringToObjectId(item.itemId),
+            menuId: this.orderRepository.stringToObjectId(item.menuId),
+            audit,
+          }),
+        );
         const selectedCartItemsDataModel = selectedItems.map((item) => this.selectedItemMapper.toPersistence(item));
         const insertedItems: Result<SelectedCartItem[]> = await this.selectedCartItemRepository.insertMany(
           selectedCartItemsDataModel,
@@ -113,7 +120,6 @@ export class OrderService implements IOrderService {
           }
         });
         await this.cartItemRepository.updateCartItemSelectedItems(savedItems);
-        const orderNotes = orderSummary.cartItems.map((item)=>{menuId: item.menuId, note: item.note})
         await session.commitTransaction();
         return Result.ok(response);
       }
