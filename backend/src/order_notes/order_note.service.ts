@@ -30,16 +30,12 @@ export class OrderNoteService implements IOrderNoteService {
   }
 
   async createNotes(props: CreateOrderNoteDTO[]): Promise<OrderNote[]> {
-    try {
-      const notes = props.map((note) => this.createOrderNote(note));
-      const result = await Promise.all(notes);
-      if (!result) {
-        throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Could not create order notes`);
-      }
-      return result;
-    } catch (error) {
-      console.error(error);
+    const notes = props.map((note) => this.createOrderNote(note));
+    const result = await Promise.all(notes);
+    if (!result) {
+      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Could not create order notes`);
     }
+    return result;
   }
 
   getOrderNotes(): Promise<Result<OrderNote[]>> {
