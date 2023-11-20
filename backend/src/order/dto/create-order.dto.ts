@@ -1,6 +1,6 @@
 import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { currentStatus, dinningType } from '../order-entity.interface';
-import { CartItemDataModel } from 'src/infrastructure/data_access/repositories/schemas/cartItem.schema';
+import { Types } from 'mongoose';
 
 export class CreateOrderDTO {
   @IsString()
@@ -21,5 +21,48 @@ export class CreateOrderDTO {
 
   @IsOptional()
   @IsArray()
-  cartItems: CartItemDataModel[];
+  cartItems: CreateCartItemsDTO[];
+}
+
+export class CreateCartItemsDTO {
+  @IsString()
+  @IsNotEmpty()
+  menuId: Types.ObjectId;
+
+  @IsNotEmpty()
+  orderId: Types.ObjectId;
+
+  @IsString()
+  @IsNotEmpty()
+  note: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  total: number;
+
+  @IsNotEmpty()
+  @IsArray()
+  selectedItems: CreateSelectedItemsDTO[];
+}
+
+class CreateSelectedItemsDTO {
+  @IsNotEmpty()
+  @IsString()
+  cartItemId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  menuId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  itemId: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  price: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  quantity: number;
 }

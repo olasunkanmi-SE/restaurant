@@ -84,13 +84,20 @@ export class OrderService implements IOrderService {
         const cartSelectedItems = cartItems.map((item) => item.selectedItems);
         const flattenedSelectedItems = cartSelectedItems.flat();
         flattenedSelectedItems.forEach((item) => {
-          if (cartItemMap.has(this.orderRepository.objectIdToString(item.menuId))) {
-            const cartItemId = cartItemMap.get(this.orderRepository.objectIdToString(item.menuId));
-            item.cartItemId = this.orderRepository.stringToObjectId(cartItemId);
+          if (cartItemMap.has(item.menuId)) {
+            const cartItemId = cartItemMap.get(item.menuId);
+            item.cartItemId = cartItemId;
           }
         });
-
-        const selectedItems = flattenedSelectedItems.map((item) => SelectedCartItem.create({ ...item, audit }));
+        const selectedItems = flattenedSelectedItems.map((item) =>
+          SelectedCartItem.create({
+            ...item,
+            cartItemId: this.orderRepository.stringToObjectId(item.cartItemId),
+            itemId: this.orderRepository.stringToObjectId(item.itemId),
+            menuId: this.orderRepository.stringToObjectId(item.menuId),
+            audit,
+          }),
+        );
         const selectedCartItemsDataModel = selectedItems.map((item) => this.selectedItemMapper.toPersistence(item));
         const insertedItems: Result<SelectedCartItem[]> = await this.selectedCartItemRepository.insertMany(
           selectedCartItemsDataModel,
