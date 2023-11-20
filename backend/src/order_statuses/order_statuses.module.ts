@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { OrderStatusService } from './order_statuses.service';
 import { OrderStatusesController } from './order_statuses.controller';
 import { TYPES } from 'src/application';
@@ -11,6 +11,7 @@ import {
 } from 'src/infrastructure/data_access/repositories/schemas/order-status.schema';
 import { OrderStatusMapper } from './order_status.mapper';
 import { AuditMapper } from 'src/audit';
+import { ContextMiddleWare } from 'src/infrastructure/middlewares';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: OrderStatusModel.name, schema: OrderStatusSchema }])],
@@ -23,4 +24,8 @@ import { AuditMapper } from 'src/audit';
     AuditMapper,
   ],
 })
-export class OrderStatusesModule {}
+export class OrderStatusesModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ContextMiddleWare).exclude().forRoutes(OrderStatusesController);
+  }
+}
