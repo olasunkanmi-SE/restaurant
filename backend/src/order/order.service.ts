@@ -1,17 +1,22 @@
 import { OrderNoteMapper } from 'src/order_notes/order_note.mapper';
 import { HttpStatus, Inject } from '@nestjs/common';
+import { Types } from 'mongoose';
 import { TYPES } from 'src/application';
 import { CartItem } from 'src/cart/cart-item';
 import { SelectedCartItem } from 'src/cart/selectedItems/selectedCartItem';
 import { Audit, Result } from 'src/domain';
 import { Context, IContextService, MerchantRepository } from 'src/infrastructure';
 import { ICartItemRepository } from 'src/infrastructure/data_access/repositories/interfaces/cart-item-repository.interface';
+import { IOrderNoteRespository } from 'src/infrastructure/data_access/repositories/interfaces/order-note.repository';
 import { IOrderRepository } from 'src/infrastructure/data_access/repositories/interfaces/order-repository.interface';
+import { IOrderStatusRespository } from 'src/infrastructure/data_access/repositories/interfaces/order-status.repository';
 import { CartItemDataModel } from 'src/infrastructure/data_access/repositories/schemas/cartItem.schema';
 import { OrderDataModel } from 'src/infrastructure/data_access/repositories/schemas/order.schema';
 import { SelectedCartItemRepository } from 'src/infrastructure/data_access/repositories/selected-cart-item.repository';
 import { throwApplicationError } from 'src/infrastructure/utilities/exception-instance';
 import { IMerchantService, Merchant } from 'src/merchant';
+import { IOrderNoteService } from 'src/order_notes/interface/order-note-service.interface';
+import { OrderNote } from 'src/order_notes/order_note';
 import { CartItemMapper } from './../cart/cart-item.mapper';
 import { SelectedCartItemMapper } from './../cart/selectedItems/selected-cart-item.mapper';
 import { CreateCartItemsDTO, CreateOrderDTO } from './dto/create-order.dto';
@@ -20,12 +25,6 @@ import { Order } from './order';
 import { IOrderResponseDTO } from './order-response.dto';
 import { OrderMapper } from './order.mapper';
 import { OrderParser } from './order.parser';
-import { IOrderStatusRespository } from 'src/infrastructure/data_access/repositories/interfaces/order-status.repository';
-import { OrderNote } from 'src/order_notes/order_note';
-import { IOrderNoteRespository } from 'src/infrastructure/data_access/repositories/interfaces/order-note.repository';
-import { OrderNoteParser } from 'src/order_notes/order_note_parser';
-import { IOrderNoteResponseDTO } from 'src/order_notes/dto/order-note-response';
-import { Types } from 'mongoose';
 
 export class OrderService implements IOrderService {
   private context: Context;
@@ -43,6 +42,7 @@ export class OrderService implements IOrderService {
     @Inject(TYPES.ICartItemRepository) private readonly cartItemRepository: ICartItemRepository,
     @Inject(TYPES.IOrderStatusRepository) private readonly orderStatusRespository: IOrderStatusRespository,
     @Inject(TYPES.IOrderNoteRepository) private readonly orderNoteRepository: IOrderNoteRespository,
+    @Inject(TYPES.IOrderNoteService) private readonly orderNoteService: IOrderNoteService,
   ) {
     this.context = this.contextService.getContext();
   }
@@ -116,13 +116,11 @@ export class OrderService implements IOrderService {
         const insertedItems: Result<SelectedCartItem[]> = await this.selectedCartItemRepository.insertMany(
           selectedCartItemsDataModel,
         );
-        let response: IOrderResponseDTO | undefined;
-        const notes = await this.createOrderNotes(cartItems, orderId, audit);
-        if (insertedItems.isSuccess) {
-          response = OrderParser.createOrderResponse(savedOrder, notes);
-        } else {
+        const notes = await this.createOrderNotes(cartItems, orderId);
+        if (!insertedItems.isSuccess) {
           throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Could not create an order`);
         }
+        const response: IOrderResponseDTO | undefined = OrderParser.createOrderResponse(savedOrder, notes);
         const savedSelectedItems = insertedItems.getValue();
         const savedItemsMap = savedSelectedItems.reduce((map, item) => {
           const cartItemIdToString = this.cartItemRepository.objectIdToString(item.cartItemId);
@@ -150,29 +148,15 @@ export class OrderService implements IOrderService {
     return await this.orderRepository.find({});
   }
 
-  async createOrderNotes(
-    cartItems: CreateCartItemsDTO[],
-    orderId: Types.ObjectId,
-    audit: Audit,
-  ): Promise<IOrderNoteResponseDTO[]> {
-    try {
-      const orderNotes = cartItems.map((item) => {
-        return {
-          menuId: item.menuId,
-          note: item.note ? item.note : '',
-          orderId: orderId,
-        };
-      });
-      const createOrderNotes: OrderNote[] = orderNotes.map((note) => OrderNote.create({ ...note, audit }));
-      const notesToBeSaved = createOrderNotes.map((note) => this.orderNoteMapper.toPersistence(note));
-      const result: Result<OrderNote[]> = await this.orderNoteRepository.insertMany(notesToBeSaved);
-      let response: IOrderNoteResponseDTO[] | undefined;
-      if (result.isSuccess) {
-        response = OrderNoteParser.createOrderStatusResponses(result.getValue());
-      }
-      return response;
-    } catch (error) {
-      console.error(error);
-    }
+  async createOrderNotes(cartItems: CreateCartItemsDTO[], orderId: Types.ObjectId): Promise<OrderNote[]> {
+    const orderNotes = cartItems.map((item) => {
+      return {
+        menuId: item.menuId,
+        note: item.note ? item.note : '',
+        orderId: orderId,
+      };
+    });
+    const notes = this.orderNoteService.createNotes(orderNotes);
+    return notes;
   }
 }
