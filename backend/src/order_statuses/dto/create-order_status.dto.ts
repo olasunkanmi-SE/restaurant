@@ -1,10 +1,15 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateOrderStatusDto {
   @IsString()
   @IsNotEmpty()
-  isActive: boolean;
   name: string;
+  @IsString()
+  @IsNotEmpty()
   code: string;
+  @IsString()
   description?: string;
+  @IsBoolean()
+  @IsNotEmpty()
+  isActive: boolean;
 }
