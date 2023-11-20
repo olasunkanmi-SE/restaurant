@@ -45,7 +45,7 @@ describe('Test merchant service', () => {
         email: 'ola@tesla.com',
         passwordHash: '',
       };
-      validateUserStub.getUser = async (): Promise<any | undefined> => {
+      validateUserStub.getUser = async (): Promise<any> => {
         return merchantMockData;
       };
       contextServiceStub.getContext = (): Context => {
@@ -98,7 +98,7 @@ describe('Test merchant service', () => {
     contextServiceStub.getContext = (): Context => {
       return new Context('ola@tesla.com', '');
     };
-    validateUserStub.getUser = async (): Promise<any | undefined> => {
+    validateUserStub.getUser = async (): Promise<any> => {
       return merchantMockData;
     };
     merchantRepositoryStub.findById = async (): Promise<Result<Merchant>> => {
@@ -143,7 +143,7 @@ describe('Test merchant service', () => {
       auditModifiedBy: 'Ola@gmail.com',
       auditModifiedDateTime: new Date().toString(),
     };
-    validateUserStub.getUser = async (): Promise<any | undefined> => {
+    validateUserStub.getUser = async (): Promise<any> => {
       return merchantMockData;
     };
     merchantRepositoryStub.findById = async (): Promise<Result<Merchant>> => {

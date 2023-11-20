@@ -29,4 +29,5 @@ export const TYPES = {
   IOrderNoteService: Symbol('IOrderNoteService'),
   IOrderProcessingQueueRepository: Symbol('IOrderProcessingQueueRepository'),
   IOrderProcessingQueueService: Symbol('IOrderProcessingQueueService'),
+  IMerchantRepository: Symbol('IMerchantRepository'),
 };
