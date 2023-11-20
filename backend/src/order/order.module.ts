@@ -34,6 +34,9 @@ import {
   OrderStatusSchema,
 } from 'src/infrastructure/data_access/repositories/schemas/order-status.schema';
 import { OrderStatusMapper } from 'src/order_statuses/order_status.mapper';
+import { OrderNoteMapper } from 'src/order_notes/order_note.mapper';
+import { OrderNoteRepository } from 'src/infrastructure/data_access/repositories/order-note.repository';
+import { OrderNoteModel, OrderNoteSchema } from 'src/infrastructure/data_access/repositories/schemas/order-note.schema';
 
 @Module({
   imports: [
@@ -44,6 +47,7 @@ import { OrderStatusMapper } from 'src/order_statuses/order_status.mapper';
       { name: CartItemDataModel.name, schema: CartItemSchema },
       { name: SelectedCartItemDataModel.name, schema: SelectedCartItemSchema },
       { name: OrderStatusModel.name, schema: OrderStatusSchema },
+      { name: OrderNoteModel.name, schema: OrderNoteSchema },
     ]),
   ],
   controllers: [OrderController],
@@ -55,6 +59,7 @@ import { OrderStatusMapper } from 'src/order_statuses/order_status.mapper';
     { provide: TYPES.IContextService, useClass: ContextService },
     { provide: TYPES.IValidateUser, useClass: ValidateUser },
     { provide: TYPES.IOrderStatusRepository, useClass: OrderStatusRepository },
+    { provide: TYPES.IOrderNoteRepository, useClass: OrderNoteRepository },
     MerchantRepository,
     CartItemRepository,
     SelectedCartItemRepository,
@@ -65,6 +70,7 @@ import { OrderStatusMapper } from 'src/order_statuses/order_status.mapper';
     MerchantMapper,
     AuditMapper,
     OrderStatusMapper,
+    OrderNoteMapper,
   ],
 })
 export class OrderModule implements NestModule {

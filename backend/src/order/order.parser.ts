@@ -1,9 +1,10 @@
+import { IOrderNoteResponseDTO } from 'src/order_notes/dto/order-note-response';
 import { AuditParser } from './../audit/audit.parser';
 import { Order } from './order';
 import { IOrderResponseDTO } from './order-response.dto';
 
 export class OrderParser {
-  static createOrderResponse(order: Order): IOrderResponseDTO {
+  static createOrderResponse(order: Order, notes?: IOrderNoteResponseDTO[]): IOrderResponseDTO {
     const { id, state, type, merchantId, customerId, total, discount, orderManagerId, audit } = order;
     return {
       id,
@@ -14,6 +15,7 @@ export class OrderParser {
       total,
       discount,
       orderManagerId,
+      notes,
       ...AuditParser.createAuditResponse(audit),
     };
   }
