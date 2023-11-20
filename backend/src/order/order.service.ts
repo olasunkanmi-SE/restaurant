@@ -19,6 +19,7 @@ import { Order } from './order';
 import { IOrderResponseDTO } from './order-response.dto';
 import { OrderMapper } from './order.mapper';
 import { OrderParser } from './order.parser';
+import { IOrderStatusRespository } from 'src/infrastructure/data_access/repositories/interfaces/order-status.repository';
 
 export class OrderService implements IOrderService {
   private context: Context;
@@ -33,6 +34,7 @@ export class OrderService implements IOrderService {
     private readonly selectedItemMapper: SelectedCartItemMapper,
     private readonly cartItemMapper: CartItemMapper,
     @Inject(TYPES.ICartItemRepository) private readonly cartItemRepository: ICartItemRepository,
+    @Inject(TYPES.IOrderStatusRepository) private readonly orderStatusRespository: IOrderStatusRespository,
   ) {
     this.context = this.contextService.getContext();
   }
@@ -52,8 +54,13 @@ export class OrderService implements IOrderService {
     session.startTransaction();
     try {
       const audit: Audit = Audit.createInsertContext(this.context);
-      const merchantObjId = this.orderRepository.stringToObjectId(merchantId);
-      const order: Order = Order.create({ state, type, total, merchantId: merchantObjId, audit });
+      const merchantObjId = await this.orderRepository.stringToObjectId(merchantId);
+      const getOrderStatus = await this.orderStatusRespository.findOne({ code: state.toUpperCase() });
+      if (!getOrderStatus) {
+        throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Order status not found`);
+      }
+      const orderStatus = getOrderStatus.getValue();
+      const order: Order = Order.create({ state: orderStatus, type, total, merchantId: merchantObjId, audit });
       const orderModel: OrderDataModel = this.orderMapper.toPersistence(order);
       const orderToSave: Result<Order> = await this.orderRepository.createOrder(orderModel);
       const savedOrder = orderToSave.getValue();
@@ -84,13 +91,20 @@ export class OrderService implements IOrderService {
         const cartSelectedItems = cartItems.map((item) => item.selectedItems);
         const flattenedSelectedItems = cartSelectedItems.flat();
         flattenedSelectedItems.forEach((item) => {
-          if (cartItemMap.has(this.orderRepository.objectIdToString(item.menuId))) {
-            const cartItemId = cartItemMap.get(this.orderRepository.objectIdToString(item.menuId));
-            item.cartItemId = this.orderRepository.stringToObjectId(cartItemId);
+          if (cartItemMap.has(item.menuId)) {
+            const cartItemId = cartItemMap.get(item.menuId);
+            item.cartItemId = cartItemId;
           }
         });
-
-        const selectedItems = flattenedSelectedItems.map((item) => SelectedCartItem.create({ ...item, audit }));
+        const selectedItems = flattenedSelectedItems.map((item) =>
+          SelectedCartItem.create({
+            ...item,
+            cartItemId: this.orderRepository.stringToObjectId(item.cartItemId),
+            itemId: this.orderRepository.stringToObjectId(item.itemId),
+            menuId: this.orderRepository.stringToObjectId(item.menuId),
+            audit,
+          }),
+        );
         const selectedCartItemsDataModel = selectedItems.map((item) => this.selectedItemMapper.toPersistence(item));
         const insertedItems: Result<SelectedCartItem[]> = await this.selectedCartItemRepository.insertMany(
           selectedCartItemsDataModel,

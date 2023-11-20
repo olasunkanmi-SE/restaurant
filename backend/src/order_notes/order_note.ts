@@ -13,6 +13,7 @@ export class OrderNote extends Entity<IOrderNote> {
   private _orderId: Types.ObjectId;
   private _note: string;
   private _audit: Audit;
+  private _menuId: Types.ObjectId;
 
   /**
    * Creates an instance of OrderNotes.
@@ -24,14 +25,23 @@ export class OrderNote extends Entity<IOrderNote> {
     this._orderId = props.orderId;
     this._note = props.note;
     this._audit = props.audit;
+    this._menuId = props.menuId;
   }
 
   get note(): string {
     return this._note;
   }
 
+  set note(note: string) {
+    this._note = note;
+  }
+
   get orderId(): Types.ObjectId {
     return this._orderId;
+  }
+
+  get menuId(): Types.ObjectId {
+    return this._menuId;
   }
 
   get audit() {
