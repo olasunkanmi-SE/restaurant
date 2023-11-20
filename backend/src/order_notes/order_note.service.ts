@@ -1,13 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { TYPES } from 'src/application';
 import { Audit, Result } from 'src/domain';
 import { Context, IContextService } from 'src/infrastructure';
 import { IOrderNoteRespository } from 'src/infrastructure/data_access/repositories/interfaces/order-note.repository';
-import { OrderNote } from './order_note';
-import { OrderNoteParser } from './order_note_parser';
+import { throwApplicationError } from 'src/infrastructure/utilities/exception-instance';
 import { CreateOrderNoteDTO } from './dto/create-order_note.dto';
-import { IOrderNoteResponseDTO } from './dto/order-note-response';
 import { IOrderNoteService } from './interface/order-note-service.interface';
+import { OrderNote } from './order_note';
 
 @Injectable()
 export class OrderNoteService implements IOrderNoteService {
@@ -19,13 +18,28 @@ export class OrderNoteService implements IOrderNoteService {
   ) {
     this.context = this.contextService.getContext();
   }
-  async createOrderNote(props: CreateOrderNoteDTO): Promise<Result<IOrderNoteResponseDTO>> {
+  async createOrderNote(props: CreateOrderNoteDTO): Promise<OrderNote> {
     const audit: Audit = Audit.createInsertContext(this.context);
     const orderNoteEntity = OrderNote.create({ ...props, audit });
     const result = await this.orderNoteRepository.createOrderNote(orderNoteEntity);
+    if (!result) {
+      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Could not create order note`);
+    }
     const orderNote = result.getValue();
-    const response: IOrderNoteResponseDTO = OrderNoteParser.createResponse(orderNote);
-    return Result.ok(response);
+    return orderNote;
+  }
+
+  async createNotes(props: CreateOrderNoteDTO[]): Promise<OrderNote[]> {
+    try {
+      const notes = props.map((note) => this.createOrderNote(note));
+      const result = await Promise.all(notes);
+      if (!result) {
+        throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Could not create order notes`);
+      }
+      return result;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   getOrderNotes(): Promise<Result<OrderNote[]>> {

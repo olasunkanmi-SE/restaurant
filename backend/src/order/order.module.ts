@@ -37,6 +37,7 @@ import { OrderStatusMapper } from 'src/order_statuses/order_status.mapper';
 import { OrderNoteMapper } from 'src/order_notes/order_note.mapper';
 import { OrderNoteRepository } from 'src/infrastructure/data_access/repositories/order-note.repository';
 import { OrderNoteModel, OrderNoteSchema } from 'src/infrastructure/data_access/repositories/schemas/order-note.schema';
+import { OrderNoteService } from 'src/order_notes/order_note.service';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { OrderNoteModel, OrderNoteSchema } from 'src/infrastructure/data_access/
     { provide: TYPES.IValidateUser, useClass: ValidateUser },
     { provide: TYPES.IOrderStatusRepository, useClass: OrderStatusRepository },
     { provide: TYPES.IOrderNoteRepository, useClass: OrderNoteRepository },
+    { provide: TYPES.IOrderNoteService, useClass: OrderNoteService },
     MerchantRepository,
     CartItemRepository,
     SelectedCartItemRepository,
