@@ -11,4 +11,9 @@ export class CreateOrderNoteDTO {
   @IsNotEmpty()
   @Length(2, 128)
   readonly orderId: Types.ObjectId;
+
+  @IsString()
+  @IsNotEmpty()
+  @Length(2, 128)
+  readonly menuId: Types.ObjectId;
 }

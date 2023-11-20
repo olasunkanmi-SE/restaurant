@@ -11,6 +11,11 @@ export class CreateMenuDTO {
   readonly name: string;
 
   @IsString()
+  @IsNotEmpty()
+  @Length(2, 256)
+  readonly note: string;
+
+  @IsString()
   @IsOptional()
   @Length(2, 256)
   readonly description?: string;

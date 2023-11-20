@@ -9,6 +9,7 @@ import { IMenu } from './menu-entity.interface';
 
 export const menuMockData: IMenu = {
   name: '',
+  note: '',
   description: '',
   items: [Item.create(itemMockData).getValue()],
   audit: Audit.create(auditMockData).getValue(),
