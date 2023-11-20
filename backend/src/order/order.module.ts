@@ -28,6 +28,12 @@ import { OrderMapper } from './order.mapper';
 import { OrderService } from './order.service';
 import { OrderController } from './order.controller';
 import { ContextMiddleWare } from 'src/infrastructure/middlewares';
+import { OrderStatusRepository } from 'src/infrastructure/data_access/repositories/order-status.repository';
+import {
+  OrderStatusModel,
+  OrderStatusSchema,
+} from 'src/infrastructure/data_access/repositories/schemas/order-status.schema';
+import { OrderStatusMapper } from 'src/order_statuses/order_status.mapper';
 
 @Module({
   imports: [
@@ -37,6 +43,7 @@ import { ContextMiddleWare } from 'src/infrastructure/middlewares';
       { name: ItemDataModel.name, schema: ItemSchema },
       { name: CartItemDataModel.name, schema: CartItemSchema },
       { name: SelectedCartItemDataModel.name, schema: SelectedCartItemSchema },
+      { name: OrderStatusModel.name, schema: OrderStatusSchema },
     ]),
   ],
   controllers: [OrderController],
@@ -47,6 +54,7 @@ import { ContextMiddleWare } from 'src/infrastructure/middlewares';
     { provide: TYPES.IMerchantService, useClass: MerchantService },
     { provide: TYPES.IContextService, useClass: ContextService },
     { provide: TYPES.IValidateUser, useClass: ValidateUser },
+    { provide: TYPES.IOrderStatusRepository, useClass: OrderStatusRepository },
     MerchantRepository,
     CartItemRepository,
     SelectedCartItemRepository,
@@ -56,6 +64,7 @@ import { ContextMiddleWare } from 'src/infrastructure/middlewares';
     JwtService,
     MerchantMapper,
     AuditMapper,
+    OrderStatusMapper,
   ],
 })
 export class OrderModule implements NestModule {

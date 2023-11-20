@@ -1,9 +1,10 @@
 import { Types } from 'mongoose';
 import { IAudit } from 'src/infrastructure';
+import { OrderStatus } from 'src/order_statuses/order_status';
 
 export interface IOrderResponseDTO extends IAudit {
   id: Types.ObjectId;
-  state: string;
+  state: OrderStatus;
   type: string;
   merchantId: Types.ObjectId;
   customerId?: Types.ObjectId;
