@@ -40,10 +40,10 @@ export class OrderService implements IOrderService {
   async createOrder(orderSummary: CreateOrderDTO): Promise<Result<IOrderResponseDTO>> {
     await this.merchantService.validateContext();
     const { state, type, merchantId, total, cartItems } = orderSummary;
-    const orderDuplicate = await this.orderRepository.getDuplicateOrder(type, merchantId, cartItems);
-    if (orderDuplicate) {
-      throwApplicationError(HttpStatus.NOT_FOUND, 'Duplicate order detected. Please confirm.');
-    }
+    // const orderDuplicate = await this.orderRepository.getDuplicateOrder(type, merchantId, cartItems);
+    // if (orderDuplicate) {
+    //   throwApplicationError(HttpStatus.NOT_FOUND, 'Duplicate order detected. Please confirm.');
+    // }
     const validateMerchant: Result<Merchant> = await this.merchantRepository.findOne({ _id: merchantId });
     if (!validateMerchant.isSuccess) {
       throwApplicationError(HttpStatus.NOT_FOUND, `Merchant does not exist`);
@@ -113,6 +113,7 @@ export class OrderService implements IOrderService {
           }
         });
         await this.cartItemRepository.updateCartItemSelectedItems(savedItems);
+        const orderNotes = orderSummary.cartItems.map((item)=>{menuId: item.menuId, note: item.note})
         await session.commitTransaction();
         return Result.ok(response);
       }
