@@ -1,13 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { TYPES } from 'src/application';
 import { Audit, Result } from 'src/domain';
 import { Context, IContextService } from 'src/infrastructure';
+import { IOrderProcessingQueueRespository } from 'src/infrastructure/data_access/repositories/interfaces/order-processing-queue-repository.interface';
 import { CreateOrderProcessingQueueDTO } from './dto/create-order_processing_queue.dto';
-import { IOrderProcessingQueueResponseDTO } from './dto/order-processing-queue.reponse';
 import { IOrderProcessingQueueService } from './interface/order-processing-queue-service.interface';
 import { OrderProcessingQueue } from './order_processing_queue';
-import { IOrderProcessingQueueRespository } from 'src/infrastructure/data_access/repositories/interfaces/order-processing-queue-repository.interface';
-import { OrderProcessingQueuewParser } from './order_processing_queue_parser';
+import { throwApplicationError } from 'src/infrastructure/utilities/exception-instance';
 
 @Injectable()
 export class OrderProcessingQueueService implements IOrderProcessingQueueService {
@@ -20,18 +19,26 @@ export class OrderProcessingQueueService implements IOrderProcessingQueueService
   ) {
     this.context = this.contextService.getContext();
   }
-  async createOrderProcessingQueue(
-    props: CreateOrderProcessingQueueDTO,
-  ): Promise<Result<IOrderProcessingQueueResponseDTO>> {
+  async createQueue(props: CreateOrderProcessingQueueDTO): Promise<OrderProcessingQueue> {
     const audit: Audit = Audit.createInsertContext(this.context);
     const orderProcessingQueueEntity = OrderProcessingQueue.create({ ...props, audit });
     const result = await this.orderProcessingQueueRepository.createOrderProcessingQueue(orderProcessingQueueEntity);
-    const orderProcessingQueue = result.getValue();
-    const response: IOrderProcessingQueueResponseDTO = OrderProcessingQueuewParser.createResponse(orderProcessingQueue);
-    return Result.ok(response);
+    if (!result) {
+      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Could not create order status queue`);
+    }
+    return result.getValue();
   }
 
-  getOrderProcessingQueues(): Promise<Result<OrderProcessingQueue[]>> {
+  async createOrderProcessingQueues(props: CreateOrderProcessingQueueDTO[]): Promise<OrderProcessingQueue[]> {
+    const statusQueues = props.map((queue) => this.createQueue(queue));
+    const result = await Promise.all(statusQueues);
+    if (!result) {
+      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Could not create order status queue`);
+    }
+    return result;
+  }
+
+  getOrderStatusQueues(): Promise<Result<OrderProcessingQueue[]>> {
     return this.orderProcessingQueueRepository.find({});
   }
 }

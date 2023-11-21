@@ -37,6 +37,14 @@ import { OrderStatusMapper } from 'src/order_statuses/order_status.mapper';
 import { OrderNoteMapper } from 'src/order_notes/order_note.mapper';
 import { OrderNoteRepository } from 'src/infrastructure/data_access/repositories/order-note.repository';
 import { OrderNoteModel, OrderNoteSchema } from 'src/infrastructure/data_access/repositories/schemas/order-note.schema';
+import { OrderNoteService } from 'src/order_notes/order_note.service';
+import { OrderProcessingQueueService } from 'src/order_processing_queue/order_processing_queue.service';
+import {
+  OrderProcessingQueueModel,
+  OrderProcessingQueueSchema,
+} from 'src/infrastructure/data_access/repositories/schemas/order-processing-queue.schema';
+import { OrderProcessingQueueRepository } from 'src/infrastructure/data_access/repositories/order-processing-queue.repository';
+import { OrderProcessingQueueMapper } from 'src/order_processing_queue/order_processing_queue.mapper';
 
 @Module({
   imports: [
@@ -48,6 +56,7 @@ import { OrderNoteModel, OrderNoteSchema } from 'src/infrastructure/data_access/
       { name: SelectedCartItemDataModel.name, schema: SelectedCartItemSchema },
       { name: OrderStatusModel.name, schema: OrderStatusSchema },
       { name: OrderNoteModel.name, schema: OrderNoteSchema },
+      { name: OrderProcessingQueueModel.name, schema: OrderProcessingQueueSchema },
     ]),
   ],
   controllers: [OrderController],
@@ -60,6 +69,9 @@ import { OrderNoteModel, OrderNoteSchema } from 'src/infrastructure/data_access/
     { provide: TYPES.IValidateUser, useClass: ValidateUser },
     { provide: TYPES.IOrderStatusRepository, useClass: OrderStatusRepository },
     { provide: TYPES.IOrderNoteRepository, useClass: OrderNoteRepository },
+    { provide: TYPES.IOrderNoteService, useClass: OrderNoteService },
+    { provide: TYPES.IOrderProcessingQueueService, useClass: OrderProcessingQueueService },
+    { provide: TYPES.IOrderProcessingQueueRepository, useClass: OrderProcessingQueueRepository },
     MerchantRepository,
     CartItemRepository,
     SelectedCartItemRepository,
@@ -71,6 +83,7 @@ import { OrderNoteModel, OrderNoteSchema } from 'src/infrastructure/data_access/
     AuditMapper,
     OrderStatusMapper,
     OrderNoteMapper,
+    OrderProcessingQueueMapper,
   ],
 })
 export class OrderModule implements NestModule {

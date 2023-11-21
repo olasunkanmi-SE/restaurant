@@ -1,9 +1,10 @@
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { BaseDocument } from 'src/infrastructure/database';
 import { IOrderStatusModel } from '../models/order-status-model.interface';
 
 export type OrderStatusDocument = OrderStatusModel & Document;
+@Schema({ versionKey: 'false' })
 export class OrderStatusModel extends BaseDocument implements IOrderStatusModel {
   @Prop({ type: Boolean, required: true, default: true })
   isActive: boolean;

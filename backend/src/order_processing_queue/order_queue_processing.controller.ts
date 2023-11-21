@@ -12,11 +12,11 @@ export class OrderProcessingQueuesController {
 
   @Post()
   create(@Body() createOrderProcessingQueue: CreateOrderProcessingQueueDTO) {
-    return this.orderProcessingQueueService.createOrderProcessingQueue(createOrderProcessingQueue);
+    return this.orderProcessingQueueService.createQueue(createOrderProcessingQueue);
   }
 
   @Get()
   findAll() {
-    return this.orderProcessingQueueService.getOrderProcessingQueues();
+    return this.orderProcessingQueueService.getOrderStatusQueues();
   }
 }
