@@ -17,6 +17,7 @@ export class Menu extends Entity<IMenu> implements IMenu {
   _basePrice: number;
   _category: Category;
   _restaurantId: Types.ObjectId;
+  _quantityAvailable?: number;
   constructor(id: Types.ObjectId, props: IMenu) {
     super(id);
     this._name = props.name;
@@ -28,6 +29,7 @@ export class Menu extends Entity<IMenu> implements IMenu {
     this._basePrice = props.basePrice;
     this._category = props.category;
     this._restaurantId = props.restaurantId;
+    this._quantityAvailable = props.quantityAvailable;
   }
 
   get name(): string {
@@ -36,6 +38,14 @@ export class Menu extends Entity<IMenu> implements IMenu {
 
   set name(value: string) {
     this._name = value;
+  }
+
+  get quantityAvailable(): number {
+    return this._quantityAvailable;
+  }
+
+  set quantityAvailable(value: number) {
+    this._quantityAvailable = value;
   }
 
   get description(): string | undefined {

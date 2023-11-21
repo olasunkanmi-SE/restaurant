@@ -12,5 +12,6 @@ export interface IMenu {
   discount: number;
   basePrice: number;
   category: Category;
+  quantityAvailable?: number;
   restaurantId: Types.ObjectId;
 }
