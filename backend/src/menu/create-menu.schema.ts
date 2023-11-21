@@ -34,6 +34,10 @@ export class CreateMenuDTO {
   readonly discount;
 
   @IsNumber()
+  @IsOptional()
+  readonly quantityAvailable;
+
+  @IsNumber()
   readonly basePrice;
 
   category: Category;

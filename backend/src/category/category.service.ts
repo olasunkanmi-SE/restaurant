@@ -59,4 +59,13 @@ export class CategoryService implements ICategoryService {
     const response: ICategoryResponseDTO = CategoryParser.createCategoryResponse(result.getValue());
     return Result.ok(response);
   }
+
+  protected async bulkDelete(ids: Types.ObjectId[]): Promise<Result<boolean>> {
+    return Result.ok(await this.categoryRepository.deleteMany({ _id: { $in: ids } }));
+  }
+
+  async deleteCategories(ids: string[]): Promise<Result<boolean>> {
+    const objectIds = ids.map((id) => this.categoryRepository.stringToObjectId(id));
+    return await this.bulkDelete(objectIds);
+  }
 }

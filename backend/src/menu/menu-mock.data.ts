@@ -18,4 +18,5 @@ export const menuMockData: IMenu = {
   imageUrl: 'http://',
   category: Category.create(categoryMockData).getValue(),
   restaurantId: new Types.ObjectId(),
+  quantityAvailable: 2,
 };
