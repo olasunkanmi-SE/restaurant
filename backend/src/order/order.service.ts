@@ -6,7 +6,6 @@ import { SelectedCartItem } from 'src/cart/selectedItems/selectedCartItem';
 import { Audit, Result } from 'src/domain';
 import { Context, IContextService, MerchantRepository } from 'src/infrastructure';
 import { ICartItemRepository } from 'src/infrastructure/data_access/repositories/interfaces/cart-item-repository.interface';
-import { IOrderNoteRespository } from 'src/infrastructure/data_access/repositories/interfaces/order-note.repository';
 import { IOrderRepository } from 'src/infrastructure/data_access/repositories/interfaces/order-repository.interface';
 import { IOrderStatusRespository } from 'src/infrastructure/data_access/repositories/interfaces/order-status.repository';
 import { CartItemDataModel } from 'src/infrastructure/data_access/repositories/schemas/cartItem.schema';
@@ -16,7 +15,6 @@ import { throwApplicationError } from 'src/infrastructure/utilities/exception-in
 import { IMerchantService, Merchant } from 'src/merchant';
 import { IOrderNoteService } from 'src/order_notes/interface/order-note-service.interface';
 import { OrderNote } from 'src/order_notes/order_note';
-import { OrderNoteMapper } from 'src/order_notes/order_note.mapper';
 import { IOrderProcessingQueueService } from 'src/order_processing_queue/interface/order-processing-queue-service.interface';
 import { CartItemMapper } from './../cart/cart-item.mapper';
 import { SelectedCartItemMapper } from './../cart/selectedItems/selected-cart-item.mapper';
@@ -39,10 +37,8 @@ export class OrderService implements IOrderService {
     private readonly orderMapper: OrderMapper,
     private readonly selectedItemMapper: SelectedCartItemMapper,
     private readonly cartItemMapper: CartItemMapper,
-    private readonly orderNoteMapper: OrderNoteMapper,
     @Inject(TYPES.ICartItemRepository) private readonly cartItemRepository: ICartItemRepository,
     @Inject(TYPES.IOrderStatusRepository) private readonly orderStatusRespository: IOrderStatusRespository,
-    @Inject(TYPES.IOrderNoteRepository) private readonly orderNoteRepository: IOrderNoteRespository,
     @Inject(TYPES.IOrderNoteService) private readonly orderNoteService: IOrderNoteService,
     @Inject(TYPES.IOrderProcessingQueueService)
     private readonly OrderProcessingQueueService: IOrderProcessingQueueService,
