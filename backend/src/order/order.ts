@@ -3,7 +3,7 @@ import { CartItem } from 'src/cart/cart-item';
 import { Entity, Result } from 'src/domain';
 import { OrderStatus } from 'src/order_statuses/order_status';
 import { Audit } from './../domain/audit/audit';
-import { IOrder, currentStatus, dinningType } from './order-entity.interface';
+import { IOrder, dinningType } from './order-entity.interface';
 
 export class Order extends Entity<IOrder> implements IOrder {
   _state: OrderStatus;
