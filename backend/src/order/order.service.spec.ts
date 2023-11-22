@@ -5,7 +5,6 @@ import { CartItemMapper } from '../cart/cart-item.mapper';
 import { SelectedCartItemMapper } from '../cart/selectedItems/selected-cart-item.mapper';
 import { IContextService, MerchantRepository } from '../infrastructure';
 import { ICartItemRepository } from '../infrastructure/data_access/repositories/interfaces/cart-item-repository.interface';
-import { IOrderNoteRespository } from '../infrastructure/data_access/repositories/interfaces/order-note.repository';
 import { IOrderRepository } from '../infrastructure/data_access/repositories/interfaces/order-repository.interface';
 import { IOrderStatusRespository } from '../infrastructure/data_access/repositories/interfaces/order-status.repository';
 import { SelectedCartItemRepository } from '../infrastructure/data_access/repositories/selected-cart-item.repository';
@@ -41,7 +40,6 @@ describe('Order Service', () => {
   const orderStatusMapperStub = new OrderStatusMapper(auditMapperStub);
   const orderMapperStub = new OrderMapper(auditMapperStub, cartItemMapperStub, orderStatusMapperStub);
   const orderStatusRepositoryStub: IOrderStatusRespository = sinon.stubInterface<IOrderStatusRespository>();
-  const orderNoteRespositoryStub: IOrderNoteRespository = sinon.stubInterface<IOrderNoteRespository>();
   const orderNoteServiceStub: IOrderNoteService = sinon.stubInterface<IOrderNoteService>();
   const orderProcessingQueueServiceStub: IOrderProcessingQueueService =
     sinon.stubInterface<IOrderProcessingQueueService>();
@@ -56,7 +54,6 @@ describe('Order Service', () => {
     cartItemMapperStub,
     cartItemRepositoryStub,
     orderStatusRepositoryStub,
-    orderNoteRespositoryStub,
     orderNoteServiceStub,
     orderProcessingQueueServiceStub,
   );
