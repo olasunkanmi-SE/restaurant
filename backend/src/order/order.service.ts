@@ -17,6 +17,7 @@ import { IMerchantService, Merchant } from 'src/merchant';
 import { IOrderNoteService } from 'src/order_notes/interface/order-note-service.interface';
 import { OrderNote } from 'src/order_notes/order_note';
 import { OrderNoteMapper } from 'src/order_notes/order_note.mapper';
+import { IOrderProcessingQueueService } from 'src/order_processing_queue/interface/order-processing-queue-service.interface';
 import { CartItemMapper } from './../cart/cart-item.mapper';
 import { SelectedCartItemMapper } from './../cart/selectedItems/selected-cart-item.mapper';
 import { CreateCartItemsDTO, CreateOrderDTO } from './dto/create-order.dto';
@@ -25,7 +26,6 @@ import { Order } from './order';
 import { IOrderResponseDTO } from './order-response.dto';
 import { OrderMapper } from './order.mapper';
 import { OrderParser } from './order.parser';
-import { IOrderProcessingQueueService } from 'src/order_processing_queue/interface/order-processing-queue-service.interface';
 
 export class OrderService implements IOrderService {
   private context: Context;
@@ -62,8 +62,8 @@ export class OrderService implements IOrderService {
       throwApplicationError(HttpStatus.NOT_FOUND, `Merchant does not exist`);
     }
     const session = await this.orderRepository.startSession();
-    session.startTransaction();
     try {
+      await session.startTransaction();
       const audit: Audit = Audit.createInsertContext(this.context);
       const merchantObjId = this.orderRepository.stringToObjectId(merchantId);
       const getOrderStatus = await this.orderStatusRespository.findOne({ code: state.toUpperCase() });
@@ -86,6 +86,7 @@ export class OrderService implements IOrderService {
         const savedCartItems: Result<CartItem[]> = await this.cartItemRepository.insertMany(cartItemDataModels);
         const savedItems = savedCartItems.getValue();
         savedOrder.cartItems = savedItems;
+        savedOrder.state = orderStatus;
         const orderWithCartItems = await this.orderRepository.upsert(
           { _id: orderId },
           this.orderMapper.toPersistence(savedOrder),
@@ -143,6 +144,7 @@ export class OrderService implements IOrderService {
     } catch (error) {
       console.error(error);
       await session.abortTransaction();
+      return Result.fail('An error occurred during order creation.', HttpStatus.BAD_REQUEST);
     } finally {
       await session.endSession();
     }
@@ -160,11 +162,11 @@ export class OrderService implements IOrderService {
         orderId: orderId,
       };
     });
-    const notes = this.orderNoteService.createNotes(orderNotes);
-    return notes;
+    const notes = await this.orderNoteService.createNotes(orderNotes);
+    return notes.getValue();
   }
 
   async createOrderStatusQueue(orderStatusId: Types.ObjectId, orderId: Types.ObjectId) {
-    return this.OrderProcessingQueueService.createQueue({ orderStatusId, orderId });
+    return await this.OrderProcessingQueueService.createQueue({ orderStatusId, orderId });
   }
 }

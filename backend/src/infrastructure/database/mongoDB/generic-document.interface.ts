@@ -1,5 +1,5 @@
+import { ClientSession, FilterQuery, ProjectionType, QueryOptions, SaveOptions, Types, UpdateQuery } from 'mongoose';
 import { Result } from './../../../domain/result/result';
-import { FilterQuery, ProjectionType, QueryOptions, SaveOptions, UpdateQuery, ClientSession, Types } from 'mongoose';
 
 export interface IGenericDocument<TEntity, T> {
   findOne(filterQuery: FilterQuery<T>, projection?: ProjectionType<T | null>): Promise<Result<TEntity | null>>;
