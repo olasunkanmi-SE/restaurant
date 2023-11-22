@@ -40,7 +40,7 @@ export class OrderRepository extends GenericDocumentRepository<Order, OrderDocum
       cartItems: { $elemMatch: { $in: selectedItemIds } },
       auditCreatedDateTime: {
         $gte: initDuplicateTimeInMilliSeconds,
-        $lt: new Date(currentTime.getMilliseconds() + finalDuplicateTimeFrameInMinutes),
+        $lte: new Date(currentTime.getMilliseconds() + finalDuplicateTimeFrameInMinutes),
       },
     });
     const potentialDuplicateOrder = result.getValue();

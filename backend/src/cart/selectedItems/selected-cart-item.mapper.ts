@@ -1,6 +1,6 @@
-import { AuditMapper } from 'src/audit';
-import { IMapper } from 'src/domain';
-import { SelectedCartItemDataModel } from 'src/infrastructure/data_access/repositories/schemas/selected-cart-item.schema';
+import { AuditMapper } from '../../audit';
+import { IMapper } from '../../domain';
+import { SelectedCartItemDataModel } from '../../infrastructure/data_access/repositories/schemas/selected-cart-item.schema';
 import { SelectedCartItem } from './selectedCartItem';
 
 export class SelectedCartItemMapper implements IMapper<SelectedCartItem, SelectedCartItemDataModel> {
