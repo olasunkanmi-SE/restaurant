@@ -1,4 +1,4 @@
-import { Audit, Entity, Result } from 'src/domain';
+import { Audit, Entity, Result } from '../domain';
 import { IOrderStatuses } from './order_status_entity.interface';
 import { Types } from 'mongoose';
 

@@ -1,12 +1,11 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { AuditMapper } from 'src/audit';
-import { IMapper } from 'src/domain';
-import { CartItemDataModel } from 'src/infrastructure/data_access/repositories/schemas/cartItem.schema';
-import { SelectedCartItemDataModel } from 'src/infrastructure/data_access/repositories/schemas/selected-cart-item.schema';
+import { AuditMapper } from '../audit';
+import { IMapper } from '../domain';
+import { CartItemDataModel } from '../infrastructure/data_access/repositories/schemas/cartItem.schema';
+import { throwApplicationError } from '../infrastructure/utilities/exception-instance';
 import { CartItem } from './cart-item';
 import { SelectedCartItemMapper } from './selectedItems/selected-cart-item.mapper';
 import { SelectedCartItem } from './selectedItems/selectedCartItem';
-import { throwApplicationError } from 'src/infrastructure/utilities/exception-instance';
 
 @Injectable()
 export class CartItemMapper implements IMapper<CartItem, CartItemDataModel> {
