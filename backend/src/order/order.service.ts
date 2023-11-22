@@ -24,6 +24,7 @@ import { Order } from './order';
 import { IOrderResponseDTO } from './order-response.dto';
 import { OrderMapper } from './order.mapper';
 import { OrderParser } from './order.parser';
+import { IOrderProcessingQueueService } from 'src/order_processing_queue/interface/order-processing-queue-service.interface';
 
 export class OrderService implements IOrderService {
   private context: Context;
@@ -164,5 +165,9 @@ export class OrderService implements IOrderService {
 
   async createOrderStatusQueue(orderStatusId: Types.ObjectId, orderId: Types.ObjectId) {
     return await this.OrderProcessingQueueService.createQueue({ orderStatusId, orderId });
+  }
+
+  async createOrderStatusQueue(orderStatusId: Types.ObjectId, orderId: Types.ObjectId) {
+    return this.OrderProcessingQueueService.createQueue({ orderStatusId, orderId });
   }
 }
