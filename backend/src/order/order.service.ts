@@ -1,21 +1,20 @@
 import { HttpStatus, Inject } from '@nestjs/common';
 import { Types } from 'mongoose';
-import { TYPES } from '../application';
-import { CartItem } from '../cart/cart-item';
-import { SelectedCartItem } from '../cart/selectedItems/selectedCartItem';
-import { Audit, Result } from '../domain';
-import { Context, IContextService, MerchantRepository } from '../infrastructure';
-import { ICartItemRepository } from '../infrastructure/data_access/repositories/interfaces/cart-item-repository.interface';
-import { IOrderNoteRespository } from '../infrastructure/data_access/repositories/interfaces/order-note.repository';
-import { IOrderRepository } from '../infrastructure/data_access/repositories/interfaces/order-repository.interface';
-import { IOrderStatusRespository } from '../infrastructure/data_access/repositories/interfaces/order-status.repository';
-import { CartItemDataModel } from '../infrastructure/data_access/repositories/schemas/cartItem.schema';
-import { OrderDataModel } from '../infrastructure/data_access/repositories/schemas/order.schema';
-import { SelectedCartItemRepository } from '../infrastructure/data_access/repositories/selected-cart-item.repository';
-import { throwApplicationError } from '../infrastructure/utilities/exception-instance';
-import { IMerchantService, Merchant } from '../merchant';
-import { IOrderNoteService } from '../order_notes/interface/order-note-service.interface';
-import { OrderNote } from '../order_notes/order_note';
+import { TYPES } from 'src/application';
+import { CartItem } from 'src/cart/cart-item';
+import { SelectedCartItem } from 'src/cart/selectedItems/selectedCartItem';
+import { Audit, Result } from 'src/domain';
+import { Context, IContextService, MerchantRepository } from 'src/infrastructure';
+import { ICartItemRepository } from 'src/infrastructure/data_access/repositories/interfaces/cart-item-repository.interface';
+import { IOrderRepository } from 'src/infrastructure/data_access/repositories/interfaces/order-repository.interface';
+import { IOrderStatusRespository } from 'src/infrastructure/data_access/repositories/interfaces/order-status.repository';
+import { CartItemDataModel } from 'src/infrastructure/data_access/repositories/schemas/cartItem.schema';
+import { OrderDataModel } from 'src/infrastructure/data_access/repositories/schemas/order.schema';
+import { SelectedCartItemRepository } from 'src/infrastructure/data_access/repositories/selected-cart-item.repository';
+import { throwApplicationError } from 'src/infrastructure/utilities/exception-instance';
+import { IMerchantService, Merchant } from 'src/merchant';
+import { IOrderNoteService } from 'src/order_notes/interface/order-note-service.interface';
+import { OrderNote } from 'src/order_notes/order_note';
 import { CartItemMapper } from './../cart/cart-item.mapper';
 import { SelectedCartItemMapper } from './../cart/selectedItems/selected-cart-item.mapper';
 import { CreateCartItemsDTO, CreateOrderDTO } from './dto/create-order.dto';
@@ -40,7 +39,6 @@ export class OrderService implements IOrderService {
     private readonly cartItemMapper: CartItemMapper,
     @Inject(TYPES.ICartItemRepository) private readonly cartItemRepository: ICartItemRepository,
     @Inject(TYPES.IOrderStatusRepository) private readonly orderStatusRespository: IOrderStatusRespository,
-    @Inject(TYPES.IOrderNoteRepository) private readonly orderNoteRepository: IOrderNoteRespository,
     @Inject(TYPES.IOrderNoteService) private readonly orderNoteService: IOrderNoteService,
     @Inject(TYPES.IOrderProcessingQueueService)
     private readonly OrderProcessingQueueService: IOrderProcessingQueueService,
@@ -60,8 +58,8 @@ export class OrderService implements IOrderService {
       throwApplicationError(HttpStatus.NOT_FOUND, `Merchant does not exist`);
     }
     const session = await this.orderRepository.startSession();
-    session.startTransaction();
     try {
+      await session.startTransaction();
       const audit: Audit = Audit.createInsertContext(this.context);
       const merchantObjId = this.orderRepository.stringToObjectId(merchantId);
       const getOrderStatus = await this.orderStatusRespository.findOne({ code: state.toUpperCase() });
@@ -84,6 +82,7 @@ export class OrderService implements IOrderService {
         const savedCartItems: Result<CartItem[]> = await this.cartItemRepository.insertMany(cartItemDataModels);
         const savedItems = savedCartItems.getValue();
         savedOrder.cartItems = savedItems;
+        savedOrder.state = orderStatus;
         const orderWithCartItems = await this.orderRepository.upsert(
           { _id: orderId },
           this.orderMapper.toPersistence(savedOrder),
@@ -141,6 +140,7 @@ export class OrderService implements IOrderService {
     } catch (error) {
       console.error(error);
       await session.abortTransaction();
+      return Result.fail('An error occurred during order creation.', HttpStatus.BAD_REQUEST);
     } finally {
       await session.endSession();
     }
@@ -158,8 +158,8 @@ export class OrderService implements IOrderService {
         orderId: orderId,
       };
     });
-    const notes = this.orderNoteService.createNotes(orderNotes);
-    return notes;
+    const notes = await this.orderNoteService.createNotes(orderNotes);
+    return notes.getValue();
   }
 
   async createOrderStatusQueue(orderStatusId: Types.ObjectId, orderId: Types.ObjectId) {

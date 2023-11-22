@@ -9,7 +9,7 @@ export class OrderNotesController {
 
   @Post()
   create(@Body() createOrderNote: CreateOrderNoteDTO) {
-    return this.orderNoteService.createOrderNote(createOrderNote);
+    return this.orderNoteService.createOrderNoteEntity(createOrderNote);
   }
 
   @Get()

@@ -3,7 +3,7 @@ import { CreateOrderNoteDTO } from '../dto/create-order_note.dto';
 import { OrderNote } from '../order_note';
 
 export interface IOrderNoteService {
-  createOrderNote(props: CreateOrderNoteDTO): Promise<OrderNote>;
+  createOrderNoteEntity(props: CreateOrderNoteDTO): OrderNote;
   getOrderNotes(): Promise<Result<OrderNote[]>>;
-  createNotes(props: CreateOrderNoteDTO[]): Promise<OrderNote[]>;
+  createNotes(props: CreateOrderNoteDTO[]): Promise<Result<OrderNote[]>>;
 }
