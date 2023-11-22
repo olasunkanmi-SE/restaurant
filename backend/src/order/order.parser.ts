@@ -1,5 +1,5 @@
-import { OrderNote } from 'src/order_notes/order_note';
-import { OrderNoteParser } from 'src/order_notes/order_note_parser';
+import { OrderNote } from '../order_notes/order_note';
+import { OrderNoteParser } from '../order_notes/order_note_parser';
 import { AuditParser } from './../audit/audit.parser';
 import { Order } from './order';
 import { IOrderResponseDTO } from './order-response.dto';

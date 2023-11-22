@@ -1,10 +1,10 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
-import { TYPES } from 'src/application';
-import { AuditMapper } from 'src/audit';
-import { CartItemMapper } from 'src/cart/cart-item.mapper';
-import { SelectedCartItemMapper } from 'src/cart/selectedItems/selected-cart-item.mapper';
+import { TYPES } from '../application';
+import { AuditMapper } from '../audit';
+import { CartItemMapper } from '../cart/cart-item.mapper';
+import { SelectedCartItemMapper } from '../cart/selectedItems/selected-cart-item.mapper';
 import {
   ContextService,
   ItemDataModel,
@@ -12,39 +12,39 @@ import {
   MerchantDataModel,
   MerchantRepository,
   MerchantSchema,
-} from 'src/infrastructure';
-import { CartItemRepository } from 'src/infrastructure/data_access/repositories/cart-item.repository';
-import { OrderRepository } from 'src/infrastructure/data_access/repositories/order.repository';
-import { CartItemDataModel, CartItemSchema } from 'src/infrastructure/data_access/repositories/schemas/cartItem.schema';
-import { OrderDataModel, OrderSchema } from 'src/infrastructure/data_access/repositories/schemas/order.schema';
+} from '../infrastructure';
+import { CartItemRepository } from '../infrastructure/data_access/repositories/cart-item.repository';
+import { OrderRepository } from '../infrastructure/data_access/repositories/order.repository';
+import { CartItemDataModel, CartItemSchema } from '../infrastructure/data_access/repositories/schemas/cartItem.schema';
+import { OrderDataModel, OrderSchema } from '../infrastructure/data_access/repositories/schemas/order.schema';
 import {
   SelectedCartItemDataModel,
   SelectedCartItemSchema,
-} from 'src/infrastructure/data_access/repositories/schemas/selected-cart-item.schema';
-import { SelectedCartItemRepository } from 'src/infrastructure/data_access/repositories/selected-cart-item.repository';
-import { MerchantMapper, MerchantService } from 'src/merchant';
-import { ValidateUser } from 'src/utils';
+} from '../infrastructure/data_access/repositories/schemas/selected-cart-item.schema';
+import { SelectedCartItemRepository } from '../infrastructure/data_access/repositories/selected-cart-item.repository';
+import { MerchantMapper, MerchantService } from '../merchant';
+import { ValidateUser } from '../utils';
 import { OrderMapper } from './order.mapper';
 import { OrderService } from './order.service';
 import { OrderController } from './order.controller';
-import { ContextMiddleWare } from 'src/infrastructure/middlewares';
-import { OrderStatusRepository } from 'src/infrastructure/data_access/repositories/order-status.repository';
+import { ContextMiddleWare } from '../infrastructure/middlewares';
+import { OrderStatusRepository } from '../infrastructure/data_access/repositories/order-status.repository';
 import {
   OrderStatusModel,
   OrderStatusSchema,
-} from 'src/infrastructure/data_access/repositories/schemas/order-status.schema';
-import { OrderStatusMapper } from 'src/order_statuses/order_status.mapper';
-import { OrderNoteMapper } from 'src/order_notes/order_note.mapper';
-import { OrderNoteRepository } from 'src/infrastructure/data_access/repositories/order-note.repository';
-import { OrderNoteModel, OrderNoteSchema } from 'src/infrastructure/data_access/repositories/schemas/order-note.schema';
-import { OrderNoteService } from 'src/order_notes/order_note.service';
-import { OrderProcessingQueueService } from 'src/order_processing_queue/order_processing_queue.service';
+} from '../infrastructure/data_access/repositories/schemas/order-status.schema';
+import { OrderStatusMapper } from '../order_statuses/order_status.mapper';
+import { OrderNoteMapper } from '../order_notes/order_note.mapper';
+import { OrderNoteRepository } from '../infrastructure/data_access/repositories/order-note.repository';
+import { OrderNoteModel, OrderNoteSchema } from '../infrastructure/data_access/repositories/schemas/order-note.schema';
+import { OrderNoteService } from '../order_notes/order_note.service';
+import { OrderProcessingQueueService } from '../order_processing_queue/order_processing_queue.service';
 import {
   OrderProcessingQueueModel,
   OrderProcessingQueueSchema,
-} from 'src/infrastructure/data_access/repositories/schemas/order-processing-queue.schema';
-import { OrderProcessingQueueRepository } from 'src/infrastructure/data_access/repositories/order-processing-queue.repository';
-import { OrderProcessingQueueMapper } from 'src/order_processing_queue/order_processing_queue.mapper';
+} from '../infrastructure/data_access/repositories/schemas/order-processing-queue.schema';
+import { OrderProcessingQueueRepository } from '../infrastructure/data_access/repositories/order-processing-queue.repository';
+import { OrderProcessingQueueMapper } from '../order_processing_queue/order_processing_queue.mapper';
 
 @Module({
   imports: [

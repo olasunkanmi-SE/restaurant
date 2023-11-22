@@ -1,22 +1,21 @@
 import { HttpStatus, Inject } from '@nestjs/common';
 import { Types } from 'mongoose';
-import { TYPES } from 'src/application';
-import { CartItem } from 'src/cart/cart-item';
-import { SelectedCartItem } from 'src/cart/selectedItems/selectedCartItem';
-import { Audit, Result } from 'src/domain';
-import { Context, IContextService, MerchantRepository } from 'src/infrastructure';
-import { ICartItemRepository } from 'src/infrastructure/data_access/repositories/interfaces/cart-item-repository.interface';
-import { IOrderNoteRespository } from 'src/infrastructure/data_access/repositories/interfaces/order-note.repository';
-import { IOrderRepository } from 'src/infrastructure/data_access/repositories/interfaces/order-repository.interface';
-import { IOrderStatusRespository } from 'src/infrastructure/data_access/repositories/interfaces/order-status.repository';
-import { CartItemDataModel } from 'src/infrastructure/data_access/repositories/schemas/cartItem.schema';
-import { OrderDataModel } from 'src/infrastructure/data_access/repositories/schemas/order.schema';
-import { SelectedCartItemRepository } from 'src/infrastructure/data_access/repositories/selected-cart-item.repository';
-import { throwApplicationError } from 'src/infrastructure/utilities/exception-instance';
-import { IMerchantService, Merchant } from 'src/merchant';
-import { IOrderNoteService } from 'src/order_notes/interface/order-note-service.interface';
-import { OrderNote } from 'src/order_notes/order_note';
-import { OrderNoteMapper } from 'src/order_notes/order_note.mapper';
+import { TYPES } from '../application';
+import { CartItem } from '../cart/cart-item';
+import { SelectedCartItem } from '../cart/selectedItems/selectedCartItem';
+import { Audit, Result } from '../domain';
+import { Context, IContextService, MerchantRepository } from '../infrastructure';
+import { ICartItemRepository } from '../infrastructure/data_access/repositories/interfaces/cart-item-repository.interface';
+import { IOrderNoteRespository } from '../infrastructure/data_access/repositories/interfaces/order-note.repository';
+import { IOrderRepository } from '../infrastructure/data_access/repositories/interfaces/order-repository.interface';
+import { IOrderStatusRespository } from '../infrastructure/data_access/repositories/interfaces/order-status.repository';
+import { CartItemDataModel } from '../infrastructure/data_access/repositories/schemas/cartItem.schema';
+import { OrderDataModel } from '../infrastructure/data_access/repositories/schemas/order.schema';
+import { SelectedCartItemRepository } from '../infrastructure/data_access/repositories/selected-cart-item.repository';
+import { throwApplicationError } from '../infrastructure/utilities/exception-instance';
+import { IMerchantService, Merchant } from '../merchant';
+import { IOrderNoteService } from '../order_notes/interface/order-note-service.interface';
+import { OrderNote } from '../order_notes/order_note';
 import { CartItemMapper } from './../cart/cart-item.mapper';
 import { SelectedCartItemMapper } from './../cart/selectedItems/selected-cart-item.mapper';
 import { CreateCartItemsDTO, CreateOrderDTO } from './dto/create-order.dto';
@@ -25,7 +24,7 @@ import { Order } from './order';
 import { IOrderResponseDTO } from './order-response.dto';
 import { OrderMapper } from './order.mapper';
 import { OrderParser } from './order.parser';
-import { IOrderProcessingQueueService } from 'src/order_processing_queue/interface/order-processing-queue-service.interface';
+import { IOrderProcessingQueueService } from '../order_processing_queue/interface/order-processing-queue-service.interface';
 
 export class OrderService implements IOrderService {
   private context: Context;
@@ -39,7 +38,6 @@ export class OrderService implements IOrderService {
     private readonly orderMapper: OrderMapper,
     private readonly selectedItemMapper: SelectedCartItemMapper,
     private readonly cartItemMapper: CartItemMapper,
-    private readonly orderNoteMapper: OrderNoteMapper,
     @Inject(TYPES.ICartItemRepository) private readonly cartItemRepository: ICartItemRepository,
     @Inject(TYPES.IOrderStatusRepository) private readonly orderStatusRespository: IOrderStatusRespository,
     @Inject(TYPES.IOrderNoteRepository) private readonly orderNoteRepository: IOrderNoteRespository,
