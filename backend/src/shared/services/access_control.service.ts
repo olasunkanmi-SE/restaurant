@@ -13,15 +13,16 @@ export class AccessControlService implements IAccessControlService {
     this.mapRoleToPriority();
   }
 
-  private mapRoleToPriority(): void {
+  private mapRoleToPriority(): Map<string, number> {
     const sortedRoles = this.roleService.sortRoles(Object.values(Role));
     if (sortedRoles?.length) {
-      sortedRoles.reduce((map, role) => {
+      const rolesPriorityMap = sortedRoles.reduce((map, role) => {
         map.set(role, this.priority);
         this.priority++;
         this.hierarchies.push(map);
         return map;
       }, new Map<string, number>());
+      return rolesPriorityMap;
     }
   }
 
