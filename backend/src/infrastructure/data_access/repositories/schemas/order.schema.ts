@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Type } from 'class-transformer';
 import mongoose, { Document, Types } from 'mongoose';
-import { BaseDocument } from 'src/infrastructure/database';
+import { BaseDocument } from '../../../../infrastructure/database';
 import { IOrderDataModel } from '../models/order-model.interface';
-import { currentStatus, dinningType } from './../../../../order/order-entity.interface';
+import { dinningType } from './../../../../order/order-entity.interface';
+import { CartItemDataModel } from './cartItem.schema';
 import { MerchantDataModel } from './merchant.schema';
 import { OrderManagerDataModel } from './order-manger.schema';
-import { CartItemDataModel } from './cartItem.schema';
 import { OrderStatusModel } from './order-status.schema';
 
 export type OrderDocument = OrderDataModel & Document;

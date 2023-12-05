@@ -1,3 +1,4 @@
+import { OrderNoteMapper } from 'src/order_notes/order_note.mapper';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { TYPES } from 'src/application';
 import { Audit, Result } from 'src/domain';
@@ -15,27 +16,26 @@ export class OrderNoteService implements IOrderNoteService {
     @Inject(TYPES.IOrderNoteRepository) private readonly orderNoteRepository: IOrderNoteRespository,
     @Inject(TYPES.IContextService)
     private readonly contextService: IContextService,
+    private readonly orderNoteMapper: OrderNoteMapper,
   ) {
     this.context = this.contextService.getContext();
   }
-  async createOrderNote(props: CreateOrderNoteDTO): Promise<OrderNote> {
+  createOrderNoteEntity(props: CreateOrderNoteDTO): OrderNote {
     const audit: Audit = Audit.createInsertContext(this.context);
-    const orderNoteEntity = OrderNote.create({ ...props, audit });
-    const result = await this.orderNoteRepository.createOrderNote(orderNoteEntity);
-    if (!result) {
-      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Error creating order note`);
-    }
-    const orderNote = result.getValue();
-    return orderNote;
+    return OrderNote.create({ ...props, audit });
   }
 
-  async createNotes(props: CreateOrderNoteDTO[]): Promise<OrderNote[]> {
-    const notes = props.map((note) => this.createOrderNote(note));
-    const result = await Promise.all(notes);
-    if (!result) {
-      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Error creating order notes`);
+  async createNotes(props: CreateOrderNoteDTO[]): Promise<Result<OrderNote[]>> {
+    try {
+      const notes = props.map((note) => {
+        const noteEntity = this.createOrderNoteEntity(note);
+        return this.orderNoteMapper.toPersistence(noteEntity);
+      });
+      return this.orderNoteRepository.insertMany(notes);
+    } catch (error) {
+      console.error(error);
+      throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Unexpected error creating order notes`);
     }
-    return result;
   }
 
   getOrderNotes(): Promise<Result<OrderNote[]>> {

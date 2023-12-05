@@ -1,4 +1,4 @@
-import { Audit, Entity, Result } from 'src/domain';
+import { Audit, Entity, Result } from '../../domain';
 import { ISelectedCartItem } from './selected-cart-items-entity.interface';
 import { Types } from 'mongoose';
 

@@ -1,9 +1,9 @@
 import { SelectedCartItemMapper } from './../../../cart/selectedItems/selected-cart-item.mapper';
-import { SelectedCartItem } from 'src/cart/selectedItems/selectedCartItem';
+import { SelectedCartItem } from '../../../cart/selectedItems/selectedCartItem';
 import { SelectedCartItemDataModel, SelectedCartItemDocument } from './schemas/selected-cart-item.schema';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
-import { GenericDocumentRepository } from 'src/infrastructure/database';
+import { GenericDocumentRepository } from '../../../infrastructure/database';
 
 export class SelectedCartItemRepository extends GenericDocumentRepository<SelectedCartItem, SelectedCartItemDocument> {
   selectedCartItemMapper: SelectedCartItemMapper;

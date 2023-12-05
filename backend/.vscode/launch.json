@@ -21,7 +21,7 @@
       "request": "launch",
       "name": "Test",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "test:unit", "src/order/order-service.spec.ts", "--inspect-brk"],
+      "runtimeArgs": ["run", "test:unit", "src/order/order.service.spec.ts", "--inspect-brk"],
       // "src/infrastructure/data_access/db_repositories/worker_sql_repository.spec.ts",
       "console": "integratedTerminal",
       "restart": true,

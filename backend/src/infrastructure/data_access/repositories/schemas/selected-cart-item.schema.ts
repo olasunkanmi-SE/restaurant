@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Type } from 'class-transformer';
 import mongoose, { Document, Types } from 'mongoose';
-import { BaseDocument } from 'src/infrastructure/database';
+import { BaseDocument } from '../../../../infrastructure/database';
 import { ISelectedCartItemDataModel } from '../models/selected-item-model.interface';
 import { CartItemDataModel } from './cartItem.schema';
 import { ItemDataModel } from './item.schema';

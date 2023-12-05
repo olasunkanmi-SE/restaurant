@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { Audit, Entity, Result } from 'src/domain';
+import { Audit, Entity, Result } from '../domain';
 import { ICartItem } from './cart-entity.interface';
 import { SelectedCartItem } from './selectedItems/selectedCartItem';
 

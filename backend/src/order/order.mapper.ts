@@ -1,10 +1,10 @@
 import { CartItemMapper } from './../cart/cart-item.mapper';
 import { Injectable } from '@nestjs/common';
-import { IMapper } from 'src/domain';
-import { OrderDataModel } from 'src/infrastructure/data_access/repositories/schemas/order.schema';
+import { IMapper } from '../domain';
+import { OrderDataModel } from '../infrastructure/data_access/repositories/schemas/order.schema';
 import { Order } from './order';
-import { AuditMapper } from 'src/audit';
-import { OrderStatusMapper } from 'src/order_statuses/order_status.mapper';
+import { AuditMapper } from '../audit';
+import { OrderStatusMapper } from '../order_statuses/order_status.mapper';
 
 @Injectable()
 export class OrderMapper implements IMapper<Order, OrderDataModel> {

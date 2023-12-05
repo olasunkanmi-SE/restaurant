@@ -11,6 +11,9 @@ import { CreateMerchantDTO } from './dtos/create-merchant.dto';
 import { OnBoardMerchantDTO } from './dtos/on-board-merchant.dto';
 import { IMerchantService } from './interface/merchant-service.interface';
 import { IMerchantResponseDTO } from './merchant-response.dto';
+import { RoleGuard } from 'src/infrastructure/guards/role-guard';
+import { Roles } from 'src/infrastructure';
+import { Role } from 'src/application';
 
 @Controller('merchants')
 export class MerchantController {
@@ -29,7 +32,8 @@ export class MerchantController {
     return this.merchantService.getMerchantById(merchantId);
   }
 
-  @UseGuards(AccessAuthGuard)
+  @UseGuards(AccessAuthGuard, RoleGuard)
+  @Roles(Role.ADMIN)
   @Get()
   @HttpCode(HttpStatus.OK)
   async getMerchants(): Promise<Result<IMerchantResponseDTO[]>> {

@@ -30,4 +30,6 @@ export const TYPES = {
   IOrderProcessingQueueRepository: Symbol('IOrderProcessingQueueRepository'),
   IOrderProcessingQueueService: Symbol('IOrderProcessingQueueService'),
   IMerchantRepository: Symbol('IMerchantRepository'),
+  IRoleService: Symbol('IRoleService'),
+  IAccessControlService: Symbol('IAccessControlService'),
 };

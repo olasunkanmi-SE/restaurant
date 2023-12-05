@@ -1,12 +1,14 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AccessControlService } from 'src/shared/services/access_control.service';
+import { RoleService } from 'src/shared/services/role_service';
+import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import { TYPES } from './../application/constants/types';
 import { AuditMapper } from './../audit/audit.mapper';
 import { AuthModule } from './../infrastructure/auth/auth.module';
 import { AuthService } from './../infrastructure/auth/auth.service';
 import { ContextService } from './../infrastructure/context/context.service';
-import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
 import {
   MerchantDataModel,
   MerchantSchema,
@@ -30,6 +32,8 @@ import { MerchantService } from './merchant.service';
     { provide: TYPES.IContextService, useClass: ContextService },
     { provide: TYPES.IValidateUser, useClass: ValidateUser },
     { provide: TYPES.IMapper, useClass: MerchantMapper },
+    { provide: TYPES.IAccessControlService, useClass: AccessControlService },
+    { provide: TYPES.IRoleService, useClass: RoleService },
   ],
   controllers: [MerchantController],
 })
