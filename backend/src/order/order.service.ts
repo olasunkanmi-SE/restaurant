@@ -165,4 +165,8 @@ export class OrderService implements IOrderService {
   async createOrderStatusQueue(orderStatusId: Types.ObjectId, orderId: Types.ObjectId) {
     return this.OrderProcessingQueueService.createQueue({ orderStatusId, orderId });
   }
+
+  async createOrderStatusQueue(orderStatusId: Types.ObjectId, orderId: Types.ObjectId) {
+    return this.OrderProcessingQueueService.createQueue({ orderStatusId, orderId });
+  }
 }
