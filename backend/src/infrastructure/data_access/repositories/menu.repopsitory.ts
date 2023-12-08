@@ -60,7 +60,7 @@ export class MenuRepository extends GenericDocumentRepository<Menu, MenuDocument
   }
 
   async getMenuById(id: Types.ObjectId): Promise<Result<Menu>> {
-    const document = await this.DocumentModel.findById(id).populate('itemDetails').populate('category').exec();
+    const document = await this.DocumentModel.findById(id).populate('items').populate('category').exec();
     const menu: Menu = this.menuMapper.toDomain(document);
     if (!document) {
       return Result.fail('Error getting menu from database', HttpStatus.NOT_FOUND);

@@ -17,7 +17,7 @@ export class OrderParser {
       total,
       discount,
       orderManagerId,
-      notes: OrderNoteParser.createOrderNotesResponse(notes),
+      notes: OrderNoteParser.createOrderNotesResponse(notes) || [],
       ...AuditParser.createAuditResponse(audit),
     };
   }
