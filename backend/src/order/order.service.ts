@@ -146,8 +146,10 @@ export class OrderService implements IOrderService {
     }
   }
 
-  async getOrders(): Promise<Result<Order[]>> {
-    return await this.orderRepository.find({});
+  async getOrdersBasic(): Promise<IOrderResponseDTO[]> {
+    const result = await this.orderRepository.getOrders();
+    const response = OrderParser.createOrdersResponse(result.getValue());
+    return response;
   }
 
   async createOrderNotes(cartItems: CreateCartItemsDTO[], orderId: Types.ObjectId): Promise<OrderNote[]> {

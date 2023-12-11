@@ -7,9 +7,13 @@ export class OrderNoteParser {
     return { id, note, orderId, ...AuditParser.createAuditResponse(audit) };
   }
 
-  static createOrderNotesResponse(orderNote: OrderNote[]): IOrderNoteResponseDTO[] {
-    return orderNote.map((note) => {
-      return this.createResponse(note);
-    });
+  static createOrderNotesResponse(orderNotes: OrderNote[]): IOrderNoteResponseDTO[] {
+    let notes: IOrderNoteResponseDTO[] = [];
+    if (orderNotes?.length) {
+      notes = orderNotes.map((note) => {
+        return this.createResponse(note);
+      });
+    }
+    return notes;
   }
 }
