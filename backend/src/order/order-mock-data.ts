@@ -12,7 +12,7 @@ const id = new Types.ObjectId();
 export const orderMockData: IOrder = {
   state: OrderStatus.create(orderStatusMockData),
   type: 'DINE_IN',
-  merchantId: id,
+  singleclientId: id,
   customerId: id,
   total: 1,
   audit: Audit.create(auditMockData).getValue(),
@@ -22,7 +22,7 @@ export const orderMockData: IOrder = {
 export const orderMock: CreateOrderDTO = {
   state: 'CREATED',
   type: 'DINE_IN',
-  merchantId: id.toString(),
+  singleclientId: id.toString(),
   total: 1,
   cartItems: [createItem],
 };

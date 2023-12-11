@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { MerchantDataModel } from './../infrastructure/data_access/repositories/schemas/merchant.schema';
-import { AuditMapper } from './../audit/audit.mapper';
-import { IMapper } from './../domain/mapper/mapper';
-import { Merchant } from './merchant';
+import { SingleClientDataModel } from './../infrastructure/data_access/repositories/schemas/singleclient.schema';
+import { AuditMapper } from '../audit/audit.mapper';
+import { IMapper } from '../domain/mapper/mapper';
+import { SingleClient } from './singleclient';
 
 @Injectable()
-export class MerchantMapper implements IMapper<Merchant, MerchantDataModel> {
+export class SingleClientMapper implements IMapper<SingleClient, SingleClientDataModel> {
   constructor(private readonly auditMapper: AuditMapper) {}
-  toPersistence(entity: Merchant): MerchantDataModel {
-    const document: MerchantDataModel = {
+  toPersistence(entity: SingleClient): SingleClientDataModel {
+    const document: SingleClientDataModel = {
       _id: entity.id,
       firstName: entity.firstName,
       lastName: entity.lastName,
@@ -31,7 +31,7 @@ export class MerchantMapper implements IMapper<Merchant, MerchantDataModel> {
     return document;
   }
 
-  toDomain(doc: MerchantDataModel): Merchant {
+  toDomain(doc: SingleClientDataModel): SingleClient {
     const {
       _id,
       firstName,
@@ -46,7 +46,7 @@ export class MerchantMapper implements IMapper<Merchant, MerchantDataModel> {
       status,
       organisationAddress,
     } = doc;
-    const entity: Merchant = Merchant.create(
+    const entity: SingleClient = SingleClient.create(
       {
         firstName,
         lastName,

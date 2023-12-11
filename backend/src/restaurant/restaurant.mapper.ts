@@ -5,7 +5,7 @@ import { AuditMapper } from './../audit/audit.mapper';
 import { IMapper } from './../domain/mapper/mapper';
 import { RestaurantData } from './../infrastructure/data_access/repositories/schemas/restaurant.schema';
 import { LocationMapper } from './../location/location.mapper';
-import { MerchantMapper } from './../merchant/merchant.mapper';
+import { SingleClientMapper } from './../singleclient/singleclient.mapper';
 import { Restaurant } from './restaurant';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
   constructor(
     private readonly auditMapper: AuditMapper,
     private readonly locationMapper: LocationMapper,
-    private readonly merchantMapper: MerchantMapper,
+    private readonly singleclientMapper: SingleClientMapper,
     private readonly menuMapper: MenuMapper,
   ) {}
   toPersistence(entity: Restaurant): RestaurantData {
@@ -33,7 +33,7 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
       closingHour,
       menus,
     } = entity;
-    const merchantId: Types.ObjectId = entity.merchant.id;
+    const singleclientId: Types.ObjectId = entity.singleclient.id;
     const document: RestaurantData = {
       _id: id,
       name,
@@ -50,8 +50,8 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
       closingHour,
       menus: menus && menus.length ? menus.map((menu) => this.menuMapper.toPersistence(menu)) : [],
       location: this.locationMapper.toPersistence(entity.location),
-      merchantId,
-      merchant: this.merchantMapper.toPersistence(entity.merchant),
+      singleclientId,
+      singleclient: this.singleclientMapper.toPersistence(entity.singleclient),
       auditCreatedBy: entity.audit.auditCreatedBy,
       auditCreatedDateTime: entity.audit.auditCreatedDateTime,
       auditModifiedBy: entity.audit.auditModifiedBy,
@@ -78,7 +78,7 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
       openingHour,
       closingHour,
       menus,
-      merchantId,
+      singleclientId,
     } = document;
     const entity: Restaurant = Restaurant.create(
       {
@@ -94,10 +94,10 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
         paymentMethod,
         openingHour,
         closingHour,
-        merchantId,
+        singleclientId,
         menus: menus.length ? menus.map((menu) => this.menuMapper.toDomain(menu)) : [],
         location: this.locationMapper.toDomain(document.location),
-        merchant: this.merchantMapper.toDomain(document.merchant),
+        singleclient: this.singleclientMapper.toDomain(document.singleclient),
         audit: this.auditMapper.toDomain(document),
       },
       _id,

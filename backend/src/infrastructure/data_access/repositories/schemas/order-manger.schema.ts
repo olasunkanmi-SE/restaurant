@@ -4,7 +4,7 @@ import mongoose, { Document } from 'mongoose';
 import { BaseDocument } from '../../../../infrastructure/database';
 import { IOrderManagerDataModel } from '../models/order-manager-model.interface';
 import { RoleEnum } from './../../../../order_manager/order.manager.entity';
-import { MerchantDataModel } from './merchant.schema';
+import { SingleClientDataModel } from './singleclient.schema';
 
 export type OrderManagerDocument = OrderManagerDataModel & Document;
 
@@ -22,9 +22,9 @@ export class OrderManagerDataModel extends BaseDocument implements IOrderManager
   @Prop({ type: String })
   phoneNumber: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: MerchantDataModel.name })
-  @Type(() => MerchantDataModel)
-  merchant: MerchantDataModel;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: SingleClientDataModel.name })
+  @Type(() => SingleClientDataModel)
+  singleclient: SingleClientDataModel;
 
   @Prop({ type: String, required: true, default: RoleEnum.ADMIN })
   role: number;

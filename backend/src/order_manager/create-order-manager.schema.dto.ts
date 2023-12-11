@@ -24,7 +24,7 @@ export class CreateOrderManager {
   @IsString()
   @IsNotEmpty()
   @Length(2, 128)
-  readonly merchantId: Types.ObjectId;
+  readonly singleclientId: Types.ObjectId;
 
   @IsString()
   @IsNotEmpty()

@@ -8,7 +8,7 @@ import { IOrder, dinningType } from './order-entity.interface';
 export class Order extends Entity<IOrder> implements IOrder {
   _state: OrderStatus;
   _type: dinningType;
-  _merchantId: Types.ObjectId;
+  _singleclientId: Types.ObjectId;
   _customerId?: Types.ObjectId;
   _total: number;
   _discount?: number;
@@ -18,12 +18,12 @@ export class Order extends Entity<IOrder> implements IOrder {
 
   constructor(
     id: Types.ObjectId,
-    { state, type, merchantId, customerId, total, discount, orderManagerId, audit, cartItems }: IOrder,
+    { state, type, singleclientId, customerId, total, discount, orderManagerId, audit, cartItems }: IOrder,
   ) {
     super(id);
     this._state = state;
     this._type = type;
-    this._merchantId = merchantId;
+    this._singleclientId = singleclientId;
     this._customerId = customerId;
     this._total = total;
     this._discount = discount;
@@ -48,12 +48,12 @@ export class Order extends Entity<IOrder> implements IOrder {
     this._type = type;
   }
 
-  get merchantId(): Types.ObjectId {
-    return this._merchantId;
+  get singleclientId(): Types.ObjectId {
+    return this._singleclientId;
   }
 
-  set merchantId(merchantId: Types.ObjectId) {
-    this._merchantId = merchantId;
+  set singleclientId(singleclientId: Types.ObjectId) {
+    this._singleclientId = singleclientId;
   }
 
   get customerId(): Types.ObjectId {

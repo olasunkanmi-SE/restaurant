@@ -7,12 +7,12 @@ import { IOrderResponseDTO } from './order-response.dto';
 
 export class OrderParser {
   static createOrderResponse(order: Order, notes?: OrderNote[]): IOrderResponseDTO {
-    const { id, state, type, merchantId, customerId, total, discount, orderManagerId, audit } = order;
+    const { id, state, type, singleclientId, customerId, total, discount, orderManagerId, audit } = order;
     return {
       id,
       state: OrderStatusParser.createResponse(state),
       type,
-      merchantId,
+      singleclientId,
       customerId,
       total,
       discount,

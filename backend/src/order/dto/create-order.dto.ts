@@ -13,7 +13,7 @@ export class CreateOrderDTO {
 
   @IsString()
   @IsNotEmpty()
-  merchantId: string;
+  singleclientId: string;
 
   @IsNumber()
   @IsNotEmpty()

@@ -15,7 +15,7 @@ import { AuthModule } from './infrastructure/auth';
 import { ContextService } from './infrastructure/context';
 import { ContextMiddleWare } from './infrastructure/middlewares';
 import { ItemModule } from './item/item.module';
-import { MerchantModule } from './merchant/merchant.module';
+import { SingleClientModule } from './singleclient/singleclient.module';
 import { ApplicationExceptionsFilter, ApplicationLogger } from './infrastructure';
 import { LocationModule } from './location';
 import { OrderModule } from './order/order.module';
@@ -44,7 +44,7 @@ import { OrderProcessingQueuesModule } from './order_processing_queue/order_proc
     ConfigModule.forRoot(),
     LocationModule,
     RestaurantModule,
-    MerchantModule,
+    SingleClientModule,
     AuthModule,
     ItemModule,
     MenuModule,

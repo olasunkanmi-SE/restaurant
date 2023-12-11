@@ -3,12 +3,12 @@ import mongoose, { Connection } from 'mongoose';
 import * as sinon from 'ts-sinon';
 import { CartItemMapper } from '../cart/cart-item.mapper';
 import { SelectedCartItemMapper } from '../cart/selectedItems/selected-cart-item.mapper';
-import { IContextService, MerchantRepository } from '../infrastructure';
+import { IContextService, SingleClientRepository } from '../infrastructure';
 import { ICartItemRepository } from '../infrastructure/data_access/repositories/interfaces/cart-item-repository.interface';
 import { IOrderRepository } from '../infrastructure/data_access/repositories/interfaces/order-repository.interface';
 import { IOrderStatusRespository } from '../infrastructure/data_access/repositories/interfaces/order-status.repository';
 import { SelectedCartItemRepository } from '../infrastructure/data_access/repositories/selected-cart-item.repository';
-import { IMerchantService } from '../merchant';
+import { ISingleClientService } from '../singleclient';
 import { IOrderNoteService } from '../order_notes/interface/order-note-service.interface';
 import { IOrderProcessingQueueService } from '../order_processing_queue/interface/order-processing-queue-service.interface';
 import { OrderStatusMapper } from '../order_statuses/order_status.mapper';
@@ -29,9 +29,9 @@ describe('Order Service', () => {
   });
 
   const orderRepositoryStub: IOrderRepository = sinon.stubInterface<IOrderRepository>();
-  const merchantServiceStub: IMerchantService = sinon.stubInterface<IMerchantService>();
+  const singleclientServiceStub: ISingleClientService = sinon.stubInterface<ISingleClientService>();
   const contextServiceStub: IContextService = sinon.stubInterface<IContextService>();
-  const merchantRepositoryStub: MerchantRepository = sinon.stubInterface<MerchantRepository>();
+  const singleclientRepositoryStub: SingleClientRepository = sinon.stubInterface<SingleClientRepository>();
   const selectedCartItemRepositoryStub: SelectedCartItemRepository = sinon.stubInterface<SelectedCartItemRepository>();
   const auditMapperStub = new AuditMapper();
   const selectedCartItemMapperStub = new SelectedCartItemMapper();
@@ -45,9 +45,9 @@ describe('Order Service', () => {
     sinon.stubInterface<IOrderProcessingQueueService>();
   const orderService: IOrderService = new OrderService(
     orderRepositoryStub,
-    merchantServiceStub,
+    singleclientServiceStub,
     contextServiceStub,
-    merchantRepositoryStub,
+    singleclientRepositoryStub,
     selectedCartItemRepositoryStub,
     orderMapperStub,
     selectedCartItemMapperStub,
@@ -60,7 +60,7 @@ describe('Order Service', () => {
 
   it('Should not create an order, It should throw a duplicate order warning', async () => {
     try {
-      merchantServiceStub.validateContext = async () => {
+      singleclientServiceStub.validateContext = async () => {
         return Promise.resolve(true);
       };
       orderRepositoryStub.getDuplicateOrder = async () => {

@@ -1,5 +1,5 @@
 import { Audit } from './../domain/audit/audit';
-import { Merchant } from './../merchant/merchant';
+import { SingleClient } from './../singleclient/singleclient';
 
 export type Role = 'ADMIN' | 'SUPERADMIN';
 export enum RoleEnum {
@@ -12,7 +12,7 @@ export interface IOrderManager {
   lastName: string;
   email: string;
   phoneNumber?: string;
-  merchant: Merchant;
+  singleclient: SingleClient;
   role: number;
   password: string;
   audit: Audit;

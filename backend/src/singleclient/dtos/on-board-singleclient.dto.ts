@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
-export class OnBoardMerchantDTO {
+export class OnBoardSingleClientDTO {
   @IsNotEmpty()
   @IsString()
   @MaxLength(256)
