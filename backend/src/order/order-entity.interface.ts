@@ -9,7 +9,7 @@ export type dinningType = 'PICK_UP' | 'DINE_IN' | 'DELIVERY';
 export interface IOrder {
   state: OrderStatus;
   type: dinningType;
-  merchantId: Types.ObjectId;
+  singleclientId: Types.ObjectId;
   customerId?: Types.ObjectId;
   total: number;
   discount?: number;

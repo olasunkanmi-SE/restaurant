@@ -5,7 +5,7 @@ import { BaseDocument } from '../../../../infrastructure/database';
 import { IOrderDataModel } from '../models/order-model.interface';
 import { dinningType } from './../../../../order/order-entity.interface';
 import { CartItemDataModel } from './cartItem.schema';
-import { MerchantDataModel } from './merchant.schema';
+import { SingleClientDataModel } from './singleclient.schema';
 import { OrderManagerDataModel } from './order-manger.schema';
 import { OrderStatusModel } from './order-status.schema';
 
@@ -17,8 +17,8 @@ export class OrderDataModel extends BaseDocument implements IOrderDataModel {
   type: dinningType;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId })
-  @Type(() => MerchantDataModel)
-  merchantId: Types.ObjectId;
+  @Type(() => SingleClientDataModel)
+  singleclientId: Types.ObjectId;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: false })
   @Type(() => OrderManagerDataModel)

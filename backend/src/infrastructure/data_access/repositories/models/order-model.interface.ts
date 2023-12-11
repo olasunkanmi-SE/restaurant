@@ -6,7 +6,7 @@ import { OrderStatusModel } from '../schemas/order-status.schema';
 export interface IOrderDataModel {
   readonly state: OrderStatusModel;
   readonly type: dinningType;
-  readonly merchantId: Types.ObjectId;
+  readonly singleclientId: Types.ObjectId;
   readonly customerId?: Types.ObjectId;
   readonly total: number;
   readonly discount?: number;

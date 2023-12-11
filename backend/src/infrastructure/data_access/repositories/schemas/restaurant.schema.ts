@@ -6,7 +6,7 @@ import { IRestaurantdata } from '../models/restaurant-model.interface';
 import { PaymentBy, PaymentMethod } from './../../../../restaurant/restaurant.interface';
 import { LocationData, LocationSchema } from './location.schema';
 import { MenuDataModel } from './menu.schema';
-import { MerchantDataModel } from './merchant.schema';
+import { SingleClientDataModel } from './singleclient.schema';
 
 export type RestaurantDocument = RestaurantData & Document;
 
@@ -53,11 +53,11 @@ export class RestaurantData extends BaseDocument implements IRestaurantdata {
   location: LocationData;
 
   @Prop({ type: Types.ObjectId })
-  merchantId: Types.ObjectId;
+  singleclientId: Types.ObjectId;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: MerchantDataModel.name })
-  @Type(() => MerchantDataModel)
-  merchant: MerchantDataModel;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: SingleClientDataModel.name })
+  @Type(() => SingleClientDataModel)
+  singleclient: SingleClientDataModel;
 
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: MenuDataModel.name, default: [] }],

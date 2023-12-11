@@ -2,10 +2,10 @@ import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model, Types } from 'mongoose';
 import { GenericDocumentRepository } from '../../database/mongoDB/generic-document.repository';
 import { Result } from './../../../domain/result/result';
-import { Merchant } from './../../../merchant/merchant';
+import { SingleClient } from './../../../singleclient/singleclient';
 import { Restaurant } from './../../../restaurant/restaurant';
 import { RestaurantMapper } from './../../../restaurant/restaurant.mapper';
-import { MerchantRepository } from './merchant.repository';
+import { SingleClientRepository } from './singleclient.repository';
 import { IRestaurantRepository } from './interfaces/restaurant-repository.interface';
 import { RestaurantData, RestaurantDocument } from './schemas';
 
@@ -18,7 +18,7 @@ export class RestaurantRepository
     @InjectModel(RestaurantData.name)
     restaurantModel: Model<RestaurantDocument>,
     @InjectConnection() connection: Connection,
-    private readonly merchantRepository: MerchantRepository,
+    private readonly singleclientRepository: SingleClientRepository,
     restaurantMapper: RestaurantMapper,
   ) {
     super(restaurantModel, connection, restaurantMapper);
@@ -26,21 +26,24 @@ export class RestaurantRepository
   }
 
   async getRestaurant(restaurantId: Types.ObjectId): Promise<Restaurant> {
-    const restaurantDoc = await this.DocumentModel.findById(restaurantId).populate('merchant').exec();
+    const restaurantDoc = await this.DocumentModel.findById(restaurantId).populate('singleclient').exec();
     const restaurant: Restaurant = this.restaurantMapper.toDomain(restaurantDoc);
     return restaurant;
   }
 
   async getRestaurants(): Promise<Restaurant[]> {
-    const restaurantDoc = await this.DocumentModel.find().populate('merchant').exec();
+    const restaurantDoc = await this.DocumentModel.find().populate('singleclient').exec();
     const restaurants: Restaurant[] = restaurantDoc.map((doc) => this.restaurantMapper.toDomain(doc));
     return restaurants;
   }
 
-  async getRestaurantWithMerchantDetails(restaurant: Restaurant, merchantId: Types.ObjectId): Promise<Restaurant> {
-    const merchant: Result<Merchant> = await this.merchantRepository.findById(merchantId);
-    const merchantData = merchant.getValue();
-    restaurant.merchant = merchantData;
+  async getRestaurantWithSingleClientDetails(
+    restaurant: Restaurant,
+    singleclientId: Types.ObjectId,
+  ): Promise<Restaurant> {
+    const singleclient: Result<SingleClient> = await this.singleclientRepository.findById(singleclientId);
+    const singleclientData = singleclient.getValue();
+    restaurant.singleclient = singleclientData;
     return restaurant;
   }
 }

@@ -1,4 +1,4 @@
-export interface IMerchantData {
+export interface ISingleClientData {
   readonly firstName: string;
   readonly lastName: string;
   readonly email: string;

@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
-import { MerchantRepository, RestaurantData, RestaurantRepository, RestaurantSchema } from '../infrastructure';
+import { SingleClientRepository, RestaurantData, RestaurantRepository, RestaurantSchema } from '../infrastructure';
 import { MenuMapper } from '../menu/menu.mapper';
 import { AddonMapper } from './../addon/addon.mapper';
 import { AddonDataModel, AddonSchema } from './../addon/addon.schema';
@@ -21,12 +21,12 @@ import {
 import { ItemDataModel, ItemSchema } from './../infrastructure/data_access/repositories/schemas/item.schema';
 import { MenuDataModel, MenuSchema } from './../infrastructure/data_access/repositories/schemas/menu.schema';
 import {
-  MerchantDataModel,
-  MerchantSchema,
-} from './../infrastructure/data_access/repositories/schemas/merchant.schema';
+  SingleClientDataModel,
+  SingleClientSchema,
+} from './../infrastructure/data_access/repositories/schemas/singleclient.schema';
 import { ItemMapper } from './../item/item.mapper';
-import { MerchantMapper } from './../merchant/merchant.mapper';
-import { MerchantService } from './../merchant/merchant.service';
+import { SingleClientMapper } from './../singleclient/singleclient.mapper';
+import { SingleClientService } from './../singleclient/singleclient.service';
 import { ValidateUser } from './../utils/context-validation';
 import { MenuController } from './menu.controller';
 import { MenuService } from './menu.service';
@@ -39,7 +39,7 @@ import { ContextMiddleWare } from 'src/infrastructure/middlewares';
     MongooseModule.forFeature([
       { name: MenuDataModel.name, schema: MenuSchema },
       { name: ItemDataModel.name, schema: ItemSchema },
-      { name: MerchantDataModel.name, schema: MerchantSchema },
+      { name: SingleClientDataModel.name, schema: SingleClientSchema },
       { name: CategoryDataModel.name, schema: CategorySchema },
       { name: AddonDataModel.name, schema: AddonSchema },
       { name: RestaurantData.name, schema: RestaurantSchema },
@@ -51,8 +51,8 @@ import { ContextMiddleWare } from 'src/infrastructure/middlewares';
     MenuMapper,
     ItemMapper,
     AuditMapper,
-    MerchantRepository,
-    MerchantMapper,
+    SingleClientRepository,
+    SingleClientMapper,
     JwtService,
     AddonMapper,
     CategoryMapper,
@@ -62,7 +62,7 @@ import { ContextMiddleWare } from 'src/infrastructure/middlewares';
     { provide: TYPES.IItemRepository, useClass: ITemRepository },
     { provide: TYPES.IAddonRepository, useClass: AddonRepository },
     { provide: TYPES.IContextService, useClass: ContextService },
-    { provide: TYPES.IMerchantService, useClass: MerchantService },
+    { provide: TYPES.ISingleClientService, useClass: SingleClientService },
     { provide: TYPES.IAuthService, useClass: AuthService },
     { provide: TYPES.IValidateUser, useClass: ValidateUser },
     { provide: TYPES.IMenuService, useClass: MenuService },

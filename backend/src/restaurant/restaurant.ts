@@ -4,7 +4,7 @@ import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result';
 import { Location } from './../location/location';
 import { Menu } from './../menu/menu';
-import { Merchant } from './../merchant/merchant';
+import { SingleClient } from './../singleclient/singleclient';
 import { IRestaurant, PaymentMethod } from './restaurant.interface';
 
 export class Restaurant extends Entity<IRestaurant> {
@@ -17,14 +17,14 @@ export class Restaurant extends Entity<IRestaurant> {
   private _location: Location;
   private _audit: Audit;
   private _phoneNumber: string;
-  private _merchant: Merchant;
+  private _singleclient: SingleClient;
   private _opened: boolean;
   private _imageUrl: string;
   private _paymentMethod: PaymentMethod[];
   private _openingHour: number;
   private _closingHour: number;
   private _menus: Menu[];
-  private _merchantId: Types.ObjectId;
+  private _singleclientId: Types.ObjectId;
   constructor(id: Types.ObjectId, props: IRestaurant) {
     super(id);
     this._name = props.name;
@@ -36,14 +36,14 @@ export class Restaurant extends Entity<IRestaurant> {
     this._location = props.location;
     this._audit = props.audit;
     this._phoneNumber = props.phoneNumber;
-    this._merchant = props.merchant;
+    this._singleclient = props.singleclient;
     this._opened = props.opened;
     this._imageUrl = props.imageUrl;
     this._paymentMethod = props.paymentMethod;
     this._openingHour = props.openingHour;
     this._closingHour = props.closingHour;
     this._menus = props.menus;
-    this._merchantId = props.merchantId;
+    this._singleclientId = props.singleclientId;
   }
 
   get name(): string {
@@ -110,20 +110,20 @@ export class Restaurant extends Entity<IRestaurant> {
     this._location = location;
   }
 
-  get merchantId(): Types.ObjectId {
-    return this._merchantId;
+  get singleclientId(): Types.ObjectId {
+    return this._singleclientId;
   }
 
-  set metchantId(merchantId: Types.ObjectId) {
-    this._merchantId = merchantId;
+  set metchantId(singleclientId: Types.ObjectId) {
+    this._singleclientId = singleclientId;
   }
 
-  get merchant(): Merchant {
-    return this._merchant;
+  get singleclient(): SingleClient {
+    return this._singleclient;
   }
 
-  set merchant(merchant: Merchant) {
-    this._merchant = merchant;
+  set singleclient(singleclient: SingleClient) {
+    this._singleclient = singleclient;
   }
 
   get audit(): Audit {

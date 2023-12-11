@@ -2,7 +2,7 @@ import { IMenuResponseDTO } from './../menu/menu-response.dto';
 import { Types } from 'mongoose';
 import { IAudit } from './../infrastructure/database/mongoDB/base-document.interface';
 import { ILocationResponseDTO } from './../location/location-response.dto';
-import { IMerchantResponseDTO } from './../merchant/merchant-response.dto';
+import { ISingleClientResponseDTO } from './../singleclient/singleclient-response.dto';
 export interface IRestaurantResponseDTO extends IAudit {
   id: Types.ObjectId;
   name: string;
@@ -12,6 +12,6 @@ export interface IRestaurantResponseDTO extends IAudit {
   logoUrl?: string;
   timeZone?: string;
   location: ILocationResponseDTO;
-  merchant: IMerchantResponseDTO;
+  singleclient: ISingleClientResponseDTO;
   menus: IMenuResponseDTO[];
 }

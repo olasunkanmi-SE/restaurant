@@ -6,7 +6,7 @@ export * from './interfaces/addon-repository.interface';
 export * from './addon.repository';
 export * from './item.repository';
 export * from './menu.repopsitory';
-export * from './merchant.repository';
+export * from './singleclient.repository';
 export * from './interfaces/addon-repository.interface';
 export * from './addon.repository';
 export * from './order-manager.repository';

@@ -9,7 +9,7 @@ import { Result } from './../domain/result/result';
 import { IContextService } from './../infrastructure/context/context-service.interface';
 import { CategoryRepository } from './../infrastructure/data_access/repositories/category.repository';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
-import { IMerchantService } from './../merchant/interface/merchant-service.interface';
+import { ISingleClientService } from './../singleclient/interface/singleclient-service.interface';
 import { Category } from './category';
 import { ICategoryService } from './category-service.interface';
 import { CategoryMapper } from './category.mapper';
@@ -21,7 +21,7 @@ export class CategoryService implements ICategoryService {
   private context: Context;
   constructor(
     @Inject(TYPES.IContextService) private readonly contextService: IContextService,
-    @Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService,
+    @Inject(TYPES.ISingleClientService) private readonly singleclientService: ISingleClientService,
     private readonly categoryRepository: CategoryRepository,
     private readonly categoryMapper: CategoryMapper,
   ) {
@@ -30,7 +30,7 @@ export class CategoryService implements ICategoryService {
   async createCategory(props: CreateCategoryDTO): Promise<Result<ICategoryResponseDTO>> {
     const { name } = props;
     const code = name.toUpperCase();
-    await this.merchantService.validateContext();
+    await this.singleclientService.validateContext();
     const existingItem = await this.categoryRepository.findOne({ name });
     if (existingItem.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `Item ${name} already exists`);
@@ -47,14 +47,14 @@ export class CategoryService implements ICategoryService {
   }
 
   async getCategories(): Promise<Result<ICategoryResponseDTO[]>> {
-    await this.merchantService.validateContext();
+    await this.singleclientService.validateContext();
     const result: Result<Category[]> = await this.categoryRepository.find({});
     const response: ICategoryResponseDTO[] = CategoryParser.createCategoriesResponse(result.getValue());
     return Result.ok(response);
   }
 
   async getCategoryById(id: Types.ObjectId): Promise<Result<ICategoryResponseDTO>> {
-    await this.merchantService.validateContext();
+    await this.singleclientService.validateContext();
     const result: Result<Category> = await this.categoryRepository.findById(id);
     const response: ICategoryResponseDTO = CategoryParser.createCategoryResponse(result.getValue());
     return Result.ok(response);

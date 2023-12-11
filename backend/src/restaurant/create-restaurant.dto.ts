@@ -76,5 +76,5 @@ export class CreateRestaurantDTO {
   readonly location: CreateLocationDTO;
 
   @IsString()
-  readonly merchantId: Types.ObjectId;
+  readonly singleclientId: Types.ObjectId;
 }

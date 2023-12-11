@@ -39,7 +39,7 @@ export class MenuController {
     return this.menuService.deleteMenu(menuId);
   }
 
-  @Get('/merchant/:restaurantId')
+  @Get('/singleclient/:restaurantId')
   async getMenusByRestaurantId(@Param('restaurantId') restaurantId: string): Promise<Result<IMenuResponseDTO[]>> {
     return this.menuService.getMenuByRestaurantId(restaurantId);
   }

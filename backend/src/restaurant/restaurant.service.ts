@@ -2,7 +2,7 @@ import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection, Types } from 'mongoose';
 import { Context } from '../infrastructure/context';
-import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
+import { SingleClientRepository } from '../infrastructure/data_access/repositories/singleclient.repository';
 import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
@@ -10,8 +10,8 @@ import { IContextService } from './../infrastructure/context/context-service.int
 import { IMenuRepository, IRestaurantRepository } from './../infrastructure/data_access/repositories/interfaces';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
 import { Location } from './../location/location';
-import { IMerchantService } from './../merchant/interface/merchant-service.interface';
-import { Merchant } from './../merchant/merchant';
+import { ISingleClientService } from './../singleclient/interface/singleclient-service.interface';
+import { SingleClient } from './../singleclient/singleclient';
 import { CreateRestaurantDTO } from './create-restaurant.dto';
 import { Restaurant } from './restaurant';
 import { IRestaurantResponseDTO } from './restaurant-response.dto';
@@ -24,11 +24,11 @@ export class RestaurantService implements IRestaurantService {
   constructor(
     @Inject(TYPES.IRestaurantRepository)
     private readonly restaurantRepository: IRestaurantRepository,
-    private readonly merchantRepository: MerchantRepository,
+    private readonly singleclientRepository: SingleClientRepository,
     private readonly restaurantMapper: RestaurantMapper,
     @Inject(TYPES.IMenuRepository) private readonly menuRepository: IMenuRepository,
     @Inject(TYPES.IContextService) private readonly contextService: IContextService,
-    @Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService,
+    @Inject(TYPES.ISingleClientService) private readonly singleclientService: ISingleClientService,
     @InjectConnection() private readonly connection: Connection,
   ) {
     this.context = this.contextService.getContext();
@@ -38,7 +38,7 @@ export class RestaurantService implements IRestaurantService {
     const session = await this.connection.startSession();
     try {
       session.startTransaction();
-      await this.merchantService.validateContext();
+      await this.singleclientService.validateContext();
       const restaurantEntity: Result<Restaurant[]> = await this.restaurantRepository.find({});
       const restaurants = restaurantEntity.getValue();
       const existingEmail = restaurants.find((doc) => doc.email === props.email);
@@ -56,8 +56,8 @@ export class RestaurantService implements IRestaurantService {
         new Types.ObjectId(),
       ).getValue();
 
-      const result = await this.merchantRepository.findById(props.merchantId);
-      const merchant: Merchant = result.getValue();
+      const result = await this.singleclientRepository.findById(props.singleclientId);
+      const singleclient: SingleClient = result.getValue();
 
       let menus: [] = [];
       if (props.menus) {
@@ -68,7 +68,7 @@ export class RestaurantService implements IRestaurantService {
         {
           ...props,
           location,
-          merchant,
+          singleclient,
           menus,
           audit,
         },
@@ -92,25 +92,25 @@ export class RestaurantService implements IRestaurantService {
   }
 
   async getRestaurants(): Promise<Result<IRestaurantResponseDTO[]>> {
-    await this.merchantService.validateContext();
+    await this.singleclientService.validateContext();
     const restaurants: Restaurant[] = await this.restaurantRepository.getRestaurants();
     return Result.ok(RestaurantParser.createRestaurantsParser(restaurants), 'Restaurants retrieved successfully');
   }
 
   async getRestaurantById(id: Types.ObjectId): Promise<Result<IRestaurantResponseDTO>> {
-    await this.merchantService.validateContext();
+    await this.singleclientService.validateContext();
     const result = await this.restaurantRepository.findById(id);
     const restaurantId: Types.ObjectId = result.getValue().id;
-    const restaurantWithMerchantData: Restaurant = await this.restaurantRepository.getRestaurant(restaurantId);
+    const restaurantWithSingleClientData: Restaurant = await this.restaurantRepository.getRestaurant(restaurantId);
     const context = this.contextService.getContext();
     const email = context.email;
-    const userDoc = await this.merchantRepository.findOne({ email });
-    const user: Merchant = userDoc.getValue();
-    if (user.id.toString() !== restaurantWithMerchantData.merchant.id.toString()) {
+    const userDoc = await this.singleclientRepository.findOne({ email });
+    const user: SingleClient = userDoc.getValue();
+    if (user.id.toString() !== restaurantWithSingleClientData.singleclient.id.toString()) {
       throwApplicationError(HttpStatus.UNAUTHORIZED, 'You dont have sufficient priviledge');
     }
     return Result.ok(
-      RestaurantParser.createRestaurantResponse(restaurantWithMerchantData),
+      RestaurantParser.createRestaurantResponse(restaurantWithSingleClientData),
       'Restaurant retrieved successfully',
     );
   }
