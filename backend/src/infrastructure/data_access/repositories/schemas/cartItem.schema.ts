@@ -8,7 +8,7 @@ import { OrderDataModel } from './order.schema';
 import { SelectedCartItemDataModel } from './selected-cart-item.schema';
 
 export type CartItemDocument = CartItemDataModel & Document;
-@Schema({ versionKey: 'false' })
+@Schema({ versionKey: false })
 export class CartItemDataModel extends BaseDocument implements ICartItemModel {
   @Prop({ type: mongoose.Schema.Types.ObjectId })
   @Type(() => MenuDataModel)
