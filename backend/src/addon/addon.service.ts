@@ -10,12 +10,12 @@ import { Context } from './../infrastructure/context/context';
 import { IContextService } from './../infrastructure/context/context-service.interface';
 import { AddonRepository } from './../infrastructure/data_access/repositories/addon.repository';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
-import { IMerchantService } from './../merchant/interface/merchant-service.interface';
 import { Addon } from './addon';
 import { IAddonService } from './addon-service.interface';
 import { AddonMapper } from './addon.mapper';
 import { AddonDataModel } from './addon.schema';
 import { CreateAddonDTO } from './create-addon.dto';
+import { ISingleClientService } from '../singleclient/interface/singleclient-service.interface';
 
 @Injectable()
 export class AddonService implements IAddonService {
@@ -23,7 +23,7 @@ export class AddonService implements IAddonService {
   constructor(
     @Inject(TYPES.IContextService)
     private readonly contextService: IContextService,
-    @Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService,
+    @Inject(TYPES.ISingleClientService) private readonly singleclientService: ISingleClientService,
     private readonly categoryRepository: CategoryRepository,
     private readonly addonRepository: AddonRepository,
     private readonly addonMapper: AddonMapper,
@@ -33,7 +33,7 @@ export class AddonService implements IAddonService {
 
   async createAddon(props: CreateAddonDTO): Promise<Result<IAddonResponseDTO>> {
     const { name } = props;
-    await this.merchantService.validateContext();
+    await this.singleclientService.validateContext();
     const existingItem = await this.addonRepository.findOne({ name });
     if (existingItem.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `Item ${name} already exists`);
@@ -57,7 +57,7 @@ export class AddonService implements IAddonService {
   }
 
   async getAddons(): Promise<Result<IAddonResponseDTO[]>> {
-    await this.merchantService.validateContext();
+    await this.singleclientService.validateContext();
     const addonsDoc = await this.addonRepository.getAddons();
     const addons: Addon[] = addonsDoc.map((addon) => this.addonMapper.toDomain(addon));
     const response: IAddonResponseDTO[] = AddonParser.createAddonsResponse(addons);

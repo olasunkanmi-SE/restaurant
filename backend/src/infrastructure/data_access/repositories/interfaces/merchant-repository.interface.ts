@@ -1,5 +1,5 @@
 import { IGenericDocument } from 'src/infrastructure/database';
-import { Merchant } from 'src/merchant';
-import { MerchantDocument } from '../schemas';
+import { SingleClient } from 'src/singleclient';
+import { SingleClientDocument } from '../schemas';
 
-export interface IMerchantRepository extends IGenericDocument<Merchant, MerchantDocument> {}
+export interface ISingleClientRepository extends IGenericDocument<SingleClient, SingleClientDocument> {}

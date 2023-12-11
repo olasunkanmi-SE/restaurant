@@ -1,12 +1,12 @@
 import { MenuParser } from './../menu/menu.parser';
-import { MerchantParser } from './../merchant/merchant-parser';
+import { SingleClientParser } from './../singleclient/singleclient-parser';
 import { AuditParser } from './../audit/audit.parser';
 import { LocationParser } from './../location/location.parser';
 import { Restaurant } from './restaurant';
 import { IRestaurantResponseDTO } from './restaurant-response.dto';
 export class RestaurantParser {
   static createRestaurantResponse(restaurant: Restaurant): IRestaurantResponseDTO {
-    const { audit, location, merchant, menus } = restaurant;
+    const { audit, location, singleclient, menus } = restaurant;
     const restaurantResponse: IRestaurantResponseDTO = {
       id: restaurant.id,
       name: restaurant.name,
@@ -18,7 +18,7 @@ export class RestaurantParser {
       menus: MenuParser.createMenusResponse(menus),
       location: LocationParser.createLocationResponse(location),
       ...AuditParser.createAuditResponse(audit),
-      merchant: MerchantParser.createMerchantResponse(merchant),
+      singleclient: SingleClientParser.createSingleClientResponse(singleclient),
     };
     return restaurantResponse;
   }

@@ -1,5 +1,5 @@
 import { Audit } from '../../domain/audit/audit';
-export interface IMerchant {
+export interface ISingleClient {
   firstName?: string;
   lastName?: string;
   email: string;

@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
-import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
+import { SingleClientRepository } from '../infrastructure/data_access/repositories/singleclient.repository';
 import { MenuMapper } from '../menu/menu.mapper';
 import { AddonMapper } from './../addon/addon.mapper';
 import { AddonDataModel, AddonSchema } from './../addon/addon.schema';
@@ -24,9 +24,9 @@ import { ItemDataModel, ItemSchema } from './../infrastructure/data_access/repos
 import { LocationData, LocationSchema } from './../infrastructure/data_access/repositories/schemas/location.schema';
 import { MenuDataModel, MenuSchema } from './../infrastructure/data_access/repositories/schemas/menu.schema';
 import {
-  MerchantDataModel,
-  MerchantSchema,
-} from './../infrastructure/data_access/repositories/schemas/merchant.schema';
+  SingleClientDataModel,
+  SingleClientSchema,
+} from './../infrastructure/data_access/repositories/schemas/singleclient.schema';
 import {
   RestaurantData,
   RestaurantSchema,
@@ -34,8 +34,8 @@ import {
 import { ContextMiddleWare } from './../infrastructure/middlewares/context.middleware';
 import { ItemMapper } from './../item/item.mapper';
 import { LocationMapper } from './../location/location.mapper';
-import { MerchantMapper } from './../merchant/merchant.mapper';
-import { MerchantService } from './../merchant/merchant.service';
+import { SingleClientMapper } from './../singleclient/singleclient.mapper';
+import { SingleClientService } from './../singleclient/singleclient.service';
 import { ValidateUser } from './../utils/context-validation';
 import { RestaurantsController } from './restaurant.controller';
 import { RestaurantMapper } from './restaurant.mapper';
@@ -46,7 +46,7 @@ import { RestaurantService } from './restaurant.service';
     MongooseModule.forFeature([
       { name: LocationData.name, schema: LocationSchema },
       { name: RestaurantData.name, schema: RestaurantSchema },
-      { name: MerchantDataModel.name, schema: MerchantSchema },
+      { name: SingleClientDataModel.name, schema: SingleClientSchema },
       { name: MenuDataModel.name, schema: MenuSchema },
       { name: CategoryDataModel.name, schema: CategorySchema },
       { name: ItemDataModel.name, schema: ItemSchema },
@@ -60,7 +60,7 @@ import { RestaurantService } from './restaurant.service';
     { provide: TYPES.IRestaurantRepository, useClass: RestaurantRepository },
     { provide: TYPES.IContextService, useClass: ContextService },
     { provide: TYPES.IValidateUser, useClass: ValidateUser },
-    { provide: TYPES.IMerchantService, useClass: MerchantService },
+    { provide: TYPES.ISingleClientService, useClass: SingleClientService },
     { provide: TYPES.IAuthService, useClass: AuthService },
     { provide: TYPES.IMapper, useClass: RestaurantMapper },
     { provide: TYPES.IMenuRepository, useClass: MenuRepository },
@@ -70,8 +70,8 @@ import { RestaurantService } from './restaurant.service';
     AuditMapper,
     LocationMapper,
     LocationRepository,
-    MerchantRepository,
-    MerchantMapper,
+    SingleClientRepository,
+    SingleClientMapper,
     MenuMapper,
     ItemMapper,
     AddonMapper,

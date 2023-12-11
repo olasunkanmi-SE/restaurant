@@ -1,24 +1,24 @@
 import { expect } from 'chai';
 import mongoose, { Connection, Types } from 'mongoose';
 import * as sinon from 'ts-sinon';
-import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
+import { SingleClientRepository } from '../infrastructure/data_access/repositories/singleclient.repository';
 import { MenuMapper } from '../menu/menu.mapper';
-import { Merchant } from '../merchant';
+import { SingleClient } from '../singleclient';
 import { auditMockData } from './../audit/audit-mock-data';
 import { AuditMapper } from './../audit/audit.mapper';
 import { CategoryMapper } from './../category/category.mapper';
 import { Audit } from './../domain/audit/audit';
 import { Result } from './../domain/result/result';
-import { Context, MerchantDocument } from './../infrastructure';
+import { Context, SingleClientDocument } from './../infrastructure';
 import { IContextService } from './../infrastructure/context/context-service.interface';
 import { IMenuRepository } from './../infrastructure/data_access/repositories/interfaces/menu-repository.interface';
 import { IRestaurantRepository } from './../infrastructure/data_access/repositories/interfaces/restaurant-repository.interface';
 import { ItemMapper } from './../item/item.mapper';
 import { LocationMapper } from './../location/location.mapper';
 import { menuMockData } from './../menu/menu-mock.data';
-import { IMerchantService } from './../merchant/interface/merchant-service.interface';
-import { merchantMockData } from './../merchant/merchant-mock-data';
-import { MerchantMapper } from './../merchant/merchant.mapper';
+import { ISingleClientService } from './../singleclient/interface/singleclient-service.interface';
+import { singleclientMockData } from './../singleclient/singleclient-mock-data';
+import { SingleClientMapper } from './../singleclient/singleclient.mapper';
 import { IValidateUser } from './../utils/context-validation.interface';
 import { Restaurant } from './restaurant';
 import {
@@ -41,31 +41,31 @@ describe('Test restaurant service', () => {
     mongoose.disconnect();
   });
   const restaurantRepositoryStub: IRestaurantRepository = sinon.stubInterface<IRestaurantRepository>();
-  const merchantRepositoryStub: MerchantRepository = sinon.stubInterface<MerchantRepository>();
+  const singleclientRepositoryStub: SingleClientRepository = sinon.stubInterface<SingleClientRepository>();
   const auditMapperStub = new AuditMapper();
   const locationMapperStub = new LocationMapper(auditMapperStub);
-  const merchantMapperStub = new MerchantMapper(auditMapperStub);
+  const singleclientMapperStub = new SingleClientMapper(auditMapperStub);
   const itemMapperStub = new ItemMapper(auditMapperStub);
   const categoryMapperStub = new CategoryMapper();
   const menuMapperStub = new MenuMapper(auditMapperStub, itemMapperStub, categoryMapperStub);
   const restaurantMapperStub: RestaurantMapper = new RestaurantMapper(
     new AuditMapper(),
     locationMapperStub,
-    merchantMapperStub,
+    singleclientMapperStub,
     menuMapperStub,
   );
   const contextServiceStub: IContextService = sinon.stubInterface<IContextService>();
-  const validateUserStub: IValidateUser<Merchant, MerchantDocument> =
-    sinon.stubInterface<IValidateUser<Merchant, MerchantDocument>>();
-  const merchantServiceStub: IMerchantService = sinon.stubInterface<IMerchantService>();
+  const validateUserStub: IValidateUser<SingleClient, SingleClientDocument> =
+    sinon.stubInterface<IValidateUser<SingleClient, SingleClientDocument>>();
+  const singleclientServiceStub: ISingleClientService = sinon.stubInterface<ISingleClientService>();
   const menuRepositoryStub: IMenuRepository = sinon.stubInterface<IMenuRepository>();
   const restaurantService = new RestaurantService(
     restaurantRepositoryStub,
-    merchantRepositoryStub,
+    singleclientRepositoryStub,
     restaurantMapperStub,
     menuRepositoryStub,
     contextServiceStub,
-    merchantServiceStub,
+    singleclientServiceStub,
     connection,
   );
   const contextPromise = new Context('Komune@Komune.com', '');
@@ -80,7 +80,7 @@ describe('Test restaurant service', () => {
       country: 'Nigeria',
       state: 'FCT',
     },
-    merchantId: new Types.ObjectId(),
+    singleclientId: new Types.ObjectId(),
     audit: {
       auditCreatedBy: '',
       auditCreatedDateTime: new Date(),
@@ -92,8 +92,8 @@ describe('Test restaurant service', () => {
       return contextPromise;
     };
 
-    merchantServiceStub.validateContext = async (): Promise<any> => {
-      return merchantMockData;
+    singleclientServiceStub.validateContext = async (): Promise<any> => {
+      return singleclientMockData;
     };
     restaurantRepositoryStub.find = async (): Promise<Result<Restaurant[]>> => {
       return Result.ok(restaurantMockDatas);
@@ -101,8 +101,8 @@ describe('Test restaurant service', () => {
     Audit.createInsertContext = (): Audit => {
       return Audit.create(auditMockData).getValue();
     };
-    merchantRepositoryStub.findById = async (): Promise<Result<Merchant>> => {
-      return merchantMockData;
+    singleclientRepositoryStub.findById = async (): Promise<Result<SingleClient>> => {
+      return singleclientMockData;
     };
     const restaurant = Restaurant.create(restaurantMock).getValue();
     restaurantMapperStub.toPersistence(restaurant);

@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { BaseDocument } from '../../../../infrastructure/database';
-import { IMerchantData } from '../models/merchant-model.interface';
-import { MerchantStatus } from './../../../../application/constants/constants';
+import { BaseDocument } from '../../../database';
+import { ISingleClientData } from '../models/singleclient-model.interface';
+import { SingleClientStatus } from '../../../../application/constants/constants';
 
-export type MerchantDocument = MerchantDataModel & Document;
+export type SingleClientDocument = SingleClientDataModel & Document;
 
 @Schema({ versionKey: false })
-export class MerchantDataModel extends BaseDocument implements IMerchantData {
+export class SingleClientDataModel extends BaseDocument implements ISingleClientData {
   @Prop({ type: String })
   firstName: string;
 
@@ -35,11 +35,11 @@ export class MerchantDataModel extends BaseDocument implements IMerchantData {
   @Prop({ type: Boolean, default: false })
   isActive: boolean;
 
-  @Prop({ type: String, default: MerchantStatus.onBoarding })
+  @Prop({ type: String, default: SingleClientStatus.onBoarding })
   status: string;
 
   @Prop({ type: String })
   refreshTokenHash: string;
 }
 
-export const MerchantSchema = SchemaFactory.createForClass(MerchantDataModel);
+export const SingleClientSchema = SchemaFactory.createForClass(SingleClientDataModel);

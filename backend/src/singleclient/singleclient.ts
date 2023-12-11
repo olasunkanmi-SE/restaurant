@@ -1,8 +1,8 @@
 import { Types } from 'mongoose';
-import { Audit, Entity, Result } from './../domain';
-import { IMerchant } from './interface/merchant.interface';
+import { Audit, Entity, Result } from '../domain';
+import { ISingleClient } from './interface/singleclient.interface';
 
-export class Merchant extends Entity<IMerchant> {
+export class SingleClient extends Entity<ISingleClient> {
   private _firstName?: string;
   private _lastName?: string;
   private _email: string;
@@ -16,7 +16,7 @@ export class Merchant extends Entity<IMerchant> {
   private _refreshTokenHash?: string;
   private _audit: Audit;
 
-  constructor(id: Types.ObjectId, props: IMerchant) {
+  constructor(id: Types.ObjectId, props: ISingleClient) {
     super(id);
     this._firstName = props.firstName;
     this._lastName = props.lastName;
@@ -127,11 +127,11 @@ export class Merchant extends Entity<IMerchant> {
     this._refreshTokenHash = token;
   }
 
-  static create(props: IMerchant, id?: Types.ObjectId): Result<Merchant> {
-    return Result.ok(new Merchant(id, props));
+  static create(props: ISingleClient, id?: Types.ObjectId): Result<SingleClient> {
+    return Result.ok(new SingleClient(id, props));
   }
 
-  update(props: Partial<IMerchant>) {
+  update(props: Partial<ISingleClient>) {
     if (Object.hasOwnProperty.call(props, 'refreshTokenHash')) {
       this._refreshTokenHash = props.refreshTokenHash;
     }

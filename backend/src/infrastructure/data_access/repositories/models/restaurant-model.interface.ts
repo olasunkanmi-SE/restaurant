@@ -9,7 +9,7 @@ export interface IRestaurantdata {
   readonly logoUrl?: string;
   readonly timeZone?: string;
   readonly phoneNumber: string;
-  readonly merchantId: Types.ObjectId;
+  readonly singleclientId: Types.ObjectId;
   readonly location: LocationData;
   readonly opened: boolean;
   readonly imageUrl: string;

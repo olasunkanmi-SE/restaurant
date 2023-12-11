@@ -5,8 +5,8 @@ import { Location } from './../location/location';
 import { locationMockData } from './../location/location-mock-data';
 import { Menu } from './../menu/menu';
 import { menuMockData } from './../menu/menu-mock.data';
-import { Merchant } from './../merchant/merchant';
-import { merchantMock, merchantMockData } from './../merchant/merchant-mock-data';
+import { SingleClient } from './../singleclient/singleclient';
+import { singleclientMock, singleclientMockData } from './../singleclient/singleclient-mock-data';
 import { Restaurant } from './restaurant';
 import { IRestaurant } from './restaurant.interface';
 
@@ -20,10 +20,10 @@ export const restaurantMock: IRestaurant = {
   paymentMethod: [],
   openingHour: 0,
   closingHour: 0,
-  merchantId: new Types.ObjectId(),
+  singleclientId: new Types.ObjectId(),
   menus: [Menu.create(menuMockData).getValue()],
   location: Location.create(locationMockData).getValue(),
-  merchant: Merchant.create(merchantMock).getValue(),
+  singleclient: SingleClient.create(singleclientMock).getValue(),
   audit: Audit.create(auditMockData).getValue(),
 };
 
@@ -50,7 +50,7 @@ export const restaurantMockDocument: any = {
     auditCreatedBy: 'Ola',
     auditCreatedDateTime: new Date(),
   },
-  merchant: merchantMockData,
+  singleclient: singleclientMockData,
   auditModifiedBy: '',
   auditCreatedBy: 'Ola',
   auditCreatedDateTime: new Date(),

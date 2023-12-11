@@ -2,7 +2,7 @@ export const TYPES = {
   IApplicationLogger: Symbol('IApplicationLogger'),
   ILocationService: Symbol('ILocationService'),
   IRestaurantService: Symbol('IRestaurantService'),
-  IMerchantService: Symbol('IMerchantService'),
+  ISingleClientService: Symbol('ISingleClientService'),
   IRestaurantRepository: Symbol('IRestaurantRepository'),
   IItemService: Symbol('IItemService'),
   IMenuService: Symbol('IMenuService'),
@@ -29,7 +29,7 @@ export const TYPES = {
   IOrderNoteService: Symbol('IOrderNoteService'),
   IOrderProcessingQueueRepository: Symbol('IOrderProcessingQueueRepository'),
   IOrderProcessingQueueService: Symbol('IOrderProcessingQueueService'),
-  IMerchantRepository: Symbol('IMerchantRepository'),
+  ISingleClientRepository: Symbol('ISingleClientRepository'),
   IRoleService: Symbol('IRoleService'),
   IAccessControlService: Symbol('IAccessControlService'),
 };

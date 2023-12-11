@@ -7,7 +7,7 @@ export interface IOrderResponseDTO extends IAudit {
   id: Types.ObjectId;
   state: IOrderStatusResponseDTO;
   type: string;
-  merchantId: Types.ObjectId;
+  singleclientId: Types.ObjectId;
   customerId?: Types.ObjectId;
   total: number;
   discount?: number;

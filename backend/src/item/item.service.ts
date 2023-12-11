@@ -8,7 +8,7 @@ import { Context } from './../infrastructure/context/context';
 import { ITemRepository } from './../infrastructure/data_access/repositories/item.repository';
 import { ItemDataModel } from './../infrastructure/data_access/repositories/schemas/item.schema';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
-import { IMerchantService } from './../merchant/interface/merchant-service.interface';
+import { ISingleClientService } from './../singleclient/interface/singleclient-service.interface';
 import { CreateItemDTO } from './create-item-schema';
 import { Item } from './item';
 import { ITemResponseDTO } from './item-response.dto';
@@ -22,7 +22,7 @@ export class ItemService implements IItemService {
   constructor(
     @Inject(TYPES.IContextService)
     private readonly contextService: IContextService,
-    @Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService,
+    @Inject(TYPES.ISingleClientService) private readonly singleclientService: ISingleClientService,
     private readonly iTemRepository: ITemRepository,
     private readonly itemMapper: ItemMapper,
   ) {
@@ -31,7 +31,7 @@ export class ItemService implements IItemService {
 
   async createItem(props: CreateItemDTO): Promise<Result<ITemResponseDTO>> {
     const { name } = props;
-    await this.merchantService.validateContext();
+    await this.singleclientService.validateContext();
     const existingItem = await this.iTemRepository.getItem(name);
     if (existingItem.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, `Item ${name} already exists`);
@@ -50,7 +50,7 @@ export class ItemService implements IItemService {
   }
 
   async getItems(): Promise<Result<ITemResponseDTO[]>> {
-    await this.merchantService.validateContext();
+    await this.singleclientService.validateContext();
     const result: Result<Item[]> = await this.iTemRepository.getItems({});
     const items = result.getValue();
     let reponse: ITemResponseDTO[] = [];

@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { AuditMapper } from './../audit/audit.mapper';
 import { IMapper } from './../domain/mapper/mapper';
 import { OrderManagerDataModel } from './../infrastructure/data_access/repositories/schemas/order-manger.schema';
-import { MerchantMapper } from './../merchant/merchant.mapper';
+import { SingleClientMapper } from './../singleclient/singleclient.mapper';
 import { OrderManager } from './order.manager';
 
 @Injectable()
 export class OrderManagerMapper implements IMapper<OrderManager, OrderManagerDataModel> {
-  constructor(private readonly merchantMapper: MerchantMapper, private readonly auditMapper: AuditMapper) {}
+  constructor(private readonly singleclientMapper: SingleClientMapper, private readonly auditMapper: AuditMapper) {}
   toPersistence(entity: OrderManager): OrderManagerDataModel {
-    const { firstName, lastName, email, phoneNumber, merchant, role, audit, password } = entity;
+    const { firstName, lastName, email, phoneNumber, singleclient, role, audit, password } = entity;
     const {
       auditCreatedBy,
       auditCreatedDateTime,
@@ -24,7 +24,7 @@ export class OrderManagerMapper implements IMapper<OrderManager, OrderManagerDat
       lastName,
       email,
       phoneNumber,
-      merchant: this.merchantMapper.toPersistence(merchant),
+      singleclient: this.singleclientMapper.toPersistence(singleclient),
       role,
       password,
       auditCreatedBy,
@@ -38,14 +38,14 @@ export class OrderManagerMapper implements IMapper<OrderManager, OrderManagerDat
   }
 
   toDomain(model: OrderManagerDataModel): OrderManager {
-    const { _id, firstName, lastName, email, phoneNumber, merchant, role, password } = model;
+    const { _id, firstName, lastName, email, phoneNumber, singleclient, role, password } = model;
     const orderManagerEntity: OrderManager = OrderManager.create(
       {
         firstName,
         lastName,
         email,
         phoneNumber,
-        merchant: this.merchantMapper.toDomain(merchant),
+        singleclient: this.singleclientMapper.toDomain(singleclient),
         role,
         audit: this.auditMapper.toDomain(model),
         password,

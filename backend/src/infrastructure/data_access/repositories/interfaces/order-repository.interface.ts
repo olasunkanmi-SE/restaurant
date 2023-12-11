@@ -6,6 +6,6 @@ import { CreateCartItemsDTO } from 'src/order/dto/create-order.dto';
 
 export interface IOrderRepository extends IGenericDocument<Order, OrderDocument> {
   createOrder(order: OrderDataModel): Promise<Result<Order>>;
-  getDuplicateOrder(type: string, merchantId: string, cartItems: CreateCartItemsDTO[]): Promise<boolean>;
+  getDuplicateOrder(type: string, singleclientId: string, cartItems: CreateCartItemsDTO[]): Promise<boolean>;
   getOrders(): Promise<Result<Order[]>>;
 }

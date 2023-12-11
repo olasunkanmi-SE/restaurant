@@ -1,14 +1,14 @@
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
 import { OrderManagerDocument } from './../infrastructure/data_access/repositories/schemas/order-manger.schema';
 import { OrderManager } from './../order_manager/order.manager';
-import { Merchant } from './../merchant/merchant';
+import { SingleClient } from './../singleclient/singleclient';
 import { IValidateUser } from './context-validation.interface';
 import { Result } from './../domain/result/result';
-import { GenericDocumentRepository, MerchantDocument } from './../infrastructure';
+import { GenericDocumentRepository, SingleClientDocument } from './../infrastructure';
 import { HttpStatus } from '@nestjs/common';
 
-type Document = MerchantDocument | OrderManagerDocument;
-type Domain = Merchant | OrderManager;
+type Document = SingleClientDocument | OrderManagerDocument;
+type Domain = SingleClient | OrderManager;
 export class ValidateUser implements IValidateUser<Domain, Document> {
   async getUser(
     model: GenericDocumentRepository<Domain, Document>,

@@ -1,4 +1,4 @@
-export interface IUpdateMerchant {
+export interface IUpdateSingleClient {
   firstName: string;
   lastName: string;
   organisationAddress: string;

@@ -1,17 +1,17 @@
 import { AuditParser } from './../audit/audit.parser';
-import { MerchantParser } from './../merchant/merchant-parser';
+import { SingleClientParser } from './../singleclient/singleclient-parser';
 import { IOrderManagerDTO } from './order-manager-response.dto';
 import { OrderManager } from './order.manager';
 export class OrderManagerParser {
   static createOrderManagerResponse(orderManager: OrderManager): IOrderManagerDTO {
-    const { id, firstName, lastName, email, phoneNumber, merchant, role, audit } = orderManager;
+    const { id, firstName, lastName, email, phoneNumber, singleclient, role, audit } = orderManager;
     return {
       id,
       firstName,
       lastName,
       email,
       phoneNumber,
-      merchant: MerchantParser.createMerchantResponse(merchant),
+      singleclient: SingleClientParser.createSingleClientResponse(singleclient),
       role,
       ...AuditParser.createAuditResponse(audit),
     };

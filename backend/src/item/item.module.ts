@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
-import { MerchantRepository } from '../infrastructure/data_access/repositories/merchant.repository';
+import { SingleClientRepository } from '../infrastructure/data_access/repositories/singleclient.repository';
 import { AddonMapper } from './../addon/addon.mapper';
 import { AddonDataModel, AddonSchema } from './../addon/addon.schema';
 import { AddonService } from './../addon/addon.service';
@@ -19,12 +19,12 @@ import {
 } from './../infrastructure/data_access/repositories/schemas/category.schema';
 import { ItemDataModel, ItemSchema } from './../infrastructure/data_access/repositories/schemas/item.schema';
 import {
-  MerchantDataModel,
-  MerchantSchema,
-} from './../infrastructure/data_access/repositories/schemas/merchant.schema';
+  SingleClientDataModel,
+  SingleClientSchema,
+} from './../infrastructure/data_access/repositories/schemas/singleclient.schema';
 import { ContextMiddleWare } from './../infrastructure/middlewares/context.middleware';
-import { MerchantMapper } from './../merchant/merchant.mapper';
-import { MerchantService } from './../merchant/merchant.service';
+import { SingleClientMapper } from './../singleclient/singleclient.mapper';
+import { SingleClientService } from './../singleclient/singleclient.service';
 import { ValidateUser } from './../utils/context-validation';
 import { ItemController } from './item.controller';
 import { ItemMapper } from './item.mapper';
@@ -34,7 +34,7 @@ import { ItemService } from './item.service';
   imports: [
     MongooseModule.forFeature([
       { name: ItemDataModel.name, schema: ItemSchema },
-      { name: MerchantDataModel.name, schema: MerchantSchema },
+      { name: SingleClientDataModel.name, schema: SingleClientSchema },
       { name: AddonDataModel.name, schema: AddonSchema },
       { name: CategoryDataModel.name, schema: CategorySchema },
     ]),
@@ -42,7 +42,7 @@ import { ItemService } from './item.service';
   controllers: [ItemController],
   providers: [
     { provide: TYPES.IContextService, useClass: ContextService },
-    { provide: TYPES.IMerchantService, useClass: MerchantService },
+    { provide: TYPES.ISingleClientService, useClass: SingleClientService },
     { provide: TYPES.IAuthService, useClass: AuthService },
     { provide: TYPES.IValidateUser, useClass: ValidateUser },
     { provide: TYPES.IItemService, useClass: ItemService },
@@ -50,8 +50,8 @@ import { ItemService } from './item.service';
     { provide: TYPES.IaddonRepository, useClass: AddonRepository },
     ITemRepository,
     ItemMapper,
-    MerchantRepository,
-    MerchantMapper,
+    SingleClientRepository,
+    SingleClientMapper,
     JwtService,
     AuditMapper,
     AddonRepository,

@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import { Audit, Entity, Result } from '../domain';
-import { Merchant } from './../merchant/merchant';
+import { SingleClient } from './../singleclient/singleclient';
 import { IOrderManager } from './order.manager.entity';
 
 export class OrderManager extends Entity<IOrderManager> implements IOrderManager {
@@ -8,7 +8,7 @@ export class OrderManager extends Entity<IOrderManager> implements IOrderManager
   _lastName: string;
   _email: string;
   _phoneNumber?: string;
-  _merchant: Merchant;
+  _singleclient: SingleClient;
   _role: number;
   _audit: Audit;
   _password: string;
@@ -21,7 +21,7 @@ export class OrderManager extends Entity<IOrderManager> implements IOrderManager
     this._role = props.role;
     this._email = props.email;
     this._phoneNumber = props.phoneNumber;
-    this._merchant = props.merchant;
+    this._singleclient = props.singleclient;
     this._password = props.password;
   }
 
@@ -57,12 +57,12 @@ export class OrderManager extends Entity<IOrderManager> implements IOrderManager
     this._phoneNumber = phoneNumber;
   }
 
-  get merchant(): Merchant {
-    return this._merchant;
+  get singleclient(): SingleClient {
+    return this._singleclient;
   }
 
-  set merchant(merchant: Merchant) {
-    this._merchant = merchant;
+  set singleclient(singleclient: SingleClient) {
+    this._singleclient = singleclient;
   }
 
   get role(): number {

@@ -8,5 +8,5 @@ export interface IMenuRepository {
   getMenuById(id: Types.ObjectId): Promise<any>;
   createMenu(menuModel: MenuDataModel): Promise<Result<any>>;
   deleteMenu(id: Types.ObjectId);
-  getMenuByRestaurantId(restaurantId: string, merchantId: string): Promise<Result<Menu[]>>;
+  getMenuByRestaurantId(restaurantId: string, singleclientId: string): Promise<Result<Menu[]>>;
 }

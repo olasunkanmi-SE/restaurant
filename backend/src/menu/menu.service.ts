@@ -12,7 +12,7 @@ import { CategoryRepository } from './../infrastructure/data_access/repositories
 import { IItemRepository } from './../infrastructure/data_access/repositories/interfaces/item-repository.interface';
 import { MenuRepository } from './../infrastructure/data_access/repositories/menu.repopsitory';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
-import { IMerchantService } from './../merchant/interface/merchant-service.interface';
+import { ISingleClientService } from './../singleclient/interface/singleclient-service.interface';
 import { CreateMenuDTO } from './create-menu.schema';
 import { Menu } from './menu';
 import { IMenu } from './menu-entity.interface';
@@ -27,7 +27,7 @@ export class MenuService implements IMenuService {
     private readonly menuRepository: MenuRepository,
     @Inject(TYPES.IContextService)
     private readonly contextService: IContextService,
-    @Inject(TYPES.IMerchantService) private readonly merchantService: IMerchantService,
+    @Inject(TYPES.ISingleClientService) private readonly singleclientService: ISingleClientService,
     @Inject(TYPES.IItemRepository) private readonly itemRepository: IItemRepository,
     @Inject(TYPES.IRestaurantRepository) private readonly restaurantRepository: IRestaurantRepository,
     private readonly categoryRepository: CategoryRepository,
@@ -37,7 +37,7 @@ export class MenuService implements IMenuService {
   }
 
   async createMenu(props: CreateMenuDTO): Promise<Result<IMenuResponseDTO>> {
-    await this.merchantService.validateContext();
+    await this.singleclientService.validateContext();
     const { name, itemIds, categoryId, restaurantId } = props;
     const existingMenu: Result<Menu> = await this.menuRepository.findOne({ name });
     if (existingMenu.isSuccess) {

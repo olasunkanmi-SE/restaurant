@@ -1,3 +1,5 @@
+import { SingleClientMapper } from '../singleclient/singleclient.mapper';
+import { SingleClientRepository } from './../infrastructure/data_access/repositories/singleclient.repository';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -8,43 +10,38 @@ import { AuthService } from './../infrastructure/auth/auth.service';
 import { ContextService } from './../infrastructure/context/context.service';
 import { AddonRepository } from './../infrastructure/data_access/repositories/addon.repository';
 import { CategoryRepository } from './../infrastructure/data_access/repositories/category.repository';
-import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant.repository';
 import {
   CategoryDataModel,
   CategorySchema,
 } from './../infrastructure/data_access/repositories/schemas/category.schema';
-import {
-  MerchantDataModel,
-  MerchantSchema,
-} from './../infrastructure/data_access/repositories/schemas/merchant.schema';
 import { ContextMiddleWare } from './../infrastructure/middlewares/context.middleware';
-import { MerchantMapper } from './../merchant/merchant.mapper';
-import { MerchantService } from './../merchant/merchant.service';
 import { ValidateUser } from './../utils/context-validation';
 import { AddonController } from './addon.controller';
 import { AddonMapper } from './addon.mapper';
 import { AddonDataModel, AddonSchema } from './addon.schema';
 import { AddonService } from './addon.service';
+import { SingleClientDataModel, SingleClientSchema } from '../infrastructure';
+import { SingleClientService } from 'src/singleclient/singleclient.service';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: AddonDataModel.name, schema: AddonSchema },
-      { name: MerchantDataModel.name, schema: MerchantSchema },
+      { name: SingleClientDataModel.name, schema: SingleClientSchema },
       { name: CategoryDataModel.name, schema: CategorySchema },
     ]),
   ],
   controllers: [AddonController],
   providers: [
     { provide: TYPES.IContextService, useClass: ContextService },
-    { provide: TYPES.IMerchantService, useClass: MerchantService },
+    { provide: TYPES.ISingleClientService, useClass: SingleClientService },
     { provide: TYPES.IAuthService, useClass: AuthService },
     { provide: TYPES.IValidateUser, useClass: ValidateUser },
     { provide: TYPES.IAddonService, useClass: AddonService },
     AddonRepository,
     AddonMapper,
-    MerchantRepository,
-    MerchantMapper,
+    SingleClientRepository,
+    SingleClientMapper,
     JwtService,
     AuditMapper,
     CategoryRepository,

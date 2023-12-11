@@ -7,11 +7,11 @@ import { TYPES } from './../application/constants/types';
 import { Audit } from './../domain/audit/audit';
 import { Context } from './../infrastructure/context/context';
 import { IContextService } from './../infrastructure/context/context-service.interface';
-import { MerchantRepository } from './../infrastructure/data_access/repositories/merchant.repository';
+import { SingleClientRepository } from './../infrastructure/data_access/repositories/singleclient.repository';
 import { OrderManagerRepository } from './../infrastructure/data_access/repositories/order-manager.repository';
 import { OrderManagerDocument } from './../infrastructure/data_access/repositories/schemas/order-manger.schema';
 import { throwApplicationError } from './../infrastructure/utilities/exception-instance';
-import { Merchant } from './../merchant/merchant';
+import { SingleClient } from './../singleclient/singleclient';
 import { IValidateUser } from './../utils/context-validation.interface';
 import { CreateOrderManager } from './create-order-manager.schema.dto';
 import { OrderManager } from './order.manager';
@@ -30,7 +30,7 @@ export class OrderManagerService extends AuthService {
     private readonly orderManagerRepository: OrderManagerRepository,
     @Inject(TYPES.IValidateUser)
     private readonly validateOrderManager: IValidateUser<OrderManager, OrderManagerDocument>,
-    private readonly merchantRepository: MerchantRepository,
+    private readonly singleclientRepository: SingleClientRepository,
     private readonly mapper: OrderManagerMapper,
   ) {
     super(jwtService, configService);
@@ -44,17 +44,17 @@ export class OrderManagerService extends AuthService {
     if (existingOrderManager.isSuccess) {
       throwApplicationError(HttpStatus.BAD_REQUEST, 'Order Manager already exists');
     }
-    const validateMerchant = await this.merchantRepository.findById({ id: props.merchantId });
-    let merchant: Merchant | undefined;
-    if (validateMerchant.isSuccess) {
-      merchant = validateMerchant.getValue();
+    const validateSingleClient = await this.singleclientRepository.findById({ id: props.singleclientId });
+    let singleclient: SingleClient | undefined;
+    if (validateSingleClient.isSuccess) {
+      singleclient = validateSingleClient.getValue();
     }
 
     const hashedPassword = await this.hashData(password, saltRounds);
     const audit = Audit.createInsertContext(this.context);
     const orderManagerEntity: OrderManager = OrderManager.create({
       ...props,
-      merchant,
+      singleclient,
       password: hashedPassword,
       audit,
     }).getValue();

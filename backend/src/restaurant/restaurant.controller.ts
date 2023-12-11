@@ -21,9 +21,9 @@ export class RestaurantsController {
     @GetCurrentUserId() userId: Types.ObjectId,
   ): Promise<Result<IRestaurantResponseDTO>> {
     // eslint-disable-next-line prefer-const
-    let { merchantId, ...rest } = request;
-    merchantId = userId;
-    return this.restaurantService.createRestaurant({ ...rest, merchantId });
+    let { singleclientId, ...rest } = request;
+    singleclientId = userId;
+    return this.restaurantService.createRestaurant({ ...rest, singleclientId });
   }
 
   @Get()

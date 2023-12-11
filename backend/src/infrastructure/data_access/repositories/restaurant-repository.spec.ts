@@ -10,10 +10,10 @@ import { Result } from './../../../domain/result/result';
 import { ItemMapper } from './../../../item/item.mapper';
 import { LocationMapper } from './../../../location/location.mapper';
 import { MenuMapper } from './../../../menu/menu.mapper';
-import { MerchantMapper } from './../../../merchant/merchant.mapper';
+import { SingleClientMapper } from './../../../singleclient/singleclient.mapper';
 import { Restaurant } from './../../../restaurant/restaurant';
 import { RestaurantMapper } from './../../../restaurant/restaurant.mapper';
-import { MerchantRepository } from './merchant.repository';
+import { SingleClientRepository } from './singleclient.repository';
 import { RestaurantRepository } from './restaurant.repository';
 import { RestaurantDocument } from './schemas/restaurant.schema';
 
@@ -27,18 +27,23 @@ describe('test the restaurant service', () => {
     connection = new Connection();
     modelId = new Types.ObjectId();
     const auditMapperStub = new AuditMapper();
-    const merchantRepositoryStub: MerchantRepository = sinon.stubInterface<MerchantRepository>();
+    const singleclientRepositoryStub: SingleClientRepository = sinon.stubInterface<SingleClientRepository>();
     const locationMapperStub = new LocationMapper(auditMapperStub);
-    const merchantMapperStub = new MerchantMapper(auditMapperStub);
+    const singleclientMapperStub = new SingleClientMapper(auditMapperStub);
     const itemMapperStub = new ItemMapper(auditMapperStub);
     const categoryMapperStub = new CategoryMapper();
     const menuMapper = new MenuMapper(auditMapperStub, itemMapperStub, categoryMapperStub);
-    restaurantMapperStub = new RestaurantMapper(auditMapperStub, locationMapperStub, merchantMapperStub, menuMapper);
+    restaurantMapperStub = new RestaurantMapper(
+      auditMapperStub,
+      locationMapperStub,
+      singleclientMapperStub,
+      menuMapper,
+    );
     restaurantsRepositoryMock = Mock.ofType<GenericDocumentRepository<Restaurant, RestaurantDocument>>();
     restaurantRepository = new RestaurantRepository(
       restaurantsRepositoryMock.target,
       connection,
-      merchantRepositoryStub,
+      singleclientRepositoryStub,
       restaurantMapperStub,
     );
   });
