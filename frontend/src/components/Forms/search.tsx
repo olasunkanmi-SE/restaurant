@@ -21,7 +21,7 @@ export const MenuSearch = ({ isOpen, closeCart, header, placement }: menuSearchA
   };
   const getMenus = async (): Promise<IMenus> => {
     //remove the add coded value and make it dynamic
-    const response = await axiosPrivate.get("/menus/merchant/63d792433b857e1697fe7017");
+    const response = await axiosPrivate.get("/menus/singleclient/63d792433b857e1697fe7017");
     return response.data;
   };
 
