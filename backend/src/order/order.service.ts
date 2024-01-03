@@ -59,12 +59,12 @@ export class OrderService implements IOrderService {
     }
     const session = await this.orderRepository.startSession();
     try {
-      await session.startTransaction();
+      session.startTransaction();
       const audit: Audit = Audit.createInsertContext(this.context);
       const merchantObjId = this.orderRepository.stringToObjectId(merchantId);
       const getOrderStatus = await this.orderStatusRespository.findOne({ code: state.toUpperCase() });
       if (!getOrderStatus) {
-        throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Order status not found`);
+        throwApplicationError(HttpStatus.NOT_FOUND, `Order status not found`);
       }
       const orderStatus = getOrderStatus.getValue();
       const order: Order = Order.create({ state: orderStatus, type, total, merchantId: merchantObjId, audit });

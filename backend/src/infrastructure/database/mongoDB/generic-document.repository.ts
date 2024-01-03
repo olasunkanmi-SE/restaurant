@@ -148,6 +148,18 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
     return await this.connection.startSession();
   }
 
+  async abortSession() {
+    return (await this.startSession()).abortTransaction();
+  }
+
+  async endSession() {
+    return (await this.startSession()).endSession();
+  }
+
+  async startTransaction() {
+    return (await this.startSession()).startTransaction();
+  }
+
   async insertMany(docs: any): Promise<Result<TEntity[]>> {
     try {
       const documentsToSave = docs.map((doc) => this.createDocument(doc));

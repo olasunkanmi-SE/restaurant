@@ -20,7 +20,7 @@ export const merchantMock: IMerchant = {
 
 export const merchantMockData = Merchant.create(merchantMock, new Types.ObjectId());
 
-const merchant = merchantMockData.getValue();
+export const merchant = merchantMockData.getValue();
 const merchants: Merchant[] = [];
 merchants.push(merchant);
 export const merchantMockDatas = merchants;

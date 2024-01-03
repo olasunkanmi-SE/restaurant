@@ -31,4 +31,7 @@ export interface IGenericDocument<TEntity, T> {
   objectIdToString(objectId: Types.ObjectId): string;
 
   stringToObjectId(prop: string): Types.ObjectId;
+  abortSession();
+  endSession();
+  startTransaction();
 }
