@@ -7,15 +7,18 @@ export interface IOrder {
 }
 
 export interface IcartItems {
-  menuId: string;
+  menuId?: string;
   total: number;
-  quantity: number;
-  selectedItems: IselectedItems[];
+  quantity?: number;
+  selectedItems?: IselectedItems[];
+  note?: string;
 }
 
 export interface IselectedItems {
+  id: string;
   itemId: string;
   menuId: string;
   price: number;
-  quantity: number;
+  quantity?: number;
+  menuPrice: number;
 }
