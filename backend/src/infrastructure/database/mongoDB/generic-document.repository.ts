@@ -22,10 +22,6 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
     private readonly mapper: any,
   ) {}
 
-  public static createObjectId() {
-    return new Types.ObjectId();
-  }
-
   private convertObjectIdToString(objectId: Types.ObjectId) {
     return objectId.toString();
   }
@@ -194,7 +190,7 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
   createDocument(document: any) {
     return new this.DocumentModel({
       ...document,
-      _id: GenericDocumentRepository.createObjectId(),
+      _id: new Types.ObjectId(),
     });
   }
 }

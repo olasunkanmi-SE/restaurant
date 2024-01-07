@@ -10,9 +10,16 @@ import { QtyButton } from "../MenuItems/addItemButton";
 import { CallToAction } from "../Utilities/modal";
 import { CartSelectedItems } from "./CartSelectedItems";
 import { UpgradeShoppingCartItem } from "./ShoppingCartSelectedItemUpdate";
+import { OrderApi } from "../../apis/orderApi";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { handleAxiosError } from "../../utility/axios-error-handler";
+import { useMutation } from "react-query";
+import { ICreateOrderDTO } from "../../dto/order";
 
 export const ShoppingCartDetails = () => {
   const navigate = useNavigate();
+  const order = OrderApi();
+  const axios = useAxiosPrivate();
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const { GetOrderSummary, resetCart, closeCart, updateCartItems } = useShoppingCart();
   const [showClearCartModal, setShowClearCartModal] = useState(false);
@@ -74,6 +81,12 @@ export const ShoppingCartDetails = () => {
     closeCart();
     navigate("/");
   };
+
+  const handleCreateOrder: any = useMutation({
+    mutationFn: (order: ICreateOrderDTO) => {
+      return axios.post("orders/create", order);
+    },
+  });
 
   return (
     <div>
@@ -183,9 +196,24 @@ export const ShoppingCartDetails = () => {
             <p> {calculateServiceCharge(calculateTotalOrderAmount())}</p>
           </div>
         </Stack>
-        <Button className="w-100" variant="success" type="submit">
+        <Button
+          className="w-100"
+          variant="success"
+          type="submit"
+          onClick={() => {
+            handleCreateOrder.mutate(order!);
+          }}
+        >
           PLACE ORDER RM{handleCalculateTotalOrder() + calculateServiceCharge(calculateTotalOrderAmount())}
         </Button>
+        <div>
+          {handleCreateOrder.isLoading ? (
+            "Creating Order..."
+          ) : (
+            <>{handleCreateOrder.isError ? <div>An error occurred: {handleCreateOrder.error.message}</div> : null}</>
+          )}
+          {handleCreateOrder.isSuccess ? <div>Order processed successfully</div> : null}
+        </div>
       </div>
       <div>
         {showClearCartModal && (
