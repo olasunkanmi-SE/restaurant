@@ -61,7 +61,7 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
     return document;
   }
 
-  toDomain(document: RestaurantData): Restaurant {
+  toDomain(document: any): Restaurant {
     const {
       name,
       email,
