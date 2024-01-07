@@ -8,6 +8,8 @@ import { RestaurantMapper } from './../../../restaurant/restaurant.mapper';
 import { SingleClientRepository } from './singleclient.repository';
 import { IRestaurantRepository } from './interfaces/restaurant-repository.interface';
 import { RestaurantData, RestaurantDocument } from './schemas';
+import { throwApplicationError } from 'src/infrastructure/utilities/exception-instance';
+import { HttpStatus } from '@nestjs/common';
 
 export class RestaurantRepository
   extends GenericDocumentRepository<Restaurant, RestaurantDocument>
@@ -27,6 +29,9 @@ export class RestaurantRepository
 
   async getRestaurant(restaurantId: Types.ObjectId): Promise<Restaurant> {
     const restaurantDoc = await this.DocumentModel.findById(restaurantId).populate('singleclient').exec();
+    if (!restaurantDoc) {
+      throwApplicationError(HttpStatus.NOT_FOUND, `Restaurant with id ${restaurantId} does not exist`);
+    }
     const restaurant: Restaurant = this.restaurantMapper.toDomain(restaurantDoc);
     return restaurant;
   }
