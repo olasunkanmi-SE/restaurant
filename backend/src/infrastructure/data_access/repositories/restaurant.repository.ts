@@ -8,7 +8,7 @@ import { RestaurantMapper } from './../../../restaurant/restaurant.mapper';
 import { SingleClientRepository } from './singleclient.repository';
 import { IRestaurantRepository } from './interfaces/restaurant-repository.interface';
 import { RestaurantData, RestaurantDocument } from './schemas';
-import { throwApplicationError } from 'src/infrastructure/utilities/exception-instance';
+import { throwApplicationError } from '../../../infrastructure/utilities/exception-instance';
 import { HttpStatus } from '@nestjs/common';
 
 export class RestaurantRepository
