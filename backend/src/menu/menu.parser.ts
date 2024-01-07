@@ -1,4 +1,4 @@
-import { Restaurant, RestaurantParser } from 'src/restaurant';
+import { Restaurant, RestaurantParser } from '../restaurant';
 import { AuditParser } from '../audit';
 import { CategoryParser } from './../category/category.parser';
 import { ITemResponseDTO } from './../item/item-response.dto';
