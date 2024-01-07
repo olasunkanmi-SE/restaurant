@@ -7,6 +7,7 @@ import { RestaurantData } from './../infrastructure/data_access/repositories/sch
 import { LocationMapper } from './../location/location.mapper';
 import { SingleClientMapper } from './../singleclient/singleclient.mapper';
 import { Restaurant } from './restaurant';
+import { SingleClient } from 'src/singleclient';
 
 @Injectable()
 export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
@@ -48,7 +49,7 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
       paymentMethod,
       openingHour,
       closingHour,
-      menus: menus && menus.length ? menus.map((menu) => this.menuMapper.toPersistence(menu)) : [],
+      menus: menus?.length ? menus.map((menu) => this.menuMapper.toPersistence(menu)) : [],
       location: this.locationMapper.toPersistence(entity.location),
       singleclientId,
       singleclient: this.singleclientMapper.toPersistence(entity.singleclient),
@@ -62,7 +63,7 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
     return document;
   }
 
-  toDomain(document: RestaurantData): Restaurant {
+  toDomain(document: any): Restaurant {
     const {
       name,
       email,
@@ -79,6 +80,8 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
       closingHour,
       menus,
       singleclientId,
+      singleclient,
+      location,
     } = document;
     const entity: Restaurant = Restaurant.create(
       {
@@ -96,8 +99,8 @@ export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
         closingHour,
         singleclientId,
         menus: menus.length ? menus.map((menu) => this.menuMapper.toDomain(menu)) : [],
-        location: this.locationMapper.toDomain(document.location),
-        singleclient: this.singleclientMapper.toDomain(document.singleclient),
+        location: this.locationMapper.toDomain(location),
+        singleclient: singleclient ? this.singleclientMapper.toDomain(singleclient) : undefined,
         audit: this.auditMapper.toDomain(document),
       },
       _id,

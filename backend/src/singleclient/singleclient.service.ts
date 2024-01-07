@@ -84,7 +84,6 @@ export class SingleClientService extends AuthService implements ISingleClientSer
     }
     return Result.ok(SingleClientParser.createSingleClientResponse(singleclient));
   }
-  ß;
 
   async getSingleClients(): Promise<Result<ISingleClientResponseDTO[]>> {
     const isValidUser = await this.validateContext();
