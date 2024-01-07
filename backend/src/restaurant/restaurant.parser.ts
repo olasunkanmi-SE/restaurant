@@ -7,6 +7,7 @@ import { IRestaurantResponseDTO } from './restaurant-response.dto';
 export class RestaurantParser {
   static createRestaurantResponse(restaurant: Restaurant): IRestaurantResponseDTO {
     const { audit, location, singleclient, menus } = restaurant;
+    const auditResponse = audit ? { ...AuditParser.createAuditResponse(audit) } : undefined;
     const restaurantResponse: IRestaurantResponseDTO = {
       id: restaurant.id,
       name: restaurant.name,
@@ -17,8 +18,8 @@ export class RestaurantParser {
       timeZone: restaurant.timeZone,
       menus: MenuParser.createMenusResponse(menus),
       location: LocationParser.createLocationResponse(location),
-      ...AuditParser.createAuditResponse(audit),
-      singleclient: SingleClientParser.createSingleClientResponse(singleclient),
+      ...auditResponse,
+      singleclient: singleclient ? SingleClientParser.createSingleClientResponse(singleclient) : undefined,
     };
     return restaurantResponse;
   }

@@ -2,6 +2,7 @@ import { OrderSummary, SelectedItem } from "./../reducers/cartReducer";
 import { useShoppingCart } from "../hooks/UseShoppingCart";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { IcartItems } from "../models/order.model";
+import { ICreateOrderDTO } from "../dto/order";
 
 const getOrderSummary = () => {
   const { GetOrderSummary } = useShoppingCart();
@@ -12,17 +13,19 @@ export const createOrder = async () => {
   return useAxiosPrivate();
 };
 
-const mapOrderSummaryToOrderRequest = () => {
+const order = (): ICreateOrderDTO | undefined => {
+  let order: ICreateOrderDTO | undefined;
   const orderSummary = getOrderSummary();
   if (orderSummary?.length) {
-    return {
+    order = {
       state: "CREATED",
       type: "DINE_IN",
-      singleclientId: "63d792433b857e1697fe7017",
+      singleClientId: "63d792433b857e1697fe7017",
       total: calculateOrderTotalPrice(orderSummary) ?? 0,
       cartItems: cartItemsMapper(orderSummary),
     };
   }
+  return order;
 };
 
 const calculateOrderTotalPrice = (orderSummary: OrderSummary[]) => {
@@ -46,9 +49,7 @@ const cartItemsMapper = (orderSummary: OrderSummary[]): IcartItems[] => {
   const cartItems = menus.map((menu) => {
     return {
       menuId: menu.id,
-      total:
-        menu.menuTotalPrice ??
-        0 - calculateCartItemsTotalPrice(menu.selectedItems ?? []),
+      total: menu.menuTotalPrice ?? 0 - calculateCartItemsTotalPrice(menu.selectedItems ?? []),
       note: menu.note,
       selectedItems: menu.selectedItems?.map((item) => {
         return { ...item, itemId: item.id };

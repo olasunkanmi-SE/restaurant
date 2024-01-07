@@ -20,6 +20,7 @@ import { IMenuResponseDTO } from './menu-response.dto';
 import { IMenuService } from './menu-service.interface';
 import { MenuParser } from './menu.parser';
 import { UpdateMenuDTO } from './update-menu.schema';
+import { Restaurant } from 'src/restaurant';
 @Injectable()
 export class MenuService implements IMenuService {
   private context: Context;
@@ -126,6 +127,20 @@ export class MenuService implements IMenuService {
     if (result.getValue()) {
       menus = result.getValue();
     }
-    return Result.ok(menus && menus.length ? MenuParser.createMenusResponse(menus) : []);
+    return Result.ok(menus?.length ? MenuParser.createMenusResponse(menus) : []);
+  }
+
+  async getExtendedMenuByRestaurantId(restaurantId: string): Promise<Result<IMenuResponseDTO[]>> {
+    const result = await this.menuRepository.getMenuByRestaurantId(restaurantId);
+    let menus: Menu[] | [];
+    if (result.getValue()) {
+      menus = result.getValue();
+    }
+    const id = menus[0].restaurantId;
+    let restaurant: Restaurant | undefined;
+    if (id) {
+      restaurant = await this.restaurantRepository.getRestaurant(id);
+    }
+    return Result.ok(menus?.length ? MenuParser.createMenusResponse(menus, restaurant) : []);
   }
 }

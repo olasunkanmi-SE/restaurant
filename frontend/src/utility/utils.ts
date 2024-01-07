@@ -31,31 +31,31 @@ export const calculateTotalOrderAmount = (): number => {
 };
 
 export const setLocalStorageData = (key: string, value: string, encrypt: boolean) => {
-  if (encrypt) {
-    try {
+  try {
+    if (encrypt) {
       const encryptedText = cryptoJs.AES.encrypt(value, import.meta.env.VITE_SECRET);
       if (encryptedText) {
         localStorage.setItem(key, encryptedText.toString());
       }
-    } catch (error) {
-      console.log("Error while saving user Data", error);
+    } else {
+      localStorage.setItem(key, value);
     }
-  } else {
-    localStorage.setItem(key, value);
+  } catch (error) {
+    console.log("Error while saving user Data", error);
   }
 };
 
 export const getLocalStorageData = (key: string, decrypt: boolean) => {
-  let value = localStorage.getItem(key);
-  if (value && decrypt) {
-    try {
+  try {
+    let value = localStorage.getItem(key);
+    if (value && decrypt) {
       const decryptedText = cryptoJs.AES.decrypt(value, import.meta.env.VITE_SECRET);
       return decryptedText.toString(cryptoJs.enc.Utf8);
-    } catch (error) {
-      console.log("Error while getting user data", error);
     }
+    return value;
+  } catch (error) {
+    console.log("Error while getting user data", error);
   }
-  return value;
 };
 
 export const clearStorage = () => {

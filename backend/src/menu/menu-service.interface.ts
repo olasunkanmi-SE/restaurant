@@ -10,4 +10,5 @@ export interface IMenuService {
   updateMenu(props: any, id: Types.ObjectId): Promise<Result<IMenuResponseDTO>>;
   deleteMenu(id: Types.ObjectId): Promise<Result<boolean>>;
   getMenuByRestaurantId(restaurantId: string): Promise<Result<IMenuResponseDTO[]>>;
+  getExtendedMenuByRestaurantId(restaurantId: string): Promise<Result<IMenuResponseDTO[]>>;
 }
