@@ -7,7 +7,8 @@ export type currentStatus = 'CREATED' | 'ACCEPTED' | 'DENIED' | 'FINISHED' | 'CA
 export type dinningType = 'PICK_UP' | 'DINE_IN' | 'DELIVERY';
 
 export interface IOrder {
-  state: OrderStatus;
+  state?: OrderStatus;
+  orderStatusId: Types.ObjectId;
   type: dinningType;
   singleclientId: Types.ObjectId;
   customerId?: Types.ObjectId;

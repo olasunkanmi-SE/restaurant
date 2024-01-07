@@ -4,7 +4,7 @@ import { CartItemDataModel } from '../schemas/cartItem.schema';
 import { OrderStatusModel } from '../schemas/order-status.schema';
 
 export interface IOrderDataModel {
-  readonly state: OrderStatusModel;
+  readonly state?: OrderStatusModel;
   readonly type: dinningType;
   readonly singleclientId: Types.ObjectId;
   readonly customerId?: Types.ObjectId;
@@ -12,4 +12,5 @@ export interface IOrderDataModel {
   readonly discount?: number;
   readonly orderManagerId?: Types.ObjectId;
   readonly cartItems?: CartItemDataModel[];
+  readonly orderStatusId: Types.ObjectId;
 }
