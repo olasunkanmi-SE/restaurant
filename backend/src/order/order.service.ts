@@ -48,13 +48,13 @@ export class OrderService implements IOrderService {
 
   async createOrder(orderSummary: CreateOrderDTO): Promise<Result<IOrderResponseDTO>> {
     await this.singleclientService.validateContext();
-    const { state, type, singleclientId, total, cartItems } = orderSummary;
-    const orderDuplicate = await this.orderRepository.getDuplicateOrder(type, singleclientId, cartItems);
+    const { state, type, singleClientId, total, cartItems } = orderSummary;
+    const orderDuplicate = await this.orderRepository.getDuplicateOrder(type, singleClientId, cartItems);
     if (orderDuplicate) {
       throwApplicationError(HttpStatus.NOT_FOUND, 'Duplicate order detected. Please confirm.');
     }
     const validateSingleClient: Result<SingleClient> = await this.singleclientRepository.findOne({
-      _id: singleclientId,
+      _id: singleClientId,
     });
     if (!validateSingleClient.isSuccess) {
       throwApplicationError(HttpStatus.NOT_FOUND, `SingleClient does not exist`);
@@ -63,13 +63,19 @@ export class OrderService implements IOrderService {
     try {
       await session.startTransaction();
       const audit: Audit = Audit.createInsertContext(this.context);
-      const singleclientObjId = this.orderRepository.stringToObjectId(singleclientId);
+      const singleclientObjId = this.orderRepository.stringToObjectId(singleClientId);
       const getOrderStatus = await this.orderStatusRespository.findOne({ code: state.toUpperCase() });
       if (!getOrderStatus) {
         throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Order status not found`);
       }
       const orderStatus = getOrderStatus.getValue();
-      const order: Order = Order.create({ state: orderStatus, type, total, singleclientId: singleclientObjId, audit });
+      const order: Order = Order.create({
+        orderStatusId: orderStatus.id,
+        type,
+        total,
+        singleclientId: singleclientObjId,
+        audit,
+      });
       const orderModel: OrderDataModel = this.orderMapper.toPersistence(order);
       const orderToSave: Result<Order> = await this.orderRepository.createOrder(orderModel);
       const savedOrder = orderToSave.getValue();
@@ -156,13 +162,18 @@ export class OrderService implements IOrderService {
 
   async createOrderNotes(cartItems: CreateCartItemsDTO[], orderId: Types.ObjectId): Promise<OrderNote[]> {
     const orderNotes = cartItems.map(({ menuId, note }: CreateCartItemsDTO) => {
-      return {
-        menuId,
-        note: note || '',
-        orderId: orderId,
-      };
+      let noteToSave: { menuId: Types.ObjectId; note: string; orderId: Types.ObjectId } | undefined;
+      if (note?.length) {
+        noteToSave = {
+          menuId,
+          note: note,
+          orderId: orderId,
+        };
+      }
+      return noteToSave;
     });
-    const notes = await this.orderNoteService.createNotes(orderNotes);
+    const notesToSave = orderNotes.filter((note) => note !== undefined);
+    const notes = await this.orderNoteService.createNotes(notesToSave);
     return notes.getValue();
   }
 

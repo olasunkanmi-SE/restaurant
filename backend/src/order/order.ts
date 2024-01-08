@@ -6,9 +6,10 @@ import { Audit } from './../domain/audit/audit';
 import { IOrder, dinningType } from './order-entity.interface';
 
 export class Order extends Entity<IOrder> implements IOrder {
-  _state: OrderStatus;
+  _state: OrderStatus | undefined;
   _type: dinningType;
   _singleclientId: Types.ObjectId;
+  _orderStatusId: Types.ObjectId;
   _customerId?: Types.ObjectId;
   _total: number;
   _discount?: number;
@@ -18,7 +19,18 @@ export class Order extends Entity<IOrder> implements IOrder {
 
   constructor(
     id: Types.ObjectId,
-    { state, type, singleclientId, customerId, total, discount, orderManagerId, audit, cartItems }: IOrder,
+    {
+      state,
+      type,
+      singleclientId,
+      customerId,
+      total,
+      discount,
+      orderManagerId,
+      audit,
+      cartItems,
+      orderStatusId,
+    }: IOrder,
   ) {
     super(id);
     this._state = state;
@@ -30,6 +42,7 @@ export class Order extends Entity<IOrder> implements IOrder {
     this._orderManagerId = orderManagerId;
     this._audit = audit;
     this._cartItems = cartItems;
+    this._orderStatusId = orderStatusId;
   }
 
   get state(): OrderStatus {
@@ -62,6 +75,14 @@ export class Order extends Entity<IOrder> implements IOrder {
 
   set customerId(customerId: Types.ObjectId) {
     this._customerId = customerId;
+  }
+
+  get orderStatusId(): Types.ObjectId {
+    return this._orderStatusId;
+  }
+
+  set orderStatusId(orderStatusId: Types.ObjectId) {
+    this._orderStatusId = orderStatusId;
   }
 
   get total(): number {
