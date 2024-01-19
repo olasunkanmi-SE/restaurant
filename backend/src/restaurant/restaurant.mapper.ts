@@ -7,6 +7,7 @@ import { RestaurantData } from './../infrastructure/data_access/repositories/sch
 import { LocationMapper } from './../location/location.mapper';
 import { SingleClientMapper } from './../singleclient/singleclient.mapper';
 import { Restaurant } from './restaurant';
+
 @Injectable()
 export class RestaurantMapper implements IMapper<Restaurant, RestaurantData> {
   constructor(
