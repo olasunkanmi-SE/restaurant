@@ -1,7 +1,7 @@
 import { Col, Container } from "react-bootstrap";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ShoppingCartProvider } from "./contexts/shoppingCartContext";
-import { About, FoodMenu, Home, SignUp } from "./pages";
+import { About, FoodMenu, Home, SignUp, Login } from "./pages";
 import { CheckOutOrAddToCart } from "./components/Utilities/Conditional";
 import { Navigation } from "./components/Utilities/Navbar";
 
@@ -25,7 +25,7 @@ function App() {
                 <Route path="/about" element={<About />} />
                 <Route path="menu/:id" element={<FoodMenu />} />
                 <Route path="/register" element={<SignUp />} />
-                <Route path="/register" element={<SignUp />} />
+                <Route path="/login" element={<Login />} />
                 <Route path="*" element={<Navigate to=".." />} />
               </Route>
             </Routes>
