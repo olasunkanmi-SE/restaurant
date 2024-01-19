@@ -2,6 +2,7 @@ import { OrderSummary, SelectedItem } from "./../reducers/cartReducer";
 import { useShoppingCart } from "../hooks/UseShoppingCart";
 import { IcartItems } from "../models/order.model";
 import { ICreateOrderDTO } from "../dto/order";
+import { calculateServiceCharge, calculateTotalOrderAmount } from "../utility/utils";
 
 export const OrderApi = () => {
   const getOrderSummary = () => {
@@ -17,7 +18,7 @@ export const OrderApi = () => {
         state: "CREATED",
         type: "DINE_IN",
         singleClientId: "63d78441a6fda119c09b1930",
-        total: calculateOrderTotalPrice(orderSummary) ?? 0,
+        total: calculateOrderTotalPrice(orderSummary) + serviceCharge,
         cartItems: cartItemsMapper(orderSummary),
       };
     }
@@ -29,6 +30,8 @@ export const OrderApi = () => {
       return acc + (item.menus[0]?.menuTotalPrice ?? 0);
     }, 0);
   };
+
+  const serviceCharge = calculateServiceCharge(calculateTotalOrderAmount());
 
   const calculateCartItemsTotalPrice = (selectedItems: SelectedItem[]) => {
     let totalSelectedItemsPrice = 0;
