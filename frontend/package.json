@@ -19,6 +19,7 @@
     "crypto-js": "^4.1.1",
     "lodash": "^4.17.21",
     "lodash.get": "4.4.2",
+    "lottie-react": "^2.4.0",
     "nanoid": "^4.0.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",

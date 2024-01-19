@@ -12,9 +12,11 @@ import { CartSelectedItems } from "./CartSelectedItems";
 import { UpgradeShoppingCartItem } from "./ShoppingCartSelectedItemUpdate";
 import { OrderApi } from "../../apis/orderApi";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { handleAxiosError } from "../../utility/axios-error-handler";
 import { useMutation } from "react-query";
 import { ICreateOrderDTO } from "../../dto/order";
+import Lottie from "lottie-react";
+import groovyWalkAnimation from "../../assets/animations/1704611321528.json";
+import success from "../../assets/animations/1704612008454.json";
 
 export const ShoppingCartDetails = () => {
   const navigate = useNavigate();
@@ -83,8 +85,10 @@ export const ShoppingCartDetails = () => {
   };
 
   const handleCreateOrder: any = useMutation({
-    mutationFn: (order: ICreateOrderDTO) => {
-      return axios.post("orders/create", order);
+    mutationFn: async (order: ICreateOrderDTO) => {
+      const response = await axios.post("orders/create", order);
+      const x = response.data;
+      return response;
     },
   });
 
