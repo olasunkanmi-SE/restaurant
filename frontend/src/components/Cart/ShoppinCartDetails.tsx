@@ -210,6 +210,14 @@ export const ShoppingCartDetails = () => {
         >
           PLACE ORDER RM{handleCalculateTotalOrder() + calculateServiceCharge(calculateTotalOrderAmount())}
         </Button>
+        <div>
+          {handleCreateOrder.isLoading ? (
+            "Creating Order..."
+          ) : (
+            <>{handleCreateOrder.isError ? <div>An error occurred: {handleCreateOrder.error.message}</div> : null}</>
+          )}
+          {handleCreateOrder.isSuccess ? <div>Order processed successfully</div> : null}
+        </div>
       </div>
       <div>
         {showClearCartModal && (
