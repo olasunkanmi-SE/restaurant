@@ -14,6 +14,9 @@ import { OrderApi } from "../../apis/orderApi";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { useMutation } from "react-query";
 import { ICreateOrderDTO } from "../../dto/order";
+import Lottie from "lottie-react";
+import groovyWalkAnimation from "../../assets/animations/1704611321528.json";
+import success from "../../assets/animations/1704612008454.json";
 
 export const ShoppingCartDetails = () => {
   const navigate = useNavigate();
