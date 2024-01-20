@@ -14,9 +14,6 @@ import { OrderApi } from "../../apis/orderApi";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { useMutation } from "react-query";
 import { ICreateOrderDTO } from "../../dto/order";
-import Lottie from "lottie-react";
-import groovyWalkAnimation from "../../assets/animations/1704611321528.json";
-import success from "../../assets/animations/1704612008454.json";
 
 export const ShoppingCartDetails = () => {
   const navigate = useNavigate();
@@ -86,10 +83,10 @@ export const ShoppingCartDetails = () => {
 
   const handleCreateOrder: any = useMutation({
     mutationFn: async (order: ICreateOrderDTO) => {
-      const response = await axios.post("orders/create", order);
-      const x = response.data;
-      return response;
+      return await axios.post("orders/create", order);
     },
+    onSuccess: (data, variables, context) => {},
+    onError: (data, variables, context) => {},
   });
 
   return (
