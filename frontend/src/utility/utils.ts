@@ -81,6 +81,5 @@ export const cartExpiry = (date: string): boolean => {
   const specifiedDate: Date = new Date(date);
   const timeDifferenceMs: number = new Date().getTime() - specifiedDate.getTime();
   const hoursDifference: number = timeDifferenceMs / (1000 * 60 * 60);
-  console.log(hoursDifference);
   return hoursDifference > 1;
 };

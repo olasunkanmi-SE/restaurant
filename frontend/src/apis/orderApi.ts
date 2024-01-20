@@ -43,7 +43,6 @@ export const OrderApi = () => {
     return totalSelectedItemsPrice;
   };
 
-
   const cartItemsMapper = (orderSummary: OrderSummary[]): IcartItems[] => {
     const menus = orderSummary.flatMap((summary) => summary.menus);
     const cartItems = menus.map((menu) => {
