@@ -17,6 +17,7 @@ export interface IOrder {
   orderManagerId?: Types.ObjectId;
   audit: Audit;
   cartItems?: CartItem[];
+  summary: string;
 }
 
 //tableNumber

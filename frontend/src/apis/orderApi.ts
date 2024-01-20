@@ -20,6 +20,7 @@ export const OrderApi = () => {
         singleClientId: "63d78441a6fda119c09b1930",
         total: calculateOrderTotalPrice(orderSummary) + serviceCharge,
         cartItems: cartItemsMapper(orderSummary),
+        summary: JSON.stringify(orderSummary),
       };
     }
     return order;

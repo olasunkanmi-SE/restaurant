@@ -325,11 +325,12 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     };
 
     const addMenuToCart = (menu: IMenuData, instructions?: string) => {
+      //State.totalPrice is not correct
       if (!state.menus.length) {
         state.menus = menuToMenuStateMapper(menu);
         state.quantity = 1;
       }
-      let { menus, quantity, orderSummary } = state;
+      let { menus, quantity, orderSummary, totalPrice } = state;
       if (instructions?.length) {
         menus[0].note = instructions;
       }

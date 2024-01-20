@@ -19,6 +19,10 @@ export class CreateOrderDTO {
   @IsNotEmpty()
   total: number;
 
+  @IsString()
+  @IsNotEmpty()
+  summary: string;
+
   @IsOptional()
   @IsArray()
   cartItems: CreateCartItemsDTO[];

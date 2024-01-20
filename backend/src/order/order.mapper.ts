@@ -14,8 +14,19 @@ export class OrderMapper implements IMapper<Order, OrderDataModel> {
     private readonly orderStatusMapper: OrderStatusMapper,
   ) {}
   toPersistence(entity: Order): OrderDataModel {
-    const { id, state, type, singleclientId, total, discount, orderManagerId, audit, cartItems, orderStatusId } =
-      entity;
+    const {
+      id,
+      state,
+      type,
+      singleclientId,
+      total,
+      discount,
+      orderManagerId,
+      audit,
+      cartItems,
+      orderStatusId,
+      summary,
+    } = entity;
     const {
       auditCreatedBy,
       auditCreatedDateTime,
@@ -34,6 +45,7 @@ export class OrderMapper implements IMapper<Order, OrderDataModel> {
       discount,
       cartItems: cartItems?.length ? cartItems.map((cartItem) => this.cartItemMapper.toPersistence(cartItem)) : [],
       orderManagerId,
+      summary,
       auditCreatedBy,
       auditCreatedDateTime,
       auditModifiedBy,
@@ -45,7 +57,8 @@ export class OrderMapper implements IMapper<Order, OrderDataModel> {
   }
 
   toDomain(model: OrderDataModel): Order {
-    const { state, type, singleclientId, total, discount, orderManagerId, _id, cartItems, orderStatusId } = model;
+    const { state, type, singleclientId, total, discount, orderManagerId, _id, cartItems, orderStatusId, summary } =
+      model;
     const entity: Order = Order.create(
       {
         state: state ? this.orderStatusMapper.toDomain(state) : undefined,
@@ -55,6 +68,7 @@ export class OrderMapper implements IMapper<Order, OrderDataModel> {
         total,
         discount,
         orderManagerId,
+        summary,
         audit: this.auditMapper.toDomain(model),
         cartItems: cartItems?.length ? cartItems.map((cartItem) => this.cartItemMapper.toDomain(cartItem)) : [],
       },

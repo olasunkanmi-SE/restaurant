@@ -16,6 +16,7 @@ export class Order extends Entity<IOrder> implements IOrder {
   _orderManagerId: Types.ObjectId;
   _audit: Audit;
   _cartItems: CartItem[] | undefined;
+  _summary: string;
 
   constructor(
     id: Types.ObjectId,
@@ -30,6 +31,7 @@ export class Order extends Entity<IOrder> implements IOrder {
       audit,
       cartItems,
       orderStatusId,
+      summary,
     }: IOrder,
   ) {
     super(id);
@@ -43,6 +45,7 @@ export class Order extends Entity<IOrder> implements IOrder {
     this._audit = audit;
     this._cartItems = cartItems;
     this._orderStatusId = orderStatusId;
+    this._summary = summary;
   }
 
   get state(): OrderStatus {
@@ -51,6 +54,10 @@ export class Order extends Entity<IOrder> implements IOrder {
 
   set state(state: OrderStatus) {
     this._state = state;
+  }
+
+  get summary(): string {
+    return this._summary;
   }
 
   get type(): dinningType {

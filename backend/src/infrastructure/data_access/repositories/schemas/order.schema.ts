@@ -16,6 +16,9 @@ export class OrderDataModel extends BaseDocument implements IOrderDataModel {
   @Prop({ type: String, required: true })
   type: dinningType;
 
+  @Prop({ type: String, required: true })
+  summary: string;
+
   @Prop({ type: mongoose.Schema.Types.ObjectId })
   @Type(() => SingleClientDataModel)
   singleclientId: Types.ObjectId;
