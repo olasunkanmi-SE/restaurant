@@ -5,7 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { CONSTANTS } from "../../constants/constant";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { OrderSummary } from "../../reducers";
-import { calculateServiceCharge, calculateTotalOrderAmount, setLocalStorageData, wordWrap } from "../../utility/utils";
+import {
+  calculateServiceCharge,
+  calculateTotalOrderAmount,
+  clearStorage,
+  setLocalStorageData,
+  wordWrap,
+} from "../../utility/utils";
 import { QtyButton } from "../MenuItems/addItemButton";
 import { CallToAction } from "../Utilities/modal";
 import { CartSelectedItems } from "./CartSelectedItems";
@@ -14,9 +20,6 @@ import { OrderApi } from "../../apis/orderApi";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { useMutation } from "react-query";
 import { ICreateOrderDTO } from "../../dto/order";
-import Lottie from "lottie-react";
-import groovyWalkAnimation from "../../assets/animations/1704611321528.json";
-import success from "../../assets/animations/1704612008454.json";
 
 export const ShoppingCartDetails = () => {
   const navigate = useNavigate();
@@ -88,8 +91,17 @@ export const ShoppingCartDetails = () => {
     mutationFn: async (order: ICreateOrderDTO) => {
       return await axios.post("orders/create", order);
     },
-    onSuccess: (data, variables, context) => {},
-    onError: (data, variables, context) => {},
+    onSuccess: (data) => {
+      if (data.data.isSuccess) {
+        resetCart();
+        clearStorage();
+        closeCart();
+        navigate("/");
+      }
+    },
+    onError: (data) => {
+      console.log(data);
+    },
   });
 
   return (
@@ -214,7 +226,16 @@ export const ShoppingCartDetails = () => {
           {handleCreateOrder.isLoading ? (
             "Creating Order..."
           ) : (
-            <>{handleCreateOrder.isError ? <div>An error occurred: {handleCreateOrder.error.message}</div> : null}</>
+            <>
+              {handleCreateOrder.isError ? (
+                <div>
+                  An error occurred:{" "}
+                  {handleCreateOrder.error.response.data.message.message?.length
+                    ? handleCreateOrder.error.response.data.message.message.join(",")
+                    : handleCreateOrder.error.response.data.message.error}
+                </div>
+              ) : null}
+            </>
           )}
           {handleCreateOrder.isSuccess ? <div>Order processed successfully</div> : null}
         </div>
