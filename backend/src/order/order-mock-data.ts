@@ -18,6 +18,7 @@ export const orderMockData: IOrder = {
   total: 1,
   audit: Audit.create(auditMockData).getValue(),
   cartItems: [cartItemMock],
+  summary: '',
 };
 
 export const orderMock: CreateOrderDTO = {
@@ -26,4 +27,5 @@ export const orderMock: CreateOrderDTO = {
   singleClientId: id.toString(),
   total: 1,
   cartItems: [createItem],
+  summary: '',
 };

@@ -6,4 +6,5 @@ export interface ICreateOrderDTO {
   singleClientId: string;
   total: number;
   cartItems: IcartItems[];
+  summary: string;
 }

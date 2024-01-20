@@ -48,7 +48,7 @@ export class OrderService implements IOrderService {
 
   async createOrder(orderSummary: CreateOrderDTO): Promise<Result<IOrderResponseDTO>> {
     await this.singleclientService.validateContext();
-    const { state, type, singleClientId, total, cartItems } = orderSummary;
+    const { state, type, singleClientId, total, cartItems, summary } = orderSummary;
     const orderDuplicate = await this.orderRepository.getDuplicateOrder(type, singleClientId, cartItems);
     if (orderDuplicate) {
       throwApplicationError(HttpStatus.NOT_FOUND, 'Duplicate order detected. Please confirm.');
@@ -74,6 +74,7 @@ export class OrderService implements IOrderService {
         type,
         total,
         singleclientId: singleclientObjId,
+        summary,
         audit,
       });
       const orderModel: OrderDataModel = this.orderMapper.toPersistence(order);

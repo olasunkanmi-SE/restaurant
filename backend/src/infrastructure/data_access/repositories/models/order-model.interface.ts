@@ -13,4 +13,5 @@ export interface IOrderDataModel {
   readonly orderManagerId?: Types.ObjectId;
   readonly cartItems?: CartItemDataModel[];
   readonly orderStatusId: Types.ObjectId;
+  readonly summary: string;
 }
