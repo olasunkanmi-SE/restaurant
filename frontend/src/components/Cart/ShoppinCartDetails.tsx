@@ -5,7 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { CONSTANTS } from "../../constants/constant";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { OrderSummary } from "../../reducers";
-import { calculateServiceCharge, calculateTotalOrderAmount, setLocalStorageData, wordWrap } from "../../utility/utils";
+import {
+  calculateServiceCharge,
+  calculateTotalOrderAmount,
+  clearStorage,
+  setLocalStorageData,
+  wordWrap,
+} from "../../utility/utils";
 import { QtyButton } from "../MenuItems/addItemButton";
 import { CallToAction } from "../Utilities/modal";
 import { CartSelectedItems } from "./CartSelectedItems";
@@ -85,8 +91,17 @@ export const ShoppingCartDetails = () => {
     mutationFn: async (order: ICreateOrderDTO) => {
       return await axios.post("orders/create", order);
     },
-    onSuccess: (data, variables, context) => {},
-    onError: (data, variables, context) => {},
+    onSuccess: (data) => {
+      if (data.data.isSuccess) {
+        resetCart();
+        clearStorage();
+        closeCart();
+        navigate("/");
+      }
+    },
+    onError: (data) => {
+      console.log(data);
+    },
   });
 
   return (
