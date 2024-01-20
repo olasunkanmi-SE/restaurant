@@ -99,9 +99,6 @@ export const ShoppingCartDetails = () => {
         navigate("/");
       }
     },
-    onError: (data) => {
-      console.log(data);
-    },
   });
 
   return (
