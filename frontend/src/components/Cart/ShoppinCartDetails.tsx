@@ -86,10 +86,10 @@ export const ShoppingCartDetails = () => {
 
   const handleCreateOrder: any = useMutation({
     mutationFn: async (order: ICreateOrderDTO) => {
-      const response = await axios.post("orders/create", order);
-      const x = response.data;
-      return response;
+      return await axios.post("orders/create", order);
     },
+    onSuccess: (data, variables, context) => {},
+    onError: (data, variables, context) => {},
   });
 
   return (

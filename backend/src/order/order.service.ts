@@ -124,11 +124,12 @@ export class OrderService implements IOrderService {
         const insertedItems: Result<SelectedCartItem[]> = await this.selectedCartItemRepository.insertMany(
           selectedCartItemsDataModel,
         );
-        const notes = await this.createOrderNotes(cartItems, orderId);
         if (!insertedItems.isSuccess) {
           throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Could not create an order`);
         }
-        const response: IOrderResponseDTO | undefined = OrderParser.createOrderResponse(savedOrder, notes);
+        const notes = await this.createOrderNotes(cartItems, orderId);
+        const notesToSave: OrderNote[] = notes || [];
+        const response: IOrderResponseDTO | undefined = OrderParser.createOrderResponse(savedOrder, notesToSave);
         const savedSelectedItems = insertedItems.getValue();
         const savedItemsMap = savedSelectedItems.reduce((map, item) => {
           const cartItemIdToString = this.cartItemRepository.objectIdToString(item.cartItemId);
@@ -161,20 +162,21 @@ export class OrderService implements IOrderService {
   }
 
   async createOrderNotes(cartItems: CreateCartItemsDTO[], orderId: Types.ObjectId): Promise<OrderNote[]> {
-    const orderNotes = cartItems.map(({ menuId, note }: CreateCartItemsDTO) => {
-      let noteToSave: { menuId: Types.ObjectId; note: string; orderId: Types.ObjectId } | undefined;
+    const orderNotes: { menuId: Types.ObjectId; note: string; orderId: Types.ObjectId }[] = [];
+    cartItems.forEach(({ menuId, note }: CreateCartItemsDTO) => {
       if (note?.length) {
-        noteToSave = {
+        orderNotes.push({
           menuId,
           note: note,
           orderId: orderId,
-        };
+        });
       }
-      return noteToSave;
     });
-    const notesToSave = orderNotes.filter((note) => note !== undefined);
-    const notes = await this.orderNoteService.createNotes(notesToSave);
-    return notes.getValue();
+
+    if (orderNotes.length) {
+      const notes = await this.orderNoteService.createNotes(orderNotes);
+      return notes.getValue();
+    }
   }
 
   async createOrderStatusQueue(orderStatusId: Types.ObjectId, orderId: Types.ObjectId) {
