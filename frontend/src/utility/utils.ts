@@ -62,7 +62,7 @@ export const clearStorage = () => {
   localStorage.clear();
 };
 
-export const removeLocalStorageItem = (key: string) => {
+export const removeLocalStorageData = (key: string) => {
   return localStorage.removeItem(key);
 };
 

@@ -5,7 +5,7 @@ import { menuToMenuStateMapper, selectedItemToMenuMapper } from "../application/
 import { ShoppingCart } from "../components/Cart/ShoppingCart";
 import { IMenuData } from "../models/menu.model";
 import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, SelectedItem } from "../reducers";
-import { cartExpiry, getLocalStorageData, removeLocalStorageItem, setLocalStorageData } from "../utility/utils";
+import { cartExpiry, getLocalStorageData, removeLocalStorageData, setLocalStorageData } from "../utility/utils";
 import { shoppingCartProps, shoppingCartProviderProps } from "./shoppingCartTypes";
 
 export const shoppingCartContext = createContext({} as shoppingCartProps);
@@ -28,8 +28,8 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     const storedCart = getLocalStorageData("cart", true);
     if (storedCart) {
       if (cartExpiryDate && cartExpiry(cartExpiryDate)) {
-        removeLocalStorageItem("cart");
-        removeLocalStorageItem("expiry");
+        removeLocalStorageData("cart");
+        removeLocalStorageData("expiry");
       }
       dispatch({ type: CartActionsType.LOAD_CART, payload: JSON.parse(storedCart) });
     }
