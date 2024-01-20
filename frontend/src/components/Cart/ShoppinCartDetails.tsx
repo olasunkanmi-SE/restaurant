@@ -102,6 +102,8 @@ export const ShoppingCartDetails = () => {
     onError: (data) => {
       console.log(data);
     },
+    onSuccess: (data, variables, context) => {},
+    onError: (data, variables, context) => {},
   });
 
   return (
