@@ -5,7 +5,7 @@ import { menuToMenuStateMapper, selectedItemToMenuMapper } from "../application/
 import { ShoppingCart } from "../components/Cart/ShoppingCart";
 import { IMenuData } from "../models/menu.model";
 import { CartActionsType, CartItem, OrderSummary, cartReducer, initialCartState, SelectedItem } from "../reducers";
-import { cartExpiry, getLocalStorageData, setLocalStorageData } from "../utility/utils";
+import { cartExpiry, getLocalStorageData, removeLocalStorageItem, setLocalStorageData } from "../utility/utils";
 import { shoppingCartProps, shoppingCartProviderProps } from "./shoppingCartTypes";
 
 export const shoppingCartContext = createContext({} as shoppingCartProps);
@@ -28,8 +28,8 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
     const storedCart = getLocalStorageData("cart", true);
     if (storedCart) {
       if (cartExpiryDate && cartExpiry(cartExpiryDate)) {
-        setLocalStorageData("cart", "", false);
-        setLocalStorageData("expiry", "", false);
+        removeLocalStorageItem("cart");
+        removeLocalStorageItem("expiry");
       }
       dispatch({ type: CartActionsType.LOAD_CART, payload: JSON.parse(storedCart) });
     }
@@ -287,6 +287,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
           calculateMenuTotalPriceFromMenuItems(menuItem.menuId);
         }
       }
+      setLocalStorageData("expiry", new Date().toISOString(), true);
       setLocalStorageData("cart", JSON.stringify(state), true);
       dispatch({
         type: CartActionsType.ADD_ITEM_TO_CART,
@@ -347,7 +348,6 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       console.log(state);
       navigate("/");
       setLocalStorageData("cart", JSON.stringify(state), true);
-      setLocalStorageData("expiry", new Date().toISOString(), true);
       dispatch({
         type: CartActionsType.ADD_MENU_TO_CART,
       });

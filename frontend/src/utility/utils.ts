@@ -62,6 +62,10 @@ export const clearStorage = () => {
   localStorage.clear();
 };
 
+export const removeLocalStorageItem = (key: string) => {
+  return localStorage.removeItem(key);
+};
+
 export const wordWrap = (text: string, wordLimit: number) => {
   return _.truncate(text, {
     length: wordLimit,
