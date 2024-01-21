@@ -95,8 +95,9 @@ export class OrderService implements IOrderService {
         const orderWithCartItems = await this.orderRepository.upsert(
           { _id: orderId },
           this.orderMapper.toPersistence(savedOrder),
+          { session },
         );
-        if (orderWithCartItems.isSuccess === false) {
+        if (!orderWithCartItems.isSuccess) {
           throwApplicationError(HttpStatus.INTERNAL_SERVER_ERROR, `Error while creating order`);
         }
 
@@ -122,7 +123,7 @@ export class OrderService implements IOrderService {
           }),
         );
         const selectedCartItemsDataModel = selectedItems.map((item) => this.selectedItemMapper.toPersistence(item));
-        const insertedItems: Result<SelectedCartItem[]> = await this.selectedCartItemRepository.insertMany(
+        const insertedItems: Result<Types.ObjectId[]> = await this.selectedCartItemRepository.insertManyWithSession(
           selectedCartItemsDataModel,
         );
         if (!insertedItems.isSuccess) {
@@ -131,7 +132,14 @@ export class OrderService implements IOrderService {
         const notes = await this.createOrderNotes(cartItems, orderId);
         const notesToSave: OrderNote[] = notes || [];
         const response: IOrderResponseDTO | undefined = OrderParser.createOrderResponse(savedOrder, notesToSave);
-        const savedSelectedItems = insertedItems.getValue();
+        const savedSelectedItemIds = insertedItems.getValue();
+        let savedSelectedItems: SelectedCartItem[];
+        if (savedSelectedItemIds.length) {
+          const result = await this.selectedCartItemRepository.find({ _id: { $in: savedSelectedItemIds } });
+          if (result.isSuccess) {
+            savedSelectedItems = result.getValue();
+          }
+        }
         const savedItemsMap = savedSelectedItems.reduce((map, item) => {
           const cartItemIdToString = this.cartItemRepository.objectIdToString(item.cartItemId);
           !map.has(cartItemIdToString) ? map.set(cartItemIdToString, [item]) : map.get(cartItemIdToString).push(item);
