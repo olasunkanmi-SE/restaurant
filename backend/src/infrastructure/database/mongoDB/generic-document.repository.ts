@@ -113,7 +113,7 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
     const queryOptions: any = {
       new: true,
     };
-    if (options.session) {
+    if (options?.session) {
       queryOptions.session = options.session;
     }
     const result = await this.DocumentModel.findByIdAndUpdate(filterQuery, update, queryOptions);
@@ -134,7 +134,7 @@ export abstract class GenericDocumentRepository<TEntity, T extends Document> imp
       upsert: true,
       new: true,
     };
-    if (options.session) {
+    if (options?.session) {
       queryOption.session = options.session;
     }
     const result = await this.DocumentModel.findOneAndUpdate(filterQuery, document, { session: options.session });
