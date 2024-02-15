@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { BaseDocument } from '../../../database';
 import { ISingleClientData } from '../models/singleclient-model.interface';
-import { SingleClientStatus } from '../../../../application/constants/constants';
+import { Role, SingleClientStatus } from '../../../../application/constants/constants';
 
 export type SingleClientDocument = SingleClientDataModel & Document;
 
@@ -29,7 +29,7 @@ export class SingleClientDataModel extends BaseDocument implements ISingleClient
   @Prop({ type: String, required: true })
   passwordHash: string;
 
-  @Prop({ type: String, default: 'admin' })
+  @Prop({ type: String, enum: Object.values(Role), default: Role.USER })
   role: string;
 
   @Prop({ type: Boolean, default: false })
