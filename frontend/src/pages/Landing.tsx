@@ -1,7 +1,12 @@
-import { CSSProperties } from "react";
+import { CSSProperties, useState } from "react";
 import { Button, Stack } from "react-bootstrap";
+import { CallToAction } from "../components/Utilities/modal";
+import { AuthModal } from "../components/Utilities/AuthModal";
 
 export const Landing = () => {
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
   const pageStyle: CSSProperties = {
     margin: 0,
     padding: 0,
@@ -14,7 +19,7 @@ export const Landing = () => {
     left: 0,
     width: "100%",
     height: "100%",
-    backgroundImage: `url(public/food-background.jpg)`,
+    backgroundImage: `url(/food-background.jpg)`,
     backgroundSize: "cover",
     backgroundPosition: "center",
     opacity: 0.5,
@@ -30,6 +35,7 @@ export const Landing = () => {
       <div style={backgroundOverlayStyle}></div>
       <Stack direction="vertical" gap={3} className="p-3 fixed-bottom">
         <Button
+          onClick={handleShowModal}
           className="w-10"
           size="lg"
           style={{ ...buttonStyle, backgroundColor: "#407c54", borderColor: "#407c54" }}
@@ -40,6 +46,12 @@ export const Landing = () => {
           Order HISTORY
         </Button>
       </Stack>
+
+      <div>
+        <CallToAction handleAction={handleCloseModal} handleClose={handleCloseModal} show={showModal}>
+          <AuthModal />
+        </CallToAction>
+      </div>
     </div>
   );
 };
