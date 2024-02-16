@@ -10,4 +10,9 @@ export class CreateSingleClientDTO {
   @IsNotEmpty()
   @MaxLength(256)
   readonly passwordHash: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(128)
+  readonly role: string;
 }
