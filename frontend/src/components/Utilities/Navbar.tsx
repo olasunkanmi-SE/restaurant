@@ -1,4 +1,4 @@
-import { faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeftLong, faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Button, Nav, Stack } from "react-bootstrap";
@@ -28,8 +28,10 @@ export const Navigation = () => {
   };
 
   const handleNavMenu = () => {
-    return location.pathname === "/" ? (
-      <span style={{ color: "#407c54" }}>history</span>
+    return location.pathname === "/menu" ? (
+      <span style={{ fontWeight: 600 }} onClick={previousPage}>
+        <FontAwesomeIcon icon={faCircleUser} size="xl" /> Profile
+      </span>
     ) : (
       <span style={{ fontWeight: 600 }} onClick={previousPage}>
         <FontAwesomeIcon icon={faArrowLeftLong} size="xl" /> Back
