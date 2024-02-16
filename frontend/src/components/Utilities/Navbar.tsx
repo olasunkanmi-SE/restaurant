@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button, Nav, Stack } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { CONSTANTS } from "../../constants/constant";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { calculateQuantity } from "../../utility/utils";
@@ -16,6 +16,7 @@ export const Navigation = () => {
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const displayModal = () => {
     handleShowModal();
@@ -26,6 +27,16 @@ export const Navigation = () => {
     resetMenu();
   };
 
+  const handleNavMenu = () => {
+    return location.pathname === "/" ? (
+      <span style={{ color: "#407c54" }}>history</span>
+    ) : (
+      <span style={{ fontWeight: 600 }} onClick={previousPage}>
+        <FontAwesomeIcon icon={faArrowLeftLong} size="xl" /> Back
+      </span>
+    );
+  };
+
   return (
     <>
       <Navbar sticky="top" className="bg-white shadow-sm mb-3">
@@ -33,9 +44,7 @@ export const Navigation = () => {
           <Nav className="me-auto">
             <Nav.Link to="/" as={NavLink}>
               <Stack direction="horizontal" gap={4}>
-                <span style={{ fontWeight: 600 }} onClick={previousPage}>
-                  <FontAwesomeIcon icon={faArrowLeftLong} size="xl" /> Back
-                </span>
+                <span>{handleNavMenu()}</span>
               </Stack>
             </Nav.Link>
           </Nav>
