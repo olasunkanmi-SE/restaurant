@@ -4,6 +4,7 @@ import { ShoppingCartProvider } from "./contexts/shoppingCartContext";
 import { About, FoodMenu, Home, SignUp, Login } from "./pages";
 import { CheckOutOrAddToCart } from "./components/Utilities/Conditional";
 import { Navigation } from "./components/Utilities/Navbar";
+import { Landing } from "./pages/Landing";
 
 function App() {
   return (
@@ -21,7 +22,8 @@ function App() {
                   </>
                 }
               >
-                <Route index element={<Home />} />
+                <Route index element={<Landing />} />
+                <Route path="/menu" element={<Home />} />
                 <Route path="/about" element={<About />} />
                 <Route path="menu/:id" element={<FoodMenu />} />
                 <Route path="/register" element={<SignUp />} />
