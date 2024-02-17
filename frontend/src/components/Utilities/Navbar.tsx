@@ -50,6 +50,9 @@ export const Navigation = () => {
               </Stack>
             </Nav.Link>
           </Nav>
+          {/* <span style={{ fontWeight: 600 }} onClick={previousPage}>
+            <FontAwesomeIcon icon={faCircleUser} size="xl" /> Profile
+          </span> */}
           <Button
             style={{ width: "3rem", height: "3rem", position: "relative" }}
             variant="outline-secondary"
