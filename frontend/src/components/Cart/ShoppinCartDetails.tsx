@@ -20,6 +20,7 @@ import { OrderApi } from "../../apis/orderApi";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { useMutation } from "react-query";
 import { ICreateOrderDTO } from "../../dto/order";
+import { ApiResponse } from "../Utilities/ApiResponse";
 
 export const ShoppingCartDetails = () => {
   const navigate = useNavigate();
@@ -219,23 +220,7 @@ export const ShoppingCartDetails = () => {
         >
           PLACE ORDER RM{handleCalculateTotalOrder() + calculateServiceCharge(calculateTotalOrderAmount())}
         </Button>
-        <div>
-          {handleCreateOrder.isLoading ? (
-            "Creating Order..."
-          ) : (
-            <>
-              {handleCreateOrder.isError ? (
-                <div>
-                  An error occurred:{" "}
-                  {handleCreateOrder.error.response.data.message.message?.length
-                    ? handleCreateOrder.error.response.data.message.message.join(",")
-                    : handleCreateOrder.error.response.data.message.error}
-                </div>
-              ) : null}
-            </>
-          )}
-          {handleCreateOrder.isSuccess ? <div>Order processed successfully</div> : null}
-        </div>
+        <ApiResponse mutation={handleCreateOrder} />
       </div>
       <div>
         {showClearCartModal && (

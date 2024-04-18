@@ -347,7 +347,7 @@ export const ShoppingCartProvider = ({ children }: shoppingCartProviderProps) =>
       state.menus = [];
       state.quantity = 0;
       console.log(state);
-      navigate("/");
+      navigate("/menu");
       setLocalStorageData("cart", JSON.stringify(state), true);
       setLocalStorageData("expiry", new Date().toISOString(), true);
       dispatch({

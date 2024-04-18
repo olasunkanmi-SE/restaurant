@@ -17,7 +17,7 @@ export const Landing = () => {
     backgroundImage: `url(public/food-background.jpg)`,
     backgroundSize: "cover",
     backgroundPosition: "center",
-    opacity: 0.5,
+    opacity: 0.1,
   };
 
   const buttonStyle: CSSProperties = {
