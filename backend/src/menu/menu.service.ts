@@ -36,6 +36,14 @@ export class MenuService implements IMenuService {
   ) {
     this.context = this.contextService.getContext();
   }
+  /**
+   * Creates a new menu and associates it with a restaurant and category.
+   * If items are provided, they are also associated with the menu.
+   *
+   * @param props - An object containing the properties of the menu to be created
+   * @returns A Promise that resolves to a Result object containing an IMenuResponseDTO object
+   * @throws {ApplicationError} If the menu name already exists, the restaurant does not exist, or the category does not exist
+   */
 
   async createMenu(props: CreateMenuDTO): Promise<Result<IMenuResponseDTO>> {
     await this.singleclientService.validateContext();
@@ -83,6 +91,7 @@ export class MenuService implements IMenuService {
     return Result.ok(MenuParser.createMenuResponse(menu.getValue()));
   }
 
+  //Refactor
   async updateMenu(props: UpdateMenuDTO, id: Types.ObjectId): Promise<Result<IMenuResponseDTO>> {
     const menuIdQuery = { _id: id };
     const result = await this.menuRepository.findById(menuIdQuery);
@@ -113,6 +122,13 @@ export class MenuService implements IMenuService {
     return response;
   }
 
+  /**
+   * Deletes a menu by its ID.
+   *
+   * @param id - The ID of the menu to delete
+   * @returns A Promise that resolves to a Result object containing a boolean indicating whether the menu was deleted successfully
+   * @throws {ApplicationError} If the menu could not be deleted
+   */
   async deleteMenu(id: Types.ObjectId): Promise<Result<boolean>> {
     const response = await this.menuRepository.deleteMenu(id);
     if (!response) {
@@ -121,26 +137,35 @@ export class MenuService implements IMenuService {
     return Result.ok(true);
   }
 
+  /**
+   * Retrieves the menu of a restaurant by its ID
+   *
+   * @param restaurantId - The ID of the restaurant to retrieve the menu for
+   * @returns A Promise that resolves to a Result object containing an array of IMenuResponseDTO objects
+   */
   async getMenuByRestaurantId(restaurantId: string): Promise<Result<IMenuResponseDTO[]>> {
     const result = await this.menuRepository.getMenuByRestaurantId(restaurantId);
-    let menus: Menu[] | [];
+    let menus: Menu[] = [];
     if (result.getValue()) {
       menus = result.getValue();
     }
-    return Result.ok(menus?.length ? MenuParser.createMenusResponse(menus) : []);
+    return Result.ok<IMenuResponseDTO[]>(menus?.length ? MenuParser.createMenusResponse(menus) : []);
   }
 
+  /**
+   * Retrieves the extended menu for a restaurant, including the restaurant's details.
+   *
+   * @param restaurantId - The ID of the restaurant to retrieve the menu for
+   * @returns A Promise that resolves to a Result object containing an array of IMenuResponseDTO objects
+   */
   async getExtendedMenuByRestaurantId(restaurantId: string): Promise<Result<IMenuResponseDTO[]>> {
     const result = await this.menuRepository.getMenuByRestaurantId(restaurantId);
-    let menus: Menu[] | [];
-    if (result.getValue()) {
-      menus = result.getValue();
+    if (!result.getValue()) {
+      return Result.ok([]);
     }
+    const menus = result.getValue()!;
     const id = menus[0].restaurantId;
-    let restaurant: Restaurant | undefined;
-    if (id) {
-      restaurant = await this.restaurantRepository.getRestaurant(id);
-    }
-    return Result.ok(menus?.length ? MenuParser.createMenusResponse(menus, restaurant) : []);
+    const restaurant = await this.restaurantRepository.getRestaurant(id);
+    return Result.ok(MenuParser.createMenusResponse(menus, restaurant));
   }
 }
