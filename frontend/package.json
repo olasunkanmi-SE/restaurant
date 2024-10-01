@@ -1,8 +1,14 @@
 {
-  "name": "ui",
+   "name": "restaurant-application",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "The restaurant is a user-friendly web application that revolutionizes the dining experience by allowing customers to customize and place their orders directly from their smartphones conveniently. Built with NestJs and React",
+  "author": {
+    "name": "Oyinlola Olasunkanmi Raymond",
+    "url":"https://www.olasunkanmi.app/"
+  },
+  "keywords": ["restaurant", "Restaurant-management System github", "reservation system", "Restaurant github example", "Restaurant ordering system github", "nestjs github project", "NestJS open source projects", "Nestjs-mongoDB-example github"],
   "scripts": {
     "start:dev": "vite",
     "build": "tsc && vite build",
