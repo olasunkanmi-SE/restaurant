@@ -1,26 +1,145 @@
-# Restaurant
+# Restaurant Management System
 
-The restaurant is a user-friendly web application that revolutionizes the dining experience by allowing customers to conveniently customize and place their orders directly from their smartphones. With an intuitive interface and a range of features, The restaurant simplifies the ordering process and enhances customer satisfaction.
-The web application is designed to streamline the ordering process, improve order accuracy, and provide a convenient experience for customers. Whether you're dining in or opting for takeout, the restaurant empowers you to personalize your orders and have them prepared to your liking.
+This project is a comprehensive restaurant management system with a NestJS backend and React frontend, designed to streamline restaurant operations and enhance customer experience.
 
-Key Features:
-- Menu Customization: Personalize your orders by selecting specific ingredients, toppings, and customization options for each item.
-- Seamless Ordering: Browse the menu, add items to your cart, and place your order with just a few taps.
-- Real-Time Updates: Receive instant updates on the status of your order, including preparation, cooking, and estimated delivery or pickup times. (Coming Soon)
-- Special Requests: Add special requests or dietary preferences for specific items, ensuring your order is prepared to your preferences.
-- Secure Payments: Make hassle-free payments directly through the app, using a range of secure payment options. (Coming Soon)
-- Order History: Access your order history, review past orders, and easily reorder your favorite items. (Coming Soon)
-- Loyalty Rewards: Earn loyalty points or rewards for frequent orders, encouraging customer loyalty and repeat business. (Coming Soon)
+The system provides functionality for managing menus, orders, restaurants, and customers. It includes features such as user authentication, role-based access control, and real-time order processing.
 
-## Getting Started
+## Repository Structure
 
-Clone this repository
+```
+.
+├── backend/
+│   ├── src/
+│   │   ├── addon/
+│   │   ├── application/
+│   │   ├── audit/
+│   │   ├── cart/
+│   │   ├── category/
+│   │   ├── domain/
+│   │   ├── infrastructure/
+│   │   ├── item/
+│   │   ├── location/
+│   │   ├── menu/
+│   │   ├── order/
+│   │   ├── order_manager/
+│   │   ├── order_notes/
+│   │   ├── order_processing_queue/
+│   │   ├── order_statuses/
+│   │   ├── restaurant/
+│   │   ├── shared/
+│   │   ├── singleclient/
+│   │   └── utils/
+│   ├── test/
+│   ├── nest-cli.json
+│   ├── ormconfig.ts
+│   ├── package.json
+│   └── tsconfig.json
+└── frontend/
+    ├── src/
+    │   ├── apis/
+    │   ├── application/
+    │   ├── components/
+    │   ├── contexts/
+    │   ├── data/
+    │   ├── hooks/
+    │   ├── interfaces/
+    │   ├── models/
+    │   ├── pages/
+    │   ├── reducers/
+    │   └── utility/
+    ├── package.json
+    └── tsconfig.json
+```
 
-cd backend
-npm run start:dev
+## Usage Instructions
 
-cd frontend
-npm run start
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```
+   cd backend && npm install
+   cd ../frontend && npm install
+   ```
+
+### Running the Application
+
+1. Start the backend server:
+   ```
+   cd backend && npm run start:dev
+   ```
+2. Start the frontend development server:
+   ```
+   cd frontend && npm run start:dev
+   ```
+
+### API Endpoints
+
+- `/api/restaurants`: CRUD operations for restaurants
+- `/api/menus`: CRUD operations for menus
+- `/api/items`: CRUD operations for menu items
+- `/api/orders`: CRUD operations for orders
+- `/api/singleclients`: User management and authentication
+
+### Authentication
+
+The system uses JWT for authentication. To access protected routes, include the JWT token in the Authorization header of your requests:
+
+```
+Authorization: Bearer <your_jwt_token>
+```
+
+### Testing
+
+Run backend tests:
+
+```
+cd backend && npm run test
+```
+
+Run frontend tests:
+
+```
+cd frontend && npm run test
+```
+
+## Data Flow
+
+1. User authentication: Users sign in through the frontend, which sends a request to the backend's authentication service.
+2. Menu management: Restaurant owners can create and update menus through the frontend, which sends requests to the backend's menu service.
+3. Order processing: Customers place orders through the frontend, which sends the order details to the backend's order service.
+4. Order status updates: The backend processes orders and updates their status, which is then reflected in the frontend in real-time.
+
+```
+[Frontend] <--> [API Gateway] <--> [Backend Services (Auth, Menu, Order, etc.)] <--> [Database]
+```
+
+## Infrastructure
+
+The backend application uses NestJS and is structured with the following key components:
+
+- AuthModule: Handles user authentication and authorization
+- DocumentDatabaseModule: Configures the MongoDB connection
+- Various repository interfaces and implementations for data access
+
+Key resources:
+
+- MongoDB database (configured in DocumentDatabaseModule)
+- JWT for authentication (configured in AuthModule)
+
+## Deployment
+
+1. Set up environment variables for both backend and frontend
+2. Build the backend: `cd backend && npm run build`
+3. Build the frontend: `cd frontend && npm run build`
+4. Deploy the built backend to your server
+5. Deploy the built frontend to a static file hosting service
+
+## Troubleshooting
+
+- If you encounter CORS issues, ensure that the backend's CORS settings match your frontend's domain.
+- For database connection issues, verify that the `DATABASE_URL` environment variable is correctly set.
+- If authentication fails, check that the JWT secret keys are properly configured in both the backend and frontend.
 
 <img width="363" alt="Screenshot 2023-06-22 at 10 32 04 AM" src="https://github.com/olasunkanmi-SE/restaurant/assets/60177090/e5602acd-788b-4274-88bf-1b60755da07d">
 
@@ -37,11 +156,3 @@ npm run start
 <img width="359" alt="Screenshot 2023-06-22 at 10 55 07 AM" src="https://github.com/olasunkanmi-SE/restaurant/assets/60177090/f8a4c014-3cec-4c77-9f73-e878b532b6e0">
 
 <img width="362" alt="Screenshot 2023-07-25 at 9 21 50 PM" src="https://github.com/olasunkanmi-SE/restaurant/assets/60177090/2905a9c3-9a85-4156-851e-d7df753d3c3b">
-
-
-
-
-
-
-
-
