@@ -127,14 +127,6 @@ Key resources:
 - MongoDB database (configured in DocumentDatabaseModule)
 - JWT for authentication (configured in AuthModule)
 
-## Deployment
-
-1. Set up environment variables for both backend and frontend
-2. Build the backend: `cd backend && npm run build`
-3. Build the frontend: `cd frontend && npm run build`
-4. Deploy the built backend to your server
-5. Deploy the built frontend to a static file hosting service
-
 ## Troubleshooting
 
 - If you encounter CORS issues, ensure that the backend's CORS settings match your frontend's domain.
