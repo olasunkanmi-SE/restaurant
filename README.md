@@ -141,6 +141,7 @@ Key resources:
 - For database connection issues, verify that the `DATABASE_URL` environment variable is correctly set.
 - If authentication fails, check that the JWT secret keys are properly configured in both the backend and frontend.
 
+## sample
 <img width="363" alt="Screenshot 2023-06-22 at 10 32 04 AM" src="https://github.com/olasunkanmi-SE/restaurant/assets/60177090/e5602acd-788b-4274-88bf-1b60755da07d">
 
 <img width="360" alt="Screenshot 2023-06-22 at 10 49 25 AM" src="https://github.com/olasunkanmi-SE/restaurant/assets/60177090/55685caf-f6a4-4150-a92e-96506b21aca4">
