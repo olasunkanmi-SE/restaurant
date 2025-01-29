@@ -4,6 +4,9 @@ This project is a comprehensive restaurant management system with a NestJS backe
 
 The system provides functionality for managing menus, orders, restaurants, and customers. It includes features such as user authentication, role-based access control, and real-time order processing.
 
+## Postman Collection
+https://documenter.getpostman.com/view/6737031/2sAYQiC8QX#640e3128-ede1-4647-b61e-f059300e7917
+
 ## Repository Structure
 
 ```
