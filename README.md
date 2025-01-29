@@ -106,9 +106,10 @@ cd frontend && npm run test
 ## Data Flow
 
 1. User authentication: Users sign in through the frontend, which sends a request to the backend's authentication service.
-2. Menu management: Restaurant owners can create and update menus through the frontend, which sends requests to the backend's menu service.
-3. Order processing: Customers place orders through the frontend, which sends the order details to the backend's order service.
-4. Order status updates: The backend processes orders and updates their status, which is then reflected in the frontend in real-time.
+2. Restaurant owners create a new restaurant
+4. Menu management: Restaurant owners can create and update menus.
+5. Order processing: Customers place orders through the frontend, which sends the order details to the backend's order service.
+6. Order status updates: The backend processes orders and updates their status, which is then reflected in the frontend in real-time.
 
 ```
 [Frontend] <--> [API Gateway] <--> [Backend Services (Auth, Menu, Order, etc.)] <--> [Database]
