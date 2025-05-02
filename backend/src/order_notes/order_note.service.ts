@@ -28,8 +28,10 @@ export class OrderNoteService implements IOrderNoteService {
   async createNotes(props: CreateOrderNoteDTO[]): Promise<Result<OrderNote[]>> {
     try {
       const notes = props.map((note) => {
-        const noteEntity = this.createOrderNoteEntity(note);
-        return this.orderNoteMapper.toPersistence(noteEntity);
+        if (note) {
+          const noteEntity = this.createOrderNoteEntity(note);
+          return this.orderNoteMapper.toPersistence(noteEntity);
+        }
       });
       return this.orderNoteRepository.insertMany(notes);
     } catch (error) {

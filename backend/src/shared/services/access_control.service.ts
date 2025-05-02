@@ -27,14 +27,19 @@ export class AccessControlService implements IAccessControlService {
   }
 
   public isAuthorized({ currentRole, requiredRole }: IIsAuthorizedProps): boolean {
-    let authorized = false;
+    let isAuthorized = false;
     for (const hierarchy of this.hierarchies) {
       const priority = hierarchy.get(currentRole);
       const requirePriority = hierarchy.get(requiredRole);
-      if (priority && requirePriority && priority >= requirePriority) {
-        authorized = true;
+      if (priority && requirePriority) {
+        if (priority >= requirePriority) {
+          isAuthorized = true;
+        }
+        if (priority === requirePriority) {
+          isAuthorized = true;
+        }
       }
     }
-    return authorized;
+    return isAuthorized;
   }
 }

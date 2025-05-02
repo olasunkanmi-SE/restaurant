@@ -10,6 +10,7 @@ import { IOrder } from './order-entity.interface';
 const id = new Types.ObjectId();
 
 export const orderMockData: IOrder = {
+  orderStatusId: id,
   state: OrderStatus.create(orderStatusMockData),
   type: 'DINE_IN',
   singleclientId: id,
@@ -17,12 +18,14 @@ export const orderMockData: IOrder = {
   total: 1,
   audit: Audit.create(auditMockData).getValue(),
   cartItems: [cartItemMock],
+  summary: '',
 };
 
 export const orderMock: CreateOrderDTO = {
   state: 'CREATED',
   type: 'DINE_IN',
-  singleclientId: id.toString(),
+  singleClientId: id.toString(),
   total: 1,
   cartItems: [createItem],
+  summary: '',
 };

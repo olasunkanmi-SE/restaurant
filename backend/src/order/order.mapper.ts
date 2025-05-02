@@ -14,7 +14,19 @@ export class OrderMapper implements IMapper<Order, OrderDataModel> {
     private readonly orderStatusMapper: OrderStatusMapper,
   ) {}
   toPersistence(entity: Order): OrderDataModel {
-    const { id, state, type, singleclientId, total, discount, orderManagerId, audit, cartItems } = entity;
+    const {
+      id,
+      state,
+      type,
+      singleclientId,
+      total,
+      discount,
+      orderManagerId,
+      audit,
+      cartItems,
+      orderStatusId,
+      summary,
+    } = entity;
     const {
       auditCreatedBy,
       auditCreatedDateTime,
@@ -25,13 +37,15 @@ export class OrderMapper implements IMapper<Order, OrderDataModel> {
     } = audit;
     const orderDocument: OrderDataModel = {
       _id: id,
-      state: this.orderStatusMapper.toPersistence(state),
+      state: state ? this.orderStatusMapper.toPersistence(state) : undefined,
       type,
       singleclientId,
+      orderStatusId,
       total,
       discount,
       cartItems: cartItems?.length ? cartItems.map((cartItem) => this.cartItemMapper.toPersistence(cartItem)) : [],
       orderManagerId,
+      summary,
       auditCreatedBy,
       auditCreatedDateTime,
       auditModifiedBy,
@@ -43,15 +57,18 @@ export class OrderMapper implements IMapper<Order, OrderDataModel> {
   }
 
   toDomain(model: OrderDataModel): Order {
-    const { state, type, singleclientId, total, discount, orderManagerId, _id, cartItems } = model;
+    const { state, type, singleclientId, total, discount, orderManagerId, _id, cartItems, orderStatusId, summary } =
+      model;
     const entity: Order = Order.create(
       {
-        state: this.orderStatusMapper.toDomain(state),
+        state: state ? this.orderStatusMapper.toDomain(state) : undefined,
         type,
         singleclientId,
+        orderStatusId,
         total,
         discount,
         orderManagerId,
+        summary,
         audit: this.auditMapper.toDomain(model),
         cartItems: cartItems?.length ? cartItems.map((cartItem) => this.cartItemMapper.toDomain(cartItem)) : [],
       },

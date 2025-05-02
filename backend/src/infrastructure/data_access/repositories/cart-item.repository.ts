@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { CartItem } from 'src/cart/cart-item';
+import { Result } from 'src/domain';
 import { GenericDocumentRepository } from 'src/infrastructure/database';
+import { throwApplicationError } from 'src/infrastructure/utilities/exception-instance';
 import { CartItemMapper } from './../../../cart/cart-item.mapper';
 import { ICartItemRepository } from './interfaces/cart-item-repository.interface';
 import { CartItemDataModel, CartItemDocument } from './schemas/cartItem.schema';
@@ -22,10 +24,20 @@ export class CartItemRepository
     this.cartItemMapper = cartItemMapper;
   }
 
-  async updateCartItemSelectedItems(cartItems: CartItem[]): Promise<void> {
-    const document = cartItems.map((doc) => this.cartItemMapper.toPersistence(doc));
-    document.forEach((item) => {
-      this.updateOne({ _id: item._id }, { selectedItems: item.selectedItems });
-    });
+  async updateCartItemSelectedItems(cartItems: CartItem[]): Promise<Result<CartItem[]>> {
+    try {
+      const document = cartItems.map((doc) => this.cartItemMapper.toPersistence(doc));
+      const selectedItemsToUpdate = document.map((doc) => ({ _id: doc._id, selectedItems: doc.selectedItems }));
+      const result = await this.updateMany(
+        { _id: { $in: document.map((doc) => doc._id) } },
+        { $set: { selectedItems: selectedItemsToUpdate } },
+      );
+      if (!result.isSuccess) {
+        throwApplicationError(HttpStatus.BAD_REQUEST, '');
+      }
+      return result;
+    } catch (error) {
+      console.error('an error occured', error);
+    }
   }
 }

@@ -48,7 +48,7 @@ export class SingleClientService extends AuthService implements ISingleClientSer
     const { email } = props;
     const existingSingleClient: Result<SingleClient> = await this.singleclientRepository.findOne({ email });
     if (existingSingleClient.isSuccess && existingSingleClient.getValue().email === email) {
-      throwApplicationError(HttpStatus.BAD_REQUEST, `User with email ${props.email} already exists`);
+      throwApplicationError(HttpStatus.BAD_REQUEST, `User already exists, sign in.`);
     }
 
     const audit: Audit = Audit.createInsertContext(context);
@@ -84,7 +84,6 @@ export class SingleClientService extends AuthService implements ISingleClientSer
     }
     return Result.ok(SingleClientParser.createSingleClientResponse(singleclient));
   }
-  ß;
 
   async getSingleClients(): Promise<Result<ISingleClientResponseDTO[]>> {
     const isValidUser = await this.validateContext();

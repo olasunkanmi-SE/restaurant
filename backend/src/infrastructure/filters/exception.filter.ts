@@ -1,11 +1,11 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Inject } from '@nestjs/common';
+import { ArgumentsHost, Catch, HttpException, HttpStatus, Inject } from '@nestjs/common';
+import { BaseExceptionFilter } from '@nestjs/core';
 import { Request } from 'express';
 import * as fs from 'fs';
 import { TYPES } from '../../application/constants';
 import { IContextAwareLogger } from '../logger';
 import { APIResponseMessage } from './../../application/constants/constants';
 import { IExceptionResponse, IRequestException } from './exception-response.interface';
-import { BaseExceptionFilter } from '@nestjs/core';
 
 @Catch()
 export class ApplicationExceptionsFilter extends BaseExceptionFilter {

@@ -23,13 +23,15 @@ export const tokenExpiresIn = 3600000;
 export enum Role {
   ADMIN = 'ADMIN',
   USER = 'USER',
-  GUEST = 'CLIENT',
+  CLIENT = 'CLIENT',
+  SUPERADMIN = 'SUPERADMIN',
 }
 
 export const RoleOrder: Record<Role, number> = {
-  [Role.GUEST]: 1,
+  [Role.CLIENT]: 1,
   [Role.USER]: 2,
   [Role.ADMIN]: 3,
+  [Role.SUPERADMIN]: 4,
 };
 
 export const ROLE_KEY = 'role';

@@ -5,14 +5,27 @@ import { useNavigate } from "react-router-dom";
 import { CONSTANTS } from "../../constants/constant";
 import { useShoppingCart } from "../../hooks/UseShoppingCart";
 import { OrderSummary } from "../../reducers";
-import { calculateServiceCharge, calculateTotalOrderAmount, setLocalStorageData, wordWrap } from "../../utility/utils";
+import {
+  calculateServiceCharge,
+  calculateTotalOrderAmount,
+  clearStorage,
+  setLocalStorageData,
+  wordWrap,
+} from "../../utility/utils";
 import { QtyButton } from "../MenuItems/addItemButton";
 import { CallToAction } from "../Utilities/modal";
 import { CartSelectedItems } from "./CartSelectedItems";
 import { UpgradeShoppingCartItem } from "./ShoppingCartSelectedItemUpdate";
+import { OrderApi } from "../../apis/orderApi";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { useMutation } from "react-query";
+import { ICreateOrderDTO } from "../../dto/order";
+import { ApiResponse } from "../Utilities/ApiResponse";
 
 export const ShoppingCartDetails = () => {
   const navigate = useNavigate();
+  const order = OrderApi();
+  const axios = useAxiosPrivate();
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const { GetOrderSummary, resetCart, closeCart, updateCartItems } = useShoppingCart();
   const [showClearCartModal, setShowClearCartModal] = useState(false);
@@ -74,6 +87,20 @@ export const ShoppingCartDetails = () => {
     closeCart();
     navigate("/");
   };
+
+  const handleCreateOrder: any = useMutation({
+    mutationFn: async (order: ICreateOrderDTO) => {
+      return await axios.post("orders/create", order);
+    },
+    onSuccess: (data) => {
+      if (data.data.isSuccess) {
+        resetCart();
+        clearStorage();
+        closeCart();
+        navigate("/");
+      }
+    },
+  });
 
   return (
     <div>
@@ -183,9 +210,17 @@ export const ShoppingCartDetails = () => {
             <p> {calculateServiceCharge(calculateTotalOrderAmount())}</p>
           </div>
         </Stack>
-        <Button className="w-100" variant="success" type="submit">
+        <Button
+          className="w-100"
+          variant="success"
+          type="submit"
+          onClick={() => {
+            handleCreateOrder.mutate(order!);
+          }}
+        >
           PLACE ORDER RM{handleCalculateTotalOrder() + calculateServiceCharge(calculateTotalOrderAmount())}
         </Button>
+        <ApiResponse mutation={handleCreateOrder} />
       </div>
       <div>
         {showClearCartModal && (

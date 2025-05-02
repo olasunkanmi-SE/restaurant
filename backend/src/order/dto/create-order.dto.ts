@@ -13,11 +13,15 @@ export class CreateOrderDTO {
 
   @IsString()
   @IsNotEmpty()
-  singleclientId: string;
+  singleClientId: string;
 
   @IsNumber()
   @IsNotEmpty()
   total: number;
+
+  @IsString()
+  @IsNotEmpty()
+  summary: string;
 
   @IsOptional()
   @IsArray()

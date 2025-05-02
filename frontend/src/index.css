@@ -175,5 +175,9 @@ small {
   --bs-btn-border-color: none;
   --bs-btn-hover-bg: none;
   --bs-btn-hover-border-color: none;
+}
 
+.sucess-animation {
+  width: 150px;
+  height: 150px;
 }

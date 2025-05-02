@@ -22,33 +22,31 @@ export const CallToAction = ({
   showCancelButton,
 }: ModalProps) => {
   return (
-    <>
-      <Modal show={show} onHide={handleClose} centered>
-        {header ? (
-          <Modal.Header closeButton>
-            <Modal.Title>{header}</Modal.Title>
-          </Modal.Header>
+    <Modal show={show} onHide={handleClose} centered>
+      {header ? (
+        <Modal.Header closeButton>
+          <Modal.Title>{header}</Modal.Title>
+        </Modal.Header>
+      ) : (
+        <></>
+      )}
+      <Modal.Body>{children}</Modal.Body>
+      <Modal.Footer>
+        {showCancelButton ? (
+          <Button variant="inline-secondary" onClick={handleClose}>
+            Cancel
+          </Button>
         ) : (
           <></>
         )}
-        <Modal.Body>{children}</Modal.Body>
-        <Modal.Footer>
-          {showCancelButton ? (
-            <Button variant="inline-secondary" onClick={handleClose}>
-              Cancel
-            </Button>
-          ) : (
-            <></>
-          )}
-          {action ? (
-            <Button variant="success" onClick={handleAction}>
-              {action}
-            </Button>
-          ) : (
-            <></>
-          )}
-        </Modal.Footer>
-      </Modal>
-    </>
+        {action ? (
+          <Button variant="success" onClick={handleAction}>
+            {action}
+          </Button>
+        ) : (
+          <></>
+        )}
+      </Modal.Footer>
+    </Modal>
   );
 };

@@ -7,7 +7,7 @@ export const useAxiosPrivate = () => {
     const requestInterceptor = axiosPrivate.interceptors.request.use(
       (config) => {
         if (!config.headers["x-user-email"]) {
-          config.headers["x-user-email"] = import.meta.env.GUEST_USER;
+          config.headers["x-user-email"] = import.meta.env.VITE_GUEST_USER;
         }
         if (!config.headers["x-correlation-id"]) {
           config.headers["x-correlation-id"] = nanoid();

@@ -44,6 +44,7 @@ describe('Test singleclient service', () => {
       const createSingleClientProps = {
         email: 'ola@tesla.com',
         passwordHash: '',
+        role: 'USER',
       };
       validateUserStub.getUser = async (): Promise<any> => {
         return singleclientMockData;
@@ -60,7 +61,7 @@ describe('Test singleclient service', () => {
       await singleclientService.createSingleClient(createSingleClientProps);
     } catch (error: any) {
       expect(error.status).to.eq(400);
-      expect(error.response.error).to.eq('User with email ola@tesla.com already exists');
+      expect(error.response.error).to.eq('User already exists, sign in.');
     }
   });
 
@@ -68,6 +69,7 @@ describe('Test singleclient service', () => {
     const createSingleClientProps = {
       email: 'ola@ola.com',
       passwordHash: '',
+      role: 'USER',
     };
     contextServiceStub.getContext = (): Context => {
       return new Context(createSingleClientProps.email, '');

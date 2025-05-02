@@ -39,8 +39,10 @@ export class MenuController {
     return this.menuService.deleteMenu(menuId);
   }
 
+  //Todo.
+  //This API should require both the merchantId and RestaurantId /singleclient/:singleClientId/:restaurantId
   @Get('/singleclient/:restaurantId')
   async getMenusByRestaurantId(@Param('restaurantId') restaurantId: string): Promise<Result<IMenuResponseDTO[]>> {
-    return this.menuService.getMenuByRestaurantId(restaurantId);
+    return this.menuService.getExtendedMenuByRestaurantId(restaurantId);
   }
 }
