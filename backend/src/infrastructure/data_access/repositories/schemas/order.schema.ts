@@ -40,7 +40,6 @@ export class OrderDataModel extends BaseDocument implements IOrderDataModel {
   @Prop({ type: mongoose.Schema.Types.ObjectId })
   @Type(() => OrderStatusModel)
   orderStatusId: Types.ObjectId;
-
   @Prop({ type: { type: mongoose.Schema.Types.ObjectId, ref: OrderStatusModel.name } })
   @Type(() => OrderStatusModel)
   state?: OrderStatusModel;
