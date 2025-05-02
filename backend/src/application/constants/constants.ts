@@ -32,8 +32,6 @@ export const RoleOrder: Record<Role, number> = {
   [Role.USER]: 2,
   [Role.ADMIN]: 3,
   [Role.SUPERADMIN]: 4,
-  GUEST = 'CLIENT',
-}
 };
 
 export const ROLE_KEY = 'role';
