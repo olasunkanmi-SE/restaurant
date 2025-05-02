@@ -22,7 +22,8 @@ function App() {
                   </>
                 }
               >
-                <Route index element={<Landing />} />
+                {/* <Route index element={<Landing />} /> */}
+                <Route index element={<Home />} />
                 <Route path="/menu" element={<Home />} />
                 <Route path="/about" element={<About />} />
                 <Route path="menu/:id" element={<FoodMenu />} />
